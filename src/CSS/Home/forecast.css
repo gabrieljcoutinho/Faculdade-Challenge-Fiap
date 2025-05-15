@@ -1,0 +1,16 @@
+.forecast-list {
+    list-style: none;
+    padding: 0;
+}
+
+.forecast-list li {
+    padding: 8px 0;
+}
+
+.forecast-list li:last-child {
+    border-bottom: none;
+}
+
+.forecast-list li {
+    padding: 8px 0;
+}

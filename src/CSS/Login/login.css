@@ -1,0 +1,196 @@
+/* CSS/Login/login.css */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.login-box {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    text-align: center;
+}
+
+h1 {
+    color: #283149;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-weight: 700;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    text-align: left;
+    position: relative;
+    /* Garante que o botão seja posicionado corretamente */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #545e6f;
+    font-weight: 600;
+    font-size: 1em;
+}
+
+.input-group input[type="email"],
+.input-group input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 12px;
+    border: 1px solid #d1d7e0;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input[type="email"]:focus,
+.input-group input[type="password"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.password-input-group {
+    display: flex;
+    align-items: center;
+    /* Alinha verticalmente os itens */
+}
+
+.password-input-group input[type="password"],
+.password-input-group input[type="text"] {
+    width: calc(100% - 50px);
+    /* Ajusta a largura para o botão */
+    padding-right: 40px;
+    /* Espaço para o botão */
+}
+
+.password-toggle-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    /* Centraliza verticalmente */
+    transform: translateY(-50%);
+    /* Ajusta o alinhamento */
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #6c757d;
+    outline: none;
+}
+
+.login-button {
+    background-color: #007bff;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+.links {
+    margin-top: 30px;
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.links a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.links a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.login-info {
+    background-color: #e9ecef;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    width: 350px;
+    margin-left: 40px;
+}
+
+.login-info h2 {
+    color: #283149;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: 700;
+}
+
+.login-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.login-info li {
+    margin-bottom: 15px;
+    color: #545e6f;
+    font-size: 1em;
+    position: relative;
+    padding-left: 25px;
+}
+
+.login-info li span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1.2em;
+    color: #007bff;
+}
+
+/* Estilos responsivos */
+@media (max-width: 992px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-box {
+        width: 90%;
+        margin-bottom: 30px;
+    }
+
+    .login-info {
+        width: 90%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-box {
+        padding: 30px;
+    }
+
+    .login-info {
+        padding: 20px;
+    }
+
+    .login-info h2 {
+        font-size: 1.5em;
+    }
+
+    .login-info li {
+        font-size: 0.95em;
+    }
+}

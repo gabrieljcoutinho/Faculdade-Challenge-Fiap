@@ -1,0 +1,111 @@
+header {
+    position: fixed;
+    width: 100%;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    /* Garante que o header fique acima do menu */
+    display: flex;
+    /* Usamos flexbox para alinhar os itens */
+    align-items: center;
+    /* Alinha verticalmente ao centro */
+    background-color: #252525;
+}
+
+#main {
+    padding: 10px;
+    /* Reduzi o padding para o ícone não ficar muito afastado */
+}
+
+#menuIcon {
+    display: inline-block;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    /* Adiciona margem à esquerda para separá-lo da borda */
+}
+
+#menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    /* Adiciona padding na parte inferior */
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    /* Remova a linha abaixo */
+    /* justify-content: space-between; */
+}
+
+#menu.open {
+    width: 150px;
+}
+
+#menu a {
+    /* padding: 8px 8px 8px 32px; */
+    padding: 8px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #ddd;
+    display: block;
+    transition: 0.3s;
+}
+
+#menu a:hover {
+    color: #f1f1f1;
+    text-decoration: underline;
+}
+
+.close-btn {
+    /* Estilos para o botão de fechar */
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #ddd;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #f1f1f1;
+}
+
+/*IMG*/
+.imgHeader {
+    width: 35px;
+    padding-top: 0;
+    cursor: pointer;
+}
+
+
+.settings {
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    margin-top: -50px;
+    /* puxando para cima */
+    display: flex;
+    justify-content: center;
+}
+
+
+.settings:hover {
+    opacity: 0.8;
+    /* Feedback visual ao passar o mouse */
+}

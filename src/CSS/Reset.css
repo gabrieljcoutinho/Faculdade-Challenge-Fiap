@@ -1,0 +1,41 @@
+/*CSS geral*/
+
+html,
+body,
+section,
+mais,
+footer {
+  padding: 0;
+  margin: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding: 0;
+  margin: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+a {
+  list-style-type: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.App {
+  text-align: center;
+}
+
+h1 {
+  padding-top: 4rem;
+  font-size: 25px;
+}

@@ -1,0 +1,46 @@
+.chart-type-selector {
+    align-items: center;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+
+
+.chart-type-selector label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+
+.chart-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.chart-buttons button {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 12px;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.chart-container {
+    height: 360px;
+    margin-bottom: 10px;
+}
+
+.chart-buttons button.active {
+    background-color: #252525;
+    border-color: #252525;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.chart-buttons button:hover {
+    background-color: #252525;
+    color: rgba(255, 255, 255, 0.9);
+    ;
+}

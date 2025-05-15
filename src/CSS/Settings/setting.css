@@ -1,0 +1,86 @@
+/* setting.css */
+.settings {
+    padding-top: 25rem;
+}
+
+.settingTitulo {
+    font-size: 25px;
+    color: #fff;
+}
+
+.configuracoes-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #252525;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    color: #fff;
+    padding: 20px;
+    /* Added some padding around the overlay */
+}
+
+.fechar-btn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 20px;
+    /* Added some margin below the close button */
+}
+
+.conteudo-configuracoes {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+}
+
+.conteudo-configuracoes h1 {
+    position: absolute;
+    top: 20px;
+    /* Adjusted top position */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.btn-container {
+    display: flex;
+    gap: 20px;
+    /* Adds spacing between the buttons */
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* CSS for the buttons */
+.btn-container button {
+    padding: 10px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-container button:hover {
+    opacity: 0.8;
+}
+
+/* Style for the "Sing In" button */
+.btn-container button:nth-child(1) {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Style for the "Log In" button */
+.btn-container button:nth-child(2) {
+    background-color: red;
+    color: white;
+}

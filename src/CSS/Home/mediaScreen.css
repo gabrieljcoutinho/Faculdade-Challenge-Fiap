@@ -1,0 +1,66 @@
+@media (max-width: 420px) {
+    .home-container {
+        padding: 40px;
+    }
+
+    .main-content {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 60px;
+    }
+
+    .production-section {
+        margin-bottom: 15px;
+        padding: 15px;
+        width: 100%;
+    }
+
+    .weather-section {
+        margin-bottom: 15px;
+        padding: 15px;
+        width: 100%;
+    }
+
+    .production-section h2 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+
+    .weather-section h2 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+
+
+
+    .current-weather p {
+        font-size: 1em;
+        margin-bottom: 8px;
+    }
+
+    .forecast-list li {
+        align-items: center;
+        display: flex;
+        font-size: 0.9em;
+        justify-content: space-between;
+        padding: 6px 0;
+    }
+
+    .forecast-time {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+
+
+    .close-button {
+        font-size: 0.8em;
+        height: 25px;
+        right: 5px;
+        top: 5px;
+        width: 25px;
+    }
+
+
+
+}

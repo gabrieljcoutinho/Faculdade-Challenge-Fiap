@@ -1,0 +1,22 @@
+.analyze-button {
+    background-color: #252525;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 10px 16px;
+    transition: background-color 0.3s ease;
+}
+
+.analyze-button:hover {
+    background-color: #000;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+
+.analyze-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+    color: red;
+}

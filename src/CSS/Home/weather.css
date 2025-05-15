@@ -1,0 +1,12 @@
+.weather-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    width: calc(50% - 10px);
+}
+
+.weather-section h2 {
+    color: #007bff;
+    margin-bottom: 15px;
+}

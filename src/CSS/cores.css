@@ -1,0 +1,190 @@
+﻿:root{
+    --white:                       #fff;
+
+    --black:                        #000000;
+    --black2:                       #151515;
+    --black3:                       #282c34;
+
+    --darkGray:                     #A9A9A9;
+    --darkSlateGray:                #2F4F4F;
+    --dimGray:                      #696969;
+
+    --gainsboro:                    #DCDCDC;
+    --gray:                         #808080;
+    --grey1:                        #363636;
+    --grey2:                        #4f4f4f;
+    --grey3:                            #333;
+    --gray4:                    #555555;
+    --lightGrey:                    #D3D3D3;
+    --silver:                       #c0c0c0;
+    --slateGray:	                #708090;
+
+/*--------------------------------------------------------------------------*/
+
+    --blue:	                        #0000FF;
+    --cornflowerBlue:	            #6495ED;
+    --darkBlue:	                    #00008B;
+    --darkSlateBlue:	            #483D8B;
+    --darkTurquoise:	            #00CED1;
+    --deepSkyBlue:	                #00BFFF;
+    --dodgerBlue:	                #1E90FF;
+    --slateBlue:	                #6A5ACD;
+    --slateBlue1:	                #836FFF;
+    --slateBlue3:	                #6959CD;
+    --midnightBlue:	                #191970;
+    --navy:	                        #000080;
+    --mediumBlue:	                #0000CD;
+    --royalBlue:	                #4169E1;
+    --lightSkyBlue:	                #87CEFA;
+    --skyBlue:	                    #87CEEB;
+    --lightingBlue:                #61dafb;
+    --lightBlue:	                #ADD8E6;
+    --steelBlue:	                #4682B4;
+    --lightSteelBlue:               #B0C4DE;
+    --turquoise:	                #40E0D0;
+    --mediumTurquoise:	            #48D1CC;
+/*--------------------------------------------------------------------------*/
+    --lightSeaGreen:	            #20B2AA;
+    --darkCyan:	                    #008B8B;
+    --teal:	                        #008080;
+    --aquamarine:	                #7FFFD4;
+    --mediumAquamarine:	            #66CDAA;
+    --cadetBlue:                    #5F9EA0;
+    --darkSlateGray:	            #2F4F4F;
+    --mediumSpringGreen:            #00FA9A;
+    --springGreen:	                #00FF7F;
+    --paleGreen:	                #98FB98;
+    --lightGreen:	                #90EE90;
+    --darkSeaGreen:	                #8FBC8F;
+    --mediumSeaGreen:	            #3CB371;
+    --seaGreen:	                    #2E8B57;
+    --darkGreen:	                #006400;
+    --green:	                    #008000;
+    --forestGreen:	                #228B22;
+    --limeGreen:	                #32CD32;
+    --lime:	                        #00FF00;
+    --lawnGreen:	                #7CFC00;
+    --chartreuse:	                #7FFF00;
+    --greenYellow:	                #ADFF2F;
+    --yellowGreen:	                #9ACD32;
+    --oliveDrab:	                #6B8E23;
+    --darkOliveGreen:	            #556B2F;
+    --olive:	                    #808000;
+    --darkKhaki:	                #BDB76B;
+/*--------------------------------------------------------------------------*/
+    --goldenrod:	                #DAA520;
+    --darkGoldenrod:	            #B8860B;
+/*--------------------------------------------------------------------------*/
+    --saddleBrown:	                #8B4513;
+    --sienna:	                    #A0522D;
+    --rosyBrown:	                #BC8F8F;
+    --peru:	                        #CD853F;
+    --chocolate:	                #D2691E;
+    --sandyBrown:	                #F4A460;
+    --navajoWhite:	                #FFDEAD;
+    --wheat:	                    #F5DEB3;
+    --burlyWood:	                #DEB887;
+    --tan:	                        #D2B48C;
+/*--------------------------------------------------------------------------*/
+    --mediumSlateBlue:	            #7B68EE;
+    --mediumPurple:	                #9370DB;
+    --blueViolet:	                #8A2BE2;
+    --indigo:	                    #4B0082;
+    --darkViolet:	                #9400D3;
+    --darkOrchid:	                #9932CC;
+    --mediumOrchid:	                #BA55D3;
+    --purple:	                    #A020F0;
+    --darkMagenta:	                #8B008B;
+    --fuchsia:	                    #FF00FF;
+    --violet:	                    #EE82EE;
+    --thistle:	                    #D8BFD8;
+    --orchid:	                    #DA70D6;
+    --plum:	                        #DDA0DD;
+    --mediumVioletRed:	            #C71585;
+    --DarkMagenta:	        	    #8B008B;
+    --deepPink:	                    #FF1493;
+    --deepPink2:                    #EE1289;
+    --deepPink3:                    #CD1076;
+    --deepPink4:                    #8B0A50;
+    --hotPink:	                    #FF69B4;
+    --hotPink2:                     #FF6EB4;
+    --hotPink3:                     #EE6AA7;
+    --paleVioletRed:	            #DB7093;
+    --lightPink:	                #FFB6C1;
+    --pink:	                        #FFC0CB;
+    --lightCoral:	                #F08080;
+/*--------------------------------------------------------------------------*/
+    --indianRed:	                #CD5C5C;
+    --crimson:	                    #DC143C;
+    --red:	                          #FF0000;
+    --maroon:	                    #800000;
+    --darkRed:	                    #8B0000;
+    --fireBrick:	                #B22222;
+    --brown:	                    #A52A2A;
+    --chocolate:                      #EE7621;
+    /*--------------------------------------------------------------------------*/
+    --salmon:	                    #FA8072;
+    --darkSalmon:	                #E9967A;
+    --lightSalmon:	                #FFA07A;
+    --coral:	                    #FF7F50;
+    --tomato:	                    #FF6347;
+    --orangeRed:	                #FF4500;
+/*--------------------------------------------------------------------------*/
+    --darkOrange:	                #FF8C00;
+    --orange:	                    #FFA500;
+    --gold:	                        #FFD700;
+    --yellow:	                    #FFFF00;
+    --khaki:	                    #F0E68C;
+/*--------------------------------------------------------------------------*/
+    --aliceBlue:	                #F0F8FF;
+    --ghostWhite:	                #F8F8FF;
+    --snow:	                        #FFFAFA;
+    --seashell:	                    #FFF5EE;
+    --floralWhite:	                #FFFAF0;
+    --whiteSmoke:	                #F5F5F5;
+    --beige:	                    #F5F5DC;
+    --oldLace:	                    #FDF5E6;
+    --ivory:	                    #FFFFF0;
+    --linen:	                    #FAF0E6;
+    --cornsilk:	                    #FFF8DC;
+    --antiqueWhite:	                #FAEBD7;
+    --blanchedAlmond:	            #FFEBCD;
+    --bisque:	                    #FFE4C4;
+    --lightYellow:                  #FFFFE0;
+    --lemonChiffon:	                #FFFACD;
+    --lightGoldenrodYellow:	        #FAFAD2;
+    --papayaWhip:	                #FFEFD5;
+    --peachPuff:	                #FFDAB9;
+    --moccasin:	                    #FFE4B5;
+    --paleGoldenrod:	            #EEE8AA;
+    --mistyRose:	                #FFE4E1;
+    --lavenderBlush:	            #FFF0F5;
+    --lavender:	                    #E6E6FA;
+    --azure:	                    #F0FFFF;
+    --lightCyan:	                #E0FFFF;
+    --powderBlue:	                #B0E0E6;
+    --paleTurquoise:	            #E0FFFF;
+    --honeydew:	                    #F0FFF0;
+    --mintCream:	                #F5FFFA;
+
+
+
+    /*-------------------------CORES NEON-------------------------------------------------*/
+    --vermelhoNeon:          rgba(255, 0, 51, 0.7);
+    --azulNeon:              rgba(31, 81, 255, 0.7);
+    --verdeNeon:             rgba(57, 255, 20, 0.8);
+    --vermelhoLaranjadoNeon: rgba(255, 49, 49, 0.9);
+    --amareloNeon: rgba(255, 240, 31, 0.6);
+    --rosaNeon: rgba(255, 68, 204, 0.8);
+    --roxoNeon:  rgba(188, 19, 254, 0.7);
+    --roxoNeonClaro: rgb(138, 43, 226)
+    --magentaNeon: rgba(255, 0, 255, 0.7);
+    --lavandaNeon: rgba(230, 230, 250, 0.9);
+    --laranjaVibranteNeon: rgba(255, 165, 0, 0.8);
+    --amareloLimaoNeon: rgba(255, 255, 0, 0.7);
+    --brancoNeon:      rgba(255, 255, 255, 0.9);
+    --azulClaro:   rgba(15, 240, 252);
+    --azulClaro2: #22e0ff;
+    --aqua:	  #00FFFF;
+    --verdeNeon: #00ffcc;
+}
