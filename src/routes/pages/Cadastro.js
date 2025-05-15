@@ -4,41 +4,49 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Cadastro = () => {
   const navigate = useNavigate();
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const isEmailValid = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const getPasswordStrength = (pwd) => {
+    if (!pwd) return '';
+    if (pwd.length < 6) return 'Fraca';
+    if (/[A-Z]/.test(pwd) && /[0-9]/.test(pwd) && /[^A-Za-z0-9]/.test(pwd)) return 'Forte';
+    return 'Média';
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setPasswordError('');
+    setEmailError('');
+
+    if (!isEmailValid(email)) {
+      setEmailError('E-mail inválido.');
+      return;
+    }
 
     if (password !== confirmPassword) {
       setPasswordError('As senhas não conferem.');
       return;
     }
 
+    setIsSubmitting(true);
+
     setTimeout(() => {
-      console.log('Cadastro realizado com sucesso!');
-      navigate('/');
-    }, 2000);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
+      setSuccessMessage('Cadastro realizado com sucesso!');
+      // Aqui você pode armazenar dados no localStorage ou enviar para API.
+      setTimeout(() => navigate('/'), 2000);
+    }, 1500);
   };
 
   const EyeIcon = ({ onClick, visible }) => (
@@ -53,7 +61,7 @@ const Cadastro = () => {
       style={{ cursor: 'pointer' }}
     >
       {visible ? (
-        <path d="M10.59 13.41c.41.41.41 1.08 0 1.49a1.03 1.03 0 0 1-1.42 0l-3-3a1.03 1.03 0 0 1 0-1.42l3-3a1.03 1.03 0 0 1 1.42 0c.41.41.41 1.08 0 1.49L9.7 12l.89 1.41zM13.41 10.59c.41-.41 1.08-.41 1.49 0l3 3a1.03 1.03 0 0 1 0 1.42l-3 3a1.03 1.03 0 0 1-1.42 0c-.41-.41-.41-1.08 0-1.49L14.3 12l-.89-1.41zM12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 2c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm5.34-11.59l-1.41 1.41C15.89 6.89 13.97 6 12 6c-1.97 0-3.89.89-5.34 2.41L5.66 9.41C8.06 6.94 10 6 12 6c2 0 3.94.94 6.34 2.41zM18.34 14.59L19.76 16c2.4-2.47 3.34-4.4 3.34-6s-.94-3.53-3.34-6l-1.41 1.41C21.94 8.06 24 10 24 12c0 2-2.06 3.94-4.34 5.59zM4.66 14.59C2.26 12.06 1 10 1 8c0-2 2.06-3.94 4.34-5.59L5.66 4C3.26 6.47 2.34 8.4 2.34 10s.94 3.53 3.34 6l1.41-1.41z" />
+        <path d="M1.39 4.22l2.26 2.26C2.57 7.74 1 9.72 1 12c0 2 2.06 3.94 4.34 5.59l1.41-1.41C5.11 15.11 4 13.62 4 12c0-1.17.52-2.24 1.36-3.01l1.54 1.54A3.5 3.5 0 0 0 12 15a3.5 3.5 0 0 0 3.47-4.14l3.27 3.27C21.6 12.47 23 10.42 23 8c0-2-2.06-3.94-4.34-5.59L18.24 4C20.74 6.47 22 8.4 22 10s-.94 3.53-3.34 6l1.41 1.41c2.4-2.47 3.34-4.4 3.34-6 0-2.28-1.57-4.26-3.66-5.52l2.27-2.26-1.42-1.42L2.81 2.81 1.39 4.22zM12 6a9.48 9.48 0 0 0-6.34 2.41L5.66 9.41C8.06 6.94 10 6 12 6c1.06 0 2.09.27 3.03.77L12 9.88V6z" />
       ) : (
         <path d="M12 6a9.48 9.48 0 0 0-6.34 2.41L2 12l3.66 3.59A9.48 9.48 0 0 0 12 18c1.97 0 3.89-.89 5.34-2.41L22 12l-3.66-3.59A9.48 9.48 0 0 0 12 6zm0 2c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
       )}
@@ -72,6 +80,8 @@ const Cadastro = () => {
               id="nome"
               placeholder="Seu nome completo"
               required
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
             />
           </div>
           <div className="input-group">
@@ -81,57 +91,66 @@ const Cadastro = () => {
               id="email"
               placeholder="Seu e-mail"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={emailError ? 'error' : ''}
             />
+            {emailError && <p className="error-message">{emailError}</p>}
           </div>
           <div className="input-group password-input-group">
-            <label htmlFor="password" className='password'>Senha</label>
+            <label htmlFor="password">Senha</label>
             <input
               type={showPassword ? 'text' : 'password'}
               id="password"
               placeholder="Crie uma senha"
               required
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => setPassword(e.target.value)}
               className={passwordError ? 'error' : ''}
             />
-            <EyeIcon onClick={togglePasswordVisibility} visible={showPassword} />
+            <EyeIcon onClick={() => setShowPassword(!showPassword)} visible={showPassword} />
+            <small className={`password-strength ${getPasswordStrength(password).toLowerCase()}`}>
+              Força: {getPasswordStrength(password)}
+            </small>
           </div>
           <div className="input-group password-input-group">
-            <label htmlFor="confirmPassword" className='passwordConfirm'>Confirmar Senha</label>
+            <label htmlFor="confirmPassword">Confirmar Senha</label>
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               id="confirmPassword"
               placeholder="Confirme sua senha"
               required
               value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className={passwordError ? 'error' : ''}
             />
-            <EyeIcon onClick={toggleConfirmPasswordVisibility} visible={showConfirmPassword} />
+            <EyeIcon onClick={() => setShowConfirmPassword(!showConfirmPassword)} visible={showConfirmPassword} />
           </div>
           {passwordError && <p className="error-message">{passwordError}</p>}
-          <button type="submit" className="cadastro-button">
-            Cadastrar
+          <button type="submit" className="cadastro-button" disabled={isSubmitting}>
+            {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
           </button>
         </form>
+
+        {successMessage && (
+          <div className="success-message animated">
+            🎉 {successMessage}
+          </div>
+        )}
+
         <div className="links">
           <p>
             Já tem uma conta? <Link to="/login">Faça login</Link>
           </p>
         </div>
       </section>
+
       <aside className="cadastro-info">
         <h2>Comece sua jornada conosco!</h2>
         <ul>
-          <li>
-            <span aria-hidden="true">🚀</span> Acesse todos os nossos recursos.
-          </li>
-          <li>
-            <span aria-hidden="true">🤝</span> Conecte-se com nossa comunidade.
-          </li>
-          <li>
-            <span aria-hidden="true">⭐</span> Desbloqueie benefícios exclusivos.
-          </li>
+          <li>🚀 Acesse todos os nossos recursos.</li>
+          <li>🤝 Conecte-se com nossa comunidade.</li>
+          <li>⭐ Desbloqueie benefícios exclusivos.</li>
         </ul>
       </aside>
     </main>

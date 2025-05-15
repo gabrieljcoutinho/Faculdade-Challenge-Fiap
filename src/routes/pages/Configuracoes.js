@@ -19,7 +19,7 @@ const Configuracoes = () => {
             <div className="conteudo-configuracoes">
                 <h1 className='settingTitulo'>Configurações</h1>
                 <div className="btn-container">
-                    {/* <button title="Logar" onClick={navegarParaLogin}>Log In</button> */}
+                    <button title="Logar" onClick={navegarParaLogin}>Log In</button>
                     <button title="Deslogar">Log out</button>
                 </div>
             </div>
