@@ -86,7 +86,7 @@ O **Challenge** é uma solução inovadora que combina o monitoramento em tempo 
 * [Indique a licença sob a qual o seu projeto está distribuído.]
     * Exemplo: MIT License
 
-## Autor
+## Autores
 
 * Gabriel Jorge Coutinho (https://github.com/gabrieljcoutinho)
 * Guilherme (https://github.com/bufungo)
