@@ -1,0 +1,74 @@
+.conexao-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding-top: 20px;
+    width: 100%;
+    /* Garante que o container principal ocupe toda a largura disponível */
+    box-sizing: border-box;
+    /* Inclui padding e border na largura total */
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.retanguloAdiciona {
+    width: 400px;
+    height: 100px;
+    background-color: #708090;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 10px;
+    max-width: 95%;
+    /* Garante que não ultrapasse a largura do pai em telas menores */
+    box-sizing: border-box;
+}
+
+.conexions-list {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+    /* Garante que a lista ocupe toda a largura disponível do pai */
+    padding: 10px;
+    gap: 10px;
+    margin-bottom: 50px;
+    box-sizing: border-box;
+}
+
+.retanguloAdicionado {
+    position: relative;
+    width: 400px;
+    height: 100px;
+    background-color: rgba(255, 0, 51, 0.7);
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos para o seletor de cores */
+.color-picker {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.color-picker button {
+    width: 80px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 0.8em;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
