@@ -88,7 +88,7 @@ O **Challenge** é uma solução inovadora que combina o monitoramento em tempo 
 
 ## Autor
 
-* [Seu nome ou nome da sua organização.]
+* Gabriel Jorge Coutinho
 
 ---
 
