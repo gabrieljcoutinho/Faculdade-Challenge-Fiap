@@ -88,7 +88,7 @@ O **Challenge** é uma solução inovadora que combina o monitoramento em tempo 
 
 ## Autor
 
-* Gabriel Jorge Coutinho
+* Gabriel Jorge Coutinho (https://github.com/gabrieljcoutinho)
 * Guilherme (https://github.com/bufungo)
 * Roberto (https://github.com/rmoreirafiap)
 * Lucas (https://github.com/LucasFLima21122)
