@@ -12,6 +12,7 @@ import '../../CSS/Home/current.css'
 import '../../CSS/Home/production.css'
 import '../../CSS/Home/mediaScreen.css'
 
+
 import { Line, Pie, Bar } from 'react-chartjs-2';
 
 import logoGmail from '../../imgs/Logogmail.png';
@@ -65,11 +66,6 @@ const Home = () => {
   const chartRef = useRef(null);
   const [expandedChart, setExpandedChart] = useState(null);
   const [shareOptionsVisible, setShareOptionsVisible] = useState(false);
-  const [currentWeather, setCurrentWeather] = useState({
-    temperature: 28,
-    condition: 'Ensolarado',
-  });
-  const [simulationCondition, setSimulationCondition] = useState('Ensolarado');
 
   const productionOptions = {
     responsive: true,
@@ -180,48 +176,39 @@ const Home = () => {
     },
   };
 
-  const generateRandomData = (weatherCondition) => {
-    const baseSunny = [5, 15, 30, 35, 28, 18, 10];
-    const baseCloudy = [0.5, 2, 4, 5, 3, 2, 1]; // Valores reduzidos para nublado
-    const baseRainyLight = [0.2, 1, 2, 3, 1.5, 1, 0.5]; // Valores ainda mais baixos para chuva leve
-    const baseRainyHeavy = [0, 0.1, 0.3, 0.5, 0.3, 0.2, 0.1]; // Valores muito baixos para chuva forte
-    const baseVerySunny = [7, 20, 40, 45, 35, 25, 12];
-    const baseNight = [0, 0, 0, 0, 0, 0, 0];
+  const generateRandomData = () => {
+    const type = Math.floor(Math.random() * 4); // 0 a 3
+    const base = [5, 10, 15, 20, 25, 20, 10];
 
-    switch (weatherCondition) {
-      case 'Ensolarado':
-        return baseSunny.map((v) => v + Math.floor(Math.random() * 5 - 2));
-      case 'Nublado':
-        return baseCloudy.map((v) => v + Math.floor(Math.random() * 3 - 1));
-      case 'Chuvoso':
-        return baseRainyLight.map((v) => v + Math.floor(Math.random() * 2 - 1));
-      case 'Chuvoso Forte':
-        return baseRainyHeavy.map((v) => v + Math.floor(Math.random() * 1));
-      case 'Sol Muito Quente':
-        return baseVerySunny.map((v) => v + Math.floor(Math.random() * 6 - 3));
-      case 'Noite':
-        return baseNight;
+    switch (type) {
+      case 0:
+        return base.map((v) => v + Math.floor(Math.random() * 3 - 1));
+      case 1:
+        return base.map((_, i) => Math.round(15 + 10 * Math.sin(i)));
+      case 2:
+        return Array.from({ length: 7 }, () => Math.floor(Math.random() * 35));
+      case 3:
+        return [5, 12, 25, 35, 28, 18, 10].map((v) => v + Math.floor(Math.random() * 4 - 2));
       default:
-        return baseSunny.map((v) => v + Math.floor(Math.random() * 3 - 1));
+        return base;
     }
   };
 
   const handleAnalyzeClick = () => {
     setIsAnalyzing(true);
     setTimeout(() => {
-      const newData = generateRandomData(simulationCondition);
+      const newData = generateRandomData();
       setProductionData((prev) => ({
         ...prev,
         datasets: [
           {
             ...prev.datasets[0],
             data: newData,
-            label: `Produção (kWh) - ${simulationCondition}`,
           },
         ],
       }));
       setIsAnalyzing(false);
-    }, 1500);
+    }, 2000);
   };
 
   const handleChartTypeChange = (type) => {
@@ -234,17 +221,22 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const initialData = generateRandomData(currentWeather.condition);
+    const newData = generateRandomData();
     setProductionData((prev) => ({
       ...prev,
       datasets: [
         {
           ...prev.datasets[0],
-          data: initialData,
+          data: newData,
         },
       ],
     }));
-  }, [currentWeather.condition]);
+  }, []);
+
+  const currentWeather = {
+    temperature: 28,
+    condition: 'Ensolarado',
+  };
 
   const forecast = [
     { time: '09:00', condition: 'Ensolarado' },
@@ -261,10 +253,6 @@ const Home = () => {
         return '☁️';
       case 'Chuvoso':
         return '🌧️';
-      case 'Chuvoso Forte':
-        return '⛈️';
-      case 'Sol Muito Quente':
-        return '🔥';
       default:
         return '';
     }
@@ -310,7 +298,7 @@ const Home = () => {
   const shareViaInstagram = () => {
     alert('Compartilhar via Instagram geralmente envolve baixar a imagem e compartilhar manualmente no aplicativo.');
     setShareOptionsVisible(false);
-    handleSaveChart();
+    handleSaveChart(); // Suggest saving for manual sharing
   };
 
   const shareViaLinkedIn = () => {
@@ -323,10 +311,6 @@ const Home = () => {
       window.open(linkedinLink, '_blank');
       setShareOptionsVisible(false);
     }
-  };
-
-  const handleSimulationConditionChange = (event) => {
-    setSimulationCondition(event.target.value);
   };
 
   return (
@@ -364,30 +348,14 @@ const Home = () => {
               {chartType === 'pie' && <Pie data={productionData} options={pieChartOptions} ref={chartRef} />}
             </div>
           </div>
-          <div className="analyze-controls" style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <label htmlFor="simulation-condition" style={{ color: '#fff' }}>Simular Condição:</label>
-            <select
-              id="simulation-condition"
-              value={simulationCondition}
-              onChange={handleSimulationConditionChange}
-              style={{ padding: '8px', borderRadius: '4px', backgroundColor: '#333', color: '#fff', border: 'none' }}
-            >
-              <option value="Ensolarado">Ensolarado</option>
-              <option value="Nublado">Nublado</option>
-              <option value="Chuvoso">Chuvoso</option>
-              <option value="Chuvoso Forte">Chuvoso Forte</option>
-              <option value="Sol Muito Quente">Sol Muito Quente</option>
-              <option value="Noite">Noite</option>
-            </select>
-            <button
-              className="analyze-button"
-              onClick={handleAnalyzeClick}
-              disabled={isAnalyzing}
-              style={{ marginTop: '10px' }}
-            >
-              {isAnalyzing ? 'Simulando...' : 'Simular Produção'}
-            </button>
-          </div>
+          <button
+            className="analyze-button"
+            onClick={handleAnalyzeClick}
+            disabled={isAnalyzing}
+            style={{ marginTop: '35px' }}
+          >
+            {isAnalyzing ? 'Analisando...' : 'Atualizar Produção'}
+          </button>
         </section>
 
         <section className="weather-section" style={{ backgroundColor: '#252525', color: '#fff', borderRadius: '8px', padding: '20px' }}>
@@ -424,12 +392,23 @@ const Home = () => {
             </div>
             <div className="expanded-chart-actions">
               <button onClick={handleSaveChart}>Salvar Imagem</button>
-              <div className="share-options">
-                <a onClick={shareViaEmail}><img src={logoGmail} alt="Email" className='icones' title='Compartilhar por Email' /></a>
-                <a onClick={shareViaWhatsApp}><img src={logoWhasapp} alt="WhatsApp" className='icones' title='Compartilhar por WhatsApp' /></a>
-                <a onClick={shareViaInstagram}><img src={logoInstagram} alt="Instagram" className='icones' title='Compartilhar por Instagram' /></a>
-                <a onClick={shareViaLinkedIn}><img src={logoLinkedin}alt="LinkedIn" className='icones' title='Compartilhar por LinkedIn' /></a>
-              </div>
+
+
+
+
+
+                <div className="share-options">
+            <a><img src={logoGmail} alt=""  className='icones' title='Ícone Email' /></a>
+            <a><img src={logoWhasapp} alt=""  className='icones' title='Ícone WhatsApp' /></a>
+              <a><img src={logoInstagram} alt=""  className='icones' title='Ícone Instagram' /></a>
+                <a><img src={logoLinkedin} alt="" className='icones' title='Ícone Linkedin' /></a>
+
+                </div>
+
+
+
+
+
             </div>
           </div>
         </div>
