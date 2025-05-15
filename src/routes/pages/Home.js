@@ -182,9 +182,9 @@ const Home = () => {
 
   const generateRandomData = (weatherCondition) => {
     const baseSunny = [5, 15, 30, 35, 28, 18, 10];
-    const baseCloudy = [2, 8, 15, 18, 12, 8, 4];
-    const baseRainyLight = [1, 4, 8, 10, 7, 5, 2];
-    const baseRainyHeavy = [0, 1, 3, 4, 3, 2, 1];
+    const baseCloudy = [0.5, 2, 4, 5, 3, 2, 1]; // Valores reduzidos para nublado
+    const baseRainyLight = [0.2, 1, 2, 3, 1.5, 1, 0.5]; // Valores ainda mais baixos para chuva leve
+    const baseRainyHeavy = [0, 0.1, 0.3, 0.5, 0.3, 0.2, 0.1]; // Valores muito baixos para chuva forte
     const baseVerySunny = [7, 20, 40, 45, 35, 25, 12];
     const baseNight = [0, 0, 0, 0, 0, 0, 0];
 
@@ -428,7 +428,7 @@ const Home = () => {
                 <a onClick={shareViaEmail}><img src={logoGmail} alt="Email" className='icones' title='Compartilhar por Email' /></a>
                 <a onClick={shareViaWhatsApp}><img src={logoWhasapp} alt="WhatsApp" className='icones' title='Compartilhar por WhatsApp' /></a>
                 <a onClick={shareViaInstagram}><img src={logoInstagram} alt="Instagram" className='icones' title='Compartilhar por Instagram' /></a>
-                <a onClick={shareViaLinkedIn}><img src={logoLinkedin} alt="LinkedIn" className='icones' title='Compartilhar por LinkedIn' /></a>
+                <a onClick={shareViaLinkedIn}><img src={logoLinkedin}alt="LinkedIn" className='icones' title='Compartilhar por LinkedIn' /></a>
               </div>
             </div>
           </div>
