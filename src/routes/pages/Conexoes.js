@@ -4,6 +4,7 @@ import '../../CSS/Conexao/mediaScreen.css';
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
 import lampIcon from '../../imgs/lampada.png';
+import editIcon from '../../imgs/pencil.png'; // Importe o ícone de lápis
 
 const Conexoes = () => {
   const [conexions, setConexions] = useState(() => {
@@ -13,6 +14,7 @@ const Conexoes = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newConexion, setNewConexion] = useState({ text: '', icon: '' });
   const [activeIcon, setActiveIcon] = useState('');
+  const [editingIndex, setEditingIndex] = useState(null); // Novo estado para rastrear o item sendo editado
   const availableIcons = [
     { name: 'TV', src: tvIcon },
     { name: 'Ar Condicionado', src: airConditionerIcon },
@@ -28,6 +30,7 @@ const Conexoes = () => {
     setShowAddForm(true);
     setNewConexion({ text: '', icon: '' });
     setActiveIcon('');
+    setEditingIndex(null); // Reseta o índice de edição ao adicionar um novo
   };
 
   const handleInputChange = (event) => {
@@ -48,7 +51,16 @@ const Conexoes = () => {
 
   const saveConexion = () => {
     if (newConexion.text && newConexion.icon) {
-      setConexions([...conexions, newConexion]);
+      if (editingIndex !== null) {
+        // Se estiver editando, atualize o item existente
+        const updatedConexions = [...conexions];
+        updatedConexions[editingIndex] = newConexion;
+        setConexions(updatedConexions);
+        setEditingIndex(null);
+      } else {
+        // Se não estiver editando, adicione um novo item
+        setConexions([...conexions, newConexion]);
+      }
       setShowAddForm(false);
     } else {
       alert('Por favor, digite um nome e selecione um ícone.');
@@ -57,6 +69,14 @@ const Conexoes = () => {
 
   const removeConexion = (indexToRemove) => {
     setConexions(conexions.filter((_, index) => index !== indexToRemove));
+  };
+
+  const handleEditClick = (index) => {
+    const conexionToEdit = conexions[index];
+    setNewConexion({ text: conexionToEdit.text, icon: conexionToEdit.icon });
+    setActiveIcon(conexionToEdit.icon);
+    setShowAddForm(true);
+    setEditingIndex(index);
   };
 
   return (
@@ -69,7 +89,7 @@ const Conexoes = () => {
       {showAddForm && (
         <div className="modal-overlay">
           <div className="add-form-styled">
-            <h2>Adicionar Novo Aparelho</h2>
+            <h2>{editingIndex !== null ? 'Editar Aparelho' : 'Adicionar Novo Aparelho'}</h2>
             <input
               type="text"
               name="text"
@@ -94,7 +114,7 @@ const Conexoes = () => {
             </div>
             <div className="form-actions">
               <button onClick={saveConexion} className="save-button-styled">
-                Salvar
+                {editingIndex !== null ? 'Salvar Edição' : 'Salvar'}
               </button>
               <button onClick={() => setShowAddForm(false)} className="cancel-button-styled">
                 Cancelar
@@ -115,12 +135,18 @@ const Conexoes = () => {
               <img src={conexion.icon} alt={conexion.text} className="conexion-icon-overlay" />
               <span className="conexion-text-overlay">{conexion.text}</span>
             </div>
-            <button
-              className="remove-button"
-              onClick={() => removeConexion(index)}
-            >
-              X
-            </button>
+            <div className="actions-overlay"> {/* Container para os botões de ação */}
+              <button
+                className="remove-button"
+                onClick={() => removeConexion(index)}
+                title="Remover"
+              >
+                X
+              </button>
+              <button className="edit-button" onClick={() => handleEditClick(index)} title="Editar">
+                <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
+              </button>
+            </div>
           </div>
         ))}
         <div style={{ height: '60px' }}></div>

@@ -116,9 +116,6 @@ h1 {
 }
 
 .remove-button {
-    position: absolute;
-    top: 8px;
-    right: 8px;
     background: #FF0000;
     border: none;
     color: white;
@@ -253,63 +250,32 @@ h1 {
 }
 
 
-/* mediaScreen.css ou dentro de conexao.css */
+/* ... outros estilos ... */
 
-/* Para telas com largura máxima de 414px (iPhone XR em retrato) e menores */
-@media (max-width: 414px) {
-    .conexions-list {
-        flex-direction: column;
-        /* Organiza os itens em coluna */
-        align-items: center;
-        /* Centraliza os itens horizontalmente */
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    .retanguloAdicionado {
-        width: 100%;
-        /* Ocupa a largura total do container */
-        margin-bottom: 15px;
-        /* Adiciona um espaço entre os retângulos */
-    }
+.actions-overlay {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    /* Coloca os botões em coluna */
+    align-items: flex-end;
+    /* Alinha os botões à direita */
+    gap: 5px;
 }
 
+.edit-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 0.9em;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
 
-
-
-
-
-/* Para telas maiores que 414px, você pode manter o layout anterior
-   ou definir um novo comportamento se desejar. */
-@media (min-width: 415px) {
-    .conexions-list {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        width: 95%;
-        padding: 20px;
-        gap: 20px;
-        margin-bottom: 60px;
-        box-sizing: border-box;
-    }
-
-    .retanguloAdicionado {
-        position: relative;
-        width: 255px;
-        height: 110px;
-        background-color: #e0e0e0;
-        margin: 0;
-        box-sizing: border-box;
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #333;
-        font-size: 1.1em;
-        overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-        transition: transform 0.2s ease-in-out;
-    }
+.edit-button:hover {
+    opacity: 1;
 }
