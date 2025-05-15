@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
+
+
 import '../../CSS/Cadastro/cadastro.css';
+import '../../CSS/Cadastro/input.css';
+import '../../CSS/Cadastro/password.css';
+import '../../CSS/Cadastro/links.css';
+import '../../CSS/Cadastro/error.css';
+
+
+
 import { Link, useNavigate } from 'react-router-dom';
 
 const Cadastro = () => {

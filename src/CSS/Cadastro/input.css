@@ -1,0 +1,26 @@
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9em;
+    text-align: left;
+}
+
+.input-group input[type='text'],
+.input-group input[type='email'] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.input-group input[type='password'].error {
+    border-color: #dc3545;
+    background-color: #fdecea;
+}

@@ -28,38 +28,8 @@
     flex-direction: column;
 }
 
-.input-group {
-    margin-bottom: 15px;
-}
 
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-    font-size: 0.9em;
-    text-align: left;
-}
 
-.input-group input[type='text'],
-.input-group input[type='email'] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 1em;
-}
-
-.input-group input[type='password'].error {
-    border-color: #dc3545;
-    background-color: #fdecea;
-}
-
-.error-message {
-    color: #dc3545;
-    font-size: 0.8em;
-    margin-top: 5px;
-}
 
 .cadastro-button {
     background-color: #007bff;
@@ -74,22 +44,6 @@
 
 .cadastro-button:hover {
     background-color: #0056b3;
-}
-
-.links {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: #777;
-}
-
-.links a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.links a:hover {
-    text-decoration: underline;
 }
 
 .cadastro-info {
@@ -123,44 +77,6 @@
     font-size: 1.2em;
 }
 
-.password-input-group {
-    position: relative;
-    display: flex;
-    /* Usando Flexbox para alinhar label e input */
-    flex-direction: column;
-    /* Organiza os itens em coluna */
-}
-
-.password-input-group label {
-    text-align: left;
-    margin-bottom: 5px;
-    color: #555;
-    font-size: 0.9em;
-}
-
-.password-input-group input[type='password'] {
-    width: 100%;
-    padding: 10px;
-    padding-right: 30px;
-    /* Espaço para o ícone */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 1em;
-}
-
-.password-toggle-icon {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #777;
-}
-
-.password-toggle-icon:hover {
-    color: #333;
-}
 
 @media (max-width: 768px) {
     .cadastro-container {
