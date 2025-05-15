@@ -1,8 +1,8 @@
-# SolarMonitAI: Monitoramento Inteligente de Energia Solar com IA e Integração Alexa
+# Challenge: Monitoramento Inteligente de Energia Solar com IA e Integração Alexa
 
 ## Visão Geral
 
-O **SolarMonitAI** é uma solução inovadora que combina o monitoramento em tempo real da captação, produção e armazenamento de energia solar com funcionalidades inteligentes de Inteligência Artificial (IA) e integração com a Alexa. Este sistema permite que os usuários acompanhem de perto a eficiência de seus painéis solares através de um aplicativo intuitivo, além de oferecer controle de dispositivos domésticos e automação por voz.
+O **Challenge** é uma solução inovadora que combina o monitoramento em tempo real da captação, produção e armazenamento de energia solar com funcionalidades inteligentes de Inteligência Artificial (IA) e integração com a Alexa. Este sistema permite que os usuários acompanhem de perto a eficiência de seus painéis solares através de um aplicativo intuitivo, além de oferecer controle de dispositivos domésticos e automação por voz.
 
 ## Funcionalidades Principais
 
@@ -27,7 +27,7 @@ O **SolarMonitAI** é uma solução inovadora que combina o monitoramento em tem
     * Possibilidade de personalizar os períodos de análise.
 
 3.  **Integração com Alexa:**
-    * Utilize skills personalizadas da Alexa para interagir com o SolarMonitAI.
+    * Utilize skills personalizadas da Alexa para interagir com o Challenge.
     * Exemplos de comandos de voz:
         * "Alexa, qual a produção de energia solar hoje?"
         * "Alexa, desligue o ar condicionado."
@@ -92,4 +92,4 @@ O **SolarMonitAI** é uma solução inovadora que combina o monitoramento em tem
 
 ---
 
-Este README fornece uma visão geral completa do seu projeto SolarMonitAI. Lembre-se de substituir os placeholders com as informações específicas do seu desenvolvimento. Boa sorte com o seu projeto!
+Este README fornece uma visão geral completa do seu projeto Challenge. Lembre-se de substituir os placeholders com as informações específicas do seu desenvolvimento. Boa sorte com o seu projeto!
