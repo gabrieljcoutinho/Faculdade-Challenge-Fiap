@@ -2,23 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import '../../CSS/Home/home.css';
 import '../../CSS/Home/expanded.css';
-import '../../CSS/Home/analyze.css'
-import '../../CSS/Home/share.css'
-import '../../CSS/Home/chart.css'
-import '../../CSS/Home/closeBtn.css'
-import '../../CSS/Home/forecast.css'
-import '../../CSS/Home/weather.css'
-import '../../CSS/Home/current.css'
-import '../../CSS/Home/production.css'
-import '../../CSS/Home/mediaScreen.css'
-
+import '../../CSS/Home/analyze.css';
+import '../../CSS/Home/share.css';
+import '../../CSS/Home/chart.css';
+import '../../CSS/Home/closeBtn.css';
+import '../../CSS/Home/forecast.css';
+import '../../CSS/Home/weather.css';
+import '../../CSS/Home/current.css';
+import '../../CSS/Home/production.css';
+import '../../CSS/Home/mediaScreen.css';
 
 import { Line, Pie, Bar } from 'react-chartjs-2';
 
 import logoGmail from '../../imgs/Logogmail.png';
-import logoWhasapp from '../../imgs/Logowhatsapp.png'
-import logoInstagram from '../../imgs/Logoinstagram.png'
-import logoLinkedin from '../../imgs/Logolinkedin.png'
+import logoWhasapp from '../../imgs/Logowhatsapp.png';
+import logoInstagram from '../../imgs/Logoinstagram.png';
+import logoLinkedin from '../../imgs/Logolinkedin.png';
 
 import {
   Chart as ChartJS,
@@ -380,35 +379,44 @@ const Home = () => {
       {expandedChart && (
         <div className="expanded-chart-overlay" onClick={handleCloseExpandedChart}>
           <div className="expanded-chart-container" onClick={(e) => e.stopPropagation()}>
-            <button className="close-button" onClick={handleCloseExpandedChart} title='Fechar'>
+            <button className="close-button" onClick={handleCloseExpandedChart} title="Fechar">
               X
             </button>
-            <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px', height: 'calc(100% - 120px)' }}>
+            <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px', height: 'calc(100% - 170px)', overflowY: 'auto' }}>
               <div className="chart-container">
                 {expandedChart === 'line' && <Line data={productionData} options={{ ...productionOptions, responsive: true, maintainAspectRatio: false }} />}
                 {expandedChart === 'bar' && <Bar data={productionData} options={{ ...barChartOptions, responsive: true, maintainAspectRatio: false }} />}
                 {expandedChart === 'pie' && <Pie data={productionData} options={{ ...pieChartOptions, responsive: true, maintainAspectRatio: false }} />}
               </div>
+
+              <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center' }}>Dados de Produção</h3>
+              <div className="data-table-container" style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid #fff' }}>
+                      <th style={{ padding: '8px', textAlign: 'left' }}>Hora</th>
+                      <th style={{ padding: '8px', textAlign: 'left' }}>Produção (kWh)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {productionData.labels.map((label, index) => (
+                      <tr key={index} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                        <td style={{ padding: '8px' }}>{label}</td>
+                        <td style={{ padding: '8px' }}>{productionData.datasets[0].data[index]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div className="expanded-chart-actions">
               <button onClick={handleSaveChart}>Salvar Imagem</button>
-
-
-
-
-
-                <div className="share-options">
-            <a><img src={logoGmail} alt=""  className='icones' title='Ícone Email' /></a>
-            <a><img src={logoWhasapp} alt=""  className='icones' title='Ícone WhatsApp' /></a>
-              <a><img src={logoInstagram} alt=""  className='icones' title='Ícone Instagram' /></a>
-                <a><img src={logoLinkedin} alt="" className='icones' title='Ícone Linkedin' /></a>
-
-                </div>
-
-
-
-
-
+              <div className="share-options">
+                <a onClick={shareViaEmail} title="Compartilhar por Email"><img src={logoGmail} alt="Email" className="icones" /></a>
+                <a onClick={shareViaWhatsApp} title="Compartilhar no WhatsApp"><img src={logoWhasapp} alt="WhatsApp" className="icones" /></a>
+                <a onClick={shareViaInstagram} title="Compartilhar no Instagram"><img src={logoInstagram} alt="Instagram" className="icones" /></a>
+                <a onClick={shareViaLinkedIn} title="Compartilhar no LinkedIn"><img src={logoLinkedin} alt="LinkedIn" className="icones" /></a>
+              </div>
             </div>
           </div>
         </div>
