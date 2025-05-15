@@ -1,0 +1,25 @@
+.save-button-styled,
+.cancel-button-styled {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.3s ease;
+    font-size: 1em;
+}
+
+.save-button-styled {
+    background-color: #28a745;
+    color: white;
+}
+
+.cancel-button-styled {
+    background-color: #FF0000;
+    color: white;
+}
+
+.save-button-styled:hover,
+.cancel-button-styled:hover {
+    opacity: 0.9;
+}

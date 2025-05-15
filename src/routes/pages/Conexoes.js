@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../../CSS/Conexao/conexao.css';
 import '../../CSS/Conexao/mediaScreen.css';
+
+import '../../CSS/Conexao/edit.css'
+import '../../CSS/Conexao/saveBtn.css'
+import '../../CSS/Conexao/icon.css'
+import '../../CSS/Conexao/adicionar.css'
+
+
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
 import lampIcon from '../../imgs/lampada.png';
