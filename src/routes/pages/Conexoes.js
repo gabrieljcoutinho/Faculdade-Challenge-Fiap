@@ -16,7 +16,7 @@ import airConditionerIcon from '../../imgs/ar-condicionado.png';
 import lampIcon from '../../imgs/lampada.png';
 import editIcon from '../../imgs/pencil.png';
 
-const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1'];
+const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6','#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 
 const Conexoes = () => {
   const [conexions, setConexions] = useState(() => {
