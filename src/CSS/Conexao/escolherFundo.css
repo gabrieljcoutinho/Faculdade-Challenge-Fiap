@@ -1,0 +1,29 @@
+/* Em conexao.css ou um novo arquivo color-picker.css */
+.color-picker-styled {
+    margin-top: 15px;
+}
+
+.color-picker-styled label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.color-picker-styled .colors {
+    display: flex;
+    gap: 10px;
+}
+
+.color-picker-styled .color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    outline: none;
+}
+
+.color-picker-styled .color-option.active {
+    border-color: #007bff;
+    /* Cor de destaque para a cor selecionada */
+}

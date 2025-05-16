@@ -7,11 +7,15 @@ import '../../CSS/Conexao/icon.css';
 import '../../CSS/Conexao/adicionar.css';
 import '../../CSS/Conexao/slideIn.css'
 import '../../CSS/Conexao/slideOut.css';
+import '../../CSS/Conexao/error.css';
+import '../../CSS/Conexao/escolherFundo.css';
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
 import lampIcon from '../../imgs/lampada.png';
 import editIcon from '../../imgs/pencil.png';
+
+const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1'];
 
 const Conexoes = () => {
   const [conexions, setConexions] = useState(() => {
@@ -19,12 +23,14 @@ const Conexoes = () => {
     return storedConexions ? JSON.parse(storedConexions) : [];
   });
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newConexion, setNewConexion] = useState({ text: '', icon: '' });
+  const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0] }); // Cor padrão
   const [activeIcon, setActiveIcon] = useState('');
+  const [activeColor, setActiveColor] = useState(availableColors[0]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [removingIndex, setRemovingIndex] = useState(null);
-  const [enteringIndex, setEnteringIndex] = useState(null); // Novo estado para controlar a animação de entrada
+  const [enteringIndex, setEnteringIndex] = useState(null);
+
   const availableIcons = [
     { name: 'TV', src: tvIcon },
     { name: 'Ar Condicionado', src: airConditionerIcon },
@@ -37,8 +43,9 @@ const Conexoes = () => {
 
   const handleAddClick = () => {
     setShowAddForm(true);
-    setNewConexion({ text: '', icon: '' });
+    setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0] });
     setActiveIcon('');
+    setActiveColor(availableColors[0]);
     setEditingIndex(null);
     setErrorMessage('');
   };
@@ -58,6 +65,14 @@ const Conexoes = () => {
       icon: iconSrc,
     }));
     setActiveIcon(iconSrc);
+  };
+
+  const handleColorSelect = (color) => {
+    setNewConexion(prevState => ({
+      ...prevState,
+      backgroundColor: color,
+    }));
+    setActiveColor(color);
   };
 
   const saveConexion = () => {
@@ -83,10 +98,10 @@ const Conexoes = () => {
     } else {
       const newIndex = conexions.length;
       setConexions([...conexions, newConexion]);
-      setEnteringIndex(newIndex); // Define o índice do novo item para a animação
+      setEnteringIndex(newIndex);
       setTimeout(() => {
-        setEnteringIndex(null); // Limpa o índice após a animação
-      }, 300); // A duração deve corresponder à transição CSS (0.3s)
+        setEnteringIndex(null);
+      }, 300);
     }
     setShowAddForm(false);
     setErrorMessage('');
@@ -102,8 +117,9 @@ const Conexoes = () => {
 
   const handleEditClick = (index) => {
     const conexionToEdit = conexions[index];
-    setNewConexion({ text: conexionToEdit.text, icon: conexionToEdit.icon });
+    setNewConexion({ text: conexionToEdit.text, icon: conexionToEdit.icon, backgroundColor: conexionToEdit.backgroundColor || availableColors[0] });
     setActiveIcon(conexionToEdit.icon);
+    setActiveColor(conexionToEdit.backgroundColor || availableColors[0]);
     setShowAddForm(true);
     setEditingIndex(index);
     setErrorMessage('');
@@ -140,6 +156,20 @@ const Conexoes = () => {
                   >
                     <img src={icon.src} alt={icon.name} style={{ width: '30px', height: '30px' }} />
                   </button>
+                ))}
+              </div>
+            </div>
+            <div className="color-picker-styled">
+              <label>Escolha a cor de fundo:</label>
+              <div className="colors">
+                {availableColors.map((color) => (
+                  <button
+                    key={color}
+                    className={`color-option ${activeColor === color ? 'active' : ''}`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => handleColorSelect(color)}
+                    title={color}
+                  ></button>
                 ))}
               </div>
             </div>
