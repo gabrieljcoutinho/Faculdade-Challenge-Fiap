@@ -2,3 +2,24 @@
     border: 2px solid red !important;
     /* Use !important para garantir a prioridade */
 }
+
+
+.disconnected-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background-color: rgba(0, 0, 0, 0.5); Opcional: fundo semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2em;
+    z-index: 10;
+    /* Garante que a mensagem fique acima */
+    border-radius: inherit;
+    pointer-events: none;
+    /* Impede que a overlay capture eventos de clique */
+}
