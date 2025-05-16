@@ -1,0 +1,4 @@
+.error-border {
+    border: 2px solid red !important;
+    /* Use !important para garantir a prioridade */
+}

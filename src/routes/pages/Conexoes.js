@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+
 import '../../CSS/Conexao/conexao.css';
 import '../../CSS/Conexao/mediaScreen.css';
 import '../../CSS/Conexao/edit.css';
 import '../../CSS/Conexao/saveBtn.css';
 import '../../CSS/Conexao/icon.css';
 import '../../CSS/Conexao/adicionar.css';
-import '../../CSS/Conexao/slideIn.css'
+import '../../CSS/Conexao/slideIn.css';
 import '../../CSS/Conexao/slideOut.css';
 import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
@@ -30,6 +31,9 @@ const Conexoes = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [removingIndex, setRemovingIndex] = useState(null);
   const [enteringIndex, setEnteringIndex] = useState(null);
+  const [showIconError, setShowIconError] = useState(false);
+  const [showColorError, setShowColorError] = useState(false);
+  const [showNameError, setShowNameError] = useState(false);
 
   const availableIcons = [
     { name: 'TV', src: tvIcon },
@@ -48,6 +52,9 @@ const Conexoes = () => {
     setActiveColor(availableColors[0]);
     setEditingIndex(null);
     setErrorMessage('');
+    setShowIconError(false);
+    setShowColorError(false);
+    setShowNameError(false);
   };
 
   const handleInputChange = (event) => {
@@ -57,6 +64,9 @@ const Conexoes = () => {
       [name]: value,
     }));
     setErrorMessage('');
+    if (name === 'text') {
+      setShowNameError(false);
+    }
   };
 
   const handleIconSelect = (iconSrc) => {
@@ -65,6 +75,7 @@ const Conexoes = () => {
       icon: iconSrc,
     }));
     setActiveIcon(iconSrc);
+    setShowIconError(false);
   };
 
   const handleColorSelect = (color) => {
@@ -73,11 +84,36 @@ const Conexoes = () => {
       backgroundColor: color,
     }));
     setActiveColor(color);
+    setShowColorError(false);
   };
 
   const saveConexion = () => {
-    if (!newConexion.text || !newConexion.icon) {
-      setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
+    let hasError = false;
+    if (!newConexion.text) {
+      setShowNameError(true);
+      hasError = true;
+      if (!errorMessage) {
+        setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
+      }
+    } else {
+      setShowNameError(false);
+    }
+    if (!newConexion.icon) {
+      setShowIconError(true);
+      hasError = true;
+      if (!errorMessage) {
+        setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
+      }
+    } else {
+      setShowIconError(false);
+    }
+    if (!newConexion.backgroundColor) {
+      setShowColorError(true);
+    } else {
+      setShowColorError(false);
+    }
+
+    if (hasError) {
       return;
     }
 
@@ -123,6 +159,9 @@ const Conexoes = () => {
     setShowAddForm(true);
     setEditingIndex(index);
     setErrorMessage('');
+    setShowIconError(false);
+    setShowColorError(false);
+    setShowNameError(false);
   };
 
   return (
@@ -143,6 +182,7 @@ const Conexoes = () => {
               placeholder="Nome do Aparelho"
               value={newConexion.text}
               onChange={handleInputChange}
+              className={showNameError && !newConexion.text ? 'error-border' : ''}
             />
             <div className="icon-picker-styled">
               <label>Escolha o ícone:</label>
@@ -150,7 +190,7 @@ const Conexoes = () => {
                 {availableIcons.map((icon) => (
                   <button
                     key={icon.name}
-                    className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`}
+                    className={`icon-option ${activeIcon === icon.src ? 'active' : ''} ${showIconError && !newConexion.icon ? 'error-border' : ''}`}
                     onClick={() => handleIconSelect(icon.src)}
                     title={icon.name}
                   >
@@ -165,7 +205,7 @@ const Conexoes = () => {
                 {availableColors.map((color) => (
                   <button
                     key={color}
-                    className={`color-option ${activeColor === color ? 'active' : ''}`}
+                    className={`color-option ${activeColor === color ? 'active' : ''} ${showColorError && !newConexion.backgroundColor ? 'error-border' : ''}`}
                     style={{ backgroundColor: color }}
                     onClick={() => handleColorSelect(color)}
                     title={color}
