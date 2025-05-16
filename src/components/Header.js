@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../CSS/Header/header.css'; // Importe o arquivo CSS
+import '../CSS/Header/menu.css';
 
 import home from '../imgs/home.png';
 import wifi from '../imgs/wifi.png';
