@@ -13,7 +13,9 @@ import '../../CSS/Conexao/botaoSwitch.css';
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
+import airfry from '../../imgs/airfry.png'
 import lampIcon from '../../imgs/lampada.png';
+import carregador from '../../imgs/carregador.png'
 import editIcon from '../../imgs/pencil.png';
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6','#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
@@ -36,6 +38,8 @@ const Conexoes = () => {
     { name: 'TV', src: tvIcon },
     { name: 'Ar Condicionado', src: airConditionerIcon },
     { name: 'Lâmpada', src: lampIcon },
+    { name: 'Arfry', src: airfry},
+    {name: 'Carregador', src: carregador}
   ];
 
   useEffect(() => {
