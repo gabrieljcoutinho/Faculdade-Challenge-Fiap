@@ -1,0 +1,20 @@
+/* Em conexao.css ou slideOut.css */
+.retanguloAdicionado.exiting {
+    animation: slideOut 0.3s ease-out forwards;
+    opacity: 1;
+    /* Garante que o elemento esteja visível no início da animação */
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+        display: none;
+        /* Garante que o elemento desapareça completamente */
+    }
+}

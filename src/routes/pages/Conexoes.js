@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import '../../CSS/Conexao/conexao.css';
 import '../../CSS/Conexao/mediaScreen.css';
-
-import '../../CSS/Conexao/edit.css'
-import '../../CSS/Conexao/saveBtn.css'
-import '../../CSS/Conexao/icon.css'
-import '../../CSS/Conexao/adicionar.css'
-
+import '../../CSS/Conexao/edit.css';
+import '../../CSS/Conexao/saveBtn.css';
+import '../../CSS/Conexao/icon.css';
+import '../../CSS/Conexao/adicionar.css';
+import '../../CSS/Conexao/slideIn.css'
+import '../../CSS/Conexao/slideOut.css';
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
 import lampIcon from '../../imgs/lampada.png';
-import editIcon from '../../imgs/pencil.png'; // Importe o ícone de lápis
+import editIcon from '../../imgs/pencil.png';
 
 const Conexoes = () => {
   const [conexions, setConexions] = useState(() => {
@@ -21,12 +21,14 @@ const Conexoes = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newConexion, setNewConexion] = useState({ text: '', icon: '' });
   const [activeIcon, setActiveIcon] = useState('');
-  const [editingIndex, setEditingIndex] = useState(null); // Novo estado para rastrear o item sendo editado
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [removingIndex, setRemovingIndex] = useState(null);
+  const [enteringIndex, setEnteringIndex] = useState(null); // Novo estado para controlar a animação de entrada
   const availableIcons = [
     { name: 'TV', src: tvIcon },
     { name: 'Ar Condicionado', src: airConditionerIcon },
     { name: 'Lâmpada', src: lampIcon },
-    // Adicione mais ícones conforme necessário
   ];
 
   useEffect(() => {
@@ -37,7 +39,8 @@ const Conexoes = () => {
     setShowAddForm(true);
     setNewConexion({ text: '', icon: '' });
     setActiveIcon('');
-    setEditingIndex(null); // Reseta o índice de edição ao adicionar um novo
+    setEditingIndex(null);
+    setErrorMessage('');
   };
 
   const handleInputChange = (event) => {
@@ -46,6 +49,7 @@ const Conexoes = () => {
       ...prevState,
       [name]: value,
     }));
+    setErrorMessage('');
   };
 
   const handleIconSelect = (iconSrc) => {
@@ -57,25 +61,43 @@ const Conexoes = () => {
   };
 
   const saveConexion = () => {
-    if (newConexion.text && newConexion.icon) {
-      if (editingIndex !== null) {
-        // Se estiver editando, atualize o item existente
-        const updatedConexions = [...conexions];
-        updatedConexions[editingIndex] = newConexion;
-        setConexions(updatedConexions);
-        setEditingIndex(null);
-      } else {
-        // Se não estiver editando, adicione um novo item
-        setConexions([...conexions, newConexion]);
-      }
-      setShowAddForm(false);
-    } else {
-      alert('Por favor, digite um nome e selecione um ícone.');
+    if (!newConexion.text || !newConexion.icon) {
+      setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
+      return;
     }
+
+    const isDuplicate = conexions.some((conexion, index) =>
+      conexion.text.toLowerCase() === newConexion.text.toLowerCase() && index !== editingIndex
+    );
+
+    if (isDuplicate) {
+      setErrorMessage(`Hummm, parece que já temos um aparelho chamado "${newConexion.text}" por aqui. Que tal escolher outro nome? 😊`);
+      return;
+    }
+
+    if (editingIndex !== null) {
+      const updatedConexions = [...conexions];
+      updatedConexions[editingIndex] = newConexion;
+      setConexions(updatedConexions);
+      setEditingIndex(null);
+    } else {
+      const newIndex = conexions.length;
+      setConexions([...conexions, newConexion]);
+      setEnteringIndex(newIndex); // Define o índice do novo item para a animação
+      setTimeout(() => {
+        setEnteringIndex(null); // Limpa o índice após a animação
+      }, 300); // A duração deve corresponder à transição CSS (0.3s)
+    }
+    setShowAddForm(false);
+    setErrorMessage('');
   };
 
   const removeConexion = (indexToRemove) => {
-    setConexions(conexions.filter((_, index) => index !== indexToRemove));
+    setRemovingIndex(indexToRemove);
+    setTimeout(() => {
+      setConexions(conexions.filter((_, index) => index !== indexToRemove));
+      setRemovingIndex(null);
+    }, 300);
   };
 
   const handleEditClick = (index) => {
@@ -84,6 +106,7 @@ const Conexoes = () => {
     setActiveIcon(conexionToEdit.icon);
     setShowAddForm(true);
     setEditingIndex(index);
+    setErrorMessage('');
   };
 
   return (
@@ -97,6 +120,7 @@ const Conexoes = () => {
         <div className="modal-overlay">
           <div className="add-form-styled">
             <h2>{editingIndex !== null ? 'Editar Aparelho' : 'Adicionar Novo Aparelho'}</h2>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
             <input
               type="text"
               name="text"
@@ -135,14 +159,14 @@ const Conexoes = () => {
         {conexions.map((conexion, index) => (
           <div
             key={index}
-            className="retanguloAdicionado"
+            className={`retanguloAdicionado ${removingIndex === index ? 'exiting' : ''} ${enteringIndex === index ? 'entering' : (enteringIndex < index ? 'entered' : '')}`}
             style={{ backgroundColor: conexion.backgroundColor || '#e0e0e0' }}
           >
             <div className="icon-text-overlay">
               <img src={conexion.icon} alt={conexion.text} className="conexion-icon-overlay" />
               <span className="conexion-text-overlay">{conexion.text}</span>
             </div>
-            <div className="actions-overlay"> {/* Container para os botões de ação */}
+            <div className="actions-overlay">
               <button
                 className="remove-button"
                 onClick={() => removeConexion(index)}
