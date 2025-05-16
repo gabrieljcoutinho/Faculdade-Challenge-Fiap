@@ -63,8 +63,14 @@ const Header = () => {
         </Link>
 
 
-        <div className="settings" onClick={openSettings}>
-          <img src={settingsIcon} alt="Configurações" className='imgHeader' title='Configurações' />
+        <div className="settings">
+          <img
+            src={settingsIcon}
+            alt="Configurações"
+            className='imgHeader'
+            title='Configurações'
+            onClick={openSettings} // Mova o onClick para a tag <img>
+          />
         </div>
       </div>
     </header>
