@@ -53,7 +53,6 @@ const Cadastro = () => {
 
     setTimeout(() => {
       setSuccessMessage('Cadastro realizado com sucesso!');
-      // Aqui você pode armazenar dados no localStorage ou enviar para API.
       setTimeout(() => navigate('/'), 2000);
     }, 1500);
   };

@@ -8,6 +8,8 @@ import wifi from '../imgs/wifi.png';
 import contato from '../imgs/contato.png';
 import settingsIcon from '../imgs/engrenagem.png'; // Importe o ícone de engrenagem
 
+import info from '../imgs/info.png'
+
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation(); // Hook para acessar a localização atual
@@ -62,6 +64,7 @@ const Header = () => {
         >
           <p className='paragrafoListaHeader'> <img src={contato} alt=""  className='imgHeader' title='Contato'  /></p>
         </Link>
+
 
 
         <div className="settings">
