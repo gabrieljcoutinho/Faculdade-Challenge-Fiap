@@ -59,7 +59,7 @@
     /* Alinha os itens à direita */
     width: 100%;
     /* Garante que o contêiner dos botões ocupe toda a largura */
-    padding-left: 143px;
+    padding-left: 128px;
     /* Adiciona um pouco de espaço à direita, se necessário */
     box-sizing: border-box;
     /* Garante que o padding não aumente a largura total */
