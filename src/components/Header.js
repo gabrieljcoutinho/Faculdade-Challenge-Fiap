@@ -31,7 +31,7 @@ const Header = () => {
   return (
     <header>
       <div id="main">
-        <span id="menuIcon" onClick={toggleMenu}>☰</span>
+        <span id="menuIcon" onClick={toggleMenu} className='btnBurguer'>☰</span>
       </div>
       <div id="menu" className={menuOpen ? 'open' : ''}>
         <button className="close-btn" onClick={closeMenu}> x </button>
