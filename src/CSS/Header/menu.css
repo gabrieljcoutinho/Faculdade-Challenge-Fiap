@@ -91,10 +91,11 @@ header {
 }
 
 .imgHeader {
-    padding-top: 22rem;
+    padding-top: 3.5rem;
+    /* Exemplo de valor menor */
     padding-left: 3.5rem;
+    /* Exemplo de valor menor */
 }
-
 
 @media screen and (max-width: 414px) and (max-height: 896px) {
     .sua-classe {
