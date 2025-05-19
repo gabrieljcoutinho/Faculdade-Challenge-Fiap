@@ -6,6 +6,8 @@
 .settingTitulo {
     font-size: 25px;
     color: #fff;
+    margin-bottom: 20px;
+    /* Adicionei margem abaixo do título para espaçamento */
 }
 
 .configuracoes-overlay {
@@ -22,6 +24,10 @@
     color: #fff;
     padding: 20px;
     /* Added some padding around the overlay */
+    align-items: center;
+    /* Centralizei os itens horizontalmente */
+    justify-content: flex-start;
+    /* Alinhei os itens ao topo */
 }
 
 .fechar-btn {
@@ -36,28 +42,27 @@
 }
 
 .conteudo-configuracoes {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 24px;
-}
-
-.conteudo-configuracoes h1 {
-    position: absolute;
-    top: 20px;
-    /* Adjusted top position */
-    left: 50%;
-    transform: translateX(-50%);
+    /* Não precisamos mais do posicionamento absoluto aqui */
 }
 
 .btn-container {
     display: flex;
     gap: 20px;
     /* Adds spacing between the buttons */
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
+    margin-top: 30px;
+    /* Mantive a margem superior */
+    justify-content: flex-end;
+    /* Alinha os itens à direita */
+    width: 100%;
+    /* Garante que o contêiner dos botões ocupe toda a largura */
+    padding-left: 180px;
+    /* Adiciona um pouco de espaço à direita, se necessário */
+    box-sizing: border-box;
+    /* Garante que o padding não aumente a largura total */
 }
 
 /* CSS for the buttons */
