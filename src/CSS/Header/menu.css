@@ -132,7 +132,108 @@ header {
 
 @media screen and (width: 360px) and (height: 740px) {
     .imgHeader {
-        padding-top: 14rem;
+        padding-top: 15rem;
         /* Ajuste este valor para mover a imagem ainda mais para cima */
     }
+}
+
+
+@media (max-width: 400px) {
+    .sua-classe {
+        position: absolute;
+        /* Ou position: fixed; dependendo do seu layout */
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        /* Para ocupar toda a largura da tela */
+        /* Adicione outros estilos conforme necessário */
+        padding-top: 25rem;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#menu {
+    /* Outros estilos do seu menu */
+    display: flex;
+    flex-direction: column;
+    /* Garante que os itens fiquem em coluna */
+    /* ... outros estilos ... */
+}
+
+.linkHeader {
+    /* Estilos para os links do menu */
+    text-decoration: none;
+    color: white;
+    /* Ou a cor do seu texto */
+    /* ... outros estilos ... */
+}
+
+.iconesHeader {
+    width: 30px;
+    /* Ajuste o tamanho conforme necessário */
+    height: 30px;
+    /* Ajuste o tamanho conforme necessário */
+    vertical-align: middle;
+    /* Alinha verticalmente a imagem com o texto (se houver) */
+    margin-right: 10px;
+    /* Espaço entre o ícone e o texto (se houver) */
+}
+
+.contato-configuracoes {
+    display: flex;
+    flex-direction: column;
+    /* Coloca contato e configurações em coluna */
+}
+
+.configuracoes-link {
+    /* Estilos para o container do ícone de configurações (se precisar) */
+    /* Por exemplo, para adicionar margem ou padding */
+    margin-top: 15px;
+    /* Adiciona um espaço acima do ícone de configurações */
 }

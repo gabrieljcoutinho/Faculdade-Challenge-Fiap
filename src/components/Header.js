@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import '../CSS/Header/header.css'; // Importe o arquivo CSS
+import '../CSS/Header/header.css';
 import '../CSS/Header/menu.css';
 
 import home from '../imgs/home.png';
 import wifi from '../imgs/wifi.png';
 import contato from '../imgs/contato.png';
-import settingsIcon from '../imgs/engrenagem.png'; // Importe o ícone de engrenagem
-
+import settingsIcon from '../imgs/engrenagem.png';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const location = useLocation(); // Hook para acessar a localização atual
-  const navigate = useNavigate(); // Hook para navegação
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -25,8 +24,8 @@ const Header = () => {
   };
 
   const openSettings = () => {
-    closeMenu(); // Fechar o menu antes de navegar
-    navigate('/configuracoes'); // Navega para a página de configurações
+    closeMenu();
+    navigate('/configuracoes');
   };
 
   return (
@@ -41,7 +40,7 @@ const Header = () => {
           onClick={closeMenu}
           className={`linkHeader ${location.pathname === '/' ? 'active' : ''}`}
         >
-          <p className='paragrafoListaHeader'><img src={home} alt=""  className='iconesHeader' title='Home' /></p>
+          <p className='paragrafoListaHeader'><img src={home} alt="" className='iconesHeader' title='Home' /></p>
         </Link>
 
         <br /><br />
@@ -51,27 +50,27 @@ const Header = () => {
           onClick={closeMenu}
           className={`linkHeader ${location.pathname === '/conexoes' ? 'active' : ''}`}
         >
-          <p className='paragrafoListaHeader'><img src={wifi} alt=""  className='iconesHeader' title='Conexão' /></p>
+          <p className='paragrafoListaHeader'><img src={wifi} alt="" className='iconesHeader' title='Conexão' /></p>
         </Link>
 
         <br /><br />
 
-        <Link
-          to="/contato"
-          onClick={closeMenu}
-          className={`linkHeader ${location.pathname === '/contato' ? 'active' : ''}`}
-        >
-          <p className='paragrafoListaHeader'> <img src={contato} alt=""  className='iconesHeader  teste' title='Contato'  /></p>
-        </Link>
-
-        <img
-          src={settingsIcon}
-          alt="Configurações"
-          className='imgHeader'
-          title='Configurações'
-          onClick={openSettings}
-          style={{ cursor: 'pointer'}} // Adicione um cursor para indicar que é clicável
-        />
+        <div className='contato-configuracoes'> {/* Container para contato e configurações */}
+          <Link
+            to="/contato"
+            onClick={closeMenu}
+            className={`linkHeader ${location.pathname === '/contato' ? 'active' : ''}`}
+          >
+            <p className='paragrafoListaHeader'> <img src={contato} alt="" className='iconesHeader teste' title='Contato' /></p>
+          </Link>
+          <div
+            onClick={openSettings}
+            className='linkHeader configuracoes-link' // Adicionando uma classe para estilização
+            style={{ cursor: 'pointer' }}
+          >
+            <p className='paragrafoListaHeader'> <img src={settingsIcon} alt="Configurações" className='iconesHeader' title='Configurações' /></p>
+          </div>
+        </div>
       </div>
     </header>
   );
