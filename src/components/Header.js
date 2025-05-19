@@ -64,17 +64,14 @@ const Header = () => {
           <p className='paragrafoListaHeader'> <img src={contato} alt=""  className='iconesHeader  teste' title='Contato'  /></p>
         </Link>
 
-
-
-        <div className="settings">
-          <img
-            src={settingsIcon}
-            alt="Configurações"
-            className='imgHeader'
-            title='Configurações'
-            onClick={openSettings} // Mova o onClick para a tag <img>
-          />
-        </div>
+        <img
+          src={settingsIcon}
+          alt="Configurações"
+          className='imgHeader'
+          title='Configurações'
+          onClick={openSettings}
+          style={{ cursor: 'pointer'}} // Adicione um cursor para indicar que é clicável
+        />
       </div>
     </header>
   );

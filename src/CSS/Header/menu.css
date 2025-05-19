@@ -81,10 +81,6 @@ header {
     padding-left: 2rem;
 }
 
-.imgHeaderEngrenagem {
-    width: 40px;
-    padding-left: 1rem;
-}
 
 .settings {
     padding-left: 50px;
@@ -92,4 +88,9 @@ header {
     margin-bottom: 15px;
     display: flex;
     justify-content: flex-start;
+}
+
+.imgHeader {
+    padding-top: 22rem;
+    padding-left: 3.5rem;
 }
