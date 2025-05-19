@@ -1,14 +1,3 @@
-#menuIcon {
-    display: inline-block;
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-    /* Adiciona margem à esquerda para separá-lo da borda */
-}
-
 #menu {
     height: 100%;
     width: 0;
@@ -20,13 +9,13 @@
     transition: 0.5s;
     padding-top: 60px;
     padding-bottom: 60px;
-    /* Adiciona padding na parte inferior */
     background-color: #333;
     color: white;
     display: flex;
     flex-direction: column;
-    /* Remova a linha abaixo */
-    /* justify-content: space-between; */
+    /* Organiza os itens verticalmente */
+    align-items: flex-start;
+    /* Alinha os itens à esquerda */
 }
 
 #menu.open {
@@ -34,16 +23,94 @@
 }
 
 #menu a {
-    /* padding: 8px 8px 8px 32px; */
     padding: 8px;
     text-decoration: none;
     font-size: 20px;
     color: #ddd;
     display: block;
     transition: 0.3s;
+    margin-left: 15px;
+    /* Adiciona um pouco de espaço à esquerda dos links */
 }
 
 #menu a:hover {
     color: #f1f1f1;
     text-decoration: underline;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    background-color: #252525;
+}
+
+#main {
+    padding: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #ddd;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #f1f1f1;
+}
+
+/*IMG*/
+.imgHeader {
+    width: 35px;
+    padding-top: 0;
+    cursor: pointer;
+}
+
+.imgHeaderEngrenagem {
+    width: 40px;
+    padding-left: 3rem;
+}
+
+.settings {
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    /* Remova a margem superior negativa */
+    display: flex;
+    justify-content: flex-start;
+    /* Alinha o ícone à esquerda */
+    margin-left: 5px;
+    /* Adiciona um pouco de espaço à esquerda do ícone */
+}
+
+.settings:hover {
+    opacity: 0.8;
+}
+
+.contact-icon {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    /* Alinha o ícone à esquerda */
+    margin-left: 5px;
+    /* Adiciona um pouco de espaço à esquerda do ícone */
+    margin-bottom: 5px;
+    /* Adiciona um pouco de espaço abaixo do ícone */
+}
+
+.contact-icon:hover {
+    opacity: 0.8;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+
 // Importa os arquivos de estilo (CSS) para deixar a página mais bonita
 import '../../CSS/Home/home.css'; // Estilos gerais da página inicial
 import '../../CSS/Home/expanded.css'; // Estilos para quando o gráfico é ampliado

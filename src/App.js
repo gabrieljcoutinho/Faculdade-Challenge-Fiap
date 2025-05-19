@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route} from 'react-router-dom'
 import Header from './components/Header';
 import Footer from './components/Footer';
 
+
 //Pages
 import Home from './routes/pages/Home';
 import Conexoes from './routes/pages/Conexoes';
@@ -20,6 +21,8 @@ function App() {
       <BrowserRouter>
 
         <Header />
+
+
 
         <Routes>
           <Route path="/" element={<Home />} />
