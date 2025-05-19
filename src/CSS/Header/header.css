@@ -45,11 +45,15 @@ header {
     padding: 10px;
     cursor: pointer;
     margin-bottom: 15px;
-    margin-top: -350px;
+    margin-top: -50px;
 }
 
 
 .settings:hover {
     opacity: 0.8;
     /* Feedback visual ao passar o mouse */
+}
+
+.teste {
+    z-index: 123564623874;
 }

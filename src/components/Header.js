@@ -61,7 +61,7 @@ const Header = () => {
           onClick={closeMenu}
           className={`linkHeader ${location.pathname === '/contato' ? 'active' : ''}`}
         >
-          <p className='paragrafoListaHeader'> <img src={contato} alt=""  className='iconesHeader' title='Contato'  /></p>
+          <p className='paragrafoListaHeader'> <img src={contato} alt=""  className='iconesHeader  teste' title='Contato'  /></p>
         </Link>
 
 
