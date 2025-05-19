@@ -108,3 +108,30 @@ header {
         padding-top: 25rem;
     }
 }
+
+@media screen and (max-width: 414px) and (max-height: 896px) {
+    .sua-classe {
+        position: absolute;
+        /* Ou position: fixed; dependendo do seu layout */
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        /* Para ocupar toda a largura da tela */
+        /* Adicione outros estilos conforme necessário */
+        padding-top: 25rem;
+    }
+}
+
+@media screen and (width: 360px) and (height: 720px) {
+    .imgHeader {
+        padding-top: 15rem;
+        /* Ajuste este valor para mover a imagem para cima */
+    }
+}
+
+@media screen and (width: 360px) and (height: 740px) {
+    .imgHeader {
+        padding-top: 14rem;
+        /* Ajuste este valor para mover a imagem ainda mais para cima */
+    }
+}
