@@ -41,7 +41,7 @@ const Header = () => {
           onClick={closeMenu}
           className={`linkHeader ${location.pathname === '/' ? 'active' : ''}`}
         >
-          <p className='paragrafoListaHeader'><img src={home} alt=""  className='imgHeader' title='Home' /></p>
+          <p className='paragrafoListaHeader'><img src={home} alt=""  className='iconesHeader' title='Home' /></p>
         </Link>
 
         <br /><br />
@@ -51,7 +51,7 @@ const Header = () => {
           onClick={closeMenu}
           className={`linkHeader ${location.pathname === '/conexoes' ? 'active' : ''}`}
         >
-          <p className='paragrafoListaHeader'><img src={wifi} alt=""  className='imgHeader' title='Conexão' /></p>
+          <p className='paragrafoListaHeader'><img src={wifi} alt=""  className='iconesHeader' title='Conexão' /></p>
         </Link>
 
         <br /><br />
@@ -61,7 +61,7 @@ const Header = () => {
           onClick={closeMenu}
           className={`linkHeader ${location.pathname === '/contato' ? 'active' : ''}`}
         >
-          <p className='paragrafoListaHeader'> <img src={contato} alt=""  className='imgHeader' title='Contato'  /></p>
+          <p className='paragrafoListaHeader'> <img src={contato} alt=""  className='iconesHeader' title='Contato'  /></p>
         </Link>
 
 

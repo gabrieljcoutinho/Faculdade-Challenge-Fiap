@@ -74,45 +74,22 @@ header {
 }
 
 /*IMG*/
-.imgHeader {
+.iconesHeader {
     width: 35px;
     padding-top: 0;
     cursor: pointer;
+    padding-left: 2rem;
 }
 
 .imgHeaderEngrenagem {
     width: 40px;
-    padding-left: 3rem;
+    padding-left: 1rem;
 }
 
 .settings {
-    padding: 10px;
+    padding-left: 50px;
     cursor: pointer;
     margin-bottom: 15px;
-    /* Remova a margem superior negativa */
     display: flex;
     justify-content: flex-start;
-    /* Alinha o ícone à esquerda */
-    margin-left: 5px;
-    /* Adiciona um pouco de espaço à esquerda do ícone */
-}
-
-.settings:hover {
-    opacity: 0.8;
-}
-
-.contact-icon {
-    padding: 10px;
-    cursor: pointer;
-    display: flex;
-    justify-content: flex-start;
-    /* Alinha o ícone à esquerda */
-    margin-left: 5px;
-    /* Adiciona um pouco de espaço à esquerda do ícone */
-    margin-bottom: 5px;
-    /* Adiciona um pouco de espaço abaixo do ícone */
-}
-
-.contact-icon:hover {
-    opacity: 0.8;
 }
