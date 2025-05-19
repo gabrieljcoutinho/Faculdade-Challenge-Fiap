@@ -51,6 +51,8 @@ header {
 
 #main {
     padding: 10px;
+    font-size: 20px;
+    color: #fff;
 }
 
 .close-btn {

@@ -8,7 +8,6 @@ import wifi from '../imgs/wifi.png';
 import contato from '../imgs/contato.png';
 import settingsIcon from '../imgs/engrenagem.png'; // Importe o ícone de engrenagem
 
-import info from '../imgs/info.png'
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
