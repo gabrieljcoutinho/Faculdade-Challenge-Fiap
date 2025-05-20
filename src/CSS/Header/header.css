@@ -9,6 +9,7 @@ header {
     /* Usamos flexbox para alinhar os itens */
     align-items: center;
     /* Alinha verticalmente ao centro */
+    cursor: pointer;
     background-color: #252525;
 }
 
@@ -26,10 +27,12 @@ header {
     color: #ddd;
     padding: 0;
     line-height: 1;
+    cursor: pointer;
 }
 
 .close-btn:hover {
     color: #f1f1f1;
+    cursor: pointer;
 }
 
 /*IMG*/
@@ -38,6 +41,7 @@ header {
     padding-top: 0;
     cursor: pointer;
     padding-left: 20px;
+    cursor: pointer;
 }
 
 
@@ -46,10 +50,16 @@ header {
     cursor: pointer;
     margin-bottom: 15px;
     margin-top: -50px;
+    cursor: pointer;
 }
 
 
 .settings:hover {
     opacity: 0.8;
     /* Feedback visual ao passar o mouse */
+}
+
+
+#main:hover {
+    cursor: pointer;
 }
