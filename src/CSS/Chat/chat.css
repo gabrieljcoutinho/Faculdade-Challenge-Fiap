@@ -55,7 +55,7 @@
 
 .message.other .message-bubble {
     background-color: #e0e0e0;
-    color: black;
+    color: #252525;
 }
 
 .message-input-form {
@@ -64,28 +64,54 @@
 }
 
 .message-input {
+    color: #fff;
     flex-grow: 1;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
+    background-color: #252525;
 }
 
-.send-button {
-    padding: 10px 15px;
+
+
+
+/* .message-input {
     background-color: #252525;
-    color: white;
-    border: none;
+    padding: 10px;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    cursor: pointer;
     font-size: 16px;
+} */
+
+.send-button {
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    /* Cor de fundo (azul) — personalize se quiser */
+    border: none;
+    border-radius: 50%;
+    /* Faz o botão ficar redondo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     transition: background-color 0.2s ease;
+    padding: 0;
 }
 
 .send-button:hover {
-    background-color: #000;
+    background-color: #0056b3;
 }
 
-.send-button:active {
-    background-color: #c0c0c0;
+.send-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+
+.message-input::placeholder {
+    color: #fff;
+    /* Altere para a cor desejada */
 }
