@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../../CSS/Chat/chat.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
-const OPENAI_API_KEY = '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'; // Coloque sua API key aqui, melhor usar .env
+const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
