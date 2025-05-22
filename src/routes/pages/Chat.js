@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../../CSS/Chat/chat.css';
 import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
+import '../../CSS/Chat/modoResposta.css';
 
 import sendBtn from '../../imgs/sendBtn.png';
 
@@ -99,7 +100,7 @@ const Chat = () => {
     <div className="chat-container">
       {/* Seletor de modo */}
       <div className="mode-selector-container">
-        <label htmlFor="mode-select">Escolha o modo de resposta:</label>
+        <label htmlFor="mode-select">Modo de resposta</label>
         <select
           id="mode-select"
           value={mode}
