@@ -12,6 +12,7 @@ import Contato from './routes/pages/Contato';
 import Configuracoes from './routes/pages/Configuracoes';
 import Logar from './routes/pages/Logar';
 import Cadastro from './routes/pages/Cadastro';
+import Chat from '../src/routes/pages/Chat'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/configuracoes" element={<Configuracoes />} />
           <Route path="/login" element={<Logar />} />
           <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/chat" element={<Chat />} />
         </Routes>
         <Footer />
       </BrowserRouter>
