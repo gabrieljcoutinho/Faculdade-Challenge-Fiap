@@ -1,3 +1,4 @@
+/* Estilos gerais para o chat-container */
 .chat-container {
     border: 1px solid #ddd;
     border-radius: 12px;
@@ -7,13 +8,22 @@
     display: flex;
     flex-direction: column;
     height: 645px;
+    /* Altura padrão para telas maiores ou outras */
     background: #fff;
     overflow: hidden;
     padding: 16px;
     padding-top: 5rem;
 }
 
+/* Media query para telas com largura máxima de 896px (como o iPhone 414x896) */
+@media (max-width: 896px) {
+    .chat-container {
+        height: 725px;
+        /* Altura específica para telas médias */
+    }
+}
 
+/* O restante do seu CSS */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -31,8 +41,6 @@
     display: flex;
     gap: 10px;
 }
-
-
 
 @keyframes spin {
     to {
