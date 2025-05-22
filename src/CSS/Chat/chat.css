@@ -13,6 +13,7 @@
     overflow: hidden;
     padding: 16px;
     padding-top: 5rem;
+    padding-bottom: 10rem;
 }
 
 /* Media query para telas com largura máxima de 896px (como o iPhone 414x896) */
