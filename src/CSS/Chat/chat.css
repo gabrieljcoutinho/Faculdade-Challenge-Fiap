@@ -18,7 +18,7 @@
 /* Media query para telas com largura máxima de 896px (como o iPhone 414x896) */
 @media (max-width: 896px) {
     .chat-container {
-        height: 740px;
+        height: 730px;
         /* Altura específica para telas médias */
     }
 }
