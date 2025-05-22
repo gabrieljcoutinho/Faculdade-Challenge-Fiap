@@ -1,0 +1,44 @@
+.send-button {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    background: #4facfe;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+    box-shadow: 0 4px 12px rgba(79, 172, 254, 0.6);
+    position: relative;
+}
+
+.send-button:hover:not(:disabled) {
+    background: #00aaff;
+    box-shadow: 0 6px 18px rgba(0, 150, 255, 0.7);
+}
+
+.send-button:disabled {
+    background: #a0cfff;
+    cursor: default;
+    box-shadow: none;
+}
+
+.send-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.15));
+}
+
+/* Loading spinner inside the button */
+.send-button.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
