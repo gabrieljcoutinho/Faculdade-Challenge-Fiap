@@ -110,7 +110,7 @@
 
 .send-button:hover:not(:disabled) {
     background: #00aaff;
-    box-shadow: 0 6px 18px rgba(0, 170, 255, 0.7);
+    box-shadow: 0 6px 18px rgba(0, 150, 255, 0.7);
 }
 
 .send-button:disabled {
