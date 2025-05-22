@@ -38,8 +38,7 @@ const Header = () => {
         <Link
           to="/"
           onClick={closeMenu}
-          className={`linkHeader ${location.pathname === '/' ? 'active' : ''}`}
-        >
+          className={`linkHeader ${location.pathname === '/' ? 'active' : ''}`}>
           <p className='paragrafoListaHeader'><img src={home} alt="" className='iconesHeader' title='Home' /></p>
         </Link>
 
@@ -48,8 +47,7 @@ const Header = () => {
         <Link
           to="/conexoes"
           onClick={closeMenu}
-          className={`linkHeader ${location.pathname === '/conexoes' ? 'active' : ''}`}
-        >
+          className={`linkHeader ${location.pathname === '/conexoes' ? 'active' : ''}`}>
           <p className='paragrafoListaHeader'><img src={wifi} alt="" className='iconesHeader' title='Conexão' /></p>
         </Link>
 
@@ -59,17 +57,17 @@ const Header = () => {
           <Link
             to="/contato"
             onClick={closeMenu}
-            className={`linkHeader ${location.pathname === '/contato' ? 'active' : ''}`}
-          >
+            className={`linkHeader ${location.pathname === '/contato' ? 'active' : ''}`}>
             <p className='paragrafoListaHeader'> <img src={contato} alt="" className='iconesHeader teste' title='Contato' /></p>
           </Link>
+
+         <Link>
           <div
             onClick={openSettings}
             className='linkHeader configuracoes-link' // Adicionando uma classe para estilização
-            style={{ cursor: 'pointer' }}
-          >
+            style={{ cursor: 'pointer' }}>
             <p className='paragrafoListaHeader'> <img src={settingsIcon} alt="Configurações" className='iconesHeader' title='Configurações' /></p>
-          </div>
+          </div></Link>
         </div>
       </div>
     </header>
