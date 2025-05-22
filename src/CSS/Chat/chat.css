@@ -39,15 +39,15 @@
 
 .message.user {
     align-self: flex-end;
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
+    background: linear-gradient(135deg, #4facfe 0%, #00ffcc 100%);
+    color: #252525;
     border-bottom-right-radius: 4px;
     animation: fadeIn 0.3s ease forwards;
 }
 
 .message.bot {
     align-self: flex-start;
-    background: #e2e8f0;
+    background: linear-gradient(135deg, rgba(31, 81, 255, 0.7) 0%, #00f2fe 100%);
     color: #1a202c;
     border-bottom-left-radius: 4px;
     animation: fadeIn 0.3s ease forwards;

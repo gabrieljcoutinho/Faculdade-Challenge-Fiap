@@ -95,7 +95,9 @@ const Chat = () => {
           <img src={sendBtn} alt="Send" className="send-icon" />
         </button>
       </form>
+      <br /><br /><br /><br />
     </div>
+
   );
 };
 
