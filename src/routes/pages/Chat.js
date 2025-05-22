@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../../CSS/Chat/chat.css';
 import '../../CSS/Chat/mensagem.css'
 import '../../CSS/Chat/send.css'
+
 import sendBtn from '../../imgs/sendBtn.png';
 
 const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
