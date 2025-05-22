@@ -217,7 +217,7 @@ const Conexoes = () => {
           >
             {!conexion.connected && (
               <div className="disconnected-overlay">
-                Aparelho desconectado
+               Desativado
               </div>
             )}
             <div className="icon-text-overlay">
