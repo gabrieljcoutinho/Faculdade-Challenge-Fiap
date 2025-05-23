@@ -9,6 +9,8 @@ import contato from '../imgs/contato.png';
 import chatIcon from '../imgs/chat.png'; // Assuming you have a chat.png image
 import settingsIcon from '../imgs/engrenagem.png';
 
+
+
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
