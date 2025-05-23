@@ -1,54 +1,44 @@
-// App.js (or a suitable parent component)
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Conexoes from './components/Conexao/Conexoes'; // Adjust path
-import VoiceAssistant from './components/VoiceAssistant/VoiceAssistant'; // Adjust path
-import Home from './components/Home'; // Example of other routes
-import Contato from './components/Contato'; // Example of other routes
-import Configuracoes from './components/Configuracoes'; // Example of other routes
-import Login from './components/Login'; // Example of other routes
-import Cadastro from './components/Cadastro'; // Example of other routes
-import Chat from './components/Chat'; // Example of other routes
+import './CSS/Reset.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Components
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 
-const App = () => {
-  const [conexions, setConexions] = useState(() => {
-    const storedConexions = localStorage.getItem('conexions');
-    return storedConexions ? JSON.parse(storedConexions) : [];
-  });
+import VoiceAssistant from './components/VoiceAssistant';
 
-  const addConexionFromVoice = (newConexion) => {
-    const isDuplicate = conexions.some(
-      (conexion) => conexion.text.toLowerCase() === newConexion.text.toLowerCase()
-    );
+// Pages
+import Home from './routes/pages/Home';
+import Conexoes from './routes/pages/Conexoes';
+import Contato from './routes/pages/Contato';
+import Configuracoes from './routes/pages/Configuracoes';
+import Logar from './routes/pages/Logar';
+import Cadastro from './routes/pages/Cadastro';
+import Chat from '../src/routes/pages/Chat'
 
-    if (isDuplicate) {
-      console.warn(`Connection "${newConexion.text}" already exists.`);
-      // You might want to provide feedback to the user via the voice assistant
-      return;
-    }
-
-    setConexions((prevConexions) => [...prevConexions, newConexion]);
-  };
-
+function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/conexoes"
-          element={<Conexoes conexions={conexions} setConexions={setConexions} />}
-        />
-        <Route path="/contato" element={<Contato />} />
-        <Route path="/configuracoes" element={<Configuracoes />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/chat" element={<Chat />} />
-        {/* Add other routes here */}
-      </Routes>
-      <VoiceAssistant onAddConexion={addConexionFromVoice} />
-    </Router>
+    <div className="App">
+      <BrowserRouter>
+        <Header />
+
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/conexoes" element={<Conexoes />} />
+          <Route path="/contato" element={<Contato />} />
+          <Route path="/configuracoes" element={<Configuracoes />} />
+          <Route path="/login" element={<Logar />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/chat" element={<Chat />} />
+        </Routes>
+        <Footer />
+<VoiceAssistant />
+
+      </BrowserRouter>
+    </div>
   );
-};
+}
 
 export default App;

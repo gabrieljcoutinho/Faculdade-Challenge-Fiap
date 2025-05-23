@@ -5,7 +5,7 @@ import '../../CSS/Conexao/edit.css';
 import '../../CSS/Conexao/saveBtn.css';
 import '../../CSS/Conexao/icon.css';
 import '../../CSS/Conexao/adicionar.css';
-import '../../CSS/Conexao/slideIn.css';
+import '../../CSS/Conexao/slideIn.css'
 import '../../CSS/Conexao/slideOut.css';
 import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
@@ -13,15 +13,18 @@ import '../../CSS/Conexao/botaoSwitch.css';
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
-import airfry from '../../imgs/airfry.png';
+import airfry from '../../imgs/airfry.png'
 import lampIcon from '../../imgs/lampada.png';
-import carregador from '../../imgs/carregador.png';
+import carregador from '../../imgs/carregador.png'
 import editIcon from '../../imgs/pencil.png';
 
-const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
+const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6','#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 
-// Conexoes component now receives conexions and setConexions as props
-const Conexoes = ({ conexions, setConexions }) => {
+const Conexoes = () => {
+  const [conexions, setConexions] = useState(() => {
+    const storedConexions = localStorage.getItem('conexions');
+    return storedConexions ? JSON.parse(storedConexions) : [];
+  });
   const [showAddForm, setShowAddForm] = useState(false);
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true });
   const [activeIcon, setActiveIcon] = useState('');
@@ -35,11 +38,10 @@ const Conexoes = ({ conexions, setConexions }) => {
     { name: 'TV', src: tvIcon },
     { name: 'Ar Condicionado', src: airConditionerIcon },
     { name: 'Lâmpada', src: lampIcon },
-    { name: 'Airfryer', src: airfry },
-    { name: 'Carregador', src: carregador }
+    { name: 'Arfry', src: airfry},
+    {name: 'Carregador', src: carregador}
   ];
 
-  // Still use useEffect to save to localStorage whenever conexions changes
   useEffect(() => {
     localStorage.setItem('conexions', JSON.stringify(conexions));
   }, [conexions]);
@@ -215,7 +217,7 @@ const Conexoes = ({ conexions, setConexions }) => {
           >
             {!conexion.connected && (
               <div className="disconnected-overlay">
-                Desativado
+               Desativado
               </div>
             )}
             <div className="icon-text-overlay">
