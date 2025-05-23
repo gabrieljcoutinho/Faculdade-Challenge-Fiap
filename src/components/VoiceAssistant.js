@@ -1,36 +1,120 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import microFone from '../imgs/microgone.png';
 
 const VoiceAssistant = () => {
   const navigate = useNavigate();
   const [listening, setListening] = useState(false);
   const [message, setMessage] = useState('');
 
-  function handleCommand(text) {
-    const t = text.toLowerCase();
-    // ... (mantém sua lógica de comandos aqui)
-    if (
-      t.includes('home') || t.includes('página inicial') || t.includes('início') ||
-      t.includes('principal') || t.includes('voltar para home') || t.includes('ir para home') ||
-      t.includes('vá para home') || t.includes('voltar início') || t.includes('pagina da home') || t.includes('pagina home')
-    ) {
-      navigate('/');
-      setMessage('Indo para Home');
-    } else if (
-      t.includes('conexão') || t.includes('conexoes') || t.includes('conexões') || t.includes('conectar') ||
-      t.includes('minhas conexões') || t.includes('abrir conexões') || t.includes('página de conexões') ||
-      t.includes('ir para conexões') || t.includes('aparelho conectado') || t.includes('aparelhos conectados')
-    ) {
-      navigate('/conexoes');
-      setMessage('Indo para Conexões');
-    }
-    // ... continue com os outros comandos
-    else {
-      setMessage('Comando não reconhecido. Tente novamente.');
-    }
-  }
+  // Função para reconhecer comandos
+function handleCommand(text) {
+  const t = text.toLowerCase();
 
+  if (
+    t.includes('home') ||
+    t.includes('página inicial') ||
+    t.includes('início') ||
+    t.includes('principal') ||
+    t.includes('voltar para home') ||
+    t.includes('ir para home') ||
+    t.includes('vá para home') ||
+    t.includes('voltar início') ||
+    t.includes('pagina da home') ||
+      t.includes('pagina home')
+  ) {
+    navigate('/');
+    setMessage('Indo para Home');
+  }
+  else if (
+    t.includes('conexão') ||
+    t.includes('conexoes') ||
+    t.includes('conexões') ||
+    t.includes('conectar') ||
+    t.includes('minhas conexões') ||
+    t.includes('abrir conexões') ||
+    t.includes('página de conexões') ||
+    t.includes('ir para conexões') ||
+    t.includes('aparelho conectado') ||
+    t.includes('aparelhos conectado') ||
+     t.includes('aparelho conectado')
+  ) {
+    navigate('/conexoes');
+    setMessage('Indo para Conexões');
+  }
+  else if (
+    t.includes('contato') ||
+    t.includes('falar com') ||
+    t.includes('fale comigo') ||
+    t.includes('atendimento') ||
+    t.includes('suporte') ||
+    t.includes('página de contato') ||
+    t.includes('ir para contato') ||
+    t.includes('abrir contato') ||
+    t.includes('help center')
+  ) {
+    navigate('/contato');
+    setMessage('Indo para Contato');
+  }
+  else if (
+    t.includes('configurações') ||
+    t.includes('configuracao') ||
+    t.includes('ajustes') ||
+    t.includes('preferências') ||
+    t.includes('configurar') ||
+    t.includes('ir para configurações') ||
+    t.includes('abrir configurações') ||
+    t.includes('ir para configuração') ||
+    t.includes('abrir configuração')
+
+  ) {
+    navigate('/configuracoes');
+    setMessage('Indo para Configurações');
+  }
+  else if (
+    t.includes('login') ||
+    t.includes('logar') ||
+    t.includes('entrar') ||
+    t.includes('acessar conta') ||
+    t.includes('fazer login') ||
+    t.includes('página de login') ||
+    t.includes('ir para login')
+  ) {
+    navigate('/login');
+    setMessage('Indo para Login');
+  }
+  else if (
+    t.includes('cadastro') ||
+    t.includes('cadastrar') ||
+    t.includes('registrar') ||
+    t.includes('criar conta') ||
+    t.includes('abrir cadastro') ||
+    t.includes('fazer cadastro') ||
+    t.includes('página de cadastro') ||
+    t.includes('ir para cadastro')
+  ) {
+    navigate('/cadastro');
+    setMessage('Indo para Cadastro');
+  }
+  else if (
+    t.includes('chat') ||
+    t.includes('conversar') ||
+    t.includes('mensagem') ||
+    t.includes('bate-papo') ||
+    t.includes('abrir chat') ||
+    t.includes('ir para chat') ||
+        t.includes('ir para o chat') ||
+    t.includes('página de chat')
+  ) {
+    navigate('/chat');
+    setMessage('Indo para Chat');
+  }
+  else {
+    setMessage('Comando não reconhecido. Tente novamente.');
+  }
+}
+
+
+  // Função para iniciar escuta, criando nova instância toda vez
   function startListening() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -50,7 +134,7 @@ const VoiceAssistant = () => {
 
     recognition.onend = () => {
       setListening(false);
-      setMessage('Clique no microfone');
+      setMessage('Clique e fale');
     };
 
     recognition.onerror = (event) => {
@@ -71,31 +155,22 @@ const VoiceAssistant = () => {
     <div
       style={{
         position: 'fixed',
-        bottom: 801,
-        right: 10,
+        bottom: 20,
+        right: 20,
         backgroundColor: '#007bff',
-        padding: 1,
-        borderRadius: 50,
+        color: '#fff',
+        padding: 10,
+        borderRadius: 8,
         cursor: 'pointer',
         userSelect: 'none',
+        width: 140,
+        textAlign: 'center',
         zIndex: 1000000000,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: 50
       }}
       onClick={startListening}
     >
-      <img
-        src={microFone} // ou use microfoneIcon se importado
-        alt="Microfone"
-        style={{
-          width: 35,
-          height: 35,
-          filter: listening ? 'grayscale(0%)' : 'grayscale(100%)',
-        }}
-      />
-      <div style={{ fontSize: 12, color: '#fff', marginTop: 5 }}>{message}</div>
+      {listening ? 'Ouvindo...' : 'Clique e fale'}
+      <div style={{ fontSize: 12, marginTop: 5 }}>{message}</div>
     </div>
   );
 };
