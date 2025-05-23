@@ -58,6 +58,7 @@ function handleCommand(text) {
   else if (
     t.includes('configurações') ||
     t.includes('configuracao') ||
+        t.includes('configuraçãoo') ||
     t.includes('ajustes') ||
     t.includes('preferências') ||
     t.includes('configurar') ||
