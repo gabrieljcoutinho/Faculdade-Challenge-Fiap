@@ -13,7 +13,7 @@ const modePrompts = {
     'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
   profissional:
     'Você é um assistente profissional e técnico. Forneça respostas detalhadas, precisas e formais, utilizando termos técnicos quando apropriado. Seja claro e direto.',
-  engraçado:
+  engracado:
     'Você é engraçado e descontraído. Responda de forma leve e divertida, usando humor e analogias engraçadas para facilitar o entendimento.',
   coaching:
     'Você é um coach motivador. Inspire o usuário com respostas positivas, motivacionais e encorajadoras, ajudando-o a superar dúvidas com confiança.',
@@ -23,9 +23,7 @@ const modePrompts = {
 
 const Chat = () => {
   const [mode, setMode] = useState('professor');
-  const [messages, setMessages] = useState([
-    { role: 'system', content: modePrompts['professor'] },
-  ]);
+  const [messages, setMessages] = useState([]); // Começa vazio, o prompt do sistema será adicionado no useEffect
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -34,32 +32,51 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Efeito para rolar para o final das mensagens sempre que elas são atualizadas
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Atualiza a mensagem do sistema quando o modo muda
+  // --- ALTERAÇÃO PRINCIPAL AQUI ---
+  // Este useEffect agora gerencia a mensagem do sistema sem apagar o histórico.
   useEffect(() => {
-    setMessages([{ role: 'system', content: modePrompts[mode] }]);
+    setMessages(prevMessages => {
+      // Encontra o índice da mensagem do sistema, se ela já existir
+      const systemMessageIndex = prevMessages.findIndex(msg => msg.role === 'system');
+
+      const newSystemMessage = { role: 'system', content: modePrompts[mode] };
+
+      if (systemMessageIndex !== -1) {
+        // Se a mensagem do sistema já existe, atualiza o conteúdo dela
+        const updatedMessages = [...prevMessages];
+        updatedMessages[systemMessageIndex] = newSystemMessage;
+        return updatedMessages;
+      } else {
+        // Se não existir, adiciona a nova mensagem do sistema no início do array
+        return [newSystemMessage, ...prevMessages];
+      }
+    });
   }, [mode]);
+  // --- FIM DA ALTERAÇÃO PRINCIPAL ---
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
     const userMessage = { role: 'user', content: newMessage };
+    // Adiciona a nova mensagem do usuário ao histórico existente
     const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
+    setMessages(updatedMessages); // Atualiza o estado para exibir a mensagem do usuário
     setNewMessage('');
     setLoading(true);
 
     try {
       const body = {
         model: 'gpt-4o-mini',
-        messages: updatedMessages,
-        temperature: 0.7,
-        top_p: 0.9,
-        max_tokens: 500,
+        messages: updatedMessages, // Envia todo o histórico (incluindo o prompt do sistema)
+        temperature: 1.0, // Aumentado para encorajar mais criatividade/variedade
+        top_p: 1.0,      // Aumentado para permitir mais diversidade de palavras
+        max_tokens: 1000,
       };
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -79,7 +96,7 @@ const Chat = () => {
           role: 'assistant',
           content: botReply.content.trim(),
         };
-        setMessages((prev) => [...prev, botMessage]);
+        setMessages((prev) => [...prev, botMessage]); // Adiciona a resposta do bot
       } else {
         setMessages((prev) => [
           ...prev,
@@ -109,7 +126,7 @@ const Chat = () => {
         >
           <option value="professor">Professor (didático)</option>
           <option value="profissional">Profissional / Técnico</option>
-          <option value="engraçado">Engraçado / Descontraído</option>
+          <option value="engracado">Engraçado / Descontraído</option>
           <option value="coaching">Coaching / Motivador</option>
           <option value="calmo">Calmo / Reflexivo</option>
         </select>
@@ -118,7 +135,7 @@ const Chat = () => {
       {/* Área das mensagens */}
       <div className="message-display-area">
         {messages
-          .filter((msg) => msg.role !== 'system')
+          .filter((msg) => msg.role !== 'system') // Não exibe a mensagem do sistema na UI
           .map((message, index) => (
             <div
               key={index}
