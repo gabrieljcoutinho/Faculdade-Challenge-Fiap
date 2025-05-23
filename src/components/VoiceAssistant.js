@@ -8,7 +8,7 @@ const VoiceAssistant = () => {
 
   // Função para reconhecer comandos
   function handleCommand(text) {
-    if (text.includes('home')) {
+    if (text.includes('home') || text.includes('página inicial')) {
       navigate('/');
       setMessage('Indo para Home');
     } else if (text.includes('conexão') || text.includes('conexoes') || text.includes('conexões')) {
