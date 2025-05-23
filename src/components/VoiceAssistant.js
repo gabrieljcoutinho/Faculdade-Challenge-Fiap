@@ -33,7 +33,10 @@ function handleCommand(text) {
     t.includes('minhas conexões') ||
     t.includes('abrir conexões') ||
     t.includes('página de conexões') ||
-    t.includes('ir para conexões')
+    t.includes('ir para conexões') ||
+    t.includes('aparelho conectado') ||
+    t.includes('aparelhos conectado') ||
+    t.includes('aparelhos conectados')
   ) {
     navigate('/conexoes');
     setMessage('Indo para Conexões');
