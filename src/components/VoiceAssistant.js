@@ -81,6 +81,7 @@ function handleCommand(text) {
   }
   else if (
     t.includes('cadastro') ||
+    t.includes('cadastrar') ||
     t.includes('registrar') ||
     t.includes('criar conta') ||
     t.includes('abrir cadastro') ||
@@ -161,6 +162,7 @@ function handleCommand(text) {
         userSelect: 'none',
         width: 140,
         textAlign: 'center',
+        zIndex: 1000000000,
       }}
       onClick={startListening}
     >
