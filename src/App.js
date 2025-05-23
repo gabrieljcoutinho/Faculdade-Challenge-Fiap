@@ -5,6 +5,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
+
+import VoiceAssistant from './components/VoiceAssistant';
+
 // Pages
 import Home from './routes/pages/Home';
 import Conexoes from './routes/pages/Conexoes';
@@ -31,6 +34,8 @@ function App() {
           <Route path="/chat" element={<Chat />} />
         </Routes>
         <Footer />
+<VoiceAssistant />
+
       </BrowserRouter>
     </div>
   );
