@@ -6,7 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 
-import VoiceAssistant from './components/VoiceAssistant';
+// import VoiceAssistant from './components/VoiceAssistant';
 
 // Pages
 import Home from './routes/pages/Home';
@@ -34,7 +34,7 @@ function App() {
           <Route path="/chat" element={<Chat />} />
         </Routes>
         <Footer />
-<VoiceAssistant />
+{/* <VoiceAssistant /> */}
 
       </BrowserRouter>
     </div>
