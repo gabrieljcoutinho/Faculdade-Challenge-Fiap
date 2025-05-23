@@ -23,22 +23,23 @@ const modePrompts = {
 
 const Chat = () => {
   const [mode, setMode] = useState('professor');
-  const [messages, setMessages] = useState([]); // Começa vazio, o prompt do sistema será adicionado no useEffect
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  // Novo estado para armazenar a URL da imagem gerada
+  const [generatedImage, setGeneratedImage] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Efeito para rolar para o final das mensagens sempre que elas são atualizadas
+  // Efeito para rolar para o final das mensagens sempre que elas (ou a imagem) são atualizadas
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, generatedImage]); // Adicionado generatedImage à dependência
 
-  // --- ALTERAÇÃO PRINCIPAL AQUI ---
-  // Este useEffect agora gerencia a mensagem do sistema sem apagar o histórico.
+  // Este useEffect gerencia a mensagem do sistema sem apagar o histórico.
   useEffect(() => {
     setMessages(prevMessages => {
       // Encontra o índice da mensagem do sistema, se ela já existir
@@ -57,7 +58,6 @@ const Chat = () => {
       }
     });
   }, [mode]);
-  // --- FIM DA ALTERAÇÃO PRINCIPAL ---
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -69,7 +69,54 @@ const Chat = () => {
     setMessages(updatedMessages); // Atualiza o estado para exibir a mensagem do usuário
     setNewMessage('');
     setLoading(true);
+    setGeneratedImage(null); // Limpa qualquer imagem anterior ao enviar nova mensagem
 
+    // --- Lógica para Geração de Imagem ---
+    if (newMessage.toLowerCase().startsWith('!imagem ')) {
+      const promptImagem = newMessage.substring('!imagem '.length).trim();
+      if (promptImagem) {
+        try {
+          const response = await fetch('https://api.openai.com/v1/images/generations', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify({
+              prompt: promptImagem,
+              n: 1, // Número de imagens a serem geradas
+              size: '512x512', // Tamanho da imagem: '256x256', '512x512', ou '1024x1024'
+              // model: 'dall-e-2', // Você pode especificar o modelo aqui, se desejar (dall-e-3 é mais avançado)
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.data && data.data.length > 0 && data.data[0].url) {
+            setGeneratedImage(data.data[0].url); // Armazena a URL da imagem
+            // Opcional: Adicionar uma mensagem de texto no chat sobre a imagem
+            setMessages(prev => [...prev, { role: 'assistant', content: 'Aqui está a imagem que você pediu:' }]);
+          } else if (data.error) {
+              setMessages(prev => [...prev, { role: 'assistant', content: `Erro ao gerar imagem: ${data.error.message}` }]);
+          }
+          else {
+            setMessages(prev => [...prev, { role: 'assistant', content: 'Não foi possível gerar a imagem. Tente novamente mais tarde.' }]);
+          }
+        } catch (error) {
+          setMessages(prev => [...prev, { role: 'assistant', content: `Erro na API de imagem: ${error.message}` }]);
+        } finally {
+          setLoading(false);
+        }
+        return; // Sai da função para não chamar a API de chat
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: 'Por favor, forneça um prompt para a imagem após "!imagem ".' }]);
+        setLoading(false);
+        return;
+      }
+    }
+    // --- Fim da Lógica para Geração de Imagem ---
+
+    // --- Fluxo normal do Chat ---
     try {
       const body = {
         model: 'gpt-4o-mini',
@@ -149,6 +196,12 @@ const Chat = () => {
             <span className="message-bubble">Digitando...</span>
           </div>
         )}
+        {/* Renderiza a imagem gerada se houver uma */}
+        {generatedImage && (
+          <div className="message bot image-message">
+            <img src={generatedImage} alt="Imagem gerada por IA" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} />
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
@@ -158,7 +211,7 @@ const Chat = () => {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Sua mensagem..."
+          placeholder="Sua mensagem... (Ex: !imagem um gato espacial)"
           className="message-input"
           disabled={loading}
         />
