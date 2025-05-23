@@ -211,7 +211,7 @@ const Chat = () => {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Sua mensagem... (Ex: !imagem um gato espacial)"
+          placeholder="Sua mensagem..."
           className="message-input"
           disabled={loading}
         />
