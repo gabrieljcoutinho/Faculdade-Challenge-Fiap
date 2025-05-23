@@ -70,13 +70,15 @@ const Header = () => {
             <p className='paragrafoListaHeader'> <img src={chatIcon} alt="Chat" className='iconesHeader' title='Chat' /></p>
           </Link>
 
-          <Link>
-            <div
-              onClick={openSettings}
-              className='linkHeader configuracoes-link' // Adicionando uma classe para estilização
-              style={{ cursor: 'pointer' }}>
-              <p className='paragrafoListaHeader'> <img src={settingsIcon} alt="Configurações" className='iconesHeader' title='Configurações' /></p>
-            </div></Link>
+          <Link
+  to="/configuracoes"
+  onClick={closeMenu}
+  className={`linkHeader ${location.pathname === '/configuracoes' ? 'active' : ''}`}>
+  <p className='paragrafoListaHeader'>
+    <img src={settingsIcon} alt="Configurações" className='iconesHeader' title='Configurações' />
+  </p>
+</Link>
+
         </div>
       </div>
     </header>
