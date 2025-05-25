@@ -1,3 +1,4 @@
+// src/components/VoiceAssistant.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -75,9 +76,8 @@ const VoiceAssistant = () => {
 
     const recognition = new SpeechRecognition();
     recognition.lang = 'pt-BR';
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 3;
+    recognition.continuous = false; // Escuta até identificar um resultado final
+    recognition.interimResults = false; // Só usa o resultado final
 
     recognition.onstart = () => {
       setListening(true);
@@ -95,17 +95,9 @@ const VoiceAssistant = () => {
     };
 
     recognition.onresult = (event) => {
-      let interimTranscript = '';
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          setMessage(`Você disse: "${transcript}"`);
-          handleCommand(transcript);
-        } else {
-          interimTranscript += transcript;
-          setMessage(`Você está dizendo: "${interimTranscript}"`);
-        }
-      }
+      const transcript = event.results[0][0].transcript;
+      setMessage(`Você disse: "${transcript}"`);
+      handleCommand(transcript);
     };
 
     recognition.start();
