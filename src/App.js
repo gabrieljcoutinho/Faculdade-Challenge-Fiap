@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
+import VoiceAssistant from './components/VoiceAssistant'
 
 // Pages
 import Home from './routes/pages/Home';
@@ -19,8 +20,8 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header />
-
-
+        {/* renderiza o Assistente de Voz em todas as páginas */}
+        <VoiceAssistant />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/conexoes" element={<Conexoes />} />
@@ -31,10 +32,10 @@ function App() {
           <Route path="/chat" element={<Chat />} />
         </Routes>
         <Footer />
-
       </BrowserRouter>
     </div>
   );
 }
+
 
 export default App;

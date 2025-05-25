@@ -86,7 +86,7 @@ const VoiceAssistant = () => {
 
     recognition.onend = () => {
       setListening(false);
-      setMessage('Clique e fale');
+      setMessage('Fale');
     };
 
     recognition.onerror = (event) => {
