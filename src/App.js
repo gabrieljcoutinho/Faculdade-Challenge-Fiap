@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import VoiceAssistant from './components/VoiceAssistant';
 
 // Pages
 import Home from './routes/pages/Home';
@@ -21,8 +20,6 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header />
-        {/* Assistente de voz presente em todas as páginas */}
-        <VoiceAssistant />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/conexoes" element={<Conexoes />} />
