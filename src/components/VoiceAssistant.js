@@ -12,8 +12,10 @@ const VoiceAssistant = () => {
     if (
       t.includes('home') || t.includes('página inicial') || t.includes('início') ||
       t.includes('principal') || t.includes('voltar para home') || t.includes('ir para home') ||
-      t.includes('vá para home') || t.includes('voltar início') || t.includes('pagina da home') ||
-      t.includes('pagina home')
+      t.includes('vá para home') || t.includes('voltar início') || t.includes('página da home') ||
+      t.includes('página home') || t.includes('abrir home') || t.includes('abrir página inicial') || t.includes('abrir início') ||
+      t.includes('abrir página home')
+
     ) {
       navigate('/');
       setMessage('Indo para Home');
@@ -21,7 +23,11 @@ const VoiceAssistant = () => {
       t.includes('conexão') || t.includes('conexoes') || t.includes('conexões') ||
       t.includes('conectar') || t.includes('minhas conexões') || t.includes('abrir conexões') ||
       t.includes('página de conexões') || t.includes('ir para conexões') ||
-      t.includes('aparelho conectado') || t.includes('aparelhos conectado')
+      t.includes('aparelho conectado') || t.includes('aparelhos conectado') ||  t.includes('abrir conexão') || t.includes('abrir conexoes') || t.includes('abrir conexões') ||
+      t.includes('ir para conectar') || t.includes('abrir minhas conexões') || t.includes('abrir conexões') ||
+      t.includes('página de conexões') || t.includes('ir para conexões') ||
+      t.includes('aparelho conectado') || t.includes('abrir aparelhos conectado')
+
     ) {
       navigate('/conexoes');
       setMessage('Indo para Conexões');
@@ -115,17 +121,17 @@ const VoiceAssistant = () => {
     <div
       style={{
         position: 'fixed',
-        bottom: 20,
-        right: 20,
-        backgroundColor: '#007bff',
-        color: '#fff',
-        padding: 10,
-        borderRadius: 8,
-        cursor: 'pointer',
-        userSelect: 'none',
-        width: 160,
-        textAlign: 'center',
-        zIndex: 1000000000,
+    bottom: 90, // Ajuste aqui: suba de 20 para 100, ou outro valor
+    right: 20,
+    backgroundColor: '#007bff',
+    color: '#fff',
+    padding: 10,
+    borderRadius: 8,
+    cursor: 'pointer',
+    userSelect: 'none',
+    width: 100,
+    textAlign: 'center',
+    zIndex: 1000000000,
       }}
       onClick={startListening}
     >
