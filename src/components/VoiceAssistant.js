@@ -1,78 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+// src/components/VoiceAssistant.js
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const VoiceAssistant = () => {
   const navigate = useNavigate();
   const [listening, setListening] = useState(false);
   const [message, setMessage] = useState('');
-  const recognitionRef = useRef(null);
-
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      setMessage('Seu navegador não suporta reconhecimento de voz.');
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'pt-BR';
-    recognition.continuous = true;  // Fica ouvindo continuamente
-    recognition.interimResults = true; // Resultados parciais para feedback
-
-    recognition.onstart = () => {
-      setListening(true);
-      setMessage('Estou ouvindo...');
-    };
-
-    recognition.onresult = (event) => {
-      let interimTranscript = '';
-      let finalTranscript = '';
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += transcript;
-        } else {
-          interimTranscript += transcript;
-        }
-      }
-
-      if (finalTranscript) {
-        setMessage(`Você disse: "${finalTranscript}"`);
-        handleCommand(finalTranscript);
-      } else if (interimTranscript) {
-        setMessage(`Ouvindo: "${interimTranscript}"`);
-      }
-    };
-
-    recognition.onerror = (event) => {
-      setMessage('Erro no reconhecimento: ' + event.error);
-      setListening(false);
-      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-        recognition.stop();
-      } else {
-        // Tenta reiniciar em caso de erro temporário
-        if (recognition) recognition.start();
-      }
-    };
-
-    recognition.onend = () => {
-      // Se estiver "ouvindo", reinicia automaticamente para ouvir mais comandos
-      if (listening && recognition) {
-        recognition.start();
-      } else {
-        setListening(false);
-        setMessage('Clique e fale');
-      }
-    };
-
-    recognitionRef.current = recognition;
-
-    return () => {
-      recognition.stop();
-      setListening(false);
-    };
-  }, [listening]);
 
   function handleCommand(text) {
     const t = text.toLowerCase();
@@ -141,14 +74,40 @@ const VoiceAssistant = () => {
     }
   }
 
-  function toggleListening() {
-    if (listening) {
-      recognitionRef.current.stop();
-      setListening(false);
-      setMessage('Parado');
-    } else {
-      recognitionRef.current.start();
+  function startListening() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setMessage('Seu navegador não suporta reconhecimento de voz.');
+      return;
     }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'pt-BR';
+    recognition.continuous = false; // Escuta até identificar um resultado final
+    recognition.interimResults = false; // Só usa o resultado final
+
+    recognition.onstart = () => {
+      setListening(true);
+      setMessage('Estou ouvindo...');
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+      setMessage('Fale');
+    };
+
+    recognition.onerror = (event) => {
+      setMessage('Erro no reconhecimento: ' + event.error);
+      setListening(false);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setMessage(`Você disse: "${transcript}"`);
+      handleCommand(transcript);
+    };
+
+    recognition.start();
   }
 
   return (
@@ -157,21 +116,20 @@ const VoiceAssistant = () => {
         position: 'fixed',
         bottom: 20,
         right: 20,
-        backgroundColor: listening ? '#0056b3' : '#007bff',
+        backgroundColor: '#007bff',
         color: '#fff',
         padding: 10,
         borderRadius: 8,
         cursor: 'pointer',
         userSelect: 'none',
-        width: 180,
+        width: 160,
         textAlign: 'center',
         zIndex: 1000000000,
       }}
-      onClick={toggleListening}
-      title="Clique para ativar/desativar a escuta"
+      onClick={startListening}
     >
       {listening ? 'Ouvindo...' : 'Clique e fale'}
-      <div style={{ fontSize: 12, marginTop: 5, minHeight: 18 }}>{message}</div>
+      <div style={{ fontSize: 12, marginTop: 5 }}>{message}</div>
     </div>
   );
 };
