@@ -50,7 +50,7 @@ const VoiceAssistant = () => {
     } else if (
       t.includes('cadastro') || t.includes('cadastrar') || t.includes('registrar') ||
       t.includes('criar conta') || t.includes('abrir cadastro') || t.includes('fazer cadastro') ||
-      t.includes('página de cadastro') || t.includes('ir para cadastro')
+      t.includes('página de cadastro') || t.includes('ir para cadastro') || t.includes('logar')
     ) {
       navigate('/cadastro');
       setMessage('Indo para Cadastro');
