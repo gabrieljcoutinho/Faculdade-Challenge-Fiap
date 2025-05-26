@@ -1,0 +1,21 @@
+.assistente-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #0d1117;
+    color: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #00f7ff;
+    z-index: 9999;
+}
+
+.assistente-container button {
+    background: #00f7ff;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+}
