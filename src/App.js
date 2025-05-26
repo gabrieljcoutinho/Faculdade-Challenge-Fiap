@@ -1,6 +1,7 @@
 // src/App.js
 import './CSS/Reset.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import VoiceButton from './components/VoiceButton';
 
 // Components
 import Header from './components/Header';
@@ -20,6 +21,8 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header />
+        <br /><br /><br /><br />
+        <VoiceButton />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/conexoes" element={<Conexoes />} />
