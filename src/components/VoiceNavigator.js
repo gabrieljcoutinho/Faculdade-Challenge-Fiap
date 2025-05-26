@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../CSS/Voice/style.css'
+import '../CSS/Voice/style.css';
 
 const VoiceNavigator = () => {
   const navigate = useNavigate();
@@ -31,32 +31,52 @@ const VoiceNavigator = () => {
         // Modo standby: ativar só se disser "sexta-feira"
         if (transcript.includes('sexta-feira')) {
           setListening(true);
-          // Modo comando ativo por 10 segundos
+
           if (commandTimeout) clearTimeout(commandTimeout);
           commandTimeout = setTimeout(() => {
             setListening(false);
           }, 10000);
+
           console.log('Modo comando ativado!');
         }
       } else {
         // Modo comando ativo: reconhecer comandos de navegação
+        let navegou = false;
+
         if (transcript.includes('home')) {
           navigate('/');
+          navegou = true;
         } else if (transcript.includes('conexões') || transcript.includes('conexoes')) {
           navigate('/conexoes');
+          navegou = true;
         } else if (transcript.includes('contato')) {
           navigate('/contato');
+          navegou = true;
         } else if (transcript.includes('configurações') || transcript.includes('configuracoes')) {
           navigate('/configuracoes');
+          navegou = true;
         } else if (transcript.includes('login')) {
           navigate('/login');
+          navegou = true;
         } else if (transcript.includes('cadastro')) {
           navigate('/cadastro');
+          navegou = true;
         } else if (transcript.includes('chat')) {
           navigate('/chat');
+          navegou = true;
         }
 
-        // Reinicia o timeout para manter o modo comando ativo mais 10 segundos a partir do último comando
+        if (navegou) {
+          // Comando reconhecido e navegação executada
+          setListening(false);  // Remove o fundo imediatamente
+
+          if (commandTimeout) clearTimeout(commandTimeout);
+          commandTimeout = null;
+
+          return; // sai para não resetar o timeout abaixo
+        }
+
+        // Se não navegou, mantém o timeout para continuar ouvindo
         if (commandTimeout) clearTimeout(commandTimeout);
         commandTimeout = setTimeout(() => {
           setListening(false);
@@ -85,7 +105,7 @@ const VoiceNavigator = () => {
     };
   }, [listening, navigate]);
 
-  // Render vazio, mas vamos expor o estado listening para controlar a borda
+  // Renderiza a borda apenas quando o modo comando está ativo
   return listening ? <div id="voice-border" /> : null;
 };
 
