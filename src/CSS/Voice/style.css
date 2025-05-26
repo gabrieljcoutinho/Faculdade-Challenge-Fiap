@@ -1,0 +1,32 @@
+#voice-border {
+    pointer-events: none;
+    /* Para não atrapalhar clique */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 6px solid rgba(0, 255, 0, 0.7);
+    /* verde com transparência */
+    box-sizing: border-box;
+    border-radius: 0;
+    animation: pulse-border 2s infinite;
+    z-index: 9999;
+}
+
+@keyframes pulse-border {
+    0% {
+        border-color: rgba(0, 255, 0, 0.7);
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    50% {
+        border-color: rgba(0, 255, 0, 1);
+        box-shadow: 0 0 20px rgba(0, 255, 0, 1);
+    }
+
+    100% {
+        border-color: rgba(0, 255, 0, 0.7);
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+}
