@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const VoiceButton = () => {
   const [listening, setListening] = useState(false);
+  const recognitionRef = useRef(null);
   const navigate = useNavigate();
 
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = SpeechRecognition ? new SpeechRecognition() : null;
-
   useEffect(() => {
-    if (!recognition) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
       alert('Seu navegador não suporta reconhecimento de voz.');
       return;
     }
+    // cria uma única instância e guarda no ref
+    recognitionRef.current = new SpeechRecognition();
+    recognitionRef.current.lang = 'pt-BR';
+    recognitionRef.current.interimResults = false;
+    recognitionRef.current.maxAlternatives = 1;
 
-    recognition.lang = 'pt-BR';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
+    recognitionRef.current.onstart = () => {
+      setListening(true);
+    };
 
-    recognition.onresult = (event) => {
+    recognitionRef.current.onresult = (event) => {
       const transcript = event.results[0][0].transcript.toLowerCase();
       console.log('Reconhecido:', transcript);
 
@@ -39,29 +43,38 @@ const VoiceButton = () => {
       } else {
         alert('Comando não reconhecido: ' + transcript);
       }
-      setListening(false);
     };
 
-    recognition.onerror = (event) => {
+    recognitionRef.current.onerror = (event) => {
       console.error('Erro no reconhecimento de voz:', event.error);
       setListening(false);
     };
 
-    recognition.onend = () => {
+    recognitionRef.current.onend = () => {
+      // encerra o estado listening
       setListening(false);
     };
 
-  }, [navigate, recognition]);
+    return () => {
+      // cleanup: para o reconhecimento se o componente desmontar
+      recognitionRef.current?.stop();
+      setListening(false);
+    };
+  }, [navigate]);
 
   const handleClick = () => {
-    if (!recognition) return;
+    if (!recognitionRef.current) return;
 
     if (listening) {
-      recognition.stop();
+      recognitionRef.current.stop();
       setListening(false);
     } else {
-      recognition.start();
-      setListening(true);
+      try {
+        recognitionRef.current.start();
+      } catch (e) {
+        // erro caso tente start duas vezes rapidamente
+        console.log('Erro ao iniciar reconhecimento:', e);
+      }
     }
   };
 
@@ -72,19 +85,20 @@ const VoiceButton = () => {
         position: 'fixed',
         bottom: '20px',
         right: '20px',
-        padding: '12px 24px',
+        padding: '14px 28px',
         border: listening ? '3px solid rgba(15, 240, 252, 1)' : '3px solid transparent',
         borderRadius: '50px',
         backgroundColor: listening ? 'rgba(15, 240, 252, 0.15)' : '#007BFF',
-        color: listening ? '#0ff' : '#fff',
+        color: listening ? 'rgba(15, 240, 252, 1)' : '#fff',
         fontWeight: 'bold',
+        fontSize: '16px',
         cursor: 'pointer',
         boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
         transition: 'all 0.3s ease',
         zIndex: 9999,
       }}
       aria-pressed={listening}
-      title="Clique para falar"
+      title="Clique e fale"
     >
       {listening ? 'Ouvindo...' : '🎤 Falar'}
     </button>
