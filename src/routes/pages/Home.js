@@ -297,12 +297,11 @@ const Home = () => {
         condition: 'Ensolarado',
     };
 
-    // Dados simulados para a previsão do tempo
+    // Dados simulados para a previsão do tempo para 3 dias
     const forecast = [
-        { time: '09:00', condition: 'Ensolarado' },
-        { time: '12:00', condition: 'Nublado' },
-        { time: '15:00', condition: 'Chuvoso' },
-        { time: '18:00', condition: 'Nublado' },
+        { day: 'Hoje', condition: 'Ensolarado', high: 30, low: 20 },
+        { day: 'Amanhã', condition: 'Nublado', high: 25, low: 18 },
+        { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 22, low: 16 },
     ];
 
     // Função para obter o ícone do clima com base na condição
@@ -434,23 +433,27 @@ const Home = () => {
                     </button>
                 </section>
 
-                {/* Seção de clima atual e previsão do tempo */}
-                <section className="weather-section" style={{ backgroundColor: '#252525', color: '#fff', borderRadius: '8px', padding: '20px' }}>
-                    <h2>Clima Atual</h2>
-                    <div className="current-weather">
-                        <p>Temperatura: {currentWeather.temperature}°C</p>
-                        <p>Condição: {getWeatherIcon(currentWeather.condition)} {currentWeather.condition}</p>
-                    </div>
+                {/* Seção de clima atual e previsão do tempo aprimorada */}
+                <section className="weather-forecast-section">
+                    <h2>Clima e Previsão</h2>
+                    <div className="weather-cards-container">
+                        {/* Clima Atual */}
+                        <div className="weather-card current-weather-card">
+                            <h3>Agora</h3>
+                            <p className="temperature">{currentWeather.temperature}°C</p>
+                            <p className="condition">{getWeatherIcon(currentWeather.condition)} {currentWeather.condition}</p>
+                        </div>
 
-                    <h2>Previsão do Tempo</h2>
-                    <ul className="forecast-list">
-                        {/* Mapeia os dados de previsão para exibir cada item */}
+                        {/* Previsão para os próximos dias */}
                         {forecast.map((item, index) => (
-                            <li key={index} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                                {item.time} - {getWeatherIcon(item.condition)} {item.condition}
-                            </li>
+                            <div key={index} className="weather-card forecast-card">
+                                <h3>{item.day}</h3>
+                                <p className="condition">{getWeatherIcon(item.condition)}</p>
+                                <p className="temp-range">Min: {item.low}°C | Max: {item.high}°C</p>
+                                <p className="condition-text">{item.condition}</p>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </section>
                 <br /><br /><br /> {/* Adiciona um espaço no final da seção principal */}
             </main>

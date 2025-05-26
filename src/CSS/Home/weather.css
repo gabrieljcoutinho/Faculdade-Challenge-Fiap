@@ -1,12 +1,48 @@
-.weather-section {
-    background-color: white;
+/* weather-forecast.css */
+
+.weather-forecast-section {
+    background-color: #252525;
+    color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    width: calc(50% - 10px);
+    padding: 20px;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.weather-section h2 {
-    color: #007bff;
+.weather-forecast-section h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #00bcd4;
+    font-size: 1.8em;
+}
+
+.weather-cards-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.weather-card {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 20px; /* Default padding for mobile/smaller screens */
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+    max-width: 30%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.weather-card:hover {
+    transform: translateY(-5px);
+    background-color: #444;
+}
+
+.weather-card h3 {
+    margin-top: 0;
+    color: #fff;
+    font-size: 1.4em;
     margin-bottom: 15px;
 }

@@ -14,3 +14,9 @@
 .forecast-list li {
     padding: 8px 0;
 }
+
+.forecast-card .temp-range {
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: #f0f0f0;
+}
