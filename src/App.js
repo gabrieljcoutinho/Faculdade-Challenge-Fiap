@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import VoiceNavigator from './components/VoiceNavigator';
 
 // Pages
 import Home from './routes/pages/Home';
@@ -18,10 +17,9 @@ import Chat from './routes/pages/Chat';
 
 function App() {
   return (
-    <div className="App" style={{ position: 'relative', minHeight: '100vh' }}>
+    <div className="App">
       <BrowserRouter>
         <Header />
-        <VoiceNavigator />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/conexoes" element={<Conexoes />} />
