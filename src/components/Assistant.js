@@ -88,7 +88,7 @@ const Assistant = () => {
       const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
       console.log('Você disse (wake):', transcript);
 
-      if (transcript.includes('hades')) {
+      if (transcript.includes('Hades')) {
         startAssistant();
       }
     };
