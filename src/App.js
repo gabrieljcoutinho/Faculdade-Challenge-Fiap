@@ -6,10 +6,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-import Assistant from './components/Assistant'
-
-
-
 // Pages
 import Home from './routes/pages/Home';
 import Conexoes from './routes/pages/Conexoes';
@@ -23,8 +19,6 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-
-      <Assistant />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
