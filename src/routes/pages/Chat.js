@@ -6,7 +6,12 @@ import '../../CSS/Chat/modoResposta.css';
 
 import sendBtn from '../../imgs/sendBtn.png';
 
+// Certifique-se de que OPENAI_API_KEY está disponível no seu ambiente
+// Ex: no seu arquivo .env.local ou .env, deve ter: REACT_APP_OPENAI_API_KEY=sua_chave_aqui
 const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+
+// Log para verificar se a chave está sendo carregada corretamente
+console.log('Chave da API carregada (primeiros 5 caracteres):', OPENAI_API_KEY ? OPENAI_API_KEY.substring(0, 5) + '...' : 'Não carregada');
 
 const modePrompts = {
   professor:
@@ -27,41 +32,65 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
-  // Novo estado para armazenar a URL da imagem gerada
   const [generatedImage, setGeneratedImage] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Efeito para rolar para o final das mensagens sempre que elas (ou a imagem) são atualizadas
   useEffect(() => {
     scrollToBottom();
-  }, [messages, generatedImage]); // Adicionado generatedImage à dependência
+  }, [messages, generatedImage]);
 
-  // Este useEffect gerencia a mensagem do sistema sem apagar o histórico.
   useEffect(() => {
     setMessages(prevMessages => {
-      // Encontra o índice da mensagem do sistema, se ela já existir
       const systemMessageIndex = prevMessages.findIndex(msg => msg.role === 'system');
-
       const newSystemMessage = { role: 'system', content: modePrompts[mode] };
 
       if (systemMessageIndex !== -1) {
-        // Se a mensagem do sistema já existe, atualiza o conteúdo dela
         const updatedMessages = [...prevMessages];
         updatedMessages[systemMessageIndex] = newSystemMessage;
         return updatedMessages;
       } else {
-        // Se não existir, adiciona a nova mensagem do sistema no início do array
         return [newSystemMessage, ...prevMessages];
       }
     });
   }, [mode]);
 
-  const handleSendMessage = async (e) => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const handleSendMessage = async (e) => {
     e.preventDefault();
+
+    // ADIÇÃO: Log para verificar se a função foi chamada
+    console.log('handleSendMessage foi chamado!');
+
     if (!newMessage.trim()) return;
+
+    // Verifica se a chave da API está carregada antes de prosseguir
+    if (!OPENAI_API_KEY) {
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: 'Erro: Chave da API OpenAI não configurada. Verifique seu arquivo .env.local.' },
+      ]);
+      console.error('OPENAI_API_KEY não está definida. Verifique seu .env.local e reinicie o servidor.'); // ADIÇÃO: Log de erro no console
+      return;
+    }
 
     const userMessage = { role: 'user', content: newMessage };
     // Adiciona a nova mensagem do usuário ao histórico existente
@@ -90,20 +119,30 @@ const Chat = () => {
             }),
           });
 
+          // ADIÇÃO: Verificação de resposta HTTP OK para a API de imagem
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Erro na resposta da API de imagem (HTTP):', response.status, response.statusText, errorData);
+            setMessages(prev => [...prev, { role: 'assistant', content: `Erro ao gerar imagem: ${errorData.error ? errorData.error.message : 'Problema desconhecido na API de imagem.'}` }]);
+            setLoading(false); // Certifique-se de parar o loading aqui
+            return; // Sai da função após o erro
+          }
+
           const data = await response.json();
+          console.log('Resposta da API de imagem:', data); // Log da resposta completa
 
           if (data.data && data.data.length > 0 && data.data[0].url) {
             setGeneratedImage(data.data[0].url); // Armazena a URL da imagem
             // Opcional: Adicionar uma mensagem de texto no chat sobre a imagem
             setMessages(prev => [...prev, { role: 'assistant', content: 'Aqui está a imagem que você pediu:' }]);
           } else if (data.error) {
-              setMessages(prev => [...prev, { role: 'assistant', content: `Erro ao gerar imagem: ${data.error.message}` }]);
-          }
-          else {
-            setMessages(prev => [...prev, { role: 'assistant', content: 'Não foi possível gerar a imagem. Tente novamente mais tarde.' }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: `Erro ao gerar imagem: ${data.error.message}` }]);
+          } else {
+            setMessages(prev => [...prev, { role: 'assistant', content: 'Não foi possível gerar a imagem. A resposta da API não continha uma URL válida.' }]);
           }
         } catch (error) {
-          setMessages(prev => [...prev, { role: 'assistant', content: `Erro na API de imagem: ${error.message}` }]);
+          console.error('Erro de rede/chamada da API de imagem:', error);
+          setMessages(prev => [...prev, { role: 'assistant', content: `Erro na API de imagem: ${error.message}. Verifique sua conexão ou console para mais detalhes.` }]);
         } finally {
           setLoading(false);
         }
@@ -118,11 +157,15 @@ const Chat = () => {
 
     // --- Fluxo normal do Chat ---
     try {
+      const messagesForApi = updatedMessages.filter(msg => msg.role !== 'system'); // Filtra a mensagem do sistema para a API
       const body = {
-      model: 'gpt-3.5-turbo',
-        messages: updatedMessages, // Envia todo o histórico (incluindo o prompt do sistema)
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: modePrompts[mode] }, // Inclui o prompt do sistema no início para a API
+          ...messagesForApi // Adiciona o resto do histórico
+        ],
         temperature: 1.0, // Aumentado para encorajar mais criatividade/variedade
-        top_p: 1.0,      // Aumentado para permitir mais diversidade de palavras
+        top_p: 1.0,       // Aumentado para permitir mais diversidade de palavras
         max_tokens: 1000,
       };
 
@@ -135,7 +178,21 @@ const Chat = () => {
         body: JSON.stringify(body),
       });
 
+      // ADIÇÃO: Verificação de resposta HTTP OK para a API de chat
+      if (!response.ok) {
+        const errorData = await response.json(); // Tenta parsear o JSON do erro
+        console.error('Erro na resposta da API de chat (HTTP):', response.status, response.statusText, errorData);
+        // Exibe a mensagem de erro da API ou uma genérica
+        setMessages((prev) => [
+          ...prev,
+          { role: 'assistant', content: `Erro na API: ${errorData.error ? errorData.error.message : 'Problema desconhecido na API.'} (Código: ${response.status})` },
+        ]);
+        setLoading(false); // Certifique-se de parar o loading aqui
+        return; // Sai da função após o erro
+      }
+
       const data = await response.json();
+      console.log('Resposta da API de chat:', data); // Log da resposta completa da API
 
       if (data.choices && data.choices.length > 0) {
         const botReply = data.choices[0].message;
@@ -143,26 +200,47 @@ const Chat = () => {
           role: 'assistant',
           content: botReply.content.trim(),
         };
-        setMessages((prev) => [...prev, botMessage]); // Adiciona a resposta do bot
+        setMessages((prev) => [...prev, botMessage]);
       } else {
+        // Agora este 'else' significa que a API respondeu OK (status 200),
+        // mas não retornou 'choices' ou ele estava vazio, o que é incomum para sucesso.
         setMessages((prev) => [
           ...prev,
-          { role: 'assistant', content: 'Erro: resposta vazia da API.' },
+          { role: 'assistant', content: 'A API respondeu, mas sem uma resposta de chat válida. Tente novamente.' },
         ]);
       }
     } catch (error) {
+      console.error('Erro de rede/chamada da API de chat:', error); // Log para erros de rede ou CORS
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: `Erro na API: ${error.message}` },
+        { role: 'assistant', content: `Erro na API: ${error.message}. Verifique sua conexão ou console para mais detalhes.` },
       ]);
     } finally {
       setLoading(false);
     }
   };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <div className="chat-container">
-      {/* Seletor de modo */}
       <div className="mode-selector-container">
         <label htmlFor="mode-select">Modo de resposta</label>
         <select
@@ -179,10 +257,9 @@ const Chat = () => {
         </select>
       </div>
 
-      {/* Área das mensagens */}
       <div className="message-display-area">
         {messages
-          .filter((msg) => msg.role !== 'system') // Não exibe a mensagem do sistema na UI
+          .filter((msg) => msg.role !== 'system')
           .map((message, index) => (
             <div
               key={index}
@@ -196,7 +273,6 @@ const Chat = () => {
             <span className="message-bubble">Digitando...</span>
           </div>
         )}
-        {/* Renderiza a imagem gerada se houver uma */}
         {generatedImage && (
           <div className="message bot image-message">
             <img src={generatedImage} alt="Imagem gerada por IA" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} />
@@ -205,7 +281,6 @@ const Chat = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Formulário de envio */}
       <form onSubmit={handleSendMessage} className="message-input-form">
         <input
           type="text"
