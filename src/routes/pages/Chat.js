@@ -119,7 +119,7 @@ const Chat = () => {
     // --- Fluxo normal do Chat ---
     try {
       const body = {
-        model: 'gpt-4o-mini',
+      model: 'gpt-3.5-turbo',
         messages: updatedMessages, // Envia todo o histórico (incluindo o prompt do sistema)
         temperature: 1.0, // Aumentado para encorajar mais criatividade/variedade
         top_p: 1.0,      // Aumentado para permitir mais diversidade de palavras
