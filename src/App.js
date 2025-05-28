@@ -5,8 +5,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import AssistenteVirtual from './components/AssistenteVirtual'; // 👈
+import AssistenteVirtual from './components/AssistenteVirtual'; // IMPORTANTE: importar o assistente
 
+// Pages
 import Home from './routes/pages/Home';
 import Conexoes from './routes/pages/Conexoes';
 import Contato from './routes/pages/Contato';
@@ -19,7 +20,9 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <AssistenteVirtual /> {/* 👈 Aqui */}
+        {/* ⚡️ CLEITON Sempre escutando */}
+        <AssistenteVirtual />
+
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />

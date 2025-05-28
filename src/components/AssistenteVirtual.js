@@ -7,24 +7,31 @@ const AssistenteVirtual = () => {
   const [ativo, setAtivo] = useState(false);
   const navigate = useNavigate();
 
-  const { transcript, resetTranscript, listening } = useSpeechRecognition();
+  const { transcript, resetTranscript } = useSpeechRecognition();
 
   useEffect(() => {
-    // Sempre que o transcript for atualizado
-    if (!transcript) return;
-
-    const comando = transcript.toLowerCase();
-    console.log('Comando recebido:', comando);
-
-    // Ativar assistente ao ouvir "umbra"
-    if (comando.includes('umbra')) {
-      setAtivo(true);
-      resetTranscript();
-      console.log('Assistente ativado!');
+    if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+      alert('Seu navegador não suporta reconhecimento de voz!');
       return;
     }
 
-    // Se estiver ativo, processar comandos de páginas
+    // Começa a escuta contínua em português
+    SpeechRecognition.startListening({ continuous: true, language: 'pt-BR' });
+  }, []);
+
+  useEffect(() => {
+    console.log('Transcript atual:', transcript);
+
+    const comando = transcript.toLowerCase();
+    const palavrasChave = ['cleiton', 'cleitom', 'clayton']; // Pequenas variações
+
+    if (palavrasChave.some(p => comando.includes(p))) {
+      setAtivo(true);
+      console.log('CLEITON ATIVADO!');
+      resetTranscript();
+      return;
+    }
+
     if (ativo) {
       if (comando.includes('contato')) {
         navigate('/contato');
@@ -47,11 +54,6 @@ const AssistenteVirtual = () => {
       }
     }
   }, [transcript, ativo, navigate, resetTranscript]);
-
-  useEffect(() => {
-    // Começar a escuta contínua ao carregar o componente
-    SpeechRecognition.startListening({ continuous: true, language: 'pt-BR' });
-  }, []);
 
   return (
     <div>
