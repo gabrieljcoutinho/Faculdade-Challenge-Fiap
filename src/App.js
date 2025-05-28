@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import VoiceCommands from './components/VoiceCommands';
 
 // Pages
 import Home from './routes/pages/Home';
@@ -17,11 +16,10 @@ import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
 
 function App() {
- return (
+  return (
     <div className="App">
       <BrowserRouter>
         <Header />
-        <VoiceCommands /> {/* Ativa o reconhecimento de voz */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/conexoes" element={<Conexoes />} />
