@@ -15,12 +15,7 @@ import Logar from './routes/pages/Logar';
 import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
 
-// Hook de voz
-import useVoiceCommands from '../src/components/useVoiceCommands';
-
 function App() {
-  useVoiceCommands();
-
   return (
     <div className="App">
       <BrowserRouter>
