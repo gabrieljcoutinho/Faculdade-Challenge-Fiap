@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import AssistenteVirtual from './components/AssistenteVirtual'; // IMPORTANTE: importar o assistente
 
 // Pages
 import Home from './routes/pages/Home';
@@ -20,9 +19,6 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* ⚡️ CLEITON Sempre escutando */}
-        <AssistenteVirtual />
-
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
