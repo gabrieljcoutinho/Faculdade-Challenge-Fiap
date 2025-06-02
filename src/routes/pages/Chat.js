@@ -6,13 +6,15 @@ import '../../CSS/Chat/modoResposta.css';
 
 import sendBtn from '../../imgs/sendBtn.png';
 
-// Certifique-se de que OPENAI_API_KEY está disponível no seu ambiente
-// Ex: no seu arquivo .env.local ou .env, deve ter: REACT_APP_OPENAI_API_KEY=sua_chave_aqui
-const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+// Apenas a chave da API do Gemini é necessária
+// Certifique-se de que no seu arquivo .env (ou .env.local) na raiz do projeto, você tem:
+// REACT_APP_GEMINI_API_KEY=sua_chave_gemini_aqui
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
 // Log para verificar se a chave está sendo carregada corretamente
-console.log('Chave da API carregada (primeiros 5 caracteres):', OPENAI_API_KEY ? OPENAI_API_KEY.substring(0, 5) + '...' : 'Não carregada');
+console.log('Chave da API Gemini carregada (primeiros 5 caracteres):', GEMINI_API_KEY ? GEMINI_API_KEY.substring(0, 5) + '...' : 'Não carregada');
 
+// Prompts para diferentes modos de resposta do chat
 const modePrompts = {
   professor:
     'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
@@ -27,217 +29,160 @@ const modePrompts = {
 };
 
 const Chat = () => {
+  // Estado para o modo de resposta do chat (professor, profissional, etc.)
   const [mode, setMode] = useState('professor');
+  // Estado para armazenar as mensagens do chat (usuário e bot)
   const [messages, setMessages] = useState([]);
+  // Estado para a nova mensagem que o usuário está digitando
   const [newMessage, setNewMessage] = useState('');
+  // Estado para indicar se o chat está carregando uma resposta
   const [loading, setLoading] = useState(false);
+  // Referência para o final da área de mensagens, usada para rolagem automática
   const messagesEndRef = useRef(null);
-  const [generatedImage, setGeneratedImage] = useState(null);
 
+  // Efeito para rolar automaticamente para o final das mensagens quando elas são atualizadas
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]); // Depende apenas das mensagens, já que não há imagem gerada
+
+  // Função para rolar a área de mensagens para o final
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, generatedImage]);
+  // O useEffect que adicionava a mensagem de sistema foi removido,
+  // pois o prompt do sistema é enviado diretamente na requisição ao Gemini.
 
-  useEffect(() => {
-    setMessages(prevMessages => {
-      const systemMessageIndex = prevMessages.findIndex(msg => msg.role === 'system');
-      const newSystemMessage = { role: 'system', content: modePrompts[mode] };
+  // Função principal para enviar mensagens e obter respostas do Gemini
+  const handleSendMessage = async (e) => {
+    e.preventDefault(); // Previne o comportamento padrão do formulário (recarregar a página)
 
-      if (systemMessageIndex !== -1) {
-        const updatedMessages = [...prevMessages];
-        updatedMessages[systemMessageIndex] = newSystemMessage;
-        return updatedMessages;
-      } else {
-        return [newSystemMessage, ...prevMessages];
-      }
-    });
-  }, [mode]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const handleSendMessage = async (e) => {
-    e.preventDefault();
-
-    // ADIÇÃO: Log para verificar se a função foi chamada
     console.log('handleSendMessage foi chamado!');
 
+    // Se a mensagem estiver vazia ou contiver apenas espaços, não faz nada
     if (!newMessage.trim()) return;
 
-    // Verifica se a chave da API está carregada antes de prosseguir
-    if (!OPENAI_API_KEY) {
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: 'Erro: Chave da API OpenAI não configurada. Verifique seu arquivo .env.local.' },
-      ]);
-      console.error('OPENAI_API_KEY não está definida. Verifique seu .env.local e reinicie o servidor.'); // ADIÇÃO: Log de erro no console
-      return;
-    }
-
+    // Cria um objeto para a mensagem do usuário
     const userMessage = { role: 'user', content: newMessage };
     // Adiciona a nova mensagem do usuário ao histórico existente
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages); // Atualiza o estado para exibir a mensagem do usuário
-    setNewMessage('');
-    setLoading(true);
-    setGeneratedImage(null); // Limpa qualquer imagem anterior ao enviar nova mensagem
+    setNewMessage(''); // Limpa o campo de entrada
+    setLoading(true); // Ativa o estado de carregamento
 
-    // --- Lógica para Geração de Imagem ---
-    if (newMessage.toLowerCase().startsWith('!imagem ')) {
-      const promptImagem = newMessage.substring('!imagem '.length).trim();
-      if (promptImagem) {
-        try {
-          const response = await fetch('https://api.openai.com/v1/images/generations', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${OPENAI_API_KEY}`,
-            },
-            body: JSON.stringify({
-              prompt: promptImagem,
-              n: 1, // Número de imagens a serem geradas
-              size: '512x512', // Tamanho da imagem: '256x256', '512x512', ou '1024x1024'
-              // model: 'dall-e-2', // Você pode especificar o modelo aqui, se desejar (dall-e-3 é mais avançado)
-            }),
-          });
-
-          // ADIÇÃO: Verificação de resposta HTTP OK para a API de imagem
-          if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Erro na resposta da API de imagem (HTTP):', response.status, response.statusText, errorData);
-            setMessages(prev => [...prev, { role: 'assistant', content: `Erro ao gerar imagem: ${errorData.error ? errorData.error.message : 'Problema desconhecido na API de imagem.'}` }]);
-            setLoading(false); // Certifique-se de parar o loading aqui
-            return; // Sai da função após o erro
-          }
-
-          const data = await response.json();
-          console.log('Resposta da API de imagem:', data); // Log da resposta completa
-
-          if (data.data && data.data.length > 0 && data.data[0].url) {
-            setGeneratedImage(data.data[0].url); // Armazena a URL da imagem
-            // Opcional: Adicionar uma mensagem de texto no chat sobre a imagem
-            setMessages(prev => [...prev, { role: 'assistant', content: 'Aqui está a imagem que você pediu:' }]);
-          } else if (data.error) {
-            setMessages(prev => [...prev, { role: 'assistant', content: `Erro ao gerar imagem: ${data.error.message}` }]);
-          } else {
-            setMessages(prev => [...prev, { role: 'assistant', content: 'Não foi possível gerar a imagem. A resposta da API não continha uma URL válida.' }]);
-          }
-        } catch (error) {
-          console.error('Erro de rede/chamada da API de imagem:', error);
-          setMessages(prev => [...prev, { role: 'assistant', content: `Erro na API de imagem: ${error.message}. Verifique sua conexão ou console para mais detalhes.` }]);
-        } finally {
-          setLoading(false);
-        }
-        return; // Sai da função para não chamar a API de chat
-      } else {
-        setMessages(prev => [...prev, { role: 'assistant', content: 'Por favor, forneça um prompt para a imagem após "!imagem ".' }]);
-        setLoading(false);
-        return;
-      }
+    // --- Fluxo de comunicação com a API do Gemini ---
+    // Verifica se a chave da API do Gemini está configurada
+    if (!GEMINI_API_KEY) {
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada. Verifique seu arquivo .env ou .env.local.' },
+      ]);
+      console.error('GEMINI_API_KEY não está definida. Verifique seu .env ou .env.local e reinicie o servidor.');
+      setLoading(false);
+      return; // Sai da função se a chave não estiver disponível
     }
-    // --- Fim da Lógica para Geração de Imagem ---
 
-    // --- Fluxo normal do Chat ---
     try {
-      const messagesForApi = updatedMessages.filter(msg => msg.role !== 'system'); // Filtra a mensagem do sistema para a API
-      const body = {
-        model: 'gpt-3.5-turbo',
-        messages: [
-          { role: 'system', content: modePrompts[mode] }, // Inclui o prompt do sistema no início para a API
-          ...messagesForApi // Adiciona o resto do histórico
-        ],
-        temperature: 1.0, // Aumentado para encorajar mais criatividade/variedade
-        top_p: 1.0,       // Aumentado para permitir mais diversidade de palavras
-        max_tokens: 1000,
-      };
+      // Prepara o histórico de mensagens para a API do Gemini
+      // O Gemini espera uma alternância de turnos 'user' e 'model'.
+      // O prompt do sistema é adicionado como a primeira "fala" do usuário.
+      const geminiMessages = [];
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      // Adiciona o prompt do modo selecionado como a primeira instrução para o Gemini
+      geminiMessages.push({
+        role: 'user',
+        parts: [{ text: modePrompts[mode] }],
+      });
+      // Adiciona uma resposta "vazia" ou genérica do modelo para "fechar" o turno inicial do sistema/usuário.
+      // Isso é crucial para manter a alternância de turnos que o Gemini espera.
+      geminiMessages.push({
+        role: 'model',
+        parts: [{ text: "Ok, entendi. Como posso ajudar?" }],
+      });
+
+      // Adiciona as mensagens reais do histórico do chat, mapeando os papéis
+      // 'user' (seu estado) para 'user' (Gemini)
+      // 'assistant' (seu estado) para 'model' (Gemini)
+      updatedMessages.forEach(msg => {
+        if (msg.role === 'user') {
+          geminiMessages.push({
+            role: 'user',
+            parts: [{ text: msg.content }],
+          });
+        } else if (msg.role === 'assistant') {
+          geminiMessages.push({
+            role: 'model',
+            parts: [{ text: msg.content }],
+          });
+        }
+      });
+
+      // Realiza a chamada à API do Gemini
+      // ATENÇÃO: O MODELO FOI ALTERADO DE 'gemini-pro' PARA 'gemini-2.0-flash'
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          contents: geminiMessages, // Envia o histórico de mensagens formatado
+          generationConfig: {
+            temperature: 0.9, // Controla a aleatoriedade da resposta (0.0 a 1.0)
+            topP: 0.8,      // Controla a diversidade de palavras (0.0 a 1.0)
+            maxOutputTokens: 1000, // Limite de tokens na resposta
+          },
+          // safetySettings: [ ... ], // Configurações de segurança opcionais
+        }),
       });
 
-      // ADIÇÃO: Verificação de resposta HTTP OK para a API de chat
+      // Verifica se a resposta HTTP foi bem-sucedida
       if (!response.ok) {
         const errorData = await response.json(); // Tenta parsear o JSON do erro
-        console.error('Erro na resposta da API de chat (HTTP):', response.status, response.statusText, errorData);
-        // Exibe a mensagem de erro da API ou uma genérica
+        console.error('Erro na resposta da API Gemini (HTTP):', response.status, response.statusText, errorData);
         setMessages((prev) => [
           ...prev,
-          { role: 'assistant', content: `Erro na API: ${errorData.error ? errorData.error.message : 'Problema desconhecido na API.'} (Código: ${response.status})` },
+          { role: 'assistant', content: `Erro na API Gemini: ${errorData.error ? errorData.error.message : 'Problema desconhecido na API Gemini.'} (Código: ${response.status})` },
         ]);
-        setLoading(false); // Certifique-se de parar o loading aqui
+        setLoading(false);
         return; // Sai da função após o erro
       }
 
+      // Processa a resposta da API do Gemini
       const data = await response.json();
-      console.log('Resposta da API de chat:', data); // Log da resposta completa da API
+      console.log('Resposta da API Gemini:', data); // Log da resposta completa da API
 
-      if (data.choices && data.choices.length > 0) {
-        const botReply = data.choices[0].message;
+      // Verifica se a resposta contém o conteúdo esperado
+      if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts) {
+        const botReply = data.candidates[0].content.parts[0].text;
         const botMessage = {
           role: 'assistant',
-          content: botReply.content.trim(),
+          content: botReply.trim(),
         };
-        setMessages((prev) => [...prev, botMessage]);
-      } else {
-        // Agora este 'else' significa que a API respondeu OK (status 200),
-        // mas não retornou 'choices' ou ele estava vazio, o que é incomum para sucesso.
+        setMessages((prev) => [...prev, botMessage]); // Adiciona a resposta do bot ao chat
+      } else if (data.promptFeedback && data.promptFeedback.blockReason) {
+        // Se a mensagem foi bloqueada pelas políticas de segurança do Gemini
         setMessages((prev) => [
           ...prev,
-          { role: 'assistant', content: 'A API respondeu, mas sem uma resposta de chat válida. Tente novamente.' },
+          { role: 'assistant', content: `Sua mensagem foi bloqueada devido a políticas de segurança do Gemini: ${data.promptFeedback.blockReason}. Por favor, tente reformular.` },
+        ]);
+      } else {
+        // Caso a API responda OK, mas sem uma resposta válida (situação incomum)
+        setMessages((prev) => [
+          ...prev,
+          { role: 'assistant', content: 'A API Gemini respondeu, mas sem uma resposta de chat válida. Tente novamente.' },
         ]);
       }
     } catch (error) {
-      console.error('Erro de rede/chamada da API de chat:', error); // Log para erros de rede ou CORS
+      // Captura erros de rede ou outros problemas na chamada da API
+      console.error('Erro de rede/chamada da API Gemini:', error);
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: `Erro na API: ${error.message}. Verifique sua conexão ou console para mais detalhes.` },
+        { role: 'assistant', content: `Erro na API Gemini: ${error.message}. Verifique sua conexão ou console para mais detalhes.` },
       ]);
     } finally {
-      setLoading(false);
+      setLoading(false); // Desativa o estado de carregamento, independentemente do sucesso ou falha
     }
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <div className="chat-container">
@@ -259,6 +204,8 @@ const handleSendMessage = async (e) => {
 
       <div className="message-display-area">
         {messages
+          // Filtra mensagens com role 'system' para não as exibir no chat,
+          // pois elas são usadas apenas para instruir o modelo.
           .filter((msg) => msg.role !== 'system')
           .map((message, index) => (
             <div
@@ -273,12 +220,8 @@ const handleSendMessage = async (e) => {
             <span className="message-bubble">Digitando...</span>
           </div>
         )}
-        {generatedImage && (
-          <div className="message bot image-message">
-            <img src={generatedImage} alt="Imagem gerada por IA" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} />
-          </div>
-        )}
-        <div ref={messagesEndRef} />
+        {/* A seção de imagem gerada foi removida, pois não estamos usando DALL-E */}
+        <div ref={messagesEndRef} /> {/* Elemento para rolagem automática */}
       </div>
 
       <form onSubmit={handleSendMessage} className="message-input-form">
@@ -288,7 +231,7 @@ const handleSendMessage = async (e) => {
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Sua mensagem..."
           className="message-input"
-          disabled={loading}
+          disabled={loading} // Desabilita o input enquanto carrega
         />
         <button type="submit" className="send-button" disabled={loading}>
           <img src={sendBtn} alt="Enviar" className="send-icon" />
