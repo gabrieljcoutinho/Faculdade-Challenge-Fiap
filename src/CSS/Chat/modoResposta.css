@@ -63,3 +63,43 @@
     box-shadow: none;
     color: #9ca3af;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* In mensagem.css or a relevant CSS file */
+
+.message-bubble strong {
+    font-weight: bold;
+    /* Ensures bold text */
+}
+
+.message-bubble em {
+    font-style: italic;
+    /* Ensures italic text */
+}
+
+.message-bubble ul,
+.message-bubble ol {
+    margin-left: 20px;
+    /* Adds indentation for lists */
+    padding-left: 0;
+}
+
+.message-bubble li {
+    margin-bottom: 5px;
+}
