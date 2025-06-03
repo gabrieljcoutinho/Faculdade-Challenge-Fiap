@@ -34,12 +34,22 @@ const Chat = () => {
 
     const validRoutes = {
       Home: '/',
+      Inicio: '/',
       Conexoes: '/conexoes',
+      Conexões: '/conexoes',
       Contato: '/contato',
+      Contatos: '/contato',
       Configuracoes: '/configuracoes',
+      Configuracao: '/configuracoes',
+      Configurações: '/configuracoes',
+      Configuração: '/configuracoes',
+      Configuracões: '/configuracoes',
+      Configuracão: '/configuracoes',
       Login: '/login',
+      Logar: '/login',
       Cadastro: '/cadastro',
-      Chat: '/chat'
+      Cadastros: '/cadastro',
+      Cadastrar: '/cadastro',
     };
 
     const routeKey = newMessage.trim();
