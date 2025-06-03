@@ -30,36 +30,45 @@ const Home = () => {
     });
 
     const commonChartOptions = {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: '#fff' } }, tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', bodyColor: '#fff', titleColor: '#fff', borderColor: '#fff', borderWidth: 1 } },
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { labels: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } } },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)', bodyColor: '#fff', titleColor: '#fff', borderColor: '#fff', borderWidth: 1,
+                bodyFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }, titleFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }
+            }
+        },
         scales: {
-            x: { title: { display: true, text: 'Hora', color: '#fff' }, ticks: { color: '#fff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
-            y: { title: { display: true, text: 'Produção (kWh)', color: '#fff' }, ticks: { color: '#fff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+            x: {
+                title: { display: true, text: 'Hora', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
+                ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }, grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            },
+            y: {
+                title: { display: true, text: 'Produção (kWh)', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
+                ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }, grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            }
         }
     };
 
     const getChartOptions = (type) => ({
-        ...commonChartOptions, onClick: () => setExpandedChart(type),
+        ...commonChartOptions,
+        onClick: () => setExpandedChart(type),
         plugins: {
             ...commonChartOptions.plugins,
-            title: { display: true, color: '#fff', text: type === 'pie' ? 'Distribuição da Produção de Energia Solar Por Hora (Pizza)' : `Produção de Energia Solar Por Hora (${type === 'line' ? 'Linha' : 'Barra'})` },
+            title: {
+                display: true, color: '#fff',
+                text: type === 'pie' ? 'Distribuição da Produção de Energia Solar por Hora' : `Produção de Energia Solar por Hora (${type === 'line' ? 'Linha' : 'Barras'})`,
+                font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", size: 16 }
+            },
             ...(type === 'pie' && {
-                legend: { ...commonChartOptions.plugins.legend, position: 'bottom' },
+                legend: { ...commonChartOptions.plugins.legend, position: 'bottom', labels: { ...commonChartOptions.plugins.legend.labels, font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } } },
                 tooltip: {
                     ...commonChartOptions.plugins.tooltip,
-                    callbacks: { label: (context) => {
-                        const value = context.raw;
-                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                        return `${context.label}: ${value} kWh (${Math.round((value / total) * 100)}%)`;
-                    }}
+                    callbacks: { label: (context) => `${context.label}: ${context.raw} kWh (${Math.round((context.raw / context.dataset.data.reduce((a, b) => a + b, 0)) * 100)}%)` }
                 }
             }),
-            ...(type !== 'pie' && {
-                tooltip: {
-                    ...commonChartOptions.plugins.tooltip,
-                    callbacks: { label: (context) => `${context.dataset.label || ''}: ${context.parsed.y !== null ? `${context.parsed.y} kWh` : ''}` }
-                }
-            })
+            ...(type !== 'pie' && { tooltip: { ...commonChartOptions.plugins.tooltip, callbacks: { label: (context) => `${context.dataset.label || ''}: ${context.parsed.y !== null ? `${context.parsed.y} kWh` : ''}` } } })
         },
         ...(type === 'pie' && { scales: {} })
     });
@@ -91,9 +100,7 @@ const Home = () => {
         { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 22, low: 16 }
     ];
 
-    const getWeatherIcon = (condition) => ({
-        'Ensolarado': '☀️', 'Nublado': '☁️', 'Chuvoso': '🌧️'
-    }[condition] || '');
+    const getWeatherIcon = (condition) => ({ 'Ensolarado': '☀️', 'Nublado': '☁️', 'Chuvoso': '🌧️' }[condition] || '');
 
     const handleSaveChart = () => {
         if (chartRef.current && expandedChart) {
@@ -132,7 +139,7 @@ const Home = () => {
                         <div className="chart-buttons">
                             {['line', 'bar', 'pie'].map(type => (
                                 <button key={type} onClick={() => setChartType(type)} className={chartType === type ? 'active' : ''}>
-                                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                                    {type === 'line' ? 'Linha' : type === 'bar' ? 'Barras' : 'Pizza'}
                                 </button>
                             ))}
                         </div>
@@ -176,20 +183,20 @@ const Home = () => {
                             <div className="chart-container">
                                 {ExpandedChartComponent && <ExpandedChartComponent data={productionData} options={getChartOptions(expandedChart)} />}
                             </div>
-                            <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center' }}>Dados de Produção</h3>
+                            <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Dados de Produção</h3>
                             <div className="data-table-container" style={{ overflowX: 'auto' }}>
                                 <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
                                     <thead>
                                         <tr style={{ borderBottom: '1px solid #fff' }}>
-                                            <th style={{ padding: '8px', textAlign: 'left' }}>Hora</th>
-                                            <th style={{ padding: '8px', textAlign: 'left' }}>Produção (kWh)</th>
+                                            <th style={{ padding: '8px', textAlign: 'left', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Hora</th>
+                                            <th style={{ padding: '8px', textAlign: 'left', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Produção (kWh)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {productionData.labels.map((label, index) => (
                                             <tr key={index} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                                                <td style={{ padding: '8px' }}>{label}</td>
-                                                <td style={{ padding: '8px' }}>{productionData.datasets[0].data[index]}</td>
+                                                <td style={{ padding: '8px', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>{label}</td>
+                                                <td style={{ padding: '8px', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>{productionData.datasets[0].data[index]}</td>
                                             </tr>
                                         ))}
                                     </tbody>
