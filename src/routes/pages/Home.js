@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import '../../CSS/Home/home.css';
 import '../../CSS/Home/expanded.css';
 import '../../CSS/Home/analyze.css';
@@ -20,40 +20,41 @@ import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Catego
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
 const Home = () => {
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [chartType, setChartType] = useState('line');
-    const [expandedChart, setExpandedChart] = useState(null);
-    const chartRef = useRef(null);
-    const [productionData, setProductionData] = useState({
-        labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
-        datasets: [{ label: 'Produção (kWh)', data: [5, 12, 25, 30, 22, 15, 8], borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.6)', tension: 0.4 }]
+    const [state, setState] = useState({
+        isAnalyzing: false,
+        chartType: 'line',
+        expandedChart: null,
+        productionData: {
+            labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
+            datasets: [{ label: 'Produção (kWh)', data: [5, 12, 25, 30, 22, 15, 8], borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.6)', tension: 0.4 }]
+        },
+        currentWeather: { temperature: 28, condition: 'Ensolarado' },
+        forecast: [
+            { day: 'Hoje', condition: 'Ensolarado', high: 30, low: 20 },
+            { day: 'Amanhã', condition: 'Nublado', high: 25, low: 18 },
+            { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 22, low: 16 }
+        ]
     });
 
+    const chartRef = useRef(null);
+
+    const { isAnalyzing, chartType, expandedChart, productionData, currentWeather, forecast } = state;
+
     const commonChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: {
             legend: { labels: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } } },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)', bodyColor: '#fff', titleColor: '#fff', borderColor: '#fff', borderWidth: 1,
-                bodyFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }, titleFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }
-            }
+            tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', bodyColor: '#fff', titleColor: '#fff', borderColor: '#fff', borderWidth: 1, bodyFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }, titleFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }
         },
         scales: {
-            x: {
-                title: { display: true, text: 'Hora', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
-                ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }, grid: { color: 'rgba(255, 255, 255, 0.1)' }
-            },
-            y: {
-                title: { display: true, text: 'Produção (kWh)', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
-                ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }, grid: { color: 'rgba(255, 255, 255, 0.1)' }
-            }
+            x: { title: { display: true, text: 'Hora', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }, ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+            y: { title: { display: true, text: 'Produção (kWh)', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }, ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
         }
     };
 
     const getChartOptions = (type) => ({
         ...commonChartOptions,
-        onClick: () => setExpandedChart(type),
+        onClick: () => setState(prev => ({ ...prev, expandedChart: type })),
         plugins: {
             ...commonChartOptions.plugins,
             title: {
@@ -63,10 +64,7 @@ const Home = () => {
             },
             ...(type === 'pie' && {
                 legend: { ...commonChartOptions.plugins.legend, position: 'bottom', labels: { ...commonChartOptions.plugins.legend.labels, font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } } },
-                tooltip: {
-                    ...commonChartOptions.plugins.tooltip,
-                    callbacks: { label: (context) => `${context.label}: ${context.raw} kWh (${Math.round((context.raw / context.dataset.data.reduce((a, b) => a + b, 0)) * 100)}%)` }
-                }
+                tooltip: { ...commonChartOptions.plugins.tooltip, callbacks: { label: (context) => `${context.label}: ${context.raw} kWh (${Math.round((context.raw / context.dataset.data.reduce((a, b) => a + b, 0)) * 100)}%)` } }
             }),
             ...(type !== 'pie' && { tooltip: { ...commonChartOptions.plugins.tooltip, callbacks: { label: (context) => `${context.dataset.label || ''}: ${context.parsed.y !== null ? `${context.parsed.y} kWh` : ''}` } } })
         },
@@ -86,19 +84,11 @@ const Home = () => {
     };
 
     const handleAnalyzeClick = () => {
-        setIsAnalyzing(true);
+        setState(prev => ({ ...prev, isAnalyzing: true }));
         setTimeout(() => {
-            setProductionData(prev => ({ ...prev, datasets: [{ ...prev.datasets[0], data: generateRandomData() }] }));
-            setIsAnalyzing(false);
+            setState(prev => ({ ...prev, productionData: { ...prev.productionData, datasets: [{ ...prev.productionData.datasets[0], data: generateRandomData() }] }, isAnalyzing: false }));
         }, 2000);
     };
-
-    const currentWeather = { temperature: 28, condition: 'Ensolarado' };
-    const forecast = [
-        { day: 'Hoje', condition: 'Ensolarado', high: 30, low: 20 },
-        { day: 'Amanhã', condition: 'Nublado', high: 25, low: 18 },
-        { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 22, low: 16 }
-    ];
 
     const getWeatherIcon = (condition) => ({ 'Ensolarado': '☀️', 'Nublado': '☁️', 'Chuvoso': '🌧️' }[condition] || '');
 
@@ -138,14 +128,14 @@ const Home = () => {
                         <label>Tipo de Gráfico:</label>
                         <div className="chart-buttons">
                             {['line', 'bar', 'pie'].map(type => (
-                                <button key={type} onClick={() => setChartType(type)} className={chartType === type ? 'active' : ''}>
+                                <button key={type} onClick={() => setState(prev => ({ ...prev, chartType: type }))} className={chartType === type ? 'active' : ''}>
                                     {type === 'line' ? 'Linha' : type === 'bar' ? 'Barras' : 'Pizza'}
                                 </button>
                             ))}
                         </div>
                     </div>
                     <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px' }}>
-                        <div className="chart-container" onClick={() => setExpandedChart(chartType)}>
+                        <div className="chart-container" onClick={() => setState(prev => ({ ...prev, expandedChart: chartType }))}>
                             {ChartComponent && <ChartComponent data={productionData} options={getChartOptions(chartType)} ref={chartRef} />}
                         </div>
                     </div>
@@ -176,15 +166,15 @@ const Home = () => {
             </main>
 
             {expandedChart && (
-                <div className="expanded-chart-overlay" onClick={() => setExpandedChart(null)}>
+                <div className="expanded-chart-overlay" onClick={() => setState(prev => ({ ...prev, expandedChart: null }))}>
                     <div className="expanded-chart-container" onClick={e => e.stopPropagation()}>
-                        <button className="close-button" onClick={() => setExpandedChart(null)} title="Fechar">X</button>
+                        <button className="close-button" onClick={() => setState(prev => ({ ...prev, expandedChart: null }))} title="Fechar">X</button>
                         <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px', height: 'calc(100% - 170px)', overflowY: 'auto' }}>
                             <div className="chart-container">
                                 {ExpandedChartComponent && <ExpandedChartComponent data={productionData} options={getChartOptions(expandedChart)} />}
                             </div>
                             <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Dados de Produção</h3>
-                            <div className="data-table-container" style={{ overflowX: 'auto' }}>
+                            <div className="data-table-container">
                                 <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
                                     <thead>
                                         <tr style={{ borderBottom: '1px solid #fff' }}>
