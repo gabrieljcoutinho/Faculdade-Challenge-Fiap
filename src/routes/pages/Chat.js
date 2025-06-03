@@ -59,6 +59,58 @@ const Chat = () => {
       return;
     }
 
+    // --- NEW LOGIC FOR DEVICE CONNECTION COMMANDS ---
+    const connectionCommandMatch = newMessage.trim().match(/^Conectar\s(.+)$/i);
+    if (connectionCommandMatch) {
+      const deviceName = connectionCommandMatch[1].trim();
+      const lowerCaseDeviceName = deviceName.toLowerCase();
+
+      // Retrieve existing connections from local storage
+      let existingConexions = JSON.parse(localStorage.getItem('conexions')) || [];
+
+      const availableIconsMap = {
+        tv: '/static/media/TV.3d3284bb35830953a9e4.png', // Update with actual paths from Conexoes.jsx
+        'ar-condicionado': '/static/media/ar-condicionado.c035f5287f3b8908d13a.png',
+        lampada: '/static/media/lampada.d1edecf7c32b50772f91.png',
+        airfry: '/static/media/airfry.05047466d3a5105771c9.png',
+        carregador: '/static/media/carregador.5f02c63c76044737a28e.png'
+      };
+
+      const availableDeviceNames = Object.keys(availableIconsMap);
+
+      if (availableDeviceNames.includes(lowerCaseDeviceName)) {
+        const deviceIcon = availableIconsMap[lowerCaseDeviceName];
+        const newDevice = {
+          text: deviceName.charAt(0).toUpperCase() + deviceName.slice(1), // Capitalize first letter
+          icon: deviceIcon,
+          backgroundColor: '#FFEBCD', // Default color, can be customized
+          connected: true
+        };
+
+        // Check if the device already exists to avoid duplicates or update it
+        const deviceExistsIndex = existingConexions.findIndex(c => c.text.toLowerCase() === lowerCaseDeviceName);
+
+        if (deviceExistsIndex > -1) {
+          // Update existing device to connected if it exists
+          existingConexions[deviceExistsIndex] = { ...existingConexions[deviceExistsIndex], connected: true };
+          setMessages(prev => [...prev, { role: 'assistant', content: `O aparelho "${newDevice.text}" já estava presente e foi conectado!` }]);
+        } else {
+          // Add new device
+          existingConexions.push(newDevice);
+          setMessages(prev => [...prev, { role: 'assistant', content: `Aparelho "${newDevice.text}" conectado com sucesso!` }]);
+        }
+
+        localStorage.setItem('conexions', JSON.stringify(existingConexions));
+        setNewMessage('');
+        return; // Stop further processing as it's a device command
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: `Desculpe, não consegui identificar o aparelho "${deviceName}". Os aparelhos disponíveis para conexão são: TV, Ar-Condicionado, Lâmpada, Airfry e Carregador.` }]);
+        setNewMessage('');
+        return;
+      }
+    }
+    // --- END NEW LOGIC ---
+
     const userMessage = { role: 'user', content: newMessage };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
