@@ -6,6 +6,13 @@ import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
+// Import images directly here
+import tvIcon from '../../imgs/TV.png';
+import airConditionerIcon from '../../imgs/ar-condicionado.png';
+import airfry from '../../imgs/airfry.png';
+import lampIcon from '../../imgs/lampada.png';
+import carregador from '../../imgs/carregador.png';
+
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
 const modePrompts = {
@@ -68,12 +75,13 @@ const Chat = () => {
       // Retrieve existing connections from local storage
       let existingConexions = JSON.parse(localStorage.getItem('conexions')) || [];
 
+      // Use the imported image variables here
       const availableIconsMap = {
-        tv: '/static/media/TV.3d3284bb35830953a9e4.png', // Update with actual paths from Conexoes.jsx
-        'ar-condicionado': '/static/media/ar-condicionado.c035f5287f3b8908d13a.png',
-        lampada: '/static/media/lampada.d1edecf7c32b50772f91.png',
-        airfry: '/static/media/airfry.05047466d3a5105771c9.png',
-        carregador: '/static/media/carregador.5f02c63c76044737a28e.png'
+        tv: tvIcon,
+        'ar-condicionado': airConditionerIcon,
+        lampada: lampIcon,
+        airfry: airfry,
+        carregador: carregador
       };
 
       const availableDeviceNames = Object.keys(availableIconsMap);
