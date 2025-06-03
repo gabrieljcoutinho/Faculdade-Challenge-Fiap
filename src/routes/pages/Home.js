@@ -15,121 +15,63 @@ import logoGmail from '../../imgs/Logogmail.png';
 import logoWhasapp from '../../imgs/Logowhatsapp.png';
 import logoInstagram from '../../imgs/Logoinstagram.png';
 import logoLinkedin from '../../imgs/Logolinkedin.png';
-import {
-    Chart as ChartJS,
-    LineElement, PointElement, LinearScale, Title, CategoryScale,
-    PieController, ArcElement, BarController, BarElement,
-    Legend, Tooltip,
-} from 'chart.js';
+import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip } from 'chart.js';
 
-ChartJS.register(
-    LineElement, PointElement, LinearScale, Title, CategoryScale,
-    PieController, ArcElement, BarController, BarElement,
-    Legend, Tooltip
-);
+ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
 const Home = () => {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [chartType, setChartType] = useState('line');
+    const [expandedChart, setExpandedChart] = useState(null);
+    const chartRef = useRef(null);
     const [productionData, setProductionData] = useState({
         labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
-        datasets: [{
-            label: 'Produção (kWh)',
-            data: [5, 12, 25, 30, 22, 15, 8],
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            tension: 0.4,
-        }],
+        datasets: [{ label: 'Produção (kWh)', data: [5, 12, 25, 30, 22, 15, 8], borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.6)', tension: 0.4 }]
     });
-    const chartRef = useRef(null);
-    const [expandedChart, setExpandedChart] = useState(null);
-    const [shareOptionsVisible, setShareOptionsVisible] = useState(false);
 
     const commonChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { labels: { color: '#fff' } },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)', bodyColor: '#fff',
-                titleColor: '#fff', borderColor: '#fff', borderWidth: 1,
-            },
-        },
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: '#fff' } }, tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', bodyColor: '#fff', titleColor: '#fff', borderColor: '#fff', borderWidth: 1 } },
         scales: {
-            x: {
-                title: { display: true, text: 'Hora', color: '#fff' },
-                ticks: { color: '#fff' },
-                grid: { color: 'rgba(255, 255, 255, 0.1)' },
-            },
-            y: {
-                title: { display: true, text: 'Produção (kWh)', color: '#fff' },
-                ticks: { color: '#fff' },
-                grid: { color: 'rgba(255, 255, 255, 0.1)' },
-            },
-        },
-    };
-
-    const getChartOptions = (type) => {
-        const baseOptions = {
-            ...commonChartOptions,
-            onClick: () => setExpandedChart(type),
-            plugins: {
-                ...commonChartOptions.plugins,
-                title: { display: true, color: '#fff' },
-            },
-        };
-
-        if (type === 'pie') {
-            return {
-                ...baseOptions,
-                plugins: {
-                    ...baseOptions.plugins,
-                    title: { ...baseOptions.plugins.title, text: 'Distribuição da Produção de Energia Solar Por Hora (Pizza)' },
-                    legend: { ...baseOptions.plugins.legend, position: 'bottom' },
-                    tooltip: {
-                        ...baseOptions.plugins.tooltip,
-                        callbacks: {
-                            label: (context) => {
-                                const value = context.raw;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = Math.round((value / total) * 100);
-                                return `${context.label}: ${value} kWh (${percentage}%)`;
-                            },
-                        },
-                    },
-                },
-                scales: {}, // No scales for pie chart
-            };
-        } else {
-            return {
-                ...baseOptions,
-                plugins: {
-                    ...baseOptions.plugins,
-                    title: { ...baseOptions.plugins.title, text: `Produção de Energia Solar Por Hora (${type === 'line' ? 'Linha' : 'Barra'})` },
-                    tooltip: {
-                        ...baseOptions.plugins.tooltip,
-                        callbacks: {
-                            label: (context) => {
-                                let label = context.dataset.label || '';
-                                if (label) label += ': ';
-                                if (context.parsed.y !== null) label += `${context.parsed.y} kWh`;
-                                return label;
-                            },
-                        },
-                    },
-                },
-            };
+            x: { title: { display: true, text: 'Hora', color: '#fff' }, ticks: { color: '#fff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+            y: { title: { display: true, text: 'Produção (kWh)', color: '#fff' }, ticks: { color: '#fff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
         }
     };
+
+    const getChartOptions = (type) => ({
+        ...commonChartOptions, onClick: () => setExpandedChart(type),
+        plugins: {
+            ...commonChartOptions.plugins,
+            title: { display: true, color: '#fff', text: type === 'pie' ? 'Distribuição da Produção de Energia Solar Por Hora (Pizza)' : `Produção de Energia Solar Por Hora (${type === 'line' ? 'Linha' : 'Barra'})` },
+            ...(type === 'pie' && {
+                legend: { ...commonChartOptions.plugins.legend, position: 'bottom' },
+                tooltip: {
+                    ...commonChartOptions.plugins.tooltip,
+                    callbacks: { label: (context) => {
+                        const value = context.raw;
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        return `${context.label}: ${value} kWh (${Math.round((value / total) * 100)}%)`;
+                    }}
+                }
+            }),
+            ...(type !== 'pie' && {
+                tooltip: {
+                    ...commonChartOptions.plugins.tooltip,
+                    callbacks: { label: (context) => `${context.dataset.label || ''}: ${context.parsed.y !== null ? `${context.parsed.y} kWh` : ''}` }
+                }
+            })
+        },
+        ...(type === 'pie' && { scales: {} })
+    });
 
     const generateRandomData = () => {
         const base = [5, 10, 15, 20, 25, 20, 10];
         const type = Math.floor(Math.random() * 4);
         switch (type) {
-            case 0: return base.map((v) => v + Math.floor(Math.random() * 3 - 1));
+            case 0: return base.map(v => v + Math.floor(Math.random() * 3 - 1));
             case 1: return base.map((_, i) => Math.round(15 + 10 * Math.sin(i)));
             case 2: return Array.from({ length: 7 }, () => Math.floor(Math.random() * 35));
-            case 3: return [5, 12, 25, 35, 28, 18, 10].map((v) => v + Math.floor(Math.random() * 4 - 2));
+            case 3: return [5, 12, 25, 35, 28, 18, 10].map(v => v + Math.floor(Math.random() * 4 - 2));
             default: return base;
         }
     };
@@ -137,91 +79,48 @@ const Home = () => {
     const handleAnalyzeClick = () => {
         setIsAnalyzing(true);
         setTimeout(() => {
-            setProductionData((prev) => ({
-                ...prev,
-                datasets: [{ ...prev.datasets[0], data: generateRandomData() }],
-            }));
+            setProductionData(prev => ({ ...prev, datasets: [{ ...prev.datasets[0], data: generateRandomData() }] }));
             setIsAnalyzing(false);
         }, 2000);
     };
-
-    const handleCloseExpandedChart = () => {
-        setExpandedChart(null);
-        setShareOptionsVisible(false);
-    };
-
-    useEffect(() => {
-        setProductionData((prev) => ({
-            ...prev,
-            datasets: [{ ...prev.datasets[0], data: generateRandomData() }],
-        }));
-    }, []);
 
     const currentWeather = { temperature: 28, condition: 'Ensolarado' };
     const forecast = [
         { day: 'Hoje', condition: 'Ensolarado', high: 30, low: 20 },
         { day: 'Amanhã', condition: 'Nublado', high: 25, low: 18 },
-        { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 22, low: 16 },
+        { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 22, low: 16 }
     ];
 
-    const getWeatherIcon = (condition) => {
-        switch (condition) {
-            case 'Ensolarado': return '☀️';
-            case 'Nublado': return '☁️';
-            case 'Chuvoso': return '🌧️';
-            default: return '';
-        }
-    };
+    const getWeatherIcon = (condition) => ({
+        'Ensolarado': '☀️', 'Nublado': '☁️', 'Chuvoso': '🌧️'
+    }[condition] || '');
 
     const handleSaveChart = () => {
-        const chart = chartRef.current;
-        if (chart && expandedChart) {
+        if (chartRef.current && expandedChart) {
             const link = document.createElement('a');
             link.download = `grafico_producao_solar_${expandedChart}.png`;
-            link.href = chart.toBase64Image();
+            link.href = chartRef.current.toBase64Image();
             link.click();
         }
     };
 
     const shareChart = (platform) => {
-        const chart = chartRef.current;
-        if (!chart || !expandedChart) return;
-
-        const imageUrl = chart.toBase64Image();
+        if (!chartRef.current || !expandedChart) return;
+        const imageUrl = chartRef.current.toBase64Image();
         const title = 'Gráfico de Produção Solar';
         const summary = 'Confira o gráfico de produção de energia solar.';
 
-        switch (platform) {
-            case 'email':
-                window.open(`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(summary)}&attachment=${encodeURIComponent(imageUrl.split(',')[1])}`, '_blank');
-                break;
-            case 'whatsapp':
-                window.open(`https://wa.me/?text=${encodeURIComponent(`${summary} ${imageUrl}`)}`, '_blank');
-                break;
-            case 'instagram':
-                alert('Compartilhar via Instagram geralmente envolve baixar a imagem e compartilhar manualmente no aplicativo.');
-                handleSaveChart();
-                break;
-            case 'linkedin':
-                window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(imageUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}&source=${encodeURIComponent(window.location.href)}`, '_blank');
-                break;
-            default:
-                break;
-        }
-        setShareOptionsVisible(false);
+        const actions = {
+            'email': () => window.open(`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(summary)}&attachment=${encodeURIComponent(imageUrl.split(',')[1])}`, '_blank'),
+            'whatsapp': () => window.open(`https://wa.me/?text=${encodeURIComponent(`${summary} ${imageUrl}`)}`, '_blank'),
+            'instagram': () => { alert('Compartilhe manualmente via Instagram'); handleSaveChart(); },
+            'linkedin': () => window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(imageUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`, '_blank')
+        };
+        actions[platform]?.();
     };
 
-    const ChartComponent = {
-        'line': Line,
-        'bar': Bar,
-        'pie': Pie,
-    }[chartType];
-
-    const ExpandedChartComponent = {
-        'line': Line,
-        'bar': Bar,
-        'pie': Pie,
-    }[expandedChart];
+    const ChartComponent = { 'line': Line, 'bar': Bar, 'pie': Pie }[chartType];
+    const ExpandedChartComponent = { 'line': Line, 'bar': Bar, 'pie': Pie }[expandedChart];
 
     return (
         <div className="home-container">
@@ -231,12 +130,8 @@ const Home = () => {
                     <div className="chart-type-selector">
                         <label>Tipo de Gráfico:</label>
                         <div className="chart-buttons">
-                            {['line', 'bar', 'pie'].map((type) => (
-                                <button
-                                    key={type}
-                                    onClick={() => setChartType(type)}
-                                    className={chartType === type ? 'active' : ''}
-                                >
+                            {['line', 'bar', 'pie'].map(type => (
+                                <button key={type} onClick={() => setChartType(type)} className={chartType === type ? 'active' : ''}>
                                     {type.charAt(0).toUpperCase() + type.slice(1)}
                                 </button>
                             ))}
@@ -247,12 +142,7 @@ const Home = () => {
                             {ChartComponent && <ChartComponent data={productionData} options={getChartOptions(chartType)} ref={chartRef} />}
                         </div>
                     </div>
-                    <button
-                        className="analyze-button"
-                        onClick={handleAnalyzeClick}
-                        disabled={isAnalyzing}
-                        style={{ marginTop: '35px' }}
-                    >
+                    <button className="analyze-button" onClick={handleAnalyzeClick} disabled={isAnalyzing} style={{ marginTop: '35px' }}>
                         {isAnalyzing ? 'Analisando...' : 'Atualizar Produção'}
                     </button>
                 </section>
@@ -279,9 +169,9 @@ const Home = () => {
             </main>
 
             {expandedChart && (
-                <div className="expanded-chart-overlay" onClick={handleCloseExpandedChart}>
-                    <div className="expanded-chart-container" onClick={(e) => e.stopPropagation()}>
-                        <button className="close-button" onClick={handleCloseExpandedChart} title="Fechar">X</button>
+                <div className="expanded-chart-overlay" onClick={() => setExpandedChart(null)}>
+                    <div className="expanded-chart-container" onClick={e => e.stopPropagation()}>
+                        <button className="close-button" onClick={() => setExpandedChart(null)} title="Fechar">X</button>
                         <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px', height: 'calc(100% - 170px)', overflowY: 'auto' }}>
                             <div className="chart-container">
                                 {ExpandedChartComponent && <ExpandedChartComponent data={productionData} options={getChartOptions(expandedChart)} />}
