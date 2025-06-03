@@ -1,29 +1,14 @@
 import React, { useState } from 'react';
-import '../../CSS/Login/login.css';
 import { Link, useNavigate } from 'react-router-dom';
+import '../../CSS/Login/login.css';
 
 const Logar = () => {
   const navigate = useNavigate();
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Aqui você colocaria sua lógica de autenticação
-    // Por exemplo, verificar se o e-mail e a senha estão corretos
-
-    // Simulando uma autenticação bem-sucedida
-    const autenticado = true;
-
-    if (autenticado) {
-      navigate('/'); // Redireciona para a página Home
-    } else {
-      // Aqui você pode adicionar lógica para exibir mensagens de erro
-      alert('Falha na autenticação. Verifique seu e-mail e senha.');
-    }
-  };
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/'); // Simulate successful auth
   };
 
   return (
@@ -39,7 +24,7 @@ const Logar = () => {
             <label htmlFor="password">Senha</label>
             <div className="password-input-group">
               <input
-                type={passwordVisible ? 'text' : 'password'}
+                type={showPass ? 'text' : 'password'}
                 id="password"
                 placeholder="Sua senha"
                 required
@@ -47,9 +32,9 @@ const Logar = () => {
               <button
                 type="button"
                 className="password-toggle-button"
-                onClick={togglePasswordVisibility}
+                onClick={() => setShowPass(!showPass)}
               >
-                {passwordVisible ? '👁️' : '👁️‍🗨️'}
+                {showPass ? '👁️' : '👁️‍🗨️'}
               </button>
             </div>
           </div>
@@ -63,10 +48,16 @@ const Logar = () => {
       <aside className="login-info">
         <h2>Por que se juntar a nós?</h2>
         <ul>
-          <li><span aria-hidden="true">✨</span> Descubra um mundo de recursos exclusivos.</li>
-          <li><span aria-hidden="true">💾</span> Salve seu progresso e continue de onde parou.</li>
-          <li><span aria-hidden="true">🔔</span> Receba atualizações importantes e novidades em primeira mão.</li>
-          <li><span aria-hidden="true">⚙️</span> Personalize sua experiência ao seu gosto.</li>
+          {['✨', '💾', '🔔', '⚙️'].map((icon, i) => (
+            <li key={i}>
+              <span aria-hidden="true">{icon}</span> {[
+                'Descubra um mundo de recursos exclusivos',
+                'Salve seu progresso e continue de onde parou',
+                'Receba atualizações importantes e novidades',
+                'Personalize sua experiência ao seu gosto'
+              ][i]}
+            </li>
+          ))}
         </ul>
       </aside>
     </main>

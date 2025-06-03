@@ -1,31 +1,22 @@
 import React, { useState } from 'react';
-
-
+import { Link, useNavigate } from 'react-router-dom';
 import '../../CSS/Cadastro/cadastro.css';
 import '../../CSS/Cadastro/input.css';
 import '../../CSS/Cadastro/password.css';
 import '../../CSS/Cadastro/links.css';
 import '../../CSS/Cadastro/error.css';
 
-
-
-import { Link, useNavigate } from 'react-router-dom';
-
 const Cadastro = () => {
   const navigate = useNavigate();
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [form, setForm] = useState({ nome: '', email: '', password: '', confirmPassword: '' });
+  const [errors, setErrors] = useState({ password: '', email: '' });
+  const [showPasswords, setShowPasswords] = useState([false, false]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  const isEmailValid = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const handleChange = (e) => setForm({ ...form, [e.target.id]: e.target.value });
+
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const getPasswordStrength = (pwd) => {
     if (!pwd) return '';
@@ -34,23 +25,21 @@ const Cadastro = () => {
     return 'Média';
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setPasswordError('');
-    setEmailError('');
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors({ password: '', email: '' });
 
-    if (!isEmailValid(email)) {
-      setEmailError('E-mail inválido.');
+    if (!validateEmail(form.email)) {
+      setErrors({ ...errors, email: 'E-mail inválido.' });
       return;
     }
 
-    if (password !== confirmPassword) {
-      setPasswordError('As senhas não conferem.');
+    if (form.password !== form.confirmPassword) {
+      setErrors({ ...errors, password: 'As senhas não conferem.' });
       return;
     }
 
     setIsSubmitting(true);
-
     setTimeout(() => {
       setSuccessMessage('Cadastro realizado com sucesso!');
       setTimeout(() => navigate('/'), 2000);
@@ -58,16 +47,7 @@ const Cadastro = () => {
   };
 
   const EyeIcon = ({ onClick, visible }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      width="20"
-      height="20"
-      fill="currentColor"
-      className="password-toggle-icon"
-      onClick={onClick}
-      style={{ cursor: 'pointer' }}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" className="password-toggle-icon" onClick={onClick} style={{ cursor: 'pointer' }}>
       {visible ? (
         <path d="M1.39 4.22l2.26 2.26C2.57 7.74 1 9.72 1 12c0 2 2.06 3.94 4.34 5.59l1.41-1.41C5.11 15.11 4 13.62 4 12c0-1.17.52-2.24 1.36-3.01l1.54 1.54A3.5 3.5 0 0 0 12 15a3.5 3.5 0 0 0 3.47-4.14l3.27 3.27C21.6 12.47 23 10.42 23 8c0-2-2.06-3.94-4.34-5.59L18.24 4C20.74 6.47 22 8.4 22 10s-.94 3.53-3.34 6l1.41 1.41c2.4-2.47 3.34-4.4 3.34-6 0-2.28-1.57-4.26-3.66-5.52l2.27-2.26-1.42-1.42L2.81 2.81 1.39 4.22zM12 6a9.48 9.48 0 0 0-6.34 2.41L5.66 9.41C8.06 6.94 10 6 12 6c1.06 0 2.09.27 3.03.77L12 9.88V6z" />
       ) : (
@@ -81,75 +61,51 @@ const Cadastro = () => {
       <section className="cadastro-box">
         <h1>Crie sua conta</h1>
         <form className="cadastro-form" onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label htmlFor="nome">Nome</label>
-            <input
-              type="text"
-              id="nome"
-              placeholder="Seu nome completo"
-              required
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-            />
-          </div>
-          <div className="input-group">
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Seu e-mail"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={emailError ? 'error' : ''}
-            />
-            {emailError && <p className="error-message">{emailError}</p>}
-          </div>
-          <div className="input-group password-input-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              placeholder="Crie uma senha"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={passwordError ? 'error' : ''}
-            />
-            <EyeIcon onClick={() => setShowPassword(!showPassword)} visible={showPassword} />
-            <small className={`password-strength ${getPasswordStrength(password).toLowerCase()}`}>
-              Força: {getPasswordStrength(password)}
-            </small>
-          </div>
-          <div className="input-group password-input-group">
-            <label htmlFor="confirmPassword">Confirmar Senha</label>
-            <input
-              type={showConfirmPassword ? 'text' : 'password'}
-              id="confirmPassword"
-              placeholder="Confirme sua senha"
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className={passwordError ? 'error' : ''}
-            />
-            <EyeIcon onClick={() => setShowConfirmPassword(!showConfirmPassword)} visible={showConfirmPassword} />
-          </div>
-          {passwordError && <p className="error-message">{passwordError}</p>}
+          {['nome', 'email'].map((field) => (
+            <div key={field} className="input-group">
+              <label htmlFor={field}>{field === 'nome' ? 'Nome' : 'E-mail'}</label>
+              <input
+                type={field === 'email' ? 'email' : 'text'}
+                id={field}
+                placeholder={field === 'nome' ? 'Seu nome completo' : 'Seu e-mail'}
+                required
+                value={form[field]}
+                onChange={handleChange}
+                className={errors[field] ? 'error' : ''}
+              />
+              {errors[field] && <p className="error-message">{errors[field]}</p>}
+            </div>
+          ))}
+          {['password', 'confirmPassword'].map((field, i) => (
+            <div key={field} className="input-group password-input-group">
+              <label htmlFor={field}>{field === 'password' ? 'Senha' : 'Confirmar Senha'}</label>
+              <input
+                type={showPasswords[i] ? 'text' : 'password'}
+                id={field}
+                placeholder={field === 'password' ? 'Crie uma senha' : 'Confirme sua senha'}
+                required
+                value={form[field]}
+                onChange={handleChange}
+                className={errors.password ? 'error' : ''}
+              />
+              <EyeIcon onClick={() => setShowPasswords(showPasswords.map((v, j) => j === i ? !v : v))} visible={showPasswords[i]} />
+              {field === 'password' && (
+                <small className={`password-strength ${getPasswordStrength(form.password).toLowerCase()}`}>
+                  Força: {getPasswordStrength(form.password)}
+                </small>
+              )}
+            </div>
+          ))}
+          {errors.password && <p className="error-message">{errors.password}</p>}
           <button type="submit" className="cadastro-button" disabled={isSubmitting}>
             {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
           </button>
         </form>
 
-        {successMessage && (
-          <div className="success-message animated">
-            🎉 {successMessage}
-          </div>
-        )}
+        {successMessage && <div className="success-message animated">🎉 {successMessage}</div>}
 
         <div className="links">
-          <p>
-            Já tem uma conta? <Link to="/login">Faça login</Link>
-          </p>
+          <p>Já tem uma conta? <Link to="/login">Faça login</Link></p>
         </div>
       </section>
 
