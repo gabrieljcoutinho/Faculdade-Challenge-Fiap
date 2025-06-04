@@ -19,10 +19,11 @@ import editIcon from '../../imgs/pencil.png';
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 
-const Conexoes = () => {
-  const [conexions, setConexions] = useState(() => JSON.parse(localStorage.getItem('conexions')) || []);
+// Conexoes agora recebe 'conexions' e 'setConexions' como props do App.js
+const Conexoes = ({ conexions, setConexions }) => {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true });
+  // Garante que newConexion também tem um ID ao ser criado no formulário
+  const [newConexion, setNewConexion] = useState({ id: '', text: '', icon: '', backgroundColor: availableColors[0], connected: true });
   const [activeIcon, setActiveIcon] = useState('');
   const [activeColor, setActiveColor] = useState(availableColors[0]);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -34,15 +35,14 @@ const Conexoes = () => {
     { name: 'TV', src: tvIcon },
     { name: 'Ar Condicionado', src: airConditionerIcon },
     { name: 'Lâmpada', src: lampIcon },
-    { name: 'Arfry', src: airfry },
+    { name: 'Airfry', src: airfry },
     { name: 'Carregador', src: carregador }
   ];
 
-  useEffect(() => { localStorage.setItem('conexions', JSON.stringify(conexions)); }, [conexions]);
-
   const handleAddClick = () => {
     setShowAddForm(true);
-    setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true });
+    // Gera um novo ID ao iniciar o formulário de adição
+    setNewConexion({ id: crypto.randomUUID(), text: '', icon: '', backgroundColor: availableColors[0], connected: true });
     setActiveIcon('');
     setActiveColor(availableColors[0]);
     setEditingIndex(null);
@@ -54,47 +54,47 @@ const Conexoes = () => {
       setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
       return;
     }
-    if (conexions.some((c, i) => c.text.toLowerCase() === newConexion.text.toLowerCase() && i !== editingIndex)) {
+    // Verifica se já existe um aparelho com o mesmo nome, excluindo o que está sendo editado
+    if (conexions.some((c, i) => c.text.toLowerCase() === newConexion.text.toLowerCase() && (editingIndex === null || c.id !== newConexion.id))) {
       setErrorMessage(`Hummm, parece que já temos um aparelho chamado "${newConexion.text}" por aqui. Que tal escolher outro nome? 😊`);
       return;
     }
+
     if (editingIndex !== null) {
-      const updated = [...conexions];
-      updated[editingIndex] = newConexion;
-      setConexions(updated);
+      // Atualiza o aparelho existente pelo ID
+      setConexions(prev => prev.map(item => item.id === newConexion.id ? newConexion : item));
     } else {
-      const newIndex = conexions.length;
-      setConexions([...conexions, newConexion]);
+      // Adiciona um novo aparelho
+      const newIndex = conexions.length; // Isso é para a animação, o ID é o que importa para o React
+      setConexions(prev => [...prev, newConexion]);
       setEnteringIndex(newIndex);
       setTimeout(() => setEnteringIndex(null), 300);
     }
     setShowAddForm(false);
   };
 
-  const removeConexion = (index) => {
-    if (conexions[index].connected) {
-      setRemovingIndex(index);
-      setTimeout(() => {
-        setConexions(conexions.filter((_, i) => i !== index));
-        setRemovingIndex(null);
-      }, 300);
-    }
+  const removeConexion = (idToRemove) => { // Agora remove pelo ID
+    setRemovingIndex(conexions.findIndex(c => c.id === idToRemove)); // Encontra o index para a animação
+    setTimeout(() => {
+      setConexions(prev => prev.filter(c => c.id !== idToRemove)); // Filtra pelo ID
+      setRemovingIndex(null);
+    }, 300);
   };
 
-  const handleEditClick = (index) => {
-    if (conexions[index].connected) {
-      const c = conexions[index];
-      setNewConexion({ text: c.text, icon: c.icon, backgroundColor: c.backgroundColor || availableColors[0], connected: c.connected !== undefined ? c.connected : true });
+  const handleEditClick = (idToEdit) => { // Agora edita pelo ID
+    const c = conexions.find(c => c.id === idToEdit); // Encontra o aparelho pelo ID
+    if (c) {
+      setNewConexion({ ...c }); // Preenche o formulário com os dados do aparelho
       setActiveIcon(c.icon);
       setActiveColor(c.backgroundColor || availableColors[0]);
       setShowAddForm(true);
-      setEditingIndex(index);
+      setEditingIndex(conexions.findIndex(item => item.id === idToEdit)); // Define o index para a animação/lógica de edição
       setErrorMessage('');
     }
   };
 
-  const toggleConnection = (index) => {
-    setConexions(conexions.map((c, i) => i === index ? { ...c, connected: !c.connected } : c));
+  const toggleConnection = (idToToggle) => { // Agora alterna a conexão pelo ID
+    setConexions(prev => prev.map(c => c.id === idToToggle ? { ...c, connected: !c.connected } : c));
   };
 
   return (
@@ -135,21 +135,21 @@ const Conexoes = () => {
       )}
 
       <div className="conexions-list">
-        {conexions.map((c, index) => (
-          <div key={index} className={`retanguloAdicionado ${removingIndex === index ? 'exiting' : ''} ${enteringIndex === index ? 'entering' : (enteringIndex < index ? 'entered' : '')} relative`} style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}>
+        {conexions.map((c) => ( // Removido 'index' daqui, pois não é mais usado como key
+          <div key={c.id} className={`retanguloAdicionado ${removingIndex === conexions.findIndex(item => item.id === c.id) ? 'exiting' : ''} ${enteringIndex === conexions.findIndex(item => item.id === c.id) ? 'entering' : (enteringIndex !== null && conexions.findIndex(item => item.id === c.id) < enteringIndex ? 'entered' : '')} relative`} style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}>
             {!c.connected && <div className="disconnected-overlay">Desativado</div>}
             <div className="icon-text-overlay">
               <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
               <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
             </div>
             <div className="actions-overlay">
-              <button className="remove-button" onClick={() => removeConexion(index)} title="Remover" disabled={!c.connected} style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}>X</button>
-              <button className="edit-button" onClick={() => handleEditClick(index)} title="Editar" disabled={!c.connected} style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}>
+              <button className="remove-button" onClick={() => removeConexion(c.id)} title="Remover" disabled={!c.connected} style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}>X</button>
+              <button className="edit-button" onClick={() => handleEditClick(c.id)} title="Editar" disabled={!c.connected} style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}>
                 <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
               </button>
               <div className="switch-container">
                 <label className="switch">
-                  <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
+                  <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(c.id)} />
                   <span className="slider round"></span>
                 </label>
               </div>

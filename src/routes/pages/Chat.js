@@ -5,9 +5,9 @@ import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
-import comandosData from '../../data/commands.json';
+import comandosData from '../../data/commands.json'; // Certifique-se de que este caminho está correto
 
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY; // Certifique-se de que esta chave está configurada no seu ambiente
 
 const modePrompts = {
   professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
@@ -19,7 +19,7 @@ const modePrompts = {
 
 const normalizeText = (text) => text.trim().toLowerCase();
 
-const Chat = ({ onConnectDevice }) => {
+const Chat = ({ onConnectDevice }) => { // onConnectDevice é recebido como prop
   const [mode, setMode] = useState('profissional');
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -43,15 +43,60 @@ const Chat = ({ onConnectDevice }) => {
       cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
     );
 
-    if (comandoEncontrado) {
-      let resposta = comandoEncontrado.resposta;
+    let deviceToConnect = null; // Variável para armazenar o tipo de aparelho (ex: 'TV', 'Lâmpada')
+    let customDeviceName = null; // Variável para armazenar o nome personalizado (ex: 'Sala', 'Quarto')
 
-      // Se comando for conectar TV, dispare callback para conectar aparelho
-      if (comandoEncontrado.triggers.some(trigger => ['conectar tv', 'conectar televisão', 'ligar tv'].includes(normalizeText(trigger)))) {
-        if (typeof onConnectDevice === 'function') {
-          onConnectDevice('TV'); // Aqui você pode passar o nome do aparelho
+    // Mapeamento de tipos de aparelhos para seus gatilhos de conexão
+    const connectionCommands = [
+      { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão'] },
+      { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado'] },
+      { type: 'Lâmpada', triggers: ['conectar lâmpada', 'ligar lâmpada', 'conectar lampada', 'ligar lampada'] },
+      { type: 'Airfry', triggers: ['conectar airfry', 'ligar airfry'] },
+      { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador'] }
+    ];
+
+    // Lógica para identificar qual aparelho e nome personalizado devem ser conectados
+    for (const cmd of connectionCommands) {
+      for (const trigger of cmd.triggers) {
+        const normalizedTrigger = normalizeText(trigger);
+        if (textoNormalizado.startsWith(normalizedTrigger)) {
+          deviceToConnect = cmd.type;
+          // Extrai o nome personalizado (o que vem depois do gatilho)
+          customDeviceName = texto.substring(trigger.length).trim();
+
+          // Se não houver nome personalizado, usa o tipo do aparelho como nome
+          if (customDeviceName === '') {
+            customDeviceName = deviceToConnect;
+          } else {
+            // Opcional: Capitaliza a primeira letra do nome personalizado para consistência
+            customDeviceName = customDeviceName.charAt(0).toUpperCase() + customDeviceName.slice(1);
+          }
+          break; // Encontrou uma correspondência, pode sair do loop de triggers
         }
       }
+      if (deviceToConnect) break; // Encontrou um tipo de aparelho, pode sair do loop de comandos
+    }
+
+    // Se um comando de conexão foi identificado (deviceToConnect não é nulo)
+    if (deviceToConnect) {
+      // Chame a função onConnectDevice com o tipo e o nome personalizado
+      if (typeof onConnectDevice === 'function') {
+        onConnectDevice(deviceToConnect, customDeviceName);
+      }
+
+      // Encontre a resposta padrão para o comando de conexão (se existir no comandosData)
+      let resposta = "Comando de conexão executado."; // Resposta padrão se não encontrar no JSON
+      const connectionCommandInJson = comandosData.comandos.find(cmd =>
+        cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
+      );
+      if (connectionCommandInJson) {
+        resposta = connectionCommandInJson.resposta;
+      } else {
+        // Se o comando não for exatamente um trigger do JSON, mas é um comando de conexão,
+        // podemos gerar uma resposta mais dinâmica.
+        resposta = `${customDeviceName} Conectado.`;
+      }
+
 
       setMessages(prev => [
         ...prev,
@@ -60,10 +105,22 @@ const Chat = ({ onConnectDevice }) => {
       ]);
 
       setNewMessage('');
-      return; // não chama API Gemini para comandos conhecidos
+      return; // Não chama API Gemini para comandos conhecidos
     }
 
-    // Se não for comando, enviar mensagem para API Gemini
+    // Se não for um comando de conexão, mas for um comando geral do JSON
+    if (comandoEncontrado) {
+        setMessages(prev => [
+            ...prev,
+            { role: 'user', content: texto },
+            { role: 'assistant', content: comandoEncontrado.resposta }
+        ]);
+        setNewMessage('');
+        return;
+    }
+
+
+    // Se não for comando conhecido, enviar mensagem para API Gemini
     const userMessage = { role: 'user', content: texto };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
@@ -86,13 +143,18 @@ const Chat = ({ onConnectDevice }) => {
         }))
       ];
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      const payload = {
+        contents: geminiMessages,
+        generationConfig: { temperature: 0.9, topP: 0.8, maxOutputTokens: 1000 }
+      };
+
+      const apiKey = GEMINI_API_KEY; // Use a chave da API
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: geminiMessages,
-          generationConfig: { temperature: 0.9, topP: 0.8, maxOutputTokens: 1000 }
-        })
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
