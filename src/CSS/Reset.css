@@ -39,3 +39,40 @@ h1 {
   padding-top: 4rem;
   font-size: 25px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* CSS/Reset.css ou outro */
+.neon-border {
+  box-shadow: 0 0 10px rgba(255, 0, 51, 0.7),
+    0 0 20px rgba(255, 0, 51, 0.7),
+    0 0 40px rgba(255, 0, 51, 0.7),
+    0 0 80px rgba(255, 0, 51, 0.7);
+  border: 2px solid rgba(255, 0, 51, 0.7);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
