@@ -1,6 +1,6 @@
+// src/App.js
 import './CSS/Reset.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 
 // Components
 import Header from './components/Header';
@@ -16,41 +16,8 @@ import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
 
 function App() {
-  const [ativarNeon, setAtivarNeon] = useState(false);
-
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      alert("Seu navegador não suporta reconhecimento de voz.");
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'pt-BR'; // ou 'en-US' se preferir
-    recognition.continuous = true;
-    recognition.interimResults = false;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
-      console.log('Você disse:', transcript);
-
-      if (transcript === 'TESTE') {
-        setAtivarNeon(true);
-      }
-    };
-
-    recognition.onerror = (e) => {
-      console.error("Erro no reconhecimento de voz:", e.error);
-    };
-
-    recognition.start();
-
-    return () => recognition.stop();
-  }, []);
-
   return (
-    <div className={`App ${ativarNeon ? 'neon-border' : ''}`}>
+    <div className="App">
       <BrowserRouter>
         <Header />
         <Routes>
