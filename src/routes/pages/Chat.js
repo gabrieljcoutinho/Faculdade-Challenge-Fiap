@@ -5,7 +5,10 @@ import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
+import comandosData from '../../data/commands.json'; // import do arquivo JSON
+
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+
 const modePrompts = {
   professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
   profissional: 'Você é um assistente profissional e técnico. Forneça respostas detalhadas, precisas e formais, utilizando termos técnicos quando apropriado. Seja claro e direto.',
@@ -14,20 +17,54 @@ const modePrompts = {
   calmo: 'Você é calmo e reflexivo. Responda com tranquilidade, promovendo reflexão e clareza, usando linguagem serena e acolhedora.'
 };
 
+const normalizeText = (text) => text.trim().toLowerCase();
+
 const Chat = () => {
-  const [mode, setMode] = useState('professor');
+  const [mode, setMode] = useState('profissional');
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+  // Scroll automático para a última mensagem
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
 
-    const userMessage = { role: 'user', content: newMessage };
+    const texto = newMessage.trim();
+    if (!texto) return;
+
+    // Normaliza texto para comparação
+    const textoNormalizado = normalizeText(texto);
+
+    // Verificar se a mensagem é um comando predefinido (case insensitive)
+    const comandoEncontrado = comandosData.comandos.find(cmd => normalizeText(cmd.trigger) === textoNormalizado);
+
+    if (comandoEncontrado) {
+      let resposta = comandoEncontrado.resposta;
+
+      // Exemplo de comando com resposta dinâmica
+      if (comandoEncontrado.trigger.toLowerCase() === '/horario') {
+        const agora = new Date();
+        resposta += ' ' + agora.toLocaleTimeString();
+      }
+
+      // Adiciona a mensagem do usuário e a resposta do assistente
+      setMessages(prev => [
+        ...prev,
+        { role: 'user', content: texto },
+        { role: 'assistant', content: resposta }
+      ]);
+
+      setNewMessage('');
+      return; // Para aqui, não chama a API Gemini
+    }
+
+    // Se não for comando, enviar mensagem para API Gemini
+    const userMessage = { role: 'user', content: texto };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setNewMessage('');
@@ -61,10 +98,12 @@ const Chat = () => {
       if (!response.ok) {
         const errorData = await response.json();
         setMessages(prev => [...prev, { role: 'assistant', content: `Erro na API Gemini: ${errorData.error?.message || 'Problema desconhecido'} (Código: ${response.status})` }]);
+        setLoading(false);
         return;
       }
 
       const data = await response.json();
+
       if (data.candidates?.[0]?.content?.parts) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
       } else if (data.promptFeedback?.blockReason) {
@@ -83,8 +122,19 @@ const Chat = () => {
     <div className="chat-container">
       <div className="mode-selector-container">
         <label htmlFor="mode-select">Modo de resposta</label>
-        <select id="mode-select" value={mode} onChange={(e) => setMode(e.target.value)} disabled={loading}>
-          {Object.entries({ professor: 'Professor (didático)', profissional: 'Profissional / Técnico', engracado: 'Engraçado / Descontraído', coaching: 'Coaching / Motivador', calmo: 'Calmo / Reflexivo' }).map(([key, label]) => (
+        <select
+          id="mode-select"
+          value={mode}
+          onChange={(e) => setMode(e.target.value)}
+          disabled={loading}
+        >
+          {Object.entries({
+            professor: 'Professor (didático)',
+            profissional: 'Profissional / Técnico',
+            engracado: 'Engraçado / Descontraído',
+            coaching: 'Coaching / Motivador',
+            calmo: 'Calmo / Reflexivo'
+          }).map(([key, label]) => (
             <option key={key} value={key}>{label}</option>
           ))}
         </select>
@@ -92,17 +142,34 @@ const Chat = () => {
 
       <div className="message-display-area">
         {messages.filter(msg => msg.role !== 'system').map((message, index) => (
-          <div key={index} className={`message ${message.role === 'user' ? 'user' : 'bot'}`}>
+          <div
+            key={index}
+            className={`message ${message.role === 'user' ? 'user' : 'bot'}`}
+          >
             <span className="message-bubble">{message.content}</span>
           </div>
         ))}
-        {loading && <div className="message bot"><span className="message-bubble">Digitando...</span></div>}
+        {loading && (
+          <div className="message bot">
+            <span className="message-bubble">Digitando...</span>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
       <form onSubmit={handleSendMessage} className="message-input-form">
-        <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="Sua mensagem..." className="message-input" disabled={loading} />
-        <button type="submit" className="send-button" disabled={loading}><img src={sendBtn} alt="Enviar" className="send-icon" /></button>
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Sua mensagem..."
+          className="message-input"
+          disabled={loading}
+          autoComplete="off"
+        />
+        <button type="submit" className="send-button" disabled={loading}>
+          <img src={sendBtn} alt="Enviar" className="send-icon" />
+        </button>
       </form>
     </div>
   );
