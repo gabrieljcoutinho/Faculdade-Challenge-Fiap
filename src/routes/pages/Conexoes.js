@@ -20,7 +20,15 @@ import editIcon from '../../imgs/pencil.png';
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 
 const Conexoes = () => {
-  const [conexions, setConexions] = useState(() => JSON.parse(localStorage.getItem('conexions')) || []);
+  const [conexions, setConexions] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('conexions'));
+      return Array.isArray(stored) ? stored : [];
+    } catch {
+      return [];
+    }
+  });
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true });
   const [activeIcon, setActiveIcon] = useState('');
@@ -38,7 +46,9 @@ const Conexoes = () => {
     { name: 'Carregador', src: carregador }
   ];
 
-  useEffect(() => { localStorage.setItem('conexions', JSON.stringify(conexions)); }, [conexions]);
+  useEffect(() => {
+    localStorage.setItem('conexions', JSON.stringify(conexions));
+  }, [conexions]);
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -84,7 +94,12 @@ const Conexoes = () => {
   const handleEditClick = (index) => {
     if (conexions[index].connected) {
       const c = conexions[index];
-      setNewConexion({ text: c.text, icon: c.icon, backgroundColor: c.backgroundColor || availableColors[0], connected: c.connected !== undefined ? c.connected : true });
+      setNewConexion({
+        text: c.text,
+        icon: c.icon,
+        backgroundColor: c.backgroundColor || availableColors[0],
+        connected: c.connected !== undefined ? c.connected : true
+      });
       setActiveIcon(c.icon);
       setActiveColor(c.backgroundColor || availableColors[0]);
       setShowAddForm(true);
@@ -100,19 +115,35 @@ const Conexoes = () => {
   return (
     <div className="conexao-container">
       <h1>Aparelhos conectados</h1>
-      <button className="add-button-styled" onClick={handleAddClick}><span className="plus-icon">+</span> Adicionar Aparelho</button>
+      <button className="add-button-styled" onClick={handleAddClick}>
+        <span className="plus-icon">+</span> Adicionar Aparelho
+      </button>
 
       {showAddForm && (
         <div className="modal-overlay">
           <div className="add-form-styled">
             <h2>{editingIndex !== null ? 'Editar Aparelho' : 'Adicionar Novo Aparelho'}</h2>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <input type="text" name="text" placeholder="Nome do Aparelho" value={newConexion.text} onChange={(e) => setNewConexion({...newConexion, text: e.target.value})} />
+            <input
+              type="text"
+              name="text"
+              placeholder="Nome do Aparelho"
+              value={newConexion.text}
+              onChange={(e) => setNewConexion({ ...newConexion, text: e.target.value })}
+            />
             <div className="icon-picker-styled">
               <label>Escolha o ícone:</label>
               <div className="icons">
                 {availableIcons.map((icon) => (
-                  <button key={icon.name} className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`} onClick={() => { setNewConexion({...newConexion, icon: icon.src}); setActiveIcon(icon.src); }} title={icon.name}>
+                  <button
+                    key={icon.name}
+                    className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`}
+                    onClick={() => {
+                      setNewConexion({ ...newConexion, icon: icon.src });
+                      setActiveIcon(icon.src);
+                    }}
+                    title={icon.name}
+                  >
                     <img src={icon.src} alt={icon.name} style={{ width: '30px', height: '30px' }} />
                   </button>
                 ))}
@@ -122,12 +153,23 @@ const Conexoes = () => {
               <label>Escolha a cor de fundo:</label>
               <div className="colors">
                 {availableColors.map((color) => (
-                  <button key={color} className={`color-option ${activeColor === color ? 'active' : ''}`} style={{ backgroundColor: color }} onClick={() => { setNewConexion({...newConexion, backgroundColor: color}); setActiveColor(color); }} title={color}></button>
+                  <button
+                    key={color}
+                    className={`color-option ${activeColor === color ? 'active' : ''}`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => {
+                      setNewConexion({ ...newConexion, backgroundColor: color });
+                      setActiveColor(color);
+                    }}
+                    title={color}
+                  ></button>
                 ))}
               </div>
             </div>
             <div className="form-actions">
-              <button onClick={saveConexion} className="save-button-styled">{editingIndex !== null ? 'Salvar Edição' : 'Salvar'}</button>
+              <button onClick={saveConexion} className="save-button-styled">
+                {editingIndex !== null ? 'Salvar Edição' : 'Salvar'}
+              </button>
               <button onClick={() => setShowAddForm(false)} className="cancel-button-styled">Cancelar</button>
             </div>
           </div>
@@ -136,7 +178,11 @@ const Conexoes = () => {
 
       <div className="conexions-list">
         {conexions.map((c, index) => (
-          <div key={index} className={`retanguloAdicionado ${removingIndex === index ? 'exiting' : ''} ${enteringIndex === index ? 'entering' : (enteringIndex < index ? 'entered' : '')} relative`} style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}>
+          <div
+            key={index}
+            className={`retanguloAdicionado ${removingIndex === index ? 'exiting' : ''} ${enteringIndex === index ? 'entering' : (enteringIndex < index ? 'entered' : '')} relative`}
+            style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+          >
             {!c.connected && <div className="disconnected-overlay">Desativado</div>}
             <div className="icon-text-overlay">
               <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
