@@ -35,7 +35,7 @@ function App() {
       const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
       console.log('Você disse:', transcript);
 
-      if (transcript === 'teste') {
+      if (transcript === 'TESTE') {
         setAtivarNeon(true);
       }
     };
