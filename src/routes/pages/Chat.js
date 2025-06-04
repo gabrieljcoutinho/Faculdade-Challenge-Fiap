@@ -5,7 +5,7 @@ import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
-import comandosData from '../../data/commands.json'; // import do arquivo JSON
+import comandosData from '../../data/commands.json';
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
@@ -19,14 +19,13 @@ const modePrompts = {
 
 const normalizeText = (text) => text.trim().toLowerCase();
 
-const Chat = () => {
+const Chat = ({ onConnectDevice }) => {
   const [mode, setMode] = useState('profissional');
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Scroll automático para a última mensagem
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -37,22 +36,23 @@ const Chat = () => {
     const texto = newMessage.trim();
     if (!texto) return;
 
-    // Normaliza texto para comparação
     const textoNormalizado = normalizeText(texto);
 
-    // Verificar se a mensagem é um comando predefinido (case insensitive)
-    const comandoEncontrado = comandosData.comandos.find(cmd => normalizeText(cmd.trigger) === textoNormalizado);
+    // Procurar comando que bata com o texto
+    const comandoEncontrado = comandosData.comandos.find(cmd =>
+      cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
+    );
 
     if (comandoEncontrado) {
       let resposta = comandoEncontrado.resposta;
 
-      // Exemplo de comando com resposta dinâmica
-      if (comandoEncontrado.trigger.toLowerCase() === '/horario') {
-        const agora = new Date();
-        resposta += ' ' + agora.toLocaleTimeString();
+      // Se comando for conectar TV, dispare callback para conectar aparelho
+      if (comandoEncontrado.triggers.some(trigger => ['conectar tv', 'conectar televisão', 'ligar tv'].includes(normalizeText(trigger)))) {
+        if (typeof onConnectDevice === 'function') {
+          onConnectDevice('TV'); // Aqui você pode passar o nome do aparelho
+        }
       }
 
-      // Adiciona a mensagem do usuário e a resposta do assistente
       setMessages(prev => [
         ...prev,
         { role: 'user', content: texto },
@@ -60,7 +60,7 @@ const Chat = () => {
       ]);
 
       setNewMessage('');
-      return; // Para aqui, não chama a API Gemini
+      return; // não chama API Gemini para comandos conhecidos
     }
 
     // Se não for comando, enviar mensagem para API Gemini

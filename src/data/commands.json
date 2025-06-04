@@ -1,8 +1,13 @@
 {
   "comandos": [
-    {
-      "trigger": "Seu nome?",
-      "resposta": "Cleiton Matador de Porcos"
+        {
+      "triggers": ["Quais dispositivos eu posso conectar","Quais dispositivos eu posso conectar?","Quais dispositivos eu posso conectar ?",
+    "Quais dispositivos posso conectar","Quais dispositivos posso conectar?","Quais dispositivos posso conectar ?","quais dispositivos eu posso conectar","quais dispositivos eu posso conectar?","quais dispositivos eu posso conectar ?",
+    "quais dispositivos posso conectar","quais dispositivos posso conectar?","quais dispositivos posso conectar ?","quais dispositivos posso conectar?", "Qual dispositivo eu posso conectar","Qual dispositivo eu posso conectar?","Qual dispositivo eu posso conectar ?",
+    "Qual dispositivo posso conectar","Qual dispositivo posso conectar?","Qual dispositivo posso conectar ?","qual dispositivo eu posso conectar","qual dispositivo eu posso conectar?","qual dispositivo eu posso conectar ?",
+    "qual dispositivo posso conectar","qual dispositivo posso conectar?","qual dispositivo posso conectar ?"],
+
+      "resposta": "TV, Ar-Condiconado, Lâmpada, Airfy e Carregador"
     }
   ]
 }
