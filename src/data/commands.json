@@ -19,9 +19,16 @@
         "Qual dispositivo eu posso conectar ?",
         "Qual dispositivo posso conectar",
         "Qual dispositivo posso conectar?",
-        "Qual dispositivo posso conectar ?"
+        "Qual dispositivo posso conectar ?",
+        "qual dispositivo eu posso conectar",
+        "qual dispositivo eu posso conectar?",
+        "qual dispositivo eu posso conectar ?",
+        "qual dispositivo posso conectar",
+        "qual dispositivo posso conectar?",
+        "qual dispositivo posso conectar ?"
+
       ],
-      "resposta": "TV, Ar-Condicionado, Lâmpada, Airfry e Carregador"
+      "resposta": "TV, Ar-Condicionado, Lâmpada, Airfry e Carregador. Caso queira conectar algum desses dispositivos, basta dizer 'Conectar [nome do dispositivo]'."
     },
     {
       "triggers": ["Conectar TV", "Conectar Televisao", "Ligar tv"],
