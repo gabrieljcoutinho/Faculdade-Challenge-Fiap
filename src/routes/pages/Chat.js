@@ -1,20 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../../CSS/Chat/chat.css';
 import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
-// Import images directly here
-import tvIcon from '../../imgs/TV.png';
-import airConditionerIcon from '../../imgs/ar-condicionado.png';
-import airfry from '../../imgs/airfry.png';
-import lampIcon from '../../imgs/lampada.png';
-import carregador from '../../imgs/carregador.png';
-
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-
 const modePrompts = {
   professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
   profissional: 'Você é um assistente profissional e técnico. Forneça respostas detalhadas, precisas e formais, utilizando termos técnicos quando apropriado. Seja claro e direto.',
@@ -29,95 +20,12 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
-
-    const validRoutes = {
-      Home: '/',
-      Inicio: '/',
-      Conexoes: '/conexoes',
-      Conexões: '/conexoes',
-      Contato: '/contato',
-      Contatos: '/contato',
-      Configuracoes: '/configuracoes',
-      Configuracao: '/configuracoes',
-      Configurações: '/configuracoes',
-      Configuração: '/configuracoes',
-      Configuracões: '/configuracoes',
-      Configuracão: '/configuracoes',
-      Login: '/login',
-      Logar: '/login',
-      Cadastro: '/cadastro',
-      Cadastros: '/cadastro',
-      Cadastrar: '/cadastro',
-    };
-
-    const routeKey = newMessage.trim();
-    const isRouteCommand = /^[A-Z][a-z]+$/.test(routeKey) && validRoutes[routeKey];
-    if (isRouteCommand) {
-      navigate(validRoutes[routeKey]);
-      return;
-    }
-
-    // --- NEW LOGIC FOR DEVICE CONNECTION COMMANDS ---
-    const connectionCommandMatch = newMessage.trim().match(/^Conectar\s(.+)$/i);
-    if (connectionCommandMatch) {
-      const deviceName = connectionCommandMatch[1].trim();
-      const lowerCaseDeviceName = deviceName.toLowerCase();
-
-      // Retrieve existing connections from local storage
-      let existingConexions = JSON.parse(localStorage.getItem('conexions')) || [];
-
-      // Use the imported image variables here
-      const availableIconsMap = {
-        tv: tvIcon,
-        'ar-condicionado': airConditionerIcon,
-        lampada: lampIcon,
-        airfry: airfry,
-        carregador: carregador
-      };
-
-      const availableDeviceNames = Object.keys(availableIconsMap);
-
-      if (availableDeviceNames.includes(lowerCaseDeviceName)) {
-        const deviceIcon = availableIconsMap[lowerCaseDeviceName];
-        const newDevice = {
-          text: deviceName.charAt(0).toUpperCase() + deviceName.slice(1), // Capitalize first letter
-          icon: deviceIcon,
-          backgroundColor: '#FFEBCD', // Default color, can be customized
-          connected: true
-        };
-
-        // Check if the device already exists to avoid duplicates or update it
-        const deviceExistsIndex = existingConexions.findIndex(c => c.text.toLowerCase() === lowerCaseDeviceName);
-
-        if (deviceExistsIndex > -1) {
-          // Update existing device to connected if it exists
-          existingConexions[deviceExistsIndex] = { ...existingConexions[deviceExistsIndex], connected: true };
-          setMessages(prev => [...prev, { role: 'assistant', content: `O aparelho "${newDevice.text}" já estava presente e foi conectado!` }]);
-        } else {
-          // Add new device
-          existingConexions.push(newDevice);
-          setMessages(prev => [...prev, { role: 'assistant', content: `Aparelho "${newDevice.text}" conectado com sucesso!` }]);
-        }
-
-        localStorage.setItem('conexions', JSON.stringify(existingConexions));
-        setNewMessage('');
-        return; // Stop further processing as it's a device command
-      } else {
-        setMessages(prev => [...prev, { role: 'assistant', content: `Desculpe, não consegui identificar o aparelho "${deviceName}". Os aparelhos disponíveis para conexão são: TV, Ar-Condicionado, Lâmpada, Airfry e Carregador.` }]);
-        setNewMessage('');
-        return;
-      }
-    }
-    // --- END NEW LOGIC ---
 
     const userMessage = { role: 'user', content: newMessage };
     const updatedMessages = [...messages, userMessage];
@@ -152,24 +60,15 @@ const Chat = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setMessages(prev => [...prev, {
-          role: 'assistant',
-          content: `Erro na API Gemini: ${errorData.error?.message || 'Problema desconhecido'} (Código: ${response.status})`
-        }]);
+        setMessages(prev => [...prev, { role: 'assistant', content: `Erro na API Gemini: ${errorData.error?.message || 'Problema desconhecido'} (Código: ${response.status})` }]);
         return;
       }
 
       const data = await response.json();
       if (data.candidates?.[0]?.content?.parts) {
-        setMessages(prev => [...prev, {
-          role: 'assistant',
-          content: data.candidates[0].content.parts[0].text.trim()
-        }]);
+        setMessages(prev => [...prev, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
       } else if (data.promptFeedback?.blockReason) {
-        setMessages(prev => [...prev, {
-          role: 'assistant',
-          content: `Sua mensagem foi bloqueada devido a políticas de segurança: ${data.promptFeedback.blockReason}`
-        }]);
+        setMessages(prev => [...prev, { role: 'assistant', content: `Sua mensagem foi bloqueada devido a políticas de segurança: ${data.promptFeedback.blockReason}` }]);
       } else {
         setMessages(prev => [...prev, { role: 'assistant', content: 'Resposta inválida da API Gemini' }]);
       }
@@ -184,19 +83,8 @@ const Chat = () => {
     <div className="chat-container">
       <div className="mode-selector-container">
         <label htmlFor="mode-select">Modo de resposta</label>
-        <select
-          id="mode-select"
-          value={mode}
-          onChange={(e) => setMode(e.target.value)}
-          disabled={loading}
-        >
-          {Object.entries({
-            professor: 'Professor (didático)',
-            profissional: 'Profissional / Técnico',
-            engracado: 'Engraçado / Descontraído',
-            coaching: 'Coaching / Motivador',
-            calmo: 'Calmo / Reflexivo'
-          }).map(([key, label]) => (
+        <select id="mode-select" value={mode} onChange={(e) => setMode(e.target.value)} disabled={loading}>
+          {Object.entries({ professor: 'Professor (didático)', profissional: 'Profissional / Técnico', engracado: 'Engraçado / Descontraído', coaching: 'Coaching / Motivador', calmo: 'Calmo / Reflexivo' }).map(([key, label]) => (
             <option key={key} value={key}>{label}</option>
           ))}
         </select>
@@ -208,26 +96,13 @@ const Chat = () => {
             <span className="message-bubble">{message.content}</span>
           </div>
         ))}
-        {loading && (
-          <div className="message bot">
-            <span className="message-bubble">Digitando...</span>
-          </div>
-        )}
+        {loading && <div className="message bot"><span className="message-bubble">Digitando...</span></div>}
         <div ref={messagesEndRef} />
       </div>
 
       <form onSubmit={handleSendMessage} className="message-input-form">
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Sua mensagem..."
-          className="message-input"
-          disabled={loading}
-        />
-        <button type="submit" className="send-button" disabled={loading}>
-          <img src={sendBtn} alt="Enviar" className="send-icon" />
-        </button>
+        <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="Sua mensagem..." className="message-input" disabled={loading} />
+        <button type="submit" className="send-button" disabled={loading}><img src={sendBtn} alt="Enviar" className="send-icon" /></button>
       </form>
     </div>
   );
