@@ -15,6 +15,7 @@ import Configuracoes from './routes/pages/Configuracoes';
 import Logar from './routes/pages/Logar';
 import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
+import ComandosChat from './routes/pages/ComandosChat';
 
 // Importe os ícones que podem ser usados como padrão para novos aparelhos
 // Certifique-se de que esses caminhos estão corretos
@@ -121,6 +122,7 @@ function App() {
           <Route path="/cadastro" element={<Cadastro />} />
           {/* Passa a função handleConnectDevice para o Chat */}
           <Route path="/chat" element={<Chat onConnectDevice={handleConnectDevice} />} />
+          <Route path='/comandosChat' element={<ComandosChat />} />
         </Routes>
         <Footer />
       </BrowserRouter>

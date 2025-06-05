@@ -1,4 +1,3 @@
-/* setting.css */
 .settings {
     padding-top: 25rem;
 }
@@ -7,7 +6,6 @@
     font-size: 25px;
     color: #fff;
     margin-bottom: 20px;
-    /* Adicionei margem abaixo do título para espaçamento */
 }
 
 .configuracoes-overlay {
@@ -23,11 +21,8 @@
     box-sizing: border-box;
     color: #fff;
     padding: 20px;
-    /* Added some padding around the overlay */
     align-items: center;
-    /* Centralizei os itens horizontalmente */
     justify-content: flex-start;
-    /* Alinhei os itens ao topo */
 }
 
 .fechar-btn {
@@ -38,7 +33,6 @@
     color: white;
     cursor: pointer;
     margin-bottom: 20px;
-    /* Added some margin below the close button */
 }
 
 .conteudo-configuracoes {
@@ -46,27 +40,28 @@
     flex-direction: column;
     align-items: center;
     font-size: 24px;
-    /* Não precisamos mais do posicionamento absoluto aqui */
 }
 
 .btn-container {
     display: flex;
+    flex-direction: column;
     gap: 20px;
-    /* Adds spacing between the buttons */
     margin-top: 30px;
-    /* Mantive a margem superior */
-    justify-content: flex-end;
-    /* Alinha os itens à direita */
     width: 100%;
-    /* Garante que o contêiner dos botões ocupe toda a largura */
     padding-left: 128px;
-    /* Adiciona um pouco de espaço à direita, se necessário */
     box-sizing: border-box;
-    /* Garante que o padding não aumente a largura total */
 }
 
-/* CSS for the buttons */
-.btn-container button {
+.top-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+/* Botões principais */
+.btn-container button,
+.comando-btn {
     padding: 10px 20px;
     font-size: 15px;
     border: none;
@@ -74,18 +69,26 @@
     cursor: pointer;
 }
 
-.btn-container button:hover {
+.btn-container button:hover,
+.comando-btn:hover {
     opacity: 0.8;
 }
 
-/* Style for the "Sing In" button */
-.btn-container button:nth-child(1) {
+/* Log In */
+.top-buttons button:nth-child(1) {
     background-color: #007bff;
     color: white;
 }
 
-/* Style for the "Log In" button */
-.btn-container button:nth-child(2) {
+/* Log Out */
+.top-buttons button:nth-child(2) {
     background-color: red;
     color: white;
+}
+
+/* Comandos */
+.comando-btn {
+    background-color: #28a745;
+    color: white;
+    align-self: flex-end;
 }
