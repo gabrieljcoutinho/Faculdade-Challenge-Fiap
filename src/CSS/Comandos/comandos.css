@@ -17,6 +17,8 @@ h3 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     font-family: 'Segoe UI', sans-serif;
     color: #333;
+    height: 800px;
+    /* Ajuste a altura conforme necessário do fundo azul*/
 }
 
 .comandos-container h3 {
