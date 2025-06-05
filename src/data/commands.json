@@ -31,23 +31,23 @@
       "resposta": "TV, Ar-Condicionado, Lâmpada, Airfry e Carregador. Caso queira conectar algum desses dispositivos, basta dizer 'Conectar [nome do dispositivo]'."
     },
     {
-      "triggers": ["Conectar TV", "Conectar Televisao", "Ligar tv"],
+      "triggers": ["Conectar TV", "Conectar Televisao", "Conectar Televisão", "Ligar tv"],
       "resposta": "TV Conectada"
     },
     {
-      "triggers": ["Conectar Ar-Condicionado", "Ligar Ar-Condicionado", "conectar ar condicionado", "ligar ar condicionado"],
+      "triggers": ["Conectar Ar-Condicionado", "Ligar Ar-Condicionado", "Conectar ar condicionado", "Ligar ar condicionado"],
       "resposta": "Ar-Condicionado Conectado"
     },
     {
-      "triggers": ["Conectar Lâmpada", "Ligar Lâmpada", "conectar lampada", "ligar lampada"],
+      "triggers": ["Conectar Lâmpada", "Ligar Lâmpada", "Conectar lampada", "Ligar lampada"],
       "resposta": "Lâmpada Conectada"
     },
     {
-      "triggers": ["Conectar Airfry", "Ligar Airfry", "conectar airfry", "ligar airfry"],
+      "triggers": ["Conectar Airfry", "Ligar Airfry"],
       "resposta": "Airfry Conectada"
     },
     {
-      "triggers": ["Conectar Carregador", "Ligar Carregador", "conectar carregador", "ligar carregador"],
+      "triggers": ["Conectar Carregador", "Ligar Carregador", "Conectar carregador", "Ligar carregador"],
       "resposta": "Carregador Conectado"
     }
   ]
