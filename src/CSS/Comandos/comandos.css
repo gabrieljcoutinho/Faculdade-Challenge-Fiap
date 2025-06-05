@@ -1,7 +1,7 @@
-h3 {
+.comandos-container {
     padding-top: 5rem;
     padding-bottom: 1rem;
-    background-color: #c0c0c0;
+    /* background-color: #c0c0c0; */
 }
 
 .comandoChat {
@@ -17,7 +17,7 @@ h3 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     font-family: 'Segoe UI', sans-serif;
     color: #333;
-    height: 650px;
+    height: 900px;
     /* Ajuste a altura conforme necessário do fundo azul*/
 }
 
