@@ -21,7 +21,7 @@
     box-sizing: border-box;
     color: #fff;
     padding: 20px;
-    align-items: center;
+    /* align-items: center; */
     justify-content: flex-start;
 }
 
@@ -52,10 +52,14 @@
     box-sizing: border-box;
 }
 
+/* Modificação para botões um embaixo do outro */
 .top-buttons {
     display: flex;
+    flex-direction: column;
+    /* agora vertical */
     gap: 20px;
-    justify-content: flex-end;
+    align-items: flex-end;
+    /* alinhado à direita */
     width: 100%;
 }
 
@@ -88,7 +92,14 @@
 
 /* Comandos */
 .comando-btn {
-    background-color: #28a745;
-    color: white;
+    background-color: rgba(255, 255, 255, 0.9);
     align-self: flex-end;
+}
+
+.imgComando {
+    width: 40px;
+}
+
+.imgComando:hover {
+    cursor: pointer;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../CSS/Settings/setting.css';
+import comandosImg from '../../imgs/comandos.png';  // importe a imagem
 
 const Configuracoes = () => {
   const navigate = useNavigate();
@@ -27,7 +28,9 @@ const Configuracoes = () => {
             <button title="Logar" onClick={navegarParaLogin}>Log In</button>
             <button title="Deslogar">Log out</button>
           </div>
-          <button className="comando-btn" title='Comandos' onClick={comandosChat}>Comandos</button>
+          <button className="comando-btn" title='Comandos' onClick={comandosChat}>
+            <img src={comandosImg} alt="Comandos" className='imgComando' />
+          </button>
         </div>
       </div>
     </div>
