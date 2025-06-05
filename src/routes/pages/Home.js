@@ -20,6 +20,17 @@ import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Catego
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
 const Home = () => {
+    // Define your color palette here. I've added an extra color to match your 7 data points.
+    const chartColors = [
+        '#00FFFF',
+        'rgba(15, 240, 252, 0.8)',
+        '#4169E1',
+        '#1E90FF',
+        '#0000FF',
+        ' #000080',
+        ' #0e0e44'
+    ];
+
     const [state, setState] = useState({
         isAnalyzing: false,
         chartType: 'line',
@@ -116,6 +127,23 @@ const Home = () => {
         actions[platform]?.();
     };
 
+    // Modify productionData based on chartType
+    const getChartData = (type) => {
+        if (type === 'bar' || type === 'pie') {
+            return {
+                labels: productionData.labels,
+                datasets: [{
+                    label: 'Produção (kWh)',
+                    data: productionData.datasets[0].data,
+                    backgroundColor: chartColors, // Use the defined colors
+                    borderColor: '#fff',
+                    borderWidth: 1,
+                }]
+            };
+        }
+        return productionData; // For line chart, return original productionData
+    };
+
     const ChartComponent = { 'line': Line, 'bar': Bar, 'pie': Pie }[chartType];
     const ExpandedChartComponent = { 'line': Line, 'bar': Bar, 'pie': Pie }[expandedChart];
 
@@ -136,7 +164,7 @@ const Home = () => {
                     </div>
                     <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px' }}>
                         <div className="chart-container" onClick={() => setState(prev => ({ ...prev, expandedChart: chartType }))}>
-                            {ChartComponent && <ChartComponent data={productionData} options={getChartOptions(chartType)} ref={chartRef} />}
+                            {ChartComponent && <ChartComponent data={getChartData(chartType)} options={getChartOptions(chartType)} ref={chartRef} />}
                         </div>
                     </div>
                     <button className="analyze-button" onClick={handleAnalyzeClick} disabled={isAnalyzing} style={{ marginTop: '35px' }}>
@@ -171,7 +199,7 @@ const Home = () => {
                         <button className="close-button" onClick={() => setState(prev => ({ ...prev, expandedChart: null }))} title="Fechar">X</button>
                         <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px', height: 'calc(100% - 170px)', overflowY: 'auto' }}>
                             <div className="chart-container">
-                                {ExpandedChartComponent && <ExpandedChartComponent data={productionData} options={getChartOptions(expandedChart)} />}
+                                {ExpandedChartComponent && <ExpandedChartComponent data={getChartData(expandedChart)} options={getChartOptions(expandedChart)} />}
                             </div>
                             <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Dados de Produção</h3>
                             <div className="data-table-container">
