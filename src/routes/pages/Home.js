@@ -22,13 +22,10 @@ ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, P
 const Home = () => {
     // Define your color palette here. I've added an extra color to match your 7 data points.
     const chartColors = [
-        '#00FFFF',
         'rgba(15, 240, 252, 0.8)',
         '#4169E1',
-        '#1E90FF',
-        '#0000FF',
-        ' #000080',
-        ' #0e0e44'
+            '#0000FF',
+              ' #000080 ',
     ];
 
     const [state, setState] = useState({
