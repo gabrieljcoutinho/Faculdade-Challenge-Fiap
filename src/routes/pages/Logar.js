@@ -41,7 +41,7 @@ const Logar = () => {
           <button type="submit" className="login-button">Entrar</button>
         </form>
         <div className="links">
-          <Link to="/recuperar-senha">Esqueci minha senha</Link>
+          <Link to="/esqueciSenha">Esqueci minha senha</Link>
           <p>Não tem conta? <Link to="/cadastro">Crie uma agora</Link></p>
         </div>
       </section>

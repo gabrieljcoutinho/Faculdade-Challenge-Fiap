@@ -15,6 +15,7 @@ import Logar from './routes/pages/Logar';
 import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
 import ComandosChat from './routes/pages/ComandosChat';
+import EsqueciSenha from './routes/pages/EsqueciSenha';
 
 // Importe os ícones que podem ser usados como padrão para novos aparelhos
 // Certifique-se de que esses caminhos estão corretos
@@ -43,18 +44,11 @@ function App() {
         localStorage.setItem('conexions', JSON.stringify(conexions));
     }, [conexions]);
 
-    // --- NOVA FUNÇÃO: Para Home atualizar os dados de produção ---
-    // Esta função será passada para o componente Home
     const handleUpdateProductionData = (newData) => {
         setProductionData(newData);
     };
-
-    // Função para conectar um aparelho, a ser passada para o componente Chat
-    // Agora aceita o tipo do aparelho e um nome personalizado
     const handleConnectDevice = (deviceType, customName) => {
         setConexions(prevConexions => {
-            // O nome final do aparelho será o nome personalizado, se fornecido,
-            // caso contrário, será o tipo do aparelho (ex: 'TV', 'Lâmpada')
             const finalDeviceName = customName || deviceType;
             const normalizedFinalDeviceName = finalDeviceName.toLowerCase();
 
@@ -124,23 +118,22 @@ function App() {
             <BrowserRouter>
                 <Header />
                 <Routes>
-                    {/* Passa o productionData e a função de atualização para Home */}
                     <Route
                         path="/"
                         element={<Home productionData={productionData} onUpdateProductionData={handleUpdateProductionData} />}
                     />
-                    {/* Passa o estado e a função de atualização para Conexoes */}
+
                     <Route path="/conexoes" element={<Conexoes conexions={conexions} setConexions={setConexions} />} />
                     <Route path="/contato" element={<Contato />} />
                     <Route path="/configuracoes" element={<Configuracoes />} />
                     <Route path="/login" element={<Logar />} />
                     <Route path="/cadastro" element={<Cadastro />} />
-                    {/* Passa a função handleConnectDevice E o productionData para o Chat */}
                     <Route
                         path="/chat"
                         element={<Chat onConnectDevice={handleConnectDevice} productionData={productionData} />}
                     />
                     <Route path='/comandosChat' element={<ComandosChat />} />
+               <Route path="/esqueciSenha" element={<EsqueciSenha />} />
                 </Routes>
                 <Footer />
             </BrowserRouter>
