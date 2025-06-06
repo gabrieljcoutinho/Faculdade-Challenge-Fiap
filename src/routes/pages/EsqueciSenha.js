@@ -38,11 +38,11 @@ const EsqueciSenha = () => {
   return (
     <div className="forgot-password-container">
       <div className="forgot-password-card">
-        <h2>Esqueci minha senha</h2>
-        <p>Digite o e-mail abaixo e enviaremos um link para recuperar sua senha.</p>
+        <h2 className='tituloEsqueciSenha'>Esqueci minha senha</h2>
+        <p className='paragrafoEsqueciSenha'>Digite o e-mail abaixo e enviaremos um link para recuperar sua senha.</p>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Endereço de email</label>
+            <label htmlFor="email" className='labelEmail'>Endereço de email</label>
             <input
               type="email"
               id="email"
@@ -50,6 +50,7 @@ const EsqueciSenha = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="SeuEmail@gmail.com"
               required
+              className='iputEmail'
             />
           </div>
           {message && <p className="success-message">{message}</p>}

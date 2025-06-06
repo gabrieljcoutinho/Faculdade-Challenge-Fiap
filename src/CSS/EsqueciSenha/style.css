@@ -19,7 +19,6 @@ body {
 .forgot-password-card {
     background-color: var(--card-background);
     padding: 40px;
-
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     text-align: center;
@@ -41,7 +40,7 @@ body {
     }
 }
 
-h2 {
+.tituloEsqueciSenha {
     color: #2C3E50;
     margin-bottom: 25px;
     font-size: 2.2em;
@@ -49,7 +48,7 @@ h2 {
     letter-spacing: -0.5px;
 }
 
-p {
+.paragrafoEsqueciSenha {
     color: #5F7C8F;
     margin-bottom: 30px;
     line-height: 1.7;
@@ -62,7 +61,7 @@ p {
     text-align: left;
 }
 
-label {
+.labelEmail {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
@@ -70,7 +69,7 @@ label {
     font-size: 0.9em;
 }
 
-input[type="email"] {
+.iputEmailt[type="email"] {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #DDE5ED;
@@ -81,7 +80,7 @@ input[type="email"] {
     box-sizing: border-box;
 }
 
-input[type="email"]:focus {
+.iputEmailt[type="email"]:focus {
     border-color: #4A90E2;
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
     transform: translateY(-1px);
@@ -115,14 +114,6 @@ input[type="email"]:focus {
     background: linear-gradient(45deg, #4A90E2 0%, #8A2BE2 100%);
 }
 
-.message {
-    margin-top: 18px;
-    font-weight: 600;
-    font-size: 0.95em;
-    animation: slideInFromTop 0.6s ease-out forwards;
-    padding: 8px 10px;
-    border-radius: 8px;
-}
 
 .success-message {
     color: #2ECC71;
@@ -171,11 +162,11 @@ input[type="email"]:focus {
         padding: 25px 20px;
     }
 
-    h2 {
+    .tituloEsqueciSenha {
         font-size: 1.8em;
     }
 
-    p {
+    .paragrafoEsqueciSenha {
         font-size: 0.95em;
     }
 
