@@ -53,19 +53,31 @@
       "triggers": [
         "Analisar gráfico",
         "Analisar o gráfico",
-        "Analise o gráfico",
+
+        "Analise  Gráfico",
+        "Analise o Gráfico",
+
         "Relatório de produção",
+        "Relatório de produção do gráfico",
+        "Relatório de produção do Gráfico",
+
         "Dados do gráfico",
-        "Resumo da produção",
-        "Analisar grafico",
-        "Analisar o grafico",
-        "Relatorio de producao",
-        "Dados do grafico",
-        "Resumo da producao",
+         "Dados do Gráfico",
+
+
         "Producao de energia",
+         "Producao de energia do gráfico",
+          "Producao de energia do Gráfico",
+
         "Meus dados de energia",
+         "Meus dados de energia do gráfico",
+          "Meus dados de energia do Gráfico",
+
         "Como esta a energia",
-        "Analisar Grafico"
+        "Como está a energia do gráfico",
+        "Como está a energia do Gráfico"
+
+
       ],
       "resposta": "PRODUCAO_GRAFICO"
     }
