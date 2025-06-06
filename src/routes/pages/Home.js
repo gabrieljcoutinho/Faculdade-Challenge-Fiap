@@ -23,13 +23,13 @@ ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, P
 const Home = ({ productionData, onUpdateProductionData }) => {
     // Define your color palette here. I've added an extra color to match your 7 data points.
     const chartColors = [
-        'rgba(15, 240, 252, 0.8)',
-        '#4169E1',
+        '#87CEFA',
+        '#87CEEB',
+        '#ADD8E6',
+        '#1E90FF',
+       'rgba(31, 81, 255, 0.7)',
         '#0000FF',
-        '#000080',
-        '#8A2BE2', // Cor adicional para os 7 pontos
-        '#DC143C',
-        '#FF8C00'
+         '#000080',
     ];
 
     // O estado 'productionData' foi removido daqui, ele vem via props.
