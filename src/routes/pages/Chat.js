@@ -1,20 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../CSS/Chat/chat.css';
-import '../../CSS/Chat/mensagem.css';
+import '../../CSS/Chat/mensagem.css'; // This is where your .message-bubble and its child styles are
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
 import comandosData from '../../data/commands.json';
 
+// Import react-markdown and rehype-raw
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw'; // For rendering raw HTML if your markdown includes it
+
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
 const modePrompts = {
-  professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
-  profissional: 'Você é um assistente profissional e técnico. Forneça respostas detalhadas, precisas e formais, utilizando termos técnicos quando apropriado. Seja claro e direto.',
-  engracado: 'Você é engraçado e descontraído. Responda de forma leve e divertida, usando humor e analogias engraçadas para facilitar o entendimento.',
-  coaching: 'Você é um coach motivador. Inspire o usuário com respostas positivas, motivacionais e encorajadoras, ajudando-o a superar dúvidas com confiança.',
-  calmo: 'Você é calmo e reflexivo. Responda com tranquilidade, promovendo reflexão e clareza, usando linguagem serena e acolhedora.'
+  professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.',
+  profissional: 'Você é um assistente profissional e técnico. Forneça respostas detalhadas, precisas e formais, utilizando termos técnicos quando apropriado. Seja claro e direto. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.',
+  engracado: 'Você é engraçado e descontraído. Responda de forma leve e divertida, usando humor e analogias engraçadas para facilitar o entendimento. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.',
+  coaching: 'Você é um coach motivador. Inspire o usuário com respostas positivas, motivacionais e encorajadoras, ajudando-o a superar dúvidas com confiança. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.',
+  calmo: 'Você é calmo e reflexivo. Responda com tranquilidade, promovendo reflexão e clareza, usando linguagem serena e acolhedora. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.'
 };
 
 const normalizeText = (text) => text.trim().toLowerCase();
@@ -50,13 +54,13 @@ const Chat = ({ onConnectDevice, productionData }) => {
     const maxTime = labels[maxIndex];
     const minTime = labels[minIndex];
 
-    let analysisReport = `Relatório de Produção de Energia Solar:\n\n`;
-    analysisReport += `- Produção Total: ${totalProduction.toFixed(2)} kWh\n`;
-    analysisReport += `- Produção Média por Hora: ${averageProduction.toFixed(2)} kWh\n`;
-    analysisReport += `- Pico de Produção: ${maxProduction.toFixed(2)} kWh às ${maxTime}\n`;
-    analysisReport += `- Menor Produção: ${minProduction.toFixed(2)} kWh às ${minTime}\n\n`;
+    let analysisReport = `## Relatório de Produção de Energia Solar\n\n`; // Use Markdown H2
+    analysisReport += `- **Produção Total**: ${totalProduction.toFixed(2)} kWh\n`; // Bold
+    analysisReport += `- **Produção Média por Hora**: ${averageProduction.toFixed(2)} kWh\n`;
+    analysisReport += `- **Pico de Produção**: ${maxProduction.toFixed(2)} kWh às ${maxTime}\n`;
+    analysisReport += `- **Menor Produção**: ${minProduction.toFixed(2)} kWh às ${minTime}\n\n`;
 
-    analysisReport += "Detalhes por hora:\n";
+    analysisReport += "### Detalhes por hora:\n"; // Use Markdown H3
     labels.forEach((label, index) => {
       analysisReport += `- ${label}: ${values[index].toFixed(2)} kWh\n`;
     });
@@ -118,7 +122,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
       if (connectionCommandInJson) {
         resposta = connectionCommandInJson.resposta;
       } else {
-        resposta = `${customDeviceName} Conectado.`;
+        resposta = `**${customDeviceName}** Conectado.`; // Use Markdown for bold
       }
 
       setMessages(prev => [
@@ -133,15 +137,13 @@ const Chat = ({ onConnectDevice, productionData }) => {
     // Lógica para OUTROS comandos do JSON (incluindo o novo comando de análise)
     if (comandoEncontrado) {
         if (comandoEncontrado.resposta === "ANALISAR_GRAFICO_PRODUCAO") {
-            // Se o comando é para analisar o gráfico, gere o relatório COMPLETO aqui
-            const report = analyzeProductionData(productionData); // Chame a função de análise
+            const report = analyzeProductionData(productionData);
             setMessages(prev => [
                 ...prev,
                 { role: 'user', content: texto },
-                { role: 'assistant', content: report } // Use o relatório gerado como resposta
+                { role: 'assistant', content: report }
             ]);
         } else {
-            // Para outros comandos do JSON, use a resposta padrão
             setMessages(prev => [
                 ...prev,
                 { role: 'user', content: texto },
@@ -200,6 +202,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
       const data = await response.json();
 
       if (data.candidates?.[0]?.content?.parts) {
+        // Here's the key change: Gemini should return Markdown, and we store it as is.
         setMessages(prev => [...prev, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
       } else if (data.promptFeedback?.blockReason) {
         setMessages(prev => [...prev, { role: 'assistant', content: `Sua mensagem foi bloqueada devido a políticas de segurança: ${data.promptFeedback.blockReason}` }]);
@@ -241,7 +244,17 @@ const Chat = ({ onConnectDevice, productionData }) => {
             key={index}
             className={`message ${message.role === 'user' ? 'user' : 'bot'}`}
           >
-            <span className="message-bubble">{message.content}</span>
+            {/*
+              THE FIX IS HERE:
+              Wrap ReactMarkdown in a div with the 'message-bubble' class.
+              ReactMarkdown itself no longer accepts a 'className' prop directly.
+              This ensures your CSS rules for .message-bubble and its descendants still apply.
+            */}
+            <div className="message-bubble">
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                    {message.content}
+                </ReactMarkdown>
+            </div>
           </div>
         ))}
         {loading && (
