@@ -63,7 +63,8 @@
         "Resumo da producao",
         "Producao de energia",
         "Meus dados de energia",
-        "Como esta a energia"
+        "Como esta a energia",
+        "Analisar Grafico"
       ],
       "resposta": "ANALISAR_GRAFICO_PRODUCAO"
     }
