@@ -26,29 +26,44 @@
         "qual dispositivo posso conectar",
         "qual dispositivo posso conectar?",
         "qual dispositivo posso conectar ?"
-
       ],
       "resposta": "TV, Ar-Condicionado, Lâmpada, Airfry e Carregador. Caso queira conectar algum desses dispositivos, basta dizer 'Conectar [nome do dispositivo]'."
     },
     {
-      "triggers": ["Conectar TV", "Conectar Televisao", "Conectar Televisão", "Ligar tv"],
+      "triggers": ["Conectar TV", "Conectar Televisao", "Conectar Televisão", "Ligar tv", "conectar tv", "conectar televisao", "conectar televisão", "ligar tv"],
       "resposta": "TV Conectada"
     },
     {
-      "triggers": ["Conectar Ar-Condicionado", "Ligar Ar-Condicionado", "Conectar ar condicionado", "Ligar ar condicionado"],
+      "triggers": ["Conectar Ar-Condicionado", "Ligar Ar-Condicionado", "Conectar ar condicionado", "Ligar ar condicionado", "conectar ar-condicionado", "ligar ar-condicionado", "conectar ar condicionado", "ligar ar condicionado"],
       "resposta": "Ar-Condicionado Conectado"
     },
     {
-      "triggers": ["Conectar Lâmpada", "Ligar Lâmpada", "Conectar lampada", "Ligar lampada"],
+      "triggers": ["Conectar Lâmpada", "Ligar Lâmpada", "Conectar lampada", "Ligar lampada", "conectar lâmpada", "ligar lâmpada", "conectar lampada", "ligar lampada"],
       "resposta": "Lâmpada Conectada"
     },
     {
-      "triggers": ["Conectar Airfry", "Ligar Airfry"],
+      "triggers": ["Conectar Airfry", "Ligar Airfry", "conectar airfry", "ligar airfry"],
       "resposta": "Airfry Conectada"
     },
     {
-      "triggers": ["Conectar Carregador", "Ligar Carregador", "Conectar carregador", "Ligar carregador"],
+      "triggers": ["Conectar Carregador", "Ligar Carregador", "Conectar carregador", "Ligar carregador", "conectar carregador", "ligar carregador"],
       "resposta": "Carregador Conectado"
+    },
+    {
+      "triggers": [
+        "Analisar gráfico",
+        "Relatório de produção",
+        "Dados do gráfico",
+        "Resumo da produção",
+        "Analisar grafico",
+        "Relatorio de producao",
+        "Dados do grafico",
+        "Resumo da producao",
+        "Producao de energia",
+        "Meus dados de energia",
+        "Como esta a energia"
+      ],
+      "resposta": "ANALISAR_GRAFICO_PRODUCAO"
     }
   ]
 }

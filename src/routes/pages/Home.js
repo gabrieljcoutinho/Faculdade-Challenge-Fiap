@@ -19,23 +19,25 @@ import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Catego
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
-const Home = () => {
+// Home agora recebe 'productionData' e 'onUpdateProductionData' como props
+const Home = ({ productionData, onUpdateProductionData }) => {
     // Define your color palette here. I've added an extra color to match your 7 data points.
     const chartColors = [
         'rgba(15, 240, 252, 0.8)',
         '#4169E1',
-            '#0000FF',
-              ' #000080 ',
+        '#0000FF',
+        '#000080',
+        '#8A2BE2', // Cor adicional para os 7 pontos
+        '#DC143C',
+        '#FF8C00'
     ];
 
+    // O estado 'productionData' foi removido daqui, ele vem via props.
+    // Mantenha os outros estados locais para o controle da UI.
     const [state, setState] = useState({
         isAnalyzing: false,
         chartType: 'line',
         expandedChart: null,
-        productionData: {
-            labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
-            datasets: [{ label: 'Produção (kWh)', data: [5, 12, 25, 30, 22, 15, 8], borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.6)', tension: 0.4 }]
-        },
         currentWeather: { temperature: 28, condition: 'Ensolarado' },
         forecast: [
             { day: 'Hoje', condition: 'Ensolarado', high: 30, low: 20 },
@@ -46,7 +48,8 @@ const Home = () => {
 
     const chartRef = useRef(null);
 
-    const { isAnalyzing, chartType, expandedChart, productionData, currentWeather, forecast } = state;
+    // Desestruture o estado local
+    const { isAnalyzing, chartType, expandedChart, currentWeather, forecast } = state;
 
     const commonChartOptions = {
         responsive: true, maintainAspectRatio: false,
@@ -94,7 +97,15 @@ const Home = () => {
     const handleAnalyzeClick = () => {
         setState(prev => ({ ...prev, isAnalyzing: true }));
         setTimeout(() => {
-            setState(prev => ({ ...prev, productionData: { ...prev.productionData, datasets: [{ ...prev.productionData.datasets[0], data: generateRandomData() }] }, isAnalyzing: false }));
+            const newData = {
+                ...productionData,
+                datasets: [{
+                    ...productionData.datasets[0],
+                    data: generateRandomData()
+                }]
+            };
+            onUpdateProductionData(newData); // Chame a prop para atualizar o estado global
+            setState(prev => ({ ...prev, isAnalyzing: false }));
         }, 2000);
     };
 
