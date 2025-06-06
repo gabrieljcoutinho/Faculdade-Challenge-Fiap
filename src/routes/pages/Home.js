@@ -17,11 +17,12 @@ import logoInstagram from '../../imgs/Logoinstagram.png';
 import logoLinkedin from '../../imgs/Logolinkedin.png';
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip } from 'chart.js';
 
+// Registrar os componentes necessários do Chart.js
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
 // Home agora recebe 'productionData' e 'onUpdateProductionData' como props
 const Home = ({ productionData, onUpdateProductionData }) => {
-    // Define your color palette here. I've added an extra color to match your 7 data points.
+    // Define a paleta de cores para os gráficos
     const chartColors = [
         '#87CEFA',
         '#87CEEB',
@@ -32,27 +33,29 @@ const Home = ({ productionData, onUpdateProductionData }) => {
         '#000080',
     ];
 
-    // O estado 'productionData' foi removido daqui, ele vem via props.
-    // Mantenha os outros estados locais para o controle da UI.
+    // Mantenha os estados locais para controle da UI (não relacionados aos dados de produção)
     const [state, setState] = useState({
         isAnalyzing: false,
-        chartType: 'line',
-        expandedChart: null,
-        currentWeather: { temperature: 28, condition: 'Ensolarado' },
-        forecast: [
+        chartType: 'line', // Tipo de gráfico atualmente selecionado
+        expandedChart: null, // Gráfico expandido (line, bar, pie ou null)
+        currentWeather: { temperature: 28, condition: 'Ensolarado' }, // Dados do clima atual
+        forecast: [ // Dados da previsão do tempo
             { day: 'Hoje', condition: 'Ensolarado', high: 30, low: 20 },
             { day: 'Amanhã', condition: 'Nublado', high: 25, low: 18 },
             { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 22, low: 16 }
         ]
     });
 
+    // Ref para o elemento do gráfico (usado para salvar a imagem)
     const chartRef = useRef(null);
 
-    // Desestruture o estado local
+    // Desestruture o estado local para facilitar o acesso
     const { isAnalyzing, chartType, expandedChart, currentWeather, forecast } = state;
 
+    // Opções comuns para todos os tipos de gráfico
     const commonChartOptions = {
-        responsive: true, maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: { labels: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } } },
             tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', bodyColor: '#fff', titleColor: '#fff', borderColor: '#fff', borderWidth: 1, bodyFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }, titleFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } }
@@ -63,13 +66,15 @@ const Home = ({ productionData, onUpdateProductionData }) => {
         }
     };
 
+    // Função para obter opções específicas do gráfico com base no tipo
     const getChartOptions = (type) => ({
         ...commonChartOptions,
         onClick: () => setState(prev => ({ ...prev, expandedChart: type })),
         plugins: {
             ...commonChartOptions.plugins,
             title: {
-                display: true, color: '#fff',
+                display: true,
+                color: '#fff',
                 text: type === 'pie' ? 'Distribuição da Produção de Energia Solar por Hora' : `Produção de Energia Solar por Hora (${type === 'line' ? 'Linha' : 'Barras'})`,
                 font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", size: 16 }
             },
@@ -79,47 +84,52 @@ const Home = ({ productionData, onUpdateProductionData }) => {
             }),
             ...(type !== 'pie' && { tooltip: { ...commonChartOptions.plugins.tooltip, callbacks: { label: (context) => `${context.dataset.label || ''}: ${context.parsed.y !== null ? `${context.parsed.y} kWh` : ''}` } } })
         },
-        ...(type === 'pie' && { scales: {} })
+        ...(type === 'pie' && { scales: {} }) // Gráfico de pizza não tem escalas X e Y
     });
 
+    // Função para gerar dados aleatórios para os gráficos
     const generateRandomData = () => {
-        const base = [5, 10, 15, 20, 25, 20, 10];
-        const type = Math.floor(Math.random() * 4);
-        switch (type) {
-            case 0: return base.map(v => v + Math.floor(Math.random() * 3 - 1));
-            case 1: return base.map((_, i) => Math.round(15 + 10 * Math.sin(i)));
-            case 2: return Array.from({ length: 7 }, () => Math.floor(Math.random() * 35));
-            case 3: return [5, 12, 25, 35, 28, 18, 10].map(v => v + Math.floor(Math.random() * 4 - 2));
-            default: return base;
-        }
+        const dataLength = 7; // Quantidade de pontos de dados
+        const maxProduction = 40; // Valor máximo para a produção (ajuste conforme necessário)
+        const minProduction = 0; // Valor mínimo para a produção
+
+        // Gera um array de 7 números completamente aleatórios entre minProduction e maxProduction
+        const randomData = Array.from({ length: dataLength }, () =>
+            Math.floor(Math.random() * (maxProduction - minProduction + 1)) + minProduction
+        );
+        return randomData;
     };
 
+    // Handler para o clique no botão "Atualizar Produção"
     const handleAnalyzeClick = () => {
-        setState(prev => ({ ...prev, isAnalyzing: true }));
+        setState(prev => ({ ...prev, isAnalyzing: true })); // Ativa o estado de análise
         setTimeout(() => {
             const newData = {
                 ...productionData,
                 datasets: [{
                     ...productionData.datasets[0],
-                    data: generateRandomData()
+                    data: generateRandomData() // Gera novos dados totalmente aleatórios
                 }]
             };
-            onUpdateProductionData(newData); // Chame a prop para atualizar o estado global
-            setState(prev => ({ ...prev, isAnalyzing: false }));
-        }, 2000);
+            onUpdateProductionData(newData); // Chama a prop para atualizar o estado global no componente pai
+            setState(prev => ({ ...prev, isAnalyzing: false })); // Desativa o estado de análise
+        }, 2000); // Simula um tempo de processamento
     };
 
+    // Função para obter o ícone do clima
     const getWeatherIcon = (condition) => ({ 'Ensolarado': '☀️', 'Nublado': '☁️', 'Chuvoso': '🌧️' }[condition] || '');
 
+    // Handler para salvar a imagem do gráfico expandido
     const handleSaveChart = () => {
         if (chartRef.current && expandedChart) {
             const link = document.createElement('a');
             link.download = `grafico_producao_solar_${expandedChart}.png`;
-            link.href = chartRef.current.toBase64Image();
+            link.href = chartRef.current.toBase64Image(); // Obtém a imagem do gráfico
             link.click();
         }
     };
 
+    // Handler para compartilhar o gráfico em diferentes plataformas
     const shareChart = (platform) => {
         if (!chartRef.current || !expandedChart) return;
         const imageUrl = chartRef.current.toBase64Image();
@@ -129,13 +139,13 @@ const Home = ({ productionData, onUpdateProductionData }) => {
         const actions = {
             'email': () => window.open(`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(summary)}&attachment=${encodeURIComponent(imageUrl.split(',')[1])}`, '_blank'),
             'whatsapp': () => window.open(`https://wa.me/?text=${encodeURIComponent(`${summary} ${imageUrl}`)}`, '_blank'),
-            'instagram': () => { alert('Compartilhe manualmente via Instagram'); handleSaveChart(); },
+            'instagram': () => { alert('Para compartilhar no Instagram, você precisa salvar a imagem e fazer o upload manualmente.'); handleSaveChart(); },
             'linkedin': () => window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(imageUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`, '_blank')
         };
-        actions[platform]?.();
+        actions[platform]?.(); // Executa a ação da plataforma selecionada
     };
 
-    // Modify productionData based on chartType
+    // Adapta os dados de produção para o tipo de gráfico (principalmente para Pie e Bar)
     const getChartData = (type) => {
         if (type === 'bar' || type === 'pie') {
             return {
@@ -143,15 +153,16 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                 datasets: [{
                     label: 'Produção (kWh)',
                     data: productionData.datasets[0].data,
-                    backgroundColor: chartColors, // Use the defined colors
+                    backgroundColor: chartColors, // Usa as cores definidas
                     borderColor: '#fff',
                     borderWidth: 1,
                 }]
             };
         }
-        return productionData; // For line chart, return original productionData
+        return productionData; // Para gráfico de linha, retorna os dados originais
     };
 
+    // Mapeia o tipo de gráfico selecionado para o componente Chart.js correspondente
     const ChartComponent = { 'line': Line, 'bar': Bar, 'pie': Pie }[chartType];
     const ExpandedChartComponent = { 'line': Line, 'bar': Bar, 'pie': Pie }[expandedChart];
 
@@ -164,13 +175,18 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                         <label>Tipo de Gráfico:</label>
                         <div className="chart-buttons">
                             {['line', 'bar', 'pie'].map(type => (
-                                <button key={type} onClick={() => setState(prev => ({ ...prev, chartType: type }))} className={chartType === type ? 'active' : ''}>
+                                <button
+                                    key={type}
+                                    onClick={() => setState(prev => ({ ...prev, chartType: type }))}
+                                    className={chartType === type ? 'active' : ''}
+                                >
                                     {type === 'line' ? 'Linha' : type === 'bar' ? 'Barras' : 'Pizza'}
                                 </button>
                             ))}
                         </div>
                     </div>
                     <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px' }}>
+                        {/* Renderiza o gráfico principal com base no tipo selecionado */}
                         <div className="chart-container" onClick={() => setState(prev => ({ ...prev, expandedChart: chartType }))}>
                             {ChartComponent && <ChartComponent data={getChartData(chartType)} options={getChartOptions(chartType)} ref={chartRef} />}
                         </div>
@@ -201,16 +217,19 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                 <br /><br /><br />
             </main>
 
+            {/* Overlay para o gráfico expandido */}
             {expandedChart && (
                 <div className="expanded-chart-overlay" onClick={() => setState(prev => ({ ...prev, expandedChart: null }))}>
                     <div className="expanded-chart-container" onClick={e => e.stopPropagation()}>
                         <button className="close-button" onClick={() => setState(prev => ({ ...prev, expandedChart: null }))} title="Fechar">X</button>
                         <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px', height: 'calc(100% - 170px)', overflowY: 'auto' }}>
                             <div className="chart-container">
+                                {/* Renderiza o gráfico expandido */}
                                 {ExpandedChartComponent && <ExpandedChartComponent data={getChartData(expandedChart)} options={getChartOptions(expandedChart)} />}
                             </div>
                             <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Dados de Produção</h3>
                             <div className="data-table-container">
+                                {/* Tabela com os dados brutos */}
                                 <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
                                     <thead>
                                         <tr style={{ borderBottom: '1px solid #fff' }}>
