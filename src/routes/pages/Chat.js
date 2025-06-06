@@ -1,29 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../CSS/Chat/chat.css';
-import '../../CSS/Chat/mensagem.css'; // This is where your .message-bubble and its child styles are
+import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
-import comandosData from '../../data/commands.json';
+import comandosData from '../../data/commands.json'; // Certifique-se de que este caminho está correto
 
-// Import react-markdown and rehype-raw
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw'; // For rendering raw HTML if your markdown includes it
-
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY; // Certifique-se de que esta chave está configurada no seu ambiente
 
 const modePrompts = {
-  professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.',
-  profissional: 'Você é um assistente profissional e técnico. Forneça respostas detalhadas, precisas e formais, utilizando termos técnicos quando apropriado. Seja claro e direto. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.',
-  engracado: 'Você é engraçado e descontraído. Responda de forma leve e divertida, usando humor e analogias engraçadas para facilitar o entendimento. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.',
-  coaching: 'Você é um coach motivador. Inspire o usuário com respostas positivas, motivacionais e encorajadoras, ajudando-o a superar dúvidas com confiança. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.',
-  calmo: 'Você é calmo e reflexivo. Responda com tranquilidade, promovendo reflexão e clareza, usando linguagem serena e acolhedora. Formate suas respostas usando Markdown para melhor legibilidade, com títulos, parágrafos e listas quando apropriado.'
+  professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
+  profissional: 'Você é um assistente profissional e técnico. Forneça respostas detalhadas, precisas e formais, utilizando termos técnicos quando apropriado. Seja claro e direto.',
+  engracado: 'Você é engraçado e descontraído. Responda de forma leve e divertida, usando humor e analogias engraçadas para facilitar o entendimento.',
+  coaching: 'Você é um coach motivador. Inspire o usuário com respostas positivas, motivacionais e encorajadoras, ajudando-o a superar dúvidas com confiança.',
+  calmo: 'Você é calmo e reflexivo. Responda com tranquilidade, promovendo reflexão e clareza, usando linguagem serena e acolhedora.'
 };
 
 const normalizeText = (text) => text.trim().toLowerCase();
 
-const Chat = ({ onConnectDevice, productionData }) => {
+const Chat = ({ onConnectDevice }) => { // onConnectDevice é recebido como prop
   const [mode, setMode] = useState('profissional');
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -34,40 +30,6 @@ const Chat = ({ onConnectDevice, productionData }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Função para analisar os dados de produção e gerar um relatório
-  const analyzeProductionData = (data) => {
-    const labels = data.labels;
-    const values = data.datasets[0].data;
-
-    if (!values || values.length === 0) {
-      return "Não há dados de produção disponíveis para análise.";
-    }
-
-    const totalProduction = values.reduce((sum, val) => sum + val, 0);
-    const averageProduction = totalProduction / values.length;
-    const maxProduction = Math.max(...values);
-    const minProduction = Math.min(...values);
-
-    const maxIndex = values.indexOf(maxProduction);
-    const minIndex = values.indexOf(minProduction);
-
-    const maxTime = labels[maxIndex];
-    const minTime = labels[minIndex];
-
-    let analysisReport = `## Relatório de Produção de Energia Solar\n\n`; // Use Markdown H2
-    analysisReport += `- **Produção Total**: ${totalProduction.toFixed(2)} kWh\n`; // Bold
-    analysisReport += `- **Produção Média por Hora**: ${averageProduction.toFixed(2)} kWh\n`;
-    analysisReport += `- **Pico de Produção**: ${maxProduction.toFixed(2)} kWh às ${maxTime}\n`;
-    analysisReport += `- **Menor Produção**: ${minProduction.toFixed(2)} kWh às ${minTime}\n\n`;
-
-    analysisReport += "### Detalhes por hora:\n"; // Use Markdown H3
-    labels.forEach((label, index) => {
-      analysisReport += `- ${label}: ${values[index].toFixed(2)} kWh\n`;
-    });
-
-    return analysisReport;
-  };
-
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
@@ -76,13 +38,15 @@ const Chat = ({ onConnectDevice, productionData }) => {
 
     const textoNormalizado = normalizeText(texto);
 
+    // Procurar comando que bata com o texto
     const comandoEncontrado = comandosData.comandos.find(cmd =>
       cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
     );
 
-    let deviceToConnect = null;
-    let customDeviceName = null;
+    let deviceToConnect = null; // Variável para armazenar o tipo de aparelho (ex: 'TV', 'Lâmpada')
+    let customDeviceName = null; // Variável para armazenar o nome personalizado (ex: 'Sala', 'Quarto')
 
+    // Mapeamento de tipos de aparelhos para seus gatilhos de conexão
     const connectionCommands = [
       { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão'] },
       { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado'] },
@@ -91,71 +55,72 @@ const Chat = ({ onConnectDevice, productionData }) => {
       { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador'] }
     ];
 
+    // Lógica para identificar qual aparelho e nome personalizado devem ser conectados
     for (const cmd of connectionCommands) {
       for (const trigger of cmd.triggers) {
         const normalizedTrigger = normalizeText(trigger);
         if (textoNormalizado.startsWith(normalizedTrigger)) {
           deviceToConnect = cmd.type;
+          // Extrai o nome personalizado (o que vem depois do gatilho)
           customDeviceName = texto.substring(trigger.length).trim();
 
+          // Se não houver nome personalizado, usa o tipo do aparelho como nome
           if (customDeviceName === '') {
             customDeviceName = deviceToConnect;
           } else {
+            // Opcional: Capitaliza a primeira letra do nome personalizado para consistência
             customDeviceName = customDeviceName.charAt(0).toUpperCase() + customDeviceName.slice(1);
           }
-          break;
+          break; // Encontrou uma correspondência, pode sair do loop de triggers
         }
       }
-      if (deviceToConnect) break;
+      if (deviceToConnect) break; // Encontrou um tipo de aparelho, pode sair do loop de comandos
     }
 
-    // Lógica para comandos de CONEXÃO de dispositivo (prioridade alta)
+    // Se um comando de conexão foi identificado (deviceToConnect não é nulo)
     if (deviceToConnect) {
+      // Chame a função onConnectDevice com o tipo e o nome personalizado
       if (typeof onConnectDevice === 'function') {
         onConnectDevice(deviceToConnect, customDeviceName);
       }
 
-      let resposta = "Comando de conexão executado.";
+      // Encontre a resposta padrão para o comando de conexão (se existir no comandosData)
+      let resposta = "Comando de conexão executado."; // Resposta padrão se não encontrar no JSON
       const connectionCommandInJson = comandosData.comandos.find(cmd =>
         cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
       );
       if (connectionCommandInJson) {
         resposta = connectionCommandInJson.resposta;
       } else {
-        resposta = `**${customDeviceName}** Conectado.`; // Use Markdown for bold
+        // Se o comando não for exatamente um trigger do JSON, mas é um comando de conexão,
+        // podemos gerar uma resposta mais dinâmica.
+        resposta = `${customDeviceName} Conectado.`;
       }
+
 
       setMessages(prev => [
         ...prev,
         { role: 'user', content: texto },
         { role: 'assistant', content: resposta }
       ]);
+
       setNewMessage('');
-      return;
+      return; // Não chama API Gemini para comandos conhecidos
     }
 
-    // Lógica para OUTROS comandos do JSON (incluindo o novo comando de análise)
+    // Se não for um comando de conexão, mas for um comando geral do JSON
     if (comandoEncontrado) {
-        if (comandoEncontrado.resposta === "ANALISAR_GRAFICO_PRODUCAO") {
-            const report = analyzeProductionData(productionData);
-            setMessages(prev => [
-                ...prev,
-                { role: 'user', content: texto },
-                { role: 'assistant', content: report }
-            ]);
-        } else {
-            setMessages(prev => [
-                ...prev,
-                { role: 'user', content: texto },
-                { role: 'assistant', content: comandoEncontrado.resposta }
-            ]);
-        }
+        setMessages(prev => [
+            ...prev,
+            { role: 'user', content: texto },
+            { role: 'assistant', content: comandoEncontrado.resposta }
+        ]);
         setNewMessage('');
         return;
     }
 
-    // Se não for um comando conhecido do JSON (incluindo conexão ou análise),
-    // então envia a mensagem para a API Gemini.
+
+    // Se não for comando conhecido, enviar mensagem para API Gemini
     const userMessage = { role: 'user', content: texto };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
@@ -183,7 +148,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
         generationConfig: { temperature: 0.9, topP: 0.8, maxOutputTokens: 1000 }
       };
 
-      const apiKey = GEMINI_API_KEY;
+      const apiKey = GEMINI_API_KEY; // Use a chave da API
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
       const response = await fetch(apiUrl, {
@@ -202,7 +167,6 @@ const Chat = ({ onConnectDevice, productionData }) => {
       const data = await response.json();
 
       if (data.candidates?.[0]?.content?.parts) {
-        // Here's the key change: Gemini should return Markdown, and we store it as is.
         setMessages(prev => [...prev, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
       } else if (data.promptFeedback?.blockReason) {
         setMessages(prev => [...prev, { role: 'assistant', content: `Sua mensagem foi bloqueada devido a políticas de segurança: ${data.promptFeedback.blockReason}` }]);
@@ -244,17 +208,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
             key={index}
             className={`message ${message.role === 'user' ? 'user' : 'bot'}`}
           >
-            {/*
-              THE FIX IS HERE:
-              Wrap ReactMarkdown in a div with the 'message-bubble' class.
-              ReactMarkdown itself no longer accepts a 'className' prop directly.
-              This ensures your CSS rules for .message-bubble and its descendants still apply.
-            */}
-            <div className="message-bubble">
-                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                    {message.content}
-                </ReactMarkdown>
-            </div>
+            <span className="message-bubble">{message.content}</span>
           </div>
         ))}
         {loading && (
