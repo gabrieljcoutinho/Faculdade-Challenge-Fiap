@@ -24,13 +24,22 @@ const normalizeText = (text) => text.trim().toLowerCase();
 // O componente Chat agora recebe productionData como uma prop
 const Chat = ({ onConnectDevice, productionData }) => {
     const [mode, setMode] = useState('profissional');
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(() => {
+        // Tenta carregar as mensagens do localStorage ao montar o componente
+        const storedMessages = localStorage.getItem('chatMessages');
+        return storedMessages ? JSON.parse(storedMessages) : [];
+    });
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
+    // Atualiza o localStorage sempre que as mensagens mudam
+    useEffect(() => {
+        localStorage.setItem('chatMessages', JSON.stringify(messages));
     }, [messages]);
 
     // Função para formatar os dados de produção do gráfico
