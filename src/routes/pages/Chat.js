@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { marked } from 'marked';
 import '../../CSS/Chat/chat.css';
 import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
-import comandosData from '../../data/commands.json'; // Certifique-se de que este caminho está correto
+import comandosData from '../../data/commands.json';
 
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY; // Certifique-se de que esta chave está configurada no seu ambiente
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
 const modePrompts = {
   professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
@@ -19,7 +20,7 @@ const modePrompts = {
 
 const normalizeText = (text) => text.trim().toLowerCase();
 
-const Chat = ({ onConnectDevice }) => { // onConnectDevice é recebido como prop
+const Chat = ({ onConnectDevice }) => {
   const [mode, setMode] = useState('profissional');
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -32,21 +33,18 @@ const Chat = ({ onConnectDevice }) => { // onConnectDevice é recebido como prop
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
     const texto = newMessage.trim();
     if (!texto) return;
 
     const textoNormalizado = normalizeText(texto);
 
-    // Procurar comando que bata com o texto
     const comandoEncontrado = comandosData.comandos.find(cmd =>
       cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
     );
 
-    let deviceToConnect = null; // Variável para armazenar o tipo de aparelho (ex: 'TV', 'Lâmpada')
-    let customDeviceName = null; // Variável para armazenar o nome personalizado (ex: 'Sala', 'Quarto')
+    let deviceToConnect = null;
+    let customDeviceName = null;
 
-    // Mapeamento de tipos de aparelhos para seus gatilhos de conexão
     const connectionCommands = [
       { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão'] },
       { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado'] },
@@ -55,72 +53,57 @@ const Chat = ({ onConnectDevice }) => { // onConnectDevice é recebido como prop
       { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador'] }
     ];
 
-    // Lógica para identificar qual aparelho e nome personalizado devem ser conectados
     for (const cmd of connectionCommands) {
       for (const trigger of cmd.triggers) {
         const normalizedTrigger = normalizeText(trigger);
         if (textoNormalizado.startsWith(normalizedTrigger)) {
           deviceToConnect = cmd.type;
-          // Extrai o nome personalizado (o que vem depois do gatilho)
           customDeviceName = texto.substring(trigger.length).trim();
-
-          // Se não houver nome personalizado, usa o tipo do aparelho como nome
           if (customDeviceName === '') {
             customDeviceName = deviceToConnect;
           } else {
-            // Opcional: Capitaliza a primeira letra do nome personalizado para consistência
             customDeviceName = customDeviceName.charAt(0).toUpperCase() + customDeviceName.slice(1);
           }
-          break; // Encontrou uma correspondência, pode sair do loop de triggers
+          break;
         }
       }
-      if (deviceToConnect) break; // Encontrou um tipo de aparelho, pode sair do loop de comandos
+      if (deviceToConnect) break;
     }
 
-    // Se um comando de conexão foi identificado (deviceToConnect não é nulo)
     if (deviceToConnect) {
-      // Chame a função onConnectDevice com o tipo e o nome personalizado
       if (typeof onConnectDevice === 'function') {
         onConnectDevice(deviceToConnect, customDeviceName);
       }
 
-      // Encontre a resposta padrão para o comando de conexão (se existir no comandosData)
-      let resposta = "Comando de conexão executado."; // Resposta padrão se não encontrar no JSON
+      let resposta = "Comando de conexão executado.";
       const connectionCommandInJson = comandosData.comandos.find(cmd =>
         cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
       );
       if (connectionCommandInJson) {
         resposta = connectionCommandInJson.resposta;
       } else {
-        // Se o comando não for exatamente um trigger do JSON, mas é um comando de conexão,
-        // podemos gerar uma resposta mais dinâmica.
         resposta = `${customDeviceName} Conectado.`;
       }
-
 
       setMessages(prev => [
         ...prev,
         { role: 'user', content: texto },
         { role: 'assistant', content: resposta }
       ]);
-
       setNewMessage('');
-      return; // Não chama API Gemini para comandos conhecidos
+      return;
     }
 
-    // Se não for um comando de conexão, mas for um comando geral do JSON
     if (comandoEncontrado) {
-        setMessages(prev => [
-            ...prev,
-            { role: 'user', content: texto },
-            { role: 'assistant', content: comandoEncontrado.resposta }
-        ]);
-        setNewMessage('');
-        return;
+      setMessages(prev => [
+        ...prev,
+        { role: 'user', content: texto },
+        { role: 'assistant', content: comandoEncontrado.resposta }
+      ]);
+      setNewMessage('');
+      return;
     }
 
-
-    // Se não for comando conhecido, enviar mensagem para API Gemini
     const userMessage = { role: 'user', content: texto };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
@@ -148,30 +131,40 @@ const Chat = ({ onConnectDevice }) => { // onConnectDevice é recebido como prop
         generationConfig: { temperature: 0.9, topP: 0.8, maxOutputTokens: 1000 }
       };
 
-      const apiKey = GEMINI_API_KEY; // Use a chave da API
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setMessages(prev => [...prev, { role: 'assistant', content: `Erro na API Gemini: ${errorData.error?.message || 'Problema desconhecido'} (Código: ${response.status})` }]);
-        setLoading(false);
-        return;
-      }
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }
+      );
 
       const data = await response.json();
 
+      if (!response.ok) {
+        setMessages(prev => [
+          ...prev,
+          { role: 'assistant', content: `Erro na API Gemini: ${data.error?.message || 'Problema desconhecido'} (Código: ${response.status})` }
+        ]);
+        return;
+      }
+
       if (data.candidates?.[0]?.content?.parts) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
+        setMessages(prev => [
+          ...prev,
+          { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }
+        ]);
       } else if (data.promptFeedback?.blockReason) {
-        setMessages(prev => [...prev, { role: 'assistant', content: `Sua mensagem foi bloqueada devido a políticas de segurança: ${data.promptFeedback.blockReason}` }]);
+        setMessages(prev => [
+          ...prev,
+          { role: 'assistant', content: `Sua mensagem foi bloqueada: ${data.promptFeedback.blockReason}` }
+        ]);
       } else {
-        setMessages(prev => [...prev, { role: 'assistant', content: 'Resposta inválida da API Gemini' }]);
+        setMessages(prev => [
+          ...prev,
+          { role: 'assistant', content: 'Resposta inválida da API Gemini' }
+        ]);
       }
     } catch (error) {
       setMessages(prev => [...prev, { role: 'assistant', content: `Erro: ${error.message}` }]);
@@ -208,7 +201,12 @@ const Chat = ({ onConnectDevice }) => { // onConnectDevice é recebido como prop
             key={index}
             className={`message ${message.role === 'user' ? 'user' : 'bot'}`}
           >
-            <span className="message-bubble">{message.content}</span>
+            <span
+              className="message-bubble"
+              dangerouslySetInnerHTML={{
+                __html: message.role === 'assistant' ? marked.parse(message.content) : message.content
+              }}
+            />
           </div>
         ))}
         {loading && (
