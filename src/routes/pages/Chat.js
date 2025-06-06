@@ -51,14 +51,14 @@ const Chat = ({ onConnectDevice, productionData }) => {
         const productionValues = data.datasets[0].data; // Assumindo que o primeiro dataset é a produção
 
         let response = "Resumo da produção de energia solar:\n\n";
-        response += "| Hora | Produção (kWh) |\n";
+        response += "| Hora | Produção (k/Wh) |\n";
         response += "|------|----------------|\n";
 
         let totalProduction = 0;
         for (let i = 0; i < labels.length; i++) {
             const hour = labels[i];
             const value = productionValues[i];
-            response += `| ${hour} | ${value} kWh       |\n`;
+            response += `| ${hour} | ${value} kW/h       |\n`;
             totalProduction += value;
         }
 
