@@ -214,7 +214,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                         ))}
                     </div>
                 </section>
-                <br /><br /><br />
+                <br /><br /><br /><br /><br />
             </main>
 
             {/* Overlay para o gráfico expandido */}
