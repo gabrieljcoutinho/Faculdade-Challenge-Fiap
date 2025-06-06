@@ -53,7 +53,7 @@
       "triggers": [
         "Analisar gráfico",
         "Analisar o gráfico",
-            "Analisar grafico",
+        "Analisar grafico",
         "Analisar o grafico",
 
         "Analise  Gráfico",
@@ -107,7 +107,12 @@
         "Como esta a energia do gráfico",
         "Como esta a energia do Gráfico",
         "Como esta a energia do grafico",
-        "Como esta a energia do Grafico"
+        "Como esta a energia do Grafico",
+
+        "Faça uma análise do gráfico",
+        "Faça uma análise do Gráfico",
+        "Faça uma análise do grafico",
+        "Faça uma análise do Grafico"
 
 
       ],
