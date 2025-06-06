@@ -1,60 +1,169 @@
-.comandos-container {
-    padding-top: 5rem;
-    padding-bottom: 1rem;
-}
-
-.comandoChat {
-    padding-top: 5rem;
-    padding-bottom: 3rem;
-}
-
-.comandos-container {
-    max-width: 700px;
+/* General Page Wrapper for consistent layout */
+.comandos-page-wrapper {
     padding: 2rem;
-    background: linear-gradient(to bottom right, #f0f0f0, #e6f7ff);
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    font-family: 'Segoe UI', sans-serif;
-    color: #333;
-    height: 900px;
-    /* Ajuste a altura conforme necessário do fundo azul*/
+    /* Add some overall padding to the page */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center the content horizontally */
 }
 
-.comandos-container h3 {
-    padding: 1rem;
-    background-color: #00aaff;
+/* Header Styling */
+.comando-header {
+    padding: 1rem 2rem;
+    /* Adjusted padding */
+    background-color: #007bff;
+    /* A slightly softer blue */
     color: white;
-    border-radius: 10px;
+    border-radius: 12px;
+    /* Slightly more rounded */
     text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    /* Larger font size for prominence */
+    margin-bottom: 2.5rem;
+    /* More space below header */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow */
+    font-family: 'Poppins', sans-serif;
+    /* A modern font choice */
+    letter-spacing: 0.05em;
+    /* A bit of letter spacing */
 }
 
-.descricao {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    text-align: center;
+/* Main Container for Commands */
+.comandos-container {
+    max-width: 800px;
+    /* Increased max-width for better content flow */
+    width: 100%;
+    /* Ensure it takes full width up to max-width */
+    padding: 2.5rem;
+    /* Increased padding inside the container */
+    background: linear-gradient(135deg, #f9fbfd, #e0f2f7);
+    /* Smoother, lighter gradient */
+    border-radius: 25px;
+    /* More pronounced border-radius */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    /* Stronger, softer shadow */
+    font-family: 'Roboto', sans-serif;
+    /* Another modern font option */
+    color: #3f4a54;
+    /* Softer dark text color */
+    line-height: 1.6;
+    /* Better line spacing for readability */
 }
 
+/* Description Text */
+.comandos-description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    /* More space below description */
+    text-align: center;
+    color: #555;
+    font-weight: 500;
+    /* Slightly bolder */
+}
+
+/* List of Commands */
 .lista-comandos {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
-.lista-comandos li {
+/* Individual Command Item */
+.comando-item {
     background-color: #ffffff;
-    border-left: 6px solid #00aaff;
-    padding: 1rem;
-    margin-bottom: rem;
-    border-radius: 10px;
-    transition: transform 0.2s;
+    border-left: 8px solid #00aaff;
+    /* Thicker, vibrant border */
+    padding: 1.5rem 2rem;
+    /* More padding for a spacious feel */
+    margin-bottom: 1.5rem;
+    /* Consistent spacing between items */
+    border-radius: 12px;
+    /* Consistent border-radius */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    /* Smooth transitions */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    /* Light shadow for depth */
 }
 
-.lista-comandos li:hover {
-    transform: scale(1.02);
+.comando-item:hover {
+    transform: translateY(-5px) scale(1.01);
+    /* Lift and slightly enlarge on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    /* More prominent shadow on hover */
 }
 
-.exemplo {
-    color: #0077cc;
+.comando-item strong {
+    color: #0056b3;
+    /* Darker blue for command names */
+    font-size: 1.15rem;
+    /* Slightly larger font for command names */
+    display: block;
+    /* Ensures it takes full width */
+    margin-bottom: 0.5rem;
+    /* Space below command name */
+}
+
+/* Example Text */
+.comando-example {
+    color: #007bff;
+    /* Use the main blue color */
     font-style: italic;
+    font-size: 0.95rem;
+    display: block;
+    /* New line for example */
+    margin-top: 0.5rem;
+    /* Space above example */
+    margin-bottom: 0.75rem;
+    /* Space below example */
+}
+
+.comando-example code {
+    background-color: #e9ecef;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+    /* Monospaced font for code */
+    color: #d63384;
+    /* A distinct color for code snippets */
+}
+
+/* Explanation Text */
+.comando-explanation {
+    color: #6c757d;
+    /* Muted color for explanations */
+    font-size: 0.95rem;
+    margin-top: 0.75rem;
+    /* Space above explanation */
+}
+
+/* Sub-list for Graph Analysis Commands */
+.sub-lista-comandos {
+    list-style-type: disc;
+    /* Standard disc bullets */
+    padding-left: 20px;
+    /* Indent sub-list */
+    margin-top: 1rem;
+    background-color: #f8f9fa;
+    /* Slightly different background for sub-list */
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    /* Light border */
+}
+
+.sub-lista-comandos li {
+    margin-bottom: 0.5rem;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.sub-lista-comandos li:last-child {
+    margin-bottom: 0;
+    /* No margin for the last item */
+}
+
+ul li {
+    list-style-type: none;
 }
