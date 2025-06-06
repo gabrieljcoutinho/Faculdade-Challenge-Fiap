@@ -52,7 +52,8 @@
     {
       "triggers": [
         "Analisar gráfico",
-          "Analisar o gráfico",
+        "Analisar o gráfico",
+        "Analise o gráfico",
         "Relatório de produção",
         "Dados do gráfico",
         "Resumo da produção",
@@ -66,7 +67,7 @@
         "Como esta a energia",
         "Analisar Grafico"
       ],
-      "resposta": "ANALISAR_GRAFICO_PRODUCAO"
+      "resposta": "PRODUCAO_GRAFICO"
     }
   ]
 }
