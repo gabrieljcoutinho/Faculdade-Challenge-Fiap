@@ -14,7 +14,8 @@ const ComandosChat = () => {
 
         <ul className="lista-comandos">
           <li className="comando-item">
-            <strong>Conectar {'{nome do aparelho desejado}'}</strong>
+            <strong>Conectar {'{nome do aparelho}'}</strong>
+             <strong>Ligar {'{nome do aparelho}'}</strong>
             <span className="comando-example">Ex: Conectar TV</span>
             <p className="comando-explanation">
               ➤ Um aparelho com o nome <strong>TV</strong> aparecerá na seção de conexões.
@@ -87,7 +88,13 @@ const ComandosChat = () => {
                 '➤ Como esta a energia do gráfico ',
                 '➤ Como esta a energia do Gráfico ',
                 '➤ Como esta a energia do grafico ',
-                '➤ Como esta a energia do Grafico'
+                '➤ Como esta a energia do Grafico',
+                '➤ Informação do gráfico',
+                '➤ Informações do gráfico',
+                '➤ Informação do grafico',
+                '➤ Informações do grafico'
+
+
 
               ].map((command, index) => (
                 <li key={index}>{command}</li>
