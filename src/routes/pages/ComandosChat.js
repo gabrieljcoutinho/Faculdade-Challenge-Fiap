@@ -103,6 +103,7 @@ const ComandosChat = () => {
           </li>
         </ul>
       </div>
+      <br />
     </div>
   );
 };
