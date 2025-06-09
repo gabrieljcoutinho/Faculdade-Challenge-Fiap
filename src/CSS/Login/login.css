@@ -6,6 +6,7 @@
     min-height: 100vh;
     background-color: #f0f2f5;
     padding: 20px;
+    padding-top: 5rem;
 }
 
 .login-box {
@@ -124,7 +125,7 @@ h1 {
 }
 
 .login-info {
-    background-color: #e9ecef;
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
