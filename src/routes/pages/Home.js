@@ -126,90 +126,23 @@ const Home = ({ productionData, onUpdateProductionData }) => {
             link.download = `grafico_producao_solar_${expandedChart}.png`;
             link.href = chartRef.current.toBase64Image(); // Obtém a imagem do gráfico
             link.click();
-            alert('Imagem salva com sucesso!');
-        } else {
-            alert('Erro: Gráfico não disponível para salvar.');
         }
     };
 
     // Handler para compartilhar o gráfico em diferentes plataformas
-    const shareChart = async (platform) => {
-        if (!chartRef.current || !expandedChart) {
-            alert('Nenhum gráfico para compartilhar.');
-            return;
-        }
-
+    const shareChart = (platform) => {
+        if (!chartRef.current || !expandedChart) return;
+        const imageUrl = chartRef.current.toBase64Image();
         const title = 'Gráfico de Produção Solar';
-        const summary = 'Confira o gráfico de produção de energia solar da minha usina!';
-        const filename = `grafico_producao_solar_${expandedChart}.png`;
+        const summary = 'Confira o gráfico de produção de energia solar.';
 
-        try {
-            // Get the image as a Blob (more efficient for sharing than base64)
-            const imageDataUrl = chartRef.current.toBase64Image('image/png', 1);
-            const response = await fetch(imageDataUrl);
-            const blob = await response.blob();
-            const file = new File([blob], filename, { type: 'image/png' });
-
-            if (navigator.share) {
-                // Use Web Share API if available (more native sharing experience)
-                try {
-                    await navigator.share({
-                        title: title,
-                        text: summary,
-                        files: [file],
-                    });
-                    console.log('Chart shared successfully via Web Share API');
-                } catch (error) {
-                    console.error('Error sharing via Web Share API:', error);
-                    // Fallback to specific platform methods if Web Share API fails or is not available
-                    handlePlatformSpecificShare(platform, imageDataUrl, title, summary);
-                }
-            } else {
-                // Fallback for browsers that don't support Web Share API
-                handlePlatformSpecificShare(platform, imageDataUrl, title, summary);
-            }
-        } catch (error) {
-            console.error('Error generating chart image for sharing:', error);
-            alert('Houve um erro ao preparar o gráfico para compartilhamento.');
-        }
-    };
-
-    const handlePlatformSpecificShare = (platform, imageUrl, title, summary) => {
-        const encodedSummary = encodeURIComponent(summary);
-        const encodedTitle = encodeURIComponent(title);
-
-        switch (platform) {
-            case 'email':
-                // For email, you can try to attach the base64 image directly.
-                // However, be aware of URL length limits and email client support.
-                // A better approach for larger images might be to upload it to a server
-                // and share the public URL. For now, we'll stick to direct attachment.
-                window.open(`mailto:?subject=${encodedTitle}&body=${encodedSummary}\n\n[Gráfico em anexo, pode ser grande em algumas plataformas de email.]`, '_blank');
-                // Note: Direct base64 attachment in mailto links is not universally supported
-                // and can lead to very long URLs that break. The current code is a compromise.
-                alert('Para compartilhar por Email, o gráfico será enviado como um anexo (se suportado pelo seu cliente de email).');
-                break;
-            case 'whatsapp':
-                // WhatsApp does not allow direct image attachment from web via wa.me links.
-                // We'll share a message and suggest saving the image.
-                window.open(`https://wa.me/?text=${encodedSummary}%0A%0APara ver o gráfico, salve a imagem abaixo: (e se ela não aparecer, você pode baixá-la usando o botão "Salvar Imagem" e anexar manualmente)`, '_blank');
-                alert('Para compartilhar no WhatsApp, você precisará salvar a imagem (use o botão "Salvar Imagem") e anexar manualmente no chat.');
-                break;
-            case 'instagram':
-                // Instagram requires mobile app for direct image uploads.
-                // Guide the user to save the image.
-                alert('Para compartilhar no Instagram, você precisa salvar a imagem (use o botão "Salvar Imagem") e fazer o upload manualmente pelo aplicativo do Instagram.');
-                break;
-            case 'linkedin':
-                // LinkedIn primarily shares URLs. We can't directly upload an image via a simple URL.
-                // The provided URL would be the current page URL, or if you had a public URL for the image, you'd use that.
-                // For now, we'll direct them to save the image and upload.
-                window.open(`https://www.linkedin.com/shareArticle?mini=true&title=${encodedTitle}&summary=${encodedSummary}&source=${encodeURIComponent(window.location.href)}`, '_blank');
-                alert('Para compartilhar no LinkedIn, você precisará salvar a imagem (use o botão "Salvar Imagem") e anexar manualmente à sua publicação.');
-                break;
-            default:
-                break;
-        }
+        const actions = {
+            'email': () => window.open(`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(summary)}&attachment=${encodeURIComponent(imageUrl.split(',')[1])}`, '_blank'),
+            'whatsapp': () => window.open(`https://wa.me/?text=${encodeURIComponent(`${summary} ${imageUrl}`)}`, '_blank'),
+            'instagram': () => { alert('Para compartilhar no Instagram, você precisa salvar a imagem e fazer o upload manualmente.'); handleSaveChart(); },
+            'linkedin': () => window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(imageUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`, '_blank')
+        };
+        actions[platform]?.(); // Executa a ação da plataforma selecionada
     };
 
     // Adapta os dados de produção para o tipo de gráfico (principalmente para Pie e Bar)
