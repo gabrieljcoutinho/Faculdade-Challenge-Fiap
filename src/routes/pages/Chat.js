@@ -34,14 +34,6 @@ const Chat = ({ onConnectDevice, productionData }) => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    // REMOVA ESTE useEffect PARA PARAR DE SALVAR NO LOCALSTORAGE
-    /*
-    useEffect(() => {
-        localStorage.setItem('chatMessages', JSON.stringify(messages));
-    }, [messages]);
-    */
-
-    // Função para formatar os dados de produção do gráfico
     const formatProductionData = (data) => {
         if (!data || !data.labels || !data.datasets || data.datasets.length === 0) {
             return "Não há dados de produção solar disponíveis no momento.";

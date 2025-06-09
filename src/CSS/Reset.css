@@ -39,3 +39,158 @@ h1 {
   padding-top: 4rem;
   font-size: 25px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body.dark {
+  background-color: #252525;
+  color: #f0f0f0;
+}
+
+.botao-tema {
+  padding: 10px 15px;
+  margin-top: 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+body.dark .botao-tema {
+  background-color: #ddd;
+  color: black;
+}
+
+
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6,
+body.dark label,
+body.p {
+  color: white;
+}
+
+body.dark label {
+  color: #000;
+}
+
+/* Tema Dark para Contato */
+
+body.dark .contato-container {
+  background-color: #121212;
+  color: white;
+}
+
+body.dark .contato-form input,
+body.dark .contato-form textarea {
+  /* background-color: #1e1e1e; */
+  color: white;
+  border: 1px solid #444;
+}
+
+body.dark .contato-form input::placeholder,
+body.dark .contato-form textarea::placeholder {
+  color: #fff;
+}
+
+body.dark .submit-button {
+  background-color: #333;
+  color: white;
+  border: 1px solid white;
+}
+
+body.dark .contato-info {
+  background-color: #1a1a1a;
+  color: white;
+}
+
+body.dark .social-icons a svg,
+h3 {
+  color: white;
+}
+
+
+body.dark .tituloContato {
+  color: black;
+}
+
+body.dark .contato-info .info-item p,
+.paragrafoContato {
+  color: #fff;
+}
+
+body.dark .tituloPrincipalHome {
+  color: #252525;
+}

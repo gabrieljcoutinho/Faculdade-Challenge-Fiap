@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../CSS/Settings/setting.css';
-import comandosImg from '../../imgs/comandos.png';  // importe a imagem
+import comandosImg from '../../imgs/comandos.png';
+import MudarTema from '../../components/MudarTema'; // botão de tema
 
 const Configuracoes = () => {
   const navigate = useNavigate();
@@ -28,6 +29,10 @@ const Configuracoes = () => {
             <button title="Logar" onClick={navegarParaLogin}>Log In</button>
             <button title="Deslogar">Log out</button>
           </div>
+
+          {/* Botão de alternância de tema */}
+          <MudarTema />
+
           <button className="comando-btn" title='Comandos' onClick={comandosChat}>
             <img src={comandosImg} alt="Comandos" className='imgComando' />
           </button>

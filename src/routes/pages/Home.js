@@ -170,7 +170,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
         <div className="home-container">
             <main className="main-content">
                 <section className="production-section">
-                    <h2>Produção Atual</h2>
+                    <h2 className='tituloPrincipalHome'>Produção Atual</h2>
                     <div className="chart-type-selector">
                         <label>Tipo de Gráfico:</label>
                         <div className="chart-buttons">

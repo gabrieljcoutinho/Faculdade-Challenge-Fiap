@@ -11,7 +11,7 @@ const Contato = () => {
 
       <div className="contato-wrapper">
         <form className="contato-form">
-          <h2>Envie sua Mensagem</h2>
+          <h2 className='tituloContato'>Envie sua Mensagem</h2>
           <div className="form-group">
             <label htmlFor="nome">Nome:</label>
             <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required />
@@ -41,22 +41,21 @@ const Contato = () => {
         </form>
 
         <div className="contato-info">
-          <h2>Outras Formas de Contato</h2>
+          <h2 className='contato'>Outras Formas de Contato</h2>
           <div className="info-item">
             <FaMapMarkerAlt size={20} className="icon" />
-            <p><strong>Endereço:</strong> Rua Exemplo, 123 - Bairro Legal, São Paulo - SP</p>
+            <p className='paragrafoContato'><strong>Endereço:</strong> Rua Exemplo, 123 - Bairro Legal, São Paulo - SP</p>
           </div>
           <div className="info-item">
             <FaEnvelope size={20} className="icon" />
-            <p><strong>Email:</strong> contato@exemplo.com.br</p>
+            <p className='paragrafoContato' ><strong>Email:</strong> contato@exemplo.com.br</p>
           </div>
           <div className="info-item">
             <FaPhone size={20} className="icon" />
-            <p><strong>Telefone:</strong> (11) 98765-4321</p>
+            <p className='paragrafoContato'><strong>Telefone:</strong> (11) 98765-4321</p>
           </div>
 
           <div className="social-icons">
-            <h3>Nossas Redes Sociais</h3>
             <a href="https://www.instagram.com/goodwe_br/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               <FaInstagram size={35} />
             </a>
