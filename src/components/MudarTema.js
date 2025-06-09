@@ -1,5 +1,6 @@
 // src/components/MudarTema.jsx
 import React, { useEffect, useState } from 'react';
+import '../CSS/MudraTemaBTN/style.css'
 
 const MudarTema = () => {
   const temaSalvo = localStorage.getItem('tema') === 'dark';
@@ -21,9 +22,16 @@ const MudarTema = () => {
   };
 
   return (
-    <button className="botao-tema" onClick={alternarTema}>
-      {temaEscuro ? '☀️ Modo Claro' : '🌙 Modo Escuro'}
-    </button>
+    <div className='btnMudarTema'>
+ <div className="toggle-container" onClick={alternarTema}>
+  <div className=  {`toggle-botao ${temaEscuro ? 'ativo' : ''}`} >
+    <span className="icone">{temaEscuro ? '🌙' : '☀️'}</span>
+  </div>
+</div>
+
+    </div>
+
+
   );
 };
 

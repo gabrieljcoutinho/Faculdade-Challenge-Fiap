@@ -1,0 +1,46 @@
+.divBtnMudarTema {
+    padding-left: 10rem;
+}
+
+.toggle-container {
+    width: 65px;
+    height: 36px;
+    background: linear-gradient(145deg, #e0e0e0, #ffffff);
+    border-radius: 50px;
+    /* padding: 4px; */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 2px 2px 5px #bababa, inset -2px -2px 5px #ffffff;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.toggle-container:hover {
+    box-shadow: inset 2px 2px 8px #aaaaaa, inset -2px -2px 8px #ffffff;
+}
+
+.toggle-botao {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(145deg, #ffffff, #d1d1d1);
+    border-radius: 50%;
+    transition: transform 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+    justify-content: center;
+    font-size: 16px;
+    color: #333;
+}
+
+.toggle-botao.ativo {
+    transform: translateX(34px);
+    background: linear-gradient(145deg, #111, #333);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 8px #0ff;
+}
+
+.icone {
+    pointer-events: none;
+}
+
+.btnMudarTema {
+    padding-left: 10rem;
+}
