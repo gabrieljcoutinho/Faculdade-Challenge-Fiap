@@ -4,9 +4,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 70vh;
     background-color: #f4f4f4;
-    padding: 20px;
+    padding: 10px;
 }
 
 .cadastro-box {
