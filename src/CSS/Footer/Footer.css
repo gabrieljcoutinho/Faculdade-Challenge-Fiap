@@ -1,39 +1,18 @@
 .footer {
-    background-color: #252525;
-    color: white;
-    padding: 5px;
-    /* Estilos padrão para telas maiores */
-    text-align: center;
-    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
+    background-color: #252525;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    /* Para animação suave */
+    opacity: 1;
+    transition: opacity 0.4s ease;
+    position: fixed;
 }
 
-
-.footer p {
-    margin-top: 5px;
-    /* Estilos padrão para telas maiores */
-}
-
-/* Estilos específicos para telas com largura máxima de 375px (iPhone SE) */
-@media screen and (max-width: 375px) {
-    .footer {
-        padding: 10px;
-        /* Reduzindo o padding vertical para telas menores */
-        font-size: 0.9em;
-        /* Reduzindo um pouco o tamanho da fonte */
-    }
-
-    .footer div {
-        margin-bottom: 2px;
-        /* Adicionando um pequeno espaço abaixo da primeira div */
-    }
-
-    .footer p {
-        margin-top: 2px;
-        /* Reduzindo a margem superior do parágrafo */
-        font-size: 0.8em;
-        /* Reduzindo um pouco mais o tamanho da fonte do copyright */
-    }
+.footer.hide {
+    opacity: 0;
+    pointer-events: none;
 }
