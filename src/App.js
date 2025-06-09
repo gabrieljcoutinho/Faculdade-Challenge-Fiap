@@ -16,6 +16,7 @@ import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
 import ComandosChat from './routes/pages/ComandosChat';
 import EsqueciSenha from './routes/pages/EsqueciSenha';
+import HelpCenter from './routes/HelpCenter';
 
 // Importe os ícones que podem ser usados como padrão para novos aparelhos
 // Certifique-se de que esses caminhos estão corretos
@@ -134,6 +135,7 @@ function App() {
                     />
                     <Route path='/comandosChat' element={<ComandosChat />} />
                <Route path="/esqueciSenha" element={<EsqueciSenha />} />
+               <Route path="/helpCenter" element={<HelpCenter />} />
                 </Routes>
                 <Footer />
             </BrowserRouter>

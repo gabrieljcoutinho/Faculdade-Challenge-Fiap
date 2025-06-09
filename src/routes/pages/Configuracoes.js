@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../CSS/Settings/setting.css';
 import comandosImg from '../../imgs/comandos.png';
+import atendimentoImg from '../../imgs/atendimento.png';
 
 const Configuracoes = () => {
   const navigate = useNavigate();
@@ -16,6 +17,10 @@ const Configuracoes = () => {
 
   const comandosChat = () => {
     navigate('/comandosChat');
+  };
+
+    const helpCenter = () => {
+    navigate('/helpCenter');
   };
 
   return (
@@ -34,6 +39,12 @@ const Configuracoes = () => {
 
           <button className="comando-btn" title='Comandos' onClick={comandosChat}>
             <img src={comandosImg} alt="Comandos" className='imgComando' />
+          </button>
+
+
+
+           <button className="comando-btn" title='Comandos' onClick={helpCenter}>
+            <img src={atendimentoImg} alt="Comandos" className='imgComando' />
           </button>
         </div>
       </div>
