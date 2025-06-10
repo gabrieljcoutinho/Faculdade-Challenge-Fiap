@@ -56,15 +56,18 @@ const ComandosChat = () => {
                 '➤ Análise do gráfico ',
                 '➤ Análise do Gráfico ',
                 '➤ Análise do Grafico ',
+
                 '➤ Relatório de produção ',
                 '➤ Relatório de produção do gráfico ',
                 '➤ Relatório de produção do Gráfico ',
                 '➤ Relatório de produção do grafico ',
                 '➤ Relatório de produção do Grafico ',
+
                 '➤ Dados do gráfico ',
                 '➤ Dados do Gráfico ',
                 '➤ Dados do grafico ',
                 '➤ Dados do Grafico ',
+
                 '➤ Producao de energia ',
                 '➤ Producao de energia do gráfico ',
                 '➤ Producao de energia do Gráfico ',
@@ -75,11 +78,13 @@ const ComandosChat = () => {
                 '➤ Produção de energia do Gráfico ',
                 '➤ Produção de energia do grafico ',
                 '➤ Produção de energia do Grafico ',
+
                 '➤ Meus dados de energia ',
                 '➤ Meus dados de energia do gráfico ',
                 '➤ Meus dados de energia do Gráfico ',
                 '➤ Meus dados de energia do grafico ',
                 '➤ Meus dados de energia do Grafico ',
+
                 '➤ Como esta a energia ',
                 '➤ Como está a energia do gráfico ',
                 '➤ Como está a energia do Gráfico ',
@@ -89,6 +94,12 @@ const ComandosChat = () => {
                 '➤ Como esta a energia do Gráfico ',
                 '➤ Como esta a energia do grafico ',
                 '➤ Como esta a energia do Grafico',
+
+                  '➤ Como tá a produção de energia ?',
+                  '➤ Como tá a produção de energia',
+                  '➤ Como tá a produção do gráfico ?',
+                  '➤ Como tá a produção do gráfico ',
+
                 '➤ Informação do gráfico',
                 '➤ Informações do gráfico',
                 '➤ Informação do grafico',
