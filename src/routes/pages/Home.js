@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'; // Import useEffect
+import React, { useState, useRef } from 'react';
 import '../../CSS/Home/home.css';
 import '../../CSS/Home/expanded.css';
 import '../../CSS/Home/analyze.css';
@@ -75,8 +75,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
             title: {
                 display: true,
                 color: '#fff',
-                // Modified line: Always set the title to 'Produção de Energia Solar por Hora'
-                text: 'Produção de Energia Solar por Hora',
+                text: type === 'pie' ? 'Distribuição da Produção de Energia Solar por Hora' : `Produção de Energia Solar por Hora (${type === 'line' ? 'Linha' : 'Barras'})`,
                 font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", size: 16 }
             },
             ...(type === 'pie' && {
@@ -116,16 +115,6 @@ const Home = ({ productionData, onUpdateProductionData }) => {
             setState(prev => ({ ...prev, isAnalyzing: false })); // Desativa o estado de análise
         }, 2000); // Simula um tempo de processamento
     };
-
-    // UseEffect para atualizar o gráfico automaticamente a cada 10 segundos
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            handleAnalyzeClick();
-        }, 10000); // 10000 ms = 10 segundos
-
-        // Limpar o intervalo quando o componente for desmontado
-        return () => clearInterval(intervalId);
-    }, [productionData, onUpdateProductionData]); // Dependências: productionData e onUpdateProductionData
 
     // Função para obter o ícone do clima
     const getWeatherIcon = (condition) => ({ 'Ensolarado': '☀️', 'Nublado': '☁️', 'Chuvoso': '🌧️' }[condition] || '');
