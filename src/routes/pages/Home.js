@@ -75,7 +75,8 @@ const Home = ({ productionData, onUpdateProductionData }) => {
             title: {
                 display: true,
                 color: '#fff',
-                text: type === 'pie' ? 'Distribuição da Produção de Energia Solar por Hora' : `Produção de Energia Solar por Hora (${type === 'line' ? 'Linha' : 'Barras'})`,
+                // Modified line: Always set the title to 'Produção de Energia Solar por Hora'
+                text: 'Produção de Energia Solar por Hora',
                 font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", size: 16 }
             },
             ...(type === 'pie' && {
