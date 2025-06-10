@@ -2,11 +2,6 @@
     padding-top: 25rem;
 }
 
-.settingTitulo {
-    font-size: 25px;
-    color: #fff;
-    margin-bottom: 20px;
-}
 
 .configuracoes-overlay {
     position: fixed;
@@ -48,14 +43,15 @@
     gap: 20px;
     margin-top: 30px;
     width: 100%;
-    padding-left: 128px;
+    padding-left: 180px;
     box-sizing: border-box;
+
 }
 
 /* Modificação para botões um embaixo do outro */
 .top-buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: flex;
     /* agora vertical */
     gap: 20px;
     align-items: flex-end;

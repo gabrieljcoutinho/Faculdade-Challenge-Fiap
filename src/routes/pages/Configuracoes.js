@@ -27,13 +27,7 @@ const Configuracoes = () => {
     <div className="configuracoes-overlay">
       <button className="fechar-btn" onClick={fecharConfiguracoes}>✕</button>
       <div className="conteudo-configuracoes">
-        <h1 className='settingTitulo'>Configurações</h1>
         <div className="btn-container">
-          <div className="top-buttons">
-            <button title="Logar" onClick={navegarParaLogin}>Log In</button>
-            <button title="Deslogar">Log out</button>
-          </div>
-
 
 
 
@@ -46,6 +40,16 @@ const Configuracoes = () => {
            <button className="comando-btn" title='Comandos' onClick={helpCenter}>
             <img src={atendimentoImg} alt="Comandos" className='imgComando' />
           </button>
+
+
+
+        <div className="top-buttons">
+            <button title="Logar" onClick={navegarParaLogin}>Log In</button>
+            <button title="Deslogar">Log out</button>
+          </div>
+
+
+
         </div>
       </div>
     </div>
