@@ -2,26 +2,22 @@ import React, { useEffect, useState } from 'react';
 import '../CSS/MudraTemaBTN/style.css'
 
 const MudarTema = () => {
-  // Obtém o tema salvo no localStorage ou define 'light' como padrão
-  const temaSalvo = localStorage.getItem('tema') === 'dark';
-  const [temaEscuro, setTemaEscuro] = useState(temaSalvo);
+  // Always start with 'light' theme (false for temaEscuro)
+  const [temaEscuro, setTemaEscuro] = useState(false);
 
   useEffect(() => {
-    // Aplica ou remove a classe 'dark' no <body> do documento
-    // Isso garante que o tema correto seja aplicado no carregamento da página e em cada mudança
+    // Apply or remove the 'dark' class on the <body> of the document
     if (temaEscuro) {
       document.body.classList.add('dark');
     } else {
       document.body.classList.remove('dark');
     }
-  }, [temaEscuro]); // O efeito é re-executado sempre que 'temaEscuro' muda
+  }, [temaEscuro]); // The effect re-runs whenever 'temaEscuro' changes
 
-  // Função para alternar o tema entre claro e escuro
+  // Function to toggle the theme between light and dark
   const alternarTema = () => {
-    const novoTema = !temaEscuro; // Inverte o estado atual do tema
-    setTemaEscuro(novoTema); // Atualiza o estado do tema
-    // Salva a nova preferência de tema no localStorage
-    localStorage.setItem('tema', novoTema ? 'dark' : 'light');
+    setTemaEscuro(prevTemaEscuro => !prevTemaEscuro); // Inverts the current theme state
+    // localStorage logic is removed, so the theme won't be saved
   };
 
   return (
