@@ -41,7 +41,7 @@ const Contato = () => {
         </form>
 
         <div className="contato-info">
-          <p className='subtitulo'>Outras Formas de Contato</p>
+          <p className='paragrafoContato'>Outras Formas de Contato</p>
           <div className="info-item">
             <FaMapMarkerAlt size={20} className="icon" />
             <p className='paragrafoContato'><strong>Endereço:</strong> Rua Exemplo, 123 - Bairro Legal, São Paulo - SP</p>
