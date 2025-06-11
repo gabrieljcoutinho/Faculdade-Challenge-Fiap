@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../CSS/Header/header.css';
 import '../CSS/Header/menu.css';
 
@@ -14,7 +14,7 @@ import settingsIcon from '../imgs/engrenagem.png';
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
+
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -26,10 +26,7 @@ const Header = () => {
     document.body.classList.remove('overlay-active');
   };
 
-  const openSettings = () => {
-    closeMenu();
-    navigate('/configuracoes');
-  };
+
 
   return (
     <header>

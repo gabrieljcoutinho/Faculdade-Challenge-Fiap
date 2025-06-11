@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../CSS/Settings/setting.css';
 import comandosImg from '../../imgs/comandos.png';
 import atendimentoImg from '../../imgs/atendimento.png';
-import MudarTema from '../../components/MudarTema'; // Importe o componente MudarTema
+
 
 const Configuracoes = () => {
   const navigate = useNavigate();
@@ -41,9 +41,7 @@ const Configuracoes = () => {
           </button>
 
 
-        <div className="mudarTema">
-                   <MudarTema />
-        </div>
+
 
           <div className="top-buttons">
             <button title="Logar" onClick={navegarParaLogin}>Log In</button>
