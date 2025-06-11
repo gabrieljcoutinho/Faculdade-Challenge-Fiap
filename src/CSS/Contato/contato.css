@@ -203,3 +203,10 @@
         /* Mantém o padding à direita */
     }
 }
+
+.subtitulo {
+    padding-left: 1rem;
+    text-transform: bold;
+    font-size: 22px;
+    text-align: center;
+}
