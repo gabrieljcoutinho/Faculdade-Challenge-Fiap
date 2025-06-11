@@ -51,7 +51,8 @@
     align-items: flex-end;
     /* alinhado à direita */
     width: 100%;
-    padding-top: 20rem;
+    padding-top: 0 /*MUDAR AQUI OS BOTOES DE LOGAR E DESLOGAR PARA FICAR BOM NO MEU CELL
+    */;
     padding-right: 10rem;
 }
 
