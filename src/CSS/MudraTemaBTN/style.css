@@ -1,7 +1,3 @@
-.divBtnMudarTema {
-    padding-left: 10rem;
-}
-
 .toggle-container {
     width: 65px;
     height: 36px;
@@ -43,4 +39,9 @@
 
 .btnMudarTema {
     padding-left: 10rem;
+}
+
+
+.componeteMudarTema {
+    padding-left: 8.5rem;
 }

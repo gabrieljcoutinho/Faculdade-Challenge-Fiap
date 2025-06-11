@@ -40,8 +40,9 @@ const Configuracoes = () => {
             <img src={atendimentoImg} alt="Comandos" className='imgComando' />
           </button>
 
-          {/* Componente para Mudar o Tema */}
-          <MudarTema /> {/* Adicione o componente MudarTema aqui */}
+        <div className='componeteMudarTema'>
+            <MudarTema />
+        </div>
 
           <div className="top-buttons">
             <button title="Logar" onClick={navegarParaLogin}>Log In</button>
