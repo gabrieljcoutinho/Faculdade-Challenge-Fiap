@@ -195,3 +195,292 @@ h1 {
         font-size: 0.95em;
     }
 }
+
+
+
+
+
+
+
+
+/* Estilos padrão (modo claro) */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.login-box {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-box h1 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.password-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-group input {
+    padding-right: 40px;
+    /* Espaço para o botão */
+}
+
+.password-toggle-button {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.login-button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+.or-separator {
+    position: relative;
+    text-align: center;
+    margin: 25px 0;
+}
+
+.or-separator span {
+    background-color: #ffffff;
+    padding: 0 10px;
+    color: #888;
+    position: relative;
+    z-index: 1;
+}
+
+.or-separator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #eee;
+    z-index: 0;
+}
+
+/* Estilos para os links (esqueceu senha, criar conta) */
+.links {
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+.links a {
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.links p {
+    color: #555;
+}
+
+/* Estilos da seção de informações (aside) */
+.login-info {
+    background-color: #e2f0fb;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 400px;
+    margin-left: 20px;
+    /* Espaçamento entre as caixas */
+    text-align: left;
+}
+
+.login-info h2 {
+    font-size: 1.8rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.login-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.login-info li {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.login-info li span {
+    margin-right: 10px;
+    font-size: 1.5rem;
+    /* Para os ícones emoji */
+}
+
+/* --------------------------------------------------------------------- */
+/* Estilos para o Modo Escuro */
+body.dark .login-container {
+    background-color: #121212;
+    /* Fundo mais escuro */
+}
+
+body.dark .login-box {
+    background-color: #1e1e1e;
+    /* Fundo da caixa de login */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .login-box h1,
+body.dark .input-group label {
+    color: #f0f0f0;
+    /* Cor do texto para títulos e labels */
+}
+
+body.dark .input-group input {
+    background-color: #2a2a2a;
+    /* Fundo dos inputs */
+    color: #f0f0f0;
+    /* Cor do texto digitado nos inputs */
+    border: 1px solid #444;
+}
+
+body.dark .input-group input::placeholder {
+    color: #b0b0b0;
+    /* Cor do placeholder */
+}
+
+body.dark .password-toggle-button {
+    color: #f0f0f0;
+    /* Cor do ícone de mostrar/esconder senha */
+}
+
+body.dark .login-button {
+    background-color: #0056b3;
+    /* Cor do botão de login no modo escuro */
+    color: #ffffff;
+}
+
+body.dark .login-button:hover {
+    background-color: #003d80;
+}
+
+body.dark .or-separator span {
+    background-color: #1e1e1e;
+    /* Fundo do texto "ou" */
+    color: #b0b0b0;
+}
+
+body.dark .or-separator::before {
+    border-top: 1px solid #333;
+    /* Cor da linha separadora */
+}
+
+body.dark .links a {
+    color: #80c0ff;
+    /* Cor dos links no modo escuro */
+}
+
+body.dark .links p {
+    color: #f0f0f0;
+    /* Cor do texto "Não tem conta?" */
+}
+
+body.dark .login-info {
+    background-color: #2a2a2a;
+    /* Fundo da seção de informações */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .login-info h2 {
+    color: #80c0ff;
+    /* Cor do título da seção de informações */
+}
+
+body.dark .login-info li {
+    color: #e0e0e0;
+    /* Cor do texto da lista de informações */
+}
+
+/* Ajustes para os botões sociais - os backgrounds são inline, então afetamos a cor do texto e SVG */
+body.dark .social-login-buttons button {
+    color: white;
+    /* Mantém a cor do texto branca */
+}
+
+body.dark .social-login-buttons button svg path {
+    /* Pode ser necessário ajustar a cor de preenchimento de SVGs individuais se eles não forem brancos */
+    /* Por exemplo, para o Google, a parte branca do 'G' não mudará, mas os preenchimentos coloridos sim. */
+    /* Você pode precisar de regras mais específicas se o SVG não for monochroático */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-info {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+}

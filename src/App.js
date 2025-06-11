@@ -134,8 +134,8 @@ function App() {
                         element={<Chat onConnectDevice={handleConnectDevice} productionData={productionData} />}
                     />
                     <Route path='/comandosChat' element={<ComandosChat />} />
-               <Route path="/esqueciSenha" element={<EsqueciSenha />} />
-               <Route path="/helpCenter" element={<HelpCenter />} />
+                   <Route path="/esqueciSenha" element={<EsqueciSenha />} />
+                   <Route path="/helpCenter" element={<HelpCenter />} />
                 </Routes>
                 <Footer />
             </BrowserRouter>

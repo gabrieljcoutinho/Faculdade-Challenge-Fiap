@@ -105,7 +105,7 @@ const Cadastro = () => {
         {successMessage && <div className="success-message animated">🎉 {successMessage}</div>}
 
         <div className="links">
-          <p>Já tem uma conta? <Link to="/login">Faça login</Link></p>
+          <p className='temConta'><Link to="/login">Já tem uma conta?  Faça login</Link></p>
         </div>
       </section>
 

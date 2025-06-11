@@ -139,3 +139,301 @@
         opacity: 1;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*MODO DARK*/
+
+/* Estilos padrão (modo claro) */
+.cadastro-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.cadastro-box {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.cadastro-box h1 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.cadastro-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.password-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-group input {
+    padding-right: 40px;
+    /* Espaço para o ícone do olho */
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #888;
+}
+
+.password-strength {
+    font-size: 0.85rem;
+    margin-top: 5px;
+    text-align: right;
+}
+
+.password-strength.fraca {
+    color: #dc3545;
+}
+
+.password-strength.media {
+    color: #ffc107;
+}
+
+.password-strength.forte {
+    color: #28a745;
+}
+
+.cadastro-button {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.cadastro-button:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.cadastro-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.success-message {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Links no cadastro */
+.links {
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+.links p {
+    color: #555;
+}
+
+.links a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+/* Seção de informações lateral */
+.cadastro-info {
+    background-color: #e2f0fb;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 400px;
+    margin-left: 20px;
+    text-align: left;
+}
+
+.cadastro-info h2 {
+    font-size: 1.8rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.cadastro-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.cadastro-info li {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: #444;
+}
+
+/* --------------------------------------------------------------------- */
+/* Estilos para o Modo Escuro */
+body.dark .cadastro-container {
+    background-color: #121212;
+    /* Fundo mais escuro para o container principal */
+}
+
+body.dark .cadastro-box {
+    background-color: #1e1e1e;
+    /* Fundo da caixa de cadastro */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .cadastro-box h1,
+body.dark .input-group label {
+    color: #f0f0f0;
+    /* Cor do texto para títulos e labels */
+}
+
+body.dark .input-group input {
+    background-color: #2a2a2a;
+    /* Fundo dos inputs */
+    color: #f0f0f0;
+    /* Cor do texto digitado nos inputs */
+    border: 1px solid #444;
+}
+
+body.dark .input-group input::placeholder {
+    color: #b0b0b0;
+    /* Cor do placeholder */
+}
+
+body.dark .password-toggle-icon {
+    color: #f0f0f0;
+    /* Cor do ícone de mostrar/esconder senha */
+}
+
+body.dark .password-strength.fraca {
+    color: #ff6b6b;
+}
+
+/* Vermelho mais suave no dark mode */
+body.dark .password-strength.media {
+    color: #ffd700;
+}
+
+/* Amarelo no dark mode */
+body.dark .password-strength.forte {
+    color: #fff;
+}
+
+/* Verde mais suave no dark mode */
+
+body.dark .cadastro-button {
+    background-color: #fff;
+    /* Cor do botão de cadastro no modo escuro */
+    color: #ffffff;
+}
+
+body.dark .cadastro-button:hover:not(:disabled) {
+    background-color: #fff;
+}
+
+body.dark .cadastro-button:disabled {
+    background-color: #444444;
+    color: #aaaaaa;
+}
+
+body.dark .success-message {
+    background-color: #fff;
+    color: #252525;
+    border: 1px solid #fff;
+}
+
+body.dark .links p {
+    color: #252525;
+    /* Cor do texto "Já tem uma conta?" */
+}
+
+body.dark .links a {
+    color: #80c0ff;
+    /* Cor dos links no modo escuro */
+}
+
+body.dark .cadastro-info {
+    background-color: #2a2a2a;
+    /* Fundo da seção de informações */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .cadastro-info h2 {
+    color: #80c0ff;
+    /* Cor do título da seção de informações */
+}
+
+body.dark .cadastro-info li {
+    color: #e0e0e0;
+    /* Cor do texto da lista de informações */
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .cadastro-container {
+        flex-direction: column;
+    }
+
+    .cadastro-info {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+}

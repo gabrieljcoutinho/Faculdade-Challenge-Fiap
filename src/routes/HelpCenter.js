@@ -43,12 +43,8 @@ const categorias = [
 const HelpCenter = () => {
   return (
     <div className="container">
-
-
       <h2>Categorias de Suporte</h2>
-
       <br /><br />
-
       <div className="categories">
         {categorias.map((cat, index) => (
           <div className="category" key={index}>

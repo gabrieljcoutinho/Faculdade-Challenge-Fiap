@@ -149,7 +149,7 @@ const Logar = () => {
 
         <div className="links">
           <Link to="/esqueciSenha">Esqueci minha senha</Link>
-          <p>Não tem conta? <Link to="/cadastro">Crie uma agora</Link></p>
+          <p><Link to="/cadastro"> Não tem conta? Crie uma agora</Link></p>
         </div>
       </section>
       <aside className="login-info">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../CSS/Settings/setting.css';
 import comandosImg from '../../imgs/comandos.png';
 import atendimentoImg from '../../imgs/atendimento.png';
+import MudarTema from '../../components/MudarTema'; // Importe o componente MudarTema
 
 const Configuracoes = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Configuracoes = () => {
     navigate('/comandosChat');
   };
 
-    const helpCenter = () => {
+  const helpCenter = () => {
     navigate('/helpCenter');
   };
 
@@ -29,26 +30,23 @@ const Configuracoes = () => {
       <div className="conteudo-configuracoes">
         <div className="btn-container">
 
-
-
+          {/* Botão para Comandos do Chat */}
           <button className="comando-btn" title='Comandos' onClick={comandosChat}>
             <img src={comandosImg} alt="Comandos" className='imgComando' />
           </button>
 
-
-
-           <button className="comando-btn" title='Comandos' onClick={helpCenter}>
+          {/* Botão para Central de Ajuda */}
+          <button className="comando-btn" title='Comandos' onClick={helpCenter}>
             <img src={atendimentoImg} alt="Comandos" className='imgComando' />
           </button>
 
+          {/* Componente para Mudar o Tema */}
+          <MudarTema /> {/* Adicione o componente MudarTema aqui */}
 
-
-        <div className="top-buttons">
+          <div className="top-buttons">
             <button title="Logar" onClick={navegarParaLogin}>Log In</button>
             <button title="Deslogar">Log out</button>
           </div>
-
-
 
         </div>
       </div>
