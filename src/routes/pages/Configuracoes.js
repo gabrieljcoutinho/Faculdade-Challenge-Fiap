@@ -40,8 +40,9 @@ const Configuracoes = () => {
             <img src={atendimentoImg} alt="Comandos" className='imgComando' />
           </button>
 
-        <div className='componeteMudarTema'>
-            <MudarTema />
+
+        <div className="mudarTema">
+                   <MudarTema />
         </div>
 
           <div className="top-buttons">
