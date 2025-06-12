@@ -44,8 +44,8 @@ const Configuracoes = () => {
 
 
           <div className="top-buttons">
-            <button title="Logar" onClick={navegarParaLogin}>Log In</button>
-            <button title="Deslogar">Log out</button>
+            <button title="Logar" onClick={navegarParaLogin}>Logar</button>
+            <button title="Deslogar">Deslogar</button>
           </div>
 
         </div>
