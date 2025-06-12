@@ -1,5 +1,4 @@
-/*CSS geral*/
-
+/* CSS geral */
 html,
 body,
 section,
@@ -38,4 +37,121 @@ ul {
 h1 {
   padding-top: 4rem;
   font-size: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Define cores padrão para light */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --btn-bg-color: #e0e0e0;
+  --btn-text-color: #000000;
+}
+
+/* Dark theme */
+[data-theme='dark'],
+.tipoGrafico {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --btn-bg-color: #333333;
+  --btn-text-color: #ffffff;
+}
+
+/* Use as variáveis */
+body,
+.tituloConexao {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.tipoGrafico,
+.tipoDoFundoConexao {
+  color: #000000;
+}
+
+button {
+  background-color: var(--btn-bg-color);
+  /* color: var(--btn-text-color); */
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Estilo padrão light */
+.contato-container {
+  background-color: #fff;
+  color: #222;
+}
+
+/* dark mode */
+.contato-container.dark {
+  background-color: #121212;
+  color: #ddd;
+}
+
+.contato-container input,
+.contato-container textarea {
+  background-color: #fff;
+  color: #222;
+  border: 1px solid #ccc;
+}
+
+.paragrafoContato {
+  color: #252525;
+}
+
+.paragrafoContatoTitulo {
+  color: #252525;
+  font-size: 25px;
+}
+
+/* Link redes sociais */
+.contato-container a {
+  color: inherit;
+  margin-right: 12px;
+}
+
+.contato-container.dark a:hover {
+  color: #1abc9c;
+}
+
+/* Estilo do título do Help Center com suporte a tema */
+.tituloHelpCenter {
+  color: var(--text-color);
 }

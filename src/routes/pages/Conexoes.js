@@ -114,7 +114,7 @@ const Conexoes = () => {
 
   return (
     <div className="conexao-container">
-      <h1>Aparelhos conectados</h1>
+      <h1 className='tituloConexao'>Aparelhos conectados</h1>
       <button className="add-button-styled" onClick={handleAddClick}>
         <span className="plus-icon">+</span> Adicionar Aparelho
       </button>
@@ -150,7 +150,7 @@ const Conexoes = () => {
               </div>
             </div>
             <div className="color-picker-styled">
-              <label>Escolha a cor de fundo:</label>
+              <label className='tipoDoFundoConexao'>Escolha a cor de fundo:</label>
               <div className="colors">
                 {availableColors.map((color) => (
                   <button

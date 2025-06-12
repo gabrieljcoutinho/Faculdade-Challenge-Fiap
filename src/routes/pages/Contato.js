@@ -1,10 +1,14 @@
-import React from 'react';
+// src/routes/pages/Contato.jsx
+import React, { useContext } from 'react';
 import '../../CSS/Contato/contato.css';
 import { FaInstagram, FaLinkedin, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
+import { ThemeContext } from '../../components/ThemeProvider';
 
 const Contato = () => {
+  const { theme } = useContext(ThemeContext);
+
   return (
-    <div className="contato-container">
+    <div className={`contato-container ${theme}`}>
       <div className="contato-header">
         <br />
       </div>
@@ -41,7 +45,7 @@ const Contato = () => {
         </form>
 
         <div className="contato-info">
-          <p className='paragrafoContato'>Outras Formas de Contato</p>
+          <p className='paragrafoContatoTitulo'>Outras Formas de Contato</p>
           <div className="info-item">
             <FaMapMarkerAlt size={20} className="icon" />
             <p className='paragrafoContato'><strong>Endereço:</strong> Rua Exemplo, 123 - Bairro Legal, São Paulo - SP</p>

@@ -172,7 +172,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                 <section className="production-section">
                     <h2 className='tituloPrincipalHome'>Produção Atual</h2>
                     <div className="chart-type-selector">
-                        <label>Tipo de Gráfico:</label>
+                        <label className='tipoGrafico'>Tipo de Gráfico:</label>
                         <div className="chart-buttons">
                             {['line', 'bar', 'pie'].map(type => (
                                 <button
@@ -197,20 +197,6 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                 </section>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 <section className="weather-forecast-section">
                     <h2>Clima e Previsão</h2>
                     <div className="weather-cards-container">
@@ -229,23 +215,6 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                         ))}
                     </div>
                 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
