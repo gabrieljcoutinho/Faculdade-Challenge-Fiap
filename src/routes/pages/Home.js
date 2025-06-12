@@ -196,6 +196,21 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                     </button>
                 </section>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <section className="weather-forecast-section">
                     <h2>Clima e Previsão</h2>
                     <div className="weather-cards-container">
@@ -214,6 +229,26 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                         ))}
                     </div>
                 </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <br /><br /><br /><br /><br />
             </main>
 
