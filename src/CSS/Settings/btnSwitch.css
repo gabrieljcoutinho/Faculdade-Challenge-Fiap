@@ -1,0 +1,112 @@
+/* --- Estilos para o Switch de Tema com Ícones no Handle --- */
+
+/* O container do switch e o texto, se houver */
+div[style*="margin-top: 20px"] {
+    /* Selecionador mais específico para não impactar outros divs */
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* O Switch em si (o trilho) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    /* Largura do switch */
+    height: 34px;
+    /* Altura do switch */
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* O Slider (o trilho) */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    /* Cor de fundo padrão (claro) */
+    transition: 0.4s;
+    border-radius: 34px;
+    /* Cantos arredondados */
+}
+
+/* A bolinha (handle) com o ícone dentro */
+.slider:before {
+    position: absolute;
+    content: "☀️";
+    /* Ícone de sol para o tema claro */
+    font-size: 1.2em;
+    /* Tamanho do ícone */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    /* Altura da bolinha */
+    width: 26px;
+    /* Largura da bolinha */
+    left: 4px;
+    /* Posição inicial */
+    bottom: 4px;
+    background-color: #fff;
+    /* Cor de fundo da bolinha (branco) */
+    transition: 0.4s;
+    border-radius: 50%;
+    color: #ffc107;
+    /* Cor do ícone do sol */
+}
+
+/* Quando o input está checado (modo escuro) */
+input:checked+.slider {
+    background-color: #2196F3;
+    /* Cor de fundo no modo escuro */
+}
+
+/* Move o handle para a direita e muda o ícone quando checado */
+input:checked+.slider:before {
+    transform: translateX(26px);
+    content: "🌙";
+    /* Ícone de lua para o tema escuro */
+    background-color: #444;
+    /* Cor de fundo da bolinha no dark mode */
+    color: #f0f0f0;
+    /* Cor do ícone da lua */
+}
+
+/* --- Estilos para o texto ao lado do switch (opcional) --- */
+.configuracoes-overlay span[style*="margin-left"] {
+    font-size: 1em;
+    color: #333;
+    /* Cor do texto no tema claro */
+}
+
+/* --- Ajustes para o Tema Escuro Geral (se sua aplicação usa a classe 'dark-theme') --- */
+
+/* Certifique-se de que o elemento pai (body ou um div principal) receba esta classe */
+.dark-theme .configuracoes-overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #f0f0f0;
+    /* Texto do overlay */
+}
+
+.dark-theme .fechar-btn {
+    color: #f0f0f0;
+}
+
+.dark-theme .comando-btn {
+    background-color: #444;
+    color: #f0f0f0;
+}
+
+/* Cor do texto ao lado do switch no tema escuro */
+.dark-theme .configuracoes-overlay span[style*="margin-left"] {
+    color: #f0f0f0;
+}

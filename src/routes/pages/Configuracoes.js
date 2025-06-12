@@ -1,7 +1,12 @@
 // src/routes/pages/Configuracoes.jsx
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+
 import '../../CSS/Settings/setting.css';
+import '../../CSS/Settings/btnSwitch.css';
+
+
 import comandosImg from '../../imgs/comandos.png';
 import atendimentoImg from '../../imgs/atendimento.png';
 import { ThemeContext } from '../../components/ThemeProvider';
