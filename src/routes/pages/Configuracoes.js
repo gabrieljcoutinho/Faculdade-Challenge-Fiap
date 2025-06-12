@@ -30,12 +30,12 @@ const Configuracoes = () => {
       <div className="conteudo-configuracoes">
         <div className="btn-container">
 
-          {/* Botão para Comandos do Chat */}
+
           <button className="comando-btn" title='Comandos' onClick={comandosChat}>
             <img src={comandosImg} alt="Comandos" className='imgComando' />
           </button>
 
-          {/* Botão para Central de Ajuda */}
+
           <button className="comando-btn" title='Comandos' onClick={helpCenter}>
             <img src={atendimentoImg} alt="Comandos" className='imgComando' />
           </button>
