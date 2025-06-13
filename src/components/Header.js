@@ -53,7 +53,16 @@ const Header = () => {
 
         <br /><br />
 
-        <div className='contato-configuracoes'> {/* Container para contato e configurações */}
+          <Link
+            to="/chat" // You'll need to define a route for your chat page
+            onClick={closeMenu}
+            className={`linkHeader ${location.pathname === '/chat' ? 'active' : ''}`}>
+            <p className='paragrafoListaHeader'> <img src={chatIcon} alt="Chat" className='iconesHeader' title='Chat' /></p>
+          </Link>
+          <br /><br />
+
+
+           <div className='contato-configuracoes'> {/* Container para contato e configurações */}
           <Link
             to="/contato"
             onClick={closeMenu}
@@ -62,14 +71,6 @@ const Header = () => {
           </Link>
 
 <br /><br />
-
-          <Link
-            to="/chat" // You'll need to define a route for your chat page
-            onClick={closeMenu}
-            className={`linkHeader ${location.pathname === '/chat' ? 'active' : ''}`}>
-            <p className='paragrafoListaHeader'> <img src={chatIcon} alt="Chat" className='iconesHeader' title='Chat' /></p>
-          </Link>
-          <br /><br />
 
           <Link
   to="/configuracoes"
