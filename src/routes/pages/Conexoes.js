@@ -36,13 +36,13 @@ const Conexoes = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [removingIndex, setRemovingIndex] = useState(null);
-  const [enteringIndex, setEnteringIndex] = useState(null);
+  const [enteringMap, setEnteringMap] = useState({});
 
   const availableIcons = [
     { name: 'TV', src: tvIcon },
     { name: 'Ar Condicionado', src: airConditionerIcon },
     { name: 'Lâmpada', src: lampIcon },
-    { name: 'Arfry', src: airfry },
+    { name: 'Airfry', src: airfry },
     { name: 'Carregador', src: carregador }
   ];
 
@@ -68,16 +68,29 @@ const Conexoes = () => {
       setErrorMessage(`Hummm, parece que já temos um aparelho chamado "${newConexion.text}" por aqui. Que tal escolher outro nome? 😊`);
       return;
     }
+
     if (editingIndex !== null) {
       const updated = [...conexions];
       updated[editingIndex] = newConexion;
       setConexions(updated);
     } else {
-      const newIndex = conexions.length;
-      setConexions([...conexions, newConexion]);
-      setEnteringIndex(newIndex);
-      setTimeout(() => setEnteringIndex(null), 300);
+      const newConexions = [...conexions, newConexion];
+      const newIndex = newConexions.length - 1;
+
+      // Adiciona novo item com efeito de entrada controlado por ID exclusivo
+      const id = Date.now();
+      setEnteringMap((prev) => ({ ...prev, [id]: true }));
+
+      setConexions(newConexions);
+      setTimeout(() => {
+        setEnteringMap((prev) => {
+          const updated = { ...prev };
+          delete updated[id];
+          return updated;
+        });
+      }, 300);
     }
+
     setShowAddForm(false);
   };
 
@@ -85,7 +98,7 @@ const Conexoes = () => {
     if (conexions[index].connected) {
       setRemovingIndex(index);
       setTimeout(() => {
-        setConexions(conexions.filter((_, i) => i !== index));
+        setConexions((prev) => prev.filter((_, i) => i !== index));
         setRemovingIndex(null);
       }, 300);
     }
@@ -126,7 +139,6 @@ const Conexoes = () => {
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <input
               type="text"
-              name="text"
               placeholder="Nome do Aparelho"
               value={newConexion.text}
               onChange={(e) => setNewConexion({ ...newConexion, text: e.target.value })}
@@ -177,31 +189,48 @@ const Conexoes = () => {
       )}
 
       <div className="conexions-list">
-        {conexions.map((c, index) => (
-          <div
-            key={index}
-            className={`retanguloAdicionado ${removingIndex === index ? 'exiting' : ''} ${enteringIndex === index ? 'entering' : (enteringIndex < index ? 'entered' : '')} relative`}
-            style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-          >
-            {!c.connected && <div className="disconnected-overlay">Desativado</div>}
-            <div className="icon-text-overlay">
-              <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-              <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
-            </div>
-            <div className="actions-overlay">
-              <button className="remove-button" onClick={() => removeConexion(index)} title="Remover" disabled={!c.connected} style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}>X</button>
-              <button className="edit-button" onClick={() => handleEditClick(index)} title="Editar" disabled={!c.connected} style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}>
-                <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
-              </button>
-              <div className="switch-container">
-                <label className="switch">
-                  <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
-                  <span className="slider round"></span>
-                </label>
+        {conexions.map((c, index) => {
+          const isRemoving = removingIndex === index;
+          const isEntering = enteringMap[c.text + c.icon + c.backgroundColor + index];
+
+          return (
+            <div
+              key={`${c.text}-${index}`}
+              className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''} ${isEntering ? 'entering' : ''}`}
+              style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+            >
+              {!c.connected && <div className="disconnected-overlay">Desativado</div>}
+              <div className="icon-text-overlay">
+                <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
+                <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
+              </div>
+              <div className="actions-overlay">
+                <button
+                  className="remove-button"
+                  onClick={() => removeConexion(index)}
+                  title="Remover"
+                  disabled={!c.connected}
+                  style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
+                >X</button>
+                <button
+                  className="edit-button"
+                  onClick={() => handleEditClick(index)}
+                  title="Editar"
+                  disabled={!c.connected}
+                  style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
+                >
+                  <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
+                </button>
+                <div className="switch-container">
+                  <label className="switch">
+                    <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
+                    <span className="slider round"></span>
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         <div style={{ height: '60px' }}></div>
       </div>
     </div>
