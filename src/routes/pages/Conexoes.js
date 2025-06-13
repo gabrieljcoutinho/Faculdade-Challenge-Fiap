@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { QRCodeCanvas } from 'qrcode.react'; // Biblioteca local para gerar QR Code
+
 import '../../CSS/Conexao/conexao.css';
 import '../../CSS/Conexao/mediaScreen.css';
 import '../../CSS/Conexao/edit.css';
@@ -10,12 +12,16 @@ import '../../CSS/Conexao/slideOut.css';
 import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
+import '../../CSS/Conexao/qrCode.css';
+
+
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
 import airfry from '../../imgs/airfry.png';
 import lampIcon from '../../imgs/lampada.png';
 import carregador from '../../imgs/carregador.png';
 import editIcon from '../../imgs/pencil.png';
+import imgQrcode from '../../imgs/qrCode.jpg'
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 
@@ -37,6 +43,7 @@ const Conexoes = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [removingIndex, setRemovingIndex] = useState(null);
   const [enteringMap, setEnteringMap] = useState({});
+  const [visibleQRCode, setVisibleQRCode] = useState(null); // Novo estado para o QR Code
 
   const availableIcons = [
     { name: 'TV', src: tvIcon },
@@ -77,7 +84,6 @@ const Conexoes = () => {
       const newConexions = [...conexions, newConexion];
       const newIndex = newConexions.length - 1;
 
-      // Adiciona novo item com efeito de entrada controlado por ID exclusivo
       const id = Date.now();
       setEnteringMap((prev) => ({ ...prev, [id]: true }));
 
@@ -199,6 +205,21 @@ const Conexoes = () => {
               className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''} ${isEntering ? 'entering' : ''}`}
               style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
             >
+              {c.connected && ( // Only show QR code button when connected
+                <div className="qrcode-top-left">
+                  <button
+                    className="qrcode-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setVisibleQRCode(index);
+                    }}
+                    title="Gerar QR Code"
+                  >
+                    <img src={imgQrcode} alt="QR Code" className='qrCodeAparelhoConectado' />
+                  </button>
+                </div>
+              )}
+
               {!c.connected && <div className="disconnected-overlay">Desativado</div>}
               <div className="icon-text-overlay">
                 <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
@@ -212,6 +233,8 @@ const Conexoes = () => {
                   disabled={!c.connected}
                   style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
                 >X</button>
+
+
                 <button
                   className="edit-button"
                   onClick={() => handleEditClick(index)}
@@ -221,6 +244,8 @@ const Conexoes = () => {
                 >
                   <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
                 </button>
+
+
                 <div className="switch-container">
                   <label className="switch">
                     <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
@@ -233,6 +258,26 @@ const Conexoes = () => {
         })}
         <div style={{ height: '60px' }}></div>
       </div>
+
+      {/* Overlay do QR Code */}
+      {visibleQRCode !== null && (
+        <div className="qrcode-overlay">
+          <button className="close-qrcode" onClick={() => setVisibleQRCode(null)}>X</button>
+          <QRCodeCanvas
+            value={`dispositivo_${conexions[visibleQRCode].text}`}
+            size={300}
+            bgColor="#ffffff"
+            fgColor="#000000"
+            level="H"
+            imageSettings={{
+              src: conexions[visibleQRCode].icon,
+              height: 40,
+              width: 40,
+              excavate: true,
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
