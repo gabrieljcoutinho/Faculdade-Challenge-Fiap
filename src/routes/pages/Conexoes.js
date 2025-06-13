@@ -31,7 +31,7 @@ const Conexoes = () => {
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true });
-  const [activeIcon, setActiveIcon] = useState('');
+  const [activeIcon, setActiveIcon] = useState(null);
   const [activeColor, setActiveColor] = useState(availableColors[0]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -53,7 +53,7 @@ const Conexoes = () => {
   const handleAddClick = () => {
     setShowAddForm(true);
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true });
-    setActiveIcon('');
+    setActiveIcon(null);
     setActiveColor(availableColors[0]);
     setEditingIndex(null);
     setErrorMessage('');

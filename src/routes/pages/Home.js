@@ -194,6 +194,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                     <button className="analyze-button" onClick={handleAnalyzeClick} disabled={isAnalyzing} style={{ marginTop: '35px' }}>
                         {isAnalyzing ? 'Analisando...' : 'Atualizar Produção'}
                     </button>
+
                 </section>
 
 
