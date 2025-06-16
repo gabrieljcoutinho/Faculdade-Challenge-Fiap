@@ -1,21 +1,19 @@
 // src/routes/pages/Contato.jsx
-import React, { useContext } from 'react';
+import React from 'react';
 import '../../CSS/Contato/contato.css';
 import { FaInstagram, FaLinkedin, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
-import { ThemeContext } from '../../components/ThemeProvider';
 
 const Contato = () => {
-  const { theme } = useContext(ThemeContext);
-
   return (
-    <div className={`contato-container ${theme}`}>
+    <div className="contato-container">
       <div className="contato-header">
         <br />
       </div>
 
       <div className="contato-wrapper">
         <form className="contato-form">
-          <h2 className='tituloContato'>Envie sua Mensagem</h2>
+          <h2 className="tituloContato">Envie sua Mensagem</h2>
+
           <div className="form-group">
             <label htmlFor="nome">Nome:</label>
             <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required />
@@ -45,18 +43,21 @@ const Contato = () => {
         </form>
 
         <div className="contato-info">
-          <p className='paragrafoContatoTitulo'>Outras Formas de Contato</p>
+          <p className="paragrafoContatoTitulo">Outras Formas de Contato</p>
+
           <div className="info-item">
             <FaMapMarkerAlt size={20} className="icon" />
-            <p className='paragrafoContato'><strong>Endereço:</strong> Rua Exemplo, 123 - Bairro Legal, São Paulo - SP</p>
+            <p className="paragrafoContato"><strong>Endereço:</strong> Rua Exemplo, 123 - Bairro Legal, São Paulo - SP</p>
           </div>
+
           <div className="info-item">
             <FaEnvelope size={20} className="icon" />
-            <p className='paragrafoContato' ><strong>Email:</strong> contato@exemplo.com.br</p>
+            <p className="paragrafoContato"><strong>Email:</strong> contato@exemplo.com.br</p>
           </div>
+
           <div className="info-item">
             <FaPhone size={20} className="icon" />
-            <p className='paragrafoContato'><strong>Telefone:</strong> (11) 98765-4321</p>
+            <p className="paragrafoContato"><strong>Telefone:</strong> (11) 98765-4321</p>
           </div>
 
           <div className="social-icons">

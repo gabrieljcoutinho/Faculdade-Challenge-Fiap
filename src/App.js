@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import './CSS/Reset.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Contexto de tema
-import { ThemeProvider } from '../src/components/ThemeProvider';
 
 // Components
 import Header from './components/Header';
@@ -115,7 +113,6 @@ function App() {
   };
 
   return (
-    <ThemeProvider>
       <div className="App">
         <BrowserRouter>
           <Header />
@@ -137,7 +134,6 @@ function App() {
           <Footer />
         </BrowserRouter>
       </div>
-    </ThemeProvider>
   );
 }
 
