@@ -215,7 +215,7 @@ const Conexoes = () => {
       {conexions.length === 0 ? (
         <div className="no-devices-container">
           <img src={connectDeviceImage} alt="Conectar aparelho" className="connect-device-image" />
-          <p className="connect-device-text">Conecte um  aparelho</p>
+          <p className="connect-device-text">Não há aparelhos conetados</p>
 
         </div>
       ) : (
