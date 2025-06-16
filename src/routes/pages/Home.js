@@ -22,8 +22,8 @@ ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, P
 
 // Home agora recebe 'productionData' e 'onUpdateProductionData' como props
 const Home = ({ productionData, onUpdateProductionData }) => {
-    // Define a paleta de cores para os gráficos
-    const chartColors = [
+    // Define a paleta de cores para os gráficos (agora mais específica para bar/pie)
+    const barPieChartColors = [
         '#87CEFA',
         '#87CEEB',
         '#ADD8E6',
@@ -147,19 +147,30 @@ const Home = ({ productionData, onUpdateProductionData }) => {
 
     // Adapta os dados de produção para o tipo de gráfico (principalmente para Pie e Bar)
     const getChartData = (type) => {
+        if (type === 'line') {
+            return {
+                labels: productionData.labels,
+                datasets: [{
+                    ...productionData.datasets[0], // Mantém as outras propriedades do dataset
+                    borderColor: "#1E90FF", // Cor da linha
+                    backgroundColor: "rgba(30, 144, 255, 0.2)", // Cor da área abaixo da linha
+                    fill: true, // Garante que a área abaixo da linha seja preenchida
+                }]
+            };
+        }
         if (type === 'bar' || type === 'pie') {
             return {
                 labels: productionData.labels,
                 datasets: [{
                     label: 'Produção (kWh)',
                     data: productionData.datasets[0].data,
-                    backgroundColor: chartColors, // Usa as cores definidas
+                    backgroundColor: barPieChartColors, // Usa as cores definidas para bar/pie
                     borderColor: '#fff',
                     borderWidth: 1,
                 }]
             };
         }
-        return productionData; // Para gráfico de linha, retorna os dados originais
+        return productionData; // Para outros casos, retorna os dados originais (embora só haja line, bar, pie)
     };
 
     // Mapeia o tipo de gráfico selecionado para o componente Chart.js correspondente
