@@ -145,7 +145,7 @@ const Conexoes = () => {
 
   return (
     <div className="conexao-container">
-      <h1 className='tituloConexao'>Aparelhos conectados</h1>
+      <h1 className='tituloConexao'>Aparelhos Conectados</h1>
       <button className="add-button-styled" onClick={handleAddClick}>
         <span className="plus-icon">+</span> Adicionar Aparelho
       </button>
