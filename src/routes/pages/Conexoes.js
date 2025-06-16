@@ -197,7 +197,11 @@ const Conexoes = () => {
               </div>
             </div>
             <div className="form-actions">
-              <button onClick={saveConexion} className="save-button-styled">
+              <button
+                onClick={saveConexion}
+                className="save-button-styled"
+                disabled={!newConexion.text || !newConexion.icon} // Botão desabilitado se nome ou ícone vazios
+              >
                 {editingIndex !== null ? 'Salvar Edição' : 'Salvar'}
               </button>
               <button onClick={() => setShowAddForm(false)} className="cancel-button-styled">Cancelar</button>
@@ -233,10 +237,12 @@ const Conexoes = () => {
               )}
 
               {!c.connected && <div className="disconnected-overlay">Desativado</div>}
+
               <div className="icon-text-overlay">
                 <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
                 <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
               </div>
+
               <div className="actions-overlay">
                 <button
                   className="remove-button"
@@ -244,7 +250,9 @@ const Conexoes = () => {
                   title="Remover"
                   disabled={!c.connected}
                   style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
-                >X</button>
+                >
+                  X
+                </button>
 
                 <button
                   className="edit-button"

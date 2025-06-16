@@ -203,25 +203,31 @@ const Home = ({ productionData, onUpdateProductionData }) => {
     const shareChart = useCallback((platform) => {
         if (!chartRef.current || !expandedChartType) return;
 
-        const imageUrl = chartRef.current.toBase64Image();
         const title = 'Gráfico de Produção Solar';
         const summary = 'Confira o gráfico de produção de energia solar.';
-
-        const encodedImageUrl = encodeURIComponent(imageUrl);
         const encodedTitle = encodeURIComponent(title);
         const encodedSummary = encodeURIComponent(summary);
 
         const actions = {
-            'email': () => window.open(`mailto:?subject=${encodedTitle}&body=${encodedSummary}\n\n<img src="${encodedImageUrl}" alt="Solar Production Chart">`, '_blank'),
-            'whatsapp': () => window.open(`https://wa.me/?text=${encodedSummary} ${encodedImageUrl}`, '_blank'),
-            'instagram': () => {
-                alert('Para compartilhar no Instagram, você precisa salvar a imagem e fazer o upload manualmente.');
-                handleSaveChart();
+            'email': () => {
+                alert('Para compartilhar por e-mail, por favor, salve o gráfico e anexe-o ao seu e-mail manualmente. A incorporação direta de imagens não é amplamente suportada.');
+                window.open(`mailto:?subject=${encodedTitle}&body=${encodedSummary}`, '_blank');
             },
-            'linkedin': () => window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodedImageUrl}&title=${encodedTitle}&summary=${encodedSummary}`, '_blank')
+            'whatsapp': () => {
+                alert('Para compartilhar no WhatsApp, você precisará salvar a imagem primeiro e depois anexá-la à sua conversa.');
+                window.open(`https://wa.me/?text=${encodedSummary}`, '_blank');
+            },
+            'instagram': () => {
+                alert('Para compartilhar no Instagram, você precisará salvar a imagem e fazer o upload manualmente através do aplicativo.');
+            },
+            'linkedin': () => {
+                alert('Para compartilhar no LinkedIn, você precisará salvar a imagem e fazer o upload manualmente, ou compartilhar um link para esta página se ela estiver online.');
+                // If you have a live URL for your app, you could share that instead:
+                // window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodedTitle}&summary=${encodedSummary}`, '_blank');
+            }
         };
         actions[platform]?.();
-    }, [expandedChartType, handleSaveChart]);
+    }, [expandedChartType]); // handleSaveChart removed from dependencies as it's not called by shareChart directly anymore
 
     // Adapts production data for different chart types
     const getChartData = useCallback((type) => {
