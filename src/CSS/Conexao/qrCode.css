@@ -6,7 +6,7 @@
     position: absolute;
     top: 5px;
     left: 5px;
-    z-index: 10;
+    z-index: 1;
 }
 
 .qrcode-button {
@@ -21,7 +21,7 @@
 .qrCodeAparelhoConectado {
     width: 30px;
     height: 30px;
-    /* Ensure consistent size */
+
 }
 
 .qrcode-overlay {
@@ -34,7 +34,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9;
+    z-index: 9999;
 }
 
 
