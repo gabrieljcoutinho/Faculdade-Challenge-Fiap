@@ -87,31 +87,14 @@ const Home = ({ productionData, onUpdateProductionData }) => {
         ...(type === 'pie' && { scales: {} }) // Gráfico de pizza não tem escalas X e Y
     });
 
-    // Função para gerar dados aleatórios para os gráficos
-    const generateRandomData = () => {
-        const dataLength = 7; // Quantidade de pontos de dados
-        const maxProduction = 40; // Valor máximo para a produção (ajuste conforme necessário)
-        const minProduction = 0; // Valor mínimo para a produção
-
-        // Gera um array de 7 números completamente aleatórios entre minProduction e maxProduction
-        const randomData = Array.from({ length: dataLength }, () =>
-            Math.floor(Math.random() * (maxProduction - minProduction + 1)) + minProduction
-        );
-        return randomData;
-    };
-
     // Handler para o clique no botão "Atualizar Produção"
     const handleAnalyzeClick = () => {
         setState(prev => ({ ...prev, isAnalyzing: true })); // Ativa o estado de análise
         setTimeout(() => {
-            const newData = {
-                ...productionData,
-                datasets: [{
-                    ...productionData.datasets[0],
-                    data: generateRandomData() // Gera novos dados totalmente aleatórios
-                }]
-            };
-            onUpdateProductionData(newData); // Chama a prop para atualizar o estado global no componente pai
+            // Here you would typically fetch new production data from an API
+            // For now, we are just simulating an "update" without changing the data
+            // If you need new data, it should be passed down via props or fetched here
+            onUpdateProductionData(productionData); // Re-calls the prop, ensuring parent knows an update was "attempted"
             setState(prev => ({ ...prev, isAnalyzing: false })); // Desativa o estado de análise
         }, 2000); // Simula um tempo de processamento
     };
