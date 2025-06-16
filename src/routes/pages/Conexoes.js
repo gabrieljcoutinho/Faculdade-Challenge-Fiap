@@ -13,6 +13,7 @@ import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
+import '../../CSS/Conexao/imgAntesDeConectarAparelho.css';
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -21,6 +22,7 @@ import lampIcon from '../../imgs/lampada.png';
 import carregador from '../../imgs/carregador.png';
 import editIcon from '../../imgs/pencil.png';
 import imgQrcode from '../../imgs/qrCode.png';
+import connectDeviceImage from '../../imgs/imgConectarAppAntesdeSairDaTela.png'; // Adicione esta imagem
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 
@@ -200,7 +202,7 @@ const Conexoes = () => {
               <button
                 onClick={saveConexion}
                 className="save-button-styled"
-                disabled={!newConexion.text || !newConexion.icon} // Botão desabilitado se nome ou ícone vazios
+                disabled={!newConexion.text || !newConexion.icon}
               >
                 {editingIndex !== null ? 'Salvar Edição' : 'Salvar'}
               </button>
@@ -210,72 +212,80 @@ const Conexoes = () => {
         </div>
       )}
 
-      <div className="conexions-list">
-        {conexions.map((c, index) => {
-          const isRemoving = removingIndex === index;
-          const isEntering = enteringMap[c.text + c.icon + c.backgroundColor + index];
+      {conexions.length === 0 ? (
+        <div className="no-devices-container">
+          <img src={connectDeviceImage} alt="Conectar aparelho" className="connect-device-image" />
+          <p className="connect-device-text">Conecte um  aparelho</p>
 
-          return (
-            <div
-              key={`${c.text}-${index}`}
-              className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''} ${isEntering ? 'entering' : ''}`}
-              style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-            >
-              {c.connected && (
-                <div className="qrcode-top-left">
+        </div>
+      ) : (
+        <div className="conexions-list">
+          {conexions.map((c, index) => {
+            const isRemoving = removingIndex === index;
+            const isEntering = enteringMap[c.text + c.icon + c.backgroundColor + index];
+
+            return (
+              <div
+                key={`${c.text}-${index}`}
+                className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''} ${isEntering ? 'entering' : ''}`}
+                style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+              >
+                {c.connected && (
+                  <div className="qrcode-top-left">
+                    <button
+                      className="qrcode-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setVisibleQRCode(index);
+                      }}
+                      title="Gerar QR Code"
+                    >
+                      <img src={imgQrcode} alt="QR Code" className='qrCodeAparelhoConectado' />
+                    </button>
+                  </div>
+                )}
+
+                {!c.connected && <div className="disconnected-overlay">Desativado</div>}
+
+                <div className="icon-text-overlay">
+                  <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
+                  <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
+                </div>
+
+                <div className="actions-overlay">
                   <button
-                    className="qrcode-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setVisibleQRCode(index);
-                    }}
-                    title="Gerar QR Code"
+                    className="remove-button"
+                    onClick={() => removeConexion(index)}
+                    title="Remover"
+                    disabled={!c.connected}
+                    style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
                   >
-                    <img src={imgQrcode} alt="QR Code" className='qrCodeAparelhoConectado' />
+                    X
                   </button>
-                </div>
-              )}
 
-              {!c.connected && <div className="disconnected-overlay">Desativado</div>}
+                  <button
+                    className="edit-button"
+                    onClick={() => handleEditClick(index)}
+                    title="Editar"
+                    disabled={!c.connected}
+                    style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
+                  >
+                    <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
+                  </button>
 
-              <div className="icon-text-overlay">
-                <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-                <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
-              </div>
-
-              <div className="actions-overlay">
-                <button
-                  className="remove-button"
-                  onClick={() => removeConexion(index)}
-                  title="Remover"
-                  disabled={!c.connected}
-                  style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
-                >
-                  X
-                </button>
-
-                <button
-                  className="edit-button"
-                  onClick={() => handleEditClick(index)}
-                  title="Editar"
-                  disabled={!c.connected}
-                  style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
-                >
-                  <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
-                </button>
-
-                <div className="switch-container">
-                  <label className="switch">
-                    <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
-                    <span className="slider round"></span>
-                  </label>
+                  <div className="switch-container">
+                    <label className="switch">
+                      <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
+                      <span className="slider round"></span>
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-        <div style={{ height: '60px' }}></div>
-      </div>
+            );
+          })}
+          <div style={{ height: '60px' }}></div>
+        </div>
+      )}
 
       {visibleQRCode !== null && (
         <div className="qrcode-overlay">
