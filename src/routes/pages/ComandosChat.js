@@ -5,7 +5,7 @@ const ComandosChat = () => {
   return (
     <div className="comandos-page-wrapper"> {/* Added a wrapper for consistent padding/margin */}
     <br /><br /><br />
-      <h3 className="comando-header">📢 Comandos no Chat</h3>
+      <h3 className="comando-header">📢 Comandos do Chat</h3>
 
       <div className="comandos-container">
         <p className="comandos-description">
