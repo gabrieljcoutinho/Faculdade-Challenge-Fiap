@@ -20,7 +20,7 @@ import airfry from '../../imgs/airfry.png';
 import lampIcon from '../../imgs/lampada.png';
 import carregador from '../../imgs/carregador.png';
 import editIcon from '../../imgs/pencil.png';
-import imgQrcode from '../../imgs/qrCode.jpg';
+import imgQrcode from '../../imgs/qrCode.png';
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 
