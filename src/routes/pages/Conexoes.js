@@ -59,13 +59,16 @@ const Conexoes = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const aparelhoParaAdicionar = params.get('add');
-    if (aparelhoParaAdicionar) {
+    const icon = params.get('icon');
+    const bg = params.get('bg');
+
+    if (aparelhoParaAdicionar && icon && bg) {
       const jaExiste = conexions.some(c => c.text.toLowerCase() === aparelhoParaAdicionar.toLowerCase());
       if (!jaExiste) {
         const novo = {
-          text: aparelhoParaAdicionar,
-          icon: tvIcon,
-          backgroundColor: availableColors[0],
+          text: decodeURIComponent(aparelhoParaAdicionar),
+          icon: decodeURIComponent(icon),
+          backgroundColor: decodeURIComponent(bg),
           connected: true
         };
         setConexions(prev => [...prev, novo]);
@@ -273,7 +276,7 @@ const Conexoes = () => {
         <div className="qrcode-overlay">
           <button className="close-qrcode" onClick={() => setVisibleQRCode(null)}>X</button>
           <QRCodeCanvas
-            value={`https://challenge-fiap-nine.vercel.app/conexoes?add=${encodeURIComponent(conexions[visibleQRCode].text)}`}
+            value={`https://challenge-fiap-nine.vercel.app/conexoes?add=${encodeURIComponent(conexions[visibleQRCode].text)}&icon=${encodeURIComponent(conexions[visibleQRCode].icon)}&bg=${encodeURIComponent(conexions[visibleQRCode].backgroundColor)}`}
             size={300}
             bgColor="#ffffff"
             fgColor="#000000"
