@@ -6,7 +6,6 @@
     justify-content: flex-start;
     width: 100%;
     box-sizing: border-box;
-    height: 100%;
 
 }
 
@@ -43,6 +42,7 @@ h1 {
     position: relative;
     width: 255px;
     height: 110px;
+    /*altura da vid adicioando o aprelho*/
     background-color: #e0e0e0;
     /* Cor de fundo padrão */
     margin: 0;
