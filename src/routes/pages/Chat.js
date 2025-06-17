@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { marked } from 'marked'; // Certifique-se de que 'marked' está instalado
+import { marked } from 'marked';
 import '../../CSS/Chat/chat.css';
 import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
 
-// Importe o JSON de comandos
-import comandosData from '../../data/commands.json'; // Verifique o caminho correto do seu commands.json
+import comandosData from '../../data/commands.json';
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
@@ -21,13 +20,12 @@ const modePrompts = {
 
 const normalizeText = (text) => text.trim().toLowerCase();
 
-// O componente Chat agora recebe productionData como uma prop
 const Chat = ({ onConnectDevice, productionData }) => {
     const [mode, setMode] = useState('profissional');
-    // Mude a inicialização do estado `messages` para um array vazio
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [firstInteraction, setFirstInteraction] = useState(true);
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -40,8 +38,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
         }
 
         const labels = data.labels;
-        const productionValues = data.datasets[0].data; // Assumindo que o primeiro dataset é a produção
-
+        const productionValues = data.datasets[0].data;
         let response = "Produção de energia solar:\n\n";
         response += "| Hora | Produção (k/Wh) |\n";
         response += "|------|----------------|\n";
@@ -63,18 +60,17 @@ const Chat = ({ onConnectDevice, productionData }) => {
         const texto = newMessage.trim();
         if (!texto) return;
 
+        if (firstInteraction) setFirstInteraction(false);
+
         const textoNormalizado = normalizeText(texto);
 
-        // Adiciona a mensagem do usuário imediatamente ao estado
         setMessages(prev => [...prev, { role: 'user', content: texto }]);
         setNewMessage('');
         setLoading(true);
 
-        // --- Lógica para comandos locais (conexão e análise de gráfico) ---
         let handledByLocalCommand = false;
         let botResponseContent = '';
 
-        // 1. Lógica para Comandos de Conexão de Dispositivos
         const connectionCommands = [
             { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão'] },
             { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado'] },
@@ -91,12 +87,10 @@ const Chat = ({ onConnectDevice, productionData }) => {
                 const normalizedTrigger = normalizeText(trigger);
                 if (textoNormalizado.startsWith(normalizedTrigger)) {
                     deviceToConnect = cmd.type;
-                    // Tenta extrair um nome personalizado após o gatilho
                     customDeviceName = texto.substring(trigger.length).trim();
                     if (customDeviceName === '') {
                         customDeviceName = deviceToConnect;
                     } else {
-                        // Capitaliza a primeira letra do nome personalizado, se houver
                         customDeviceName = customDeviceName.charAt(0).toUpperCase() + customDeviceName.slice(1);
                     }
                     break;
@@ -109,28 +103,26 @@ const Chat = ({ onConnectDevice, productionData }) => {
             if (typeof onConnectDevice === 'function') {
                 onConnectDevice(deviceToConnect, customDeviceName);
             }
-            // Encontra a resposta padrão do JSON para o comando de conexão, se existir
+
             const connectionCommandInJson = comandosData.comandos.find(cmd =>
                 cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
             );
-            if (connectionCommandInJson) {
-                botResponseContent = connectionCommandInJson.resposta;
-            } else {
-                botResponseContent = `${customDeviceName} Conectado.`;
-            }
+
+            botResponseContent = connectionCommandInJson
+                ? connectionCommandInJson.resposta
+                : `${customDeviceName} Conectado.`;
+
             handledByLocalCommand = true;
         } else {
-            // 2. Lógica para Outros Comandos Locais (incluindo "Analisar gráfico")
             const comandoEncontrado = comandosData.comandos.find(cmd =>
                 cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
             );
 
             if (comandoEncontrado) {
-                if (comandoEncontrado.resposta === 'PRODUCAO_GRAFICO') {
-                    botResponseContent = formatProductionData(productionData);
-                } else {
-                    botResponseContent = comandoEncontrado.resposta;
-                }
+                botResponseContent =
+                    comandoEncontrado.resposta === 'PRODUCAO_GRAFICO'
+                        ? formatProductionData(productionData)
+                        : comandoEncontrado.resposta;
                 handledByLocalCommand = true;
             }
         }
@@ -139,11 +131,10 @@ const Chat = ({ onConnectDevice, productionData }) => {
             setTimeout(() => {
                 setMessages(prev => [...prev, { role: 'assistant', content: botResponseContent }]);
                 setLoading(false);
-            }, 500); // Pequeno atraso para simular o "processamento"
+            }, 500);
             return;
         }
 
-        // --- Se não for um comando local, envia para a API Gemini ---
         if (!GEMINI_API_KEY) {
             setMessages(prev => [...prev, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
             setLoading(false);
@@ -151,15 +142,14 @@ const Chat = ({ onConnectDevice, productionData }) => {
         }
 
         try {
-            // Prepara as mensagens para a API Gemini, incluindo o prompt de modo
             const geminiMessages = [
                 { role: 'user', parts: [{ text: modePrompts[mode] }] },
-                { role: 'model', parts: [{ text: "Ok, entendi. Como posso ajudar?" }] }, // Resposta inicial do bot para o prompt de modo
-                ...messages.map(msg => ({ // Adiciona as mensagens anteriores (exceto a do sistema)
+                { role: 'model', parts: [{ text: "Ok, entendi. Como posso ajudar?" }] },
+                ...messages.map(msg => ({
                     role: msg.role === 'user' ? 'user' : 'model',
                     parts: [{ text: msg.content }]
                 })),
-                { role: 'user', parts: [{ text: texto }] } // Adiciona a mensagem atual do usuário
+                { role: 'user', parts: [{ text: texto }] }
             ];
 
             const payload = {
@@ -232,7 +222,16 @@ const Chat = ({ onConnectDevice, productionData }) => {
             </div>
 
             <div className="message-display-area">
-                {/* Filtra mensagens com role 'system' que são usadas apenas para o prompt da API */}
+                {firstInteraction && (
+                   <div className="movimentoDaDiv">
+                      <div className="messageBot">
+                        <span className="message-bubble">
+                            💡 Digite <strong>Comandos</strong> para receber comandos específicos do site.
+                        </span>
+                    </div>
+                   </div>
+                )}
+
                 {messages.filter(msg => msg.role !== 'system').map((message, index) => (
                     <div
                         key={index}
@@ -240,13 +239,15 @@ const Chat = ({ onConnectDevice, productionData }) => {
                     >
                         <span
                             className="message-bubble"
-                            // Usa dangerouslySetInnerHTML para renderizar markdown do bot
                             dangerouslySetInnerHTML={{
-                                __html: message.role === 'assistant' ? marked.parse(message.content) : message.content
+                                __html: message.role === 'assistant'
+                                    ? marked.parse(message.content)
+                                    : message.content
                             }}
                         />
                     </div>
                 ))}
+
                 {loading && (
                     <div className="message bot">
                         <span className="message-bubble">Digitando...</span>
