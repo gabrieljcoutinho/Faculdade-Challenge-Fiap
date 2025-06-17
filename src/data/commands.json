@@ -112,7 +112,8 @@
         "comandos ?",
         "comandos?"
       ],
-      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia."
+      "resposta":
+      "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n\n Caso preferir, acesse as configurações e clique no ícone de um papel e lápis no qual terá todos os comandos detalhados."
     }
   ]
 }
