@@ -16,6 +16,7 @@ import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
 import '../../CSS/Conexao/imgAntesDeConectarAparelho.css';
 import '../../CSS/Conexao/chatAnimation.css'; // New CSS for chat-added animation
+import '../../CSS/Conexao/deviceDetailsModal.css'; // New CSS for device details modal
 
 // Importing images for icons and UI elements
 import tvIcon from '../../imgs/TV.png';
@@ -52,6 +53,12 @@ const Conexoes = () => {
     return icon ? icon.id : 'tv'; // Default to 'tv' if not found
   };
 
+  // Helper to find icon name by its src (new helper)
+  const getIconNameBySrc = (iconSrc) => {
+    const icon = availableIcons.find(i => i.src === iconSrc);
+    return icon ? icon.name : 'Desconhecido';
+  };
+
   // State to manage the list of connected devices
   const [conexions, setConexions] = useState(() => {
     try {
@@ -59,7 +66,13 @@ const Conexoes = () => {
       // Ensure stored connections use a valid icon src if coming from old format
       return Array.isArray(stored) ? stored.map(c => ({
         ...c,
-        icon: getIconSrcById(getIconIdBySrc(c.icon)) // Re-map to ensure valid src
+        icon: getIconSrcById(getIconIdBySrc(c.icon)), // Re-map to ensure valid src
+        connectedDate: c.connectedDate || new Date().toISOString(), // Ensure connectedDate exists
+        // Initialize lastStatusChange for existing items if it doesn't exist
+        lastStatusChange: c.lastStatusChange || new Date().toISOString(),
+        // Initialize connectedDuration and disconnectedDuration
+        connectedDuration: c.connectedDuration || 0,
+        disconnectedDuration: c.disconnectedDuration || 0
       })) : [];
     } catch {
       return [];
@@ -69,7 +82,7 @@ const Conexoes = () => {
   // State to control the visibility of the add/edit form
   const [showAddForm, setShowAddForm] = useState(false);
   // State for the new device being added or edited
-  const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true });
+  const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: '', lastStatusChange: '', connectedDuration: 0, disconnectedDuration: 0 });
   // State to track the active icon selected in the form (now uses src directly for display)
   const [activeIcon, setActiveIcon] = useState(null);
   // State to track the active background color selected in the form
@@ -86,6 +99,8 @@ const Conexoes = () => {
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   // New state to track the ID of a device added via chat (URL parameter)
   const [chatAddedDevice, setChatAddedDevice] = useState(null);
+  // NEW STATE: To manage the visibility and content of the device details modal
+  const [showDeviceDetails, setShowDeviceDetails] = useState(null); // Will hold the device object when open, null when closed
 
   // Effect to save connections to localStorage whenever `conexions` changes
   useEffect(() => {
@@ -111,6 +126,7 @@ const Conexoes = () => {
           ? bgColorParaAdicionar
           : availableColors[0]; // Default color
 
+        const now = new Date().toISOString();
         // Create a new device object with a unique ID and chat-added flag
         const novo = {
           id: Date.now(), // Assign a unique ID for React keys and animation tracking
@@ -118,7 +134,11 @@ const Conexoes = () => {
           icon: iconSrc, // Use the extracted or default icon src
           backgroundColor: finalBgColor, // Use the extracted or default background color
           connected: true,
-          addedViaChat: true // Flag to indicate it was added via chat
+          addedViaChat: true, // Flag to indicate it was added via chat
+          connectedDate: now, // Store the current date and time
+          lastStatusChange: now, // Initialize last status change to now
+          connectedDuration: 0, // Initialize connected duration
+          disconnectedDuration: 0 // Initialize disconnected duration
         };
         setConexions(prev => [...prev, novo]);
         setChatAddedDevice(novo.id); // Set the ID of the newly chat-added device
@@ -135,12 +155,14 @@ const Conexoes = () => {
   // Handles click on the "Add Device" button
   const handleAddClick = () => {
     setShowAddForm(true); // Show the add form
-    setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true }); // Reset new connection state
+    const now = new Date().toISOString();
+    setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: now, lastStatusChange: now, connectedDuration: 0, disconnectedDuration: 0 }); // Reset new connection state and set current date
     setActiveIcon(null); // Reset active icon
     setActiveColor(availableColors[0]); // Reset active color
     setEditingIndex(null); // Clear editing index
     setErrorMessage(''); // Clear any previous error messages
     setChatAddedDevice(null); // Reset chat-added device when manually adding
+    setShowDeviceDetails(null); // Ensure details modal is closed
   };
 
   // Saves a new or edited connection
@@ -159,11 +181,26 @@ const Conexoes = () => {
     if (editingIndex !== null) {
       // If editing an existing connection
       const updated = [...conexions];
-      updated[editingIndex] = newConexion;
+      updated[editingIndex] = {
+        ...newConexion,
+        connectedDate: updated[editingIndex].connectedDate || new Date().toISOString(),
+        lastStatusChange: updated[editingIndex].lastStatusChange || new Date().toISOString(),
+        connectedDuration: updated[editingIndex].connectedDuration || 0,
+        disconnectedDuration: updated[editingIndex].disconnectedDuration || 0
+      }; // Preserve existing date or add new
       setConexions(updated);
     } else {
       // If adding a new connection
-      const newDevice = { ...newConexion, id: Date.now(), addedViaChat: false }; // Assign unique ID and mark as not chat-added
+      const now = new Date().toISOString();
+      const newDevice = {
+        ...newConexion,
+        id: Date.now(),
+        addedViaChat: false,
+        connectedDate: now,
+        lastStatusChange: now, // Set initial last status change
+        connectedDuration: 0,
+        disconnectedDuration: 0
+      }; // Assign unique ID and mark as not chat-added, set current date
       setConexions((prev) => [...prev, newDevice]); // Add to the list
       setEnteringMap((prev) => ({ ...prev, [newDevice.id]: true })); // Trigger 'entering' animation for this new device
       // Remove the 'entering' class after animation completes
@@ -187,6 +224,7 @@ const Conexoes = () => {
       setTimeout(() => {
         setConexions((prev) => prev.filter((_, i) => i !== index));
         setRemovingIndex(null);
+        setShowDeviceDetails(null); // Close details modal if the removed device was being viewed
       }, 300);
     }
   };
@@ -201,7 +239,11 @@ const Conexoes = () => {
         text: c.text,
         icon: c.icon,
         backgroundColor: c.backgroundColor || availableColors[0],
-        connected: c.connected !== undefined ? c.connected : true
+        connected: c.connected !== undefined ? c.connected : true,
+        connectedDate: c.connectedDate || new Date().toISOString(), // Ensure date is carried over
+        lastStatusChange: c.lastStatusChange || new Date().toISOString(),
+        connectedDuration: c.connectedDuration || 0,
+        disconnectedDuration: c.disconnectedDuration || 0
       });
       setActiveIcon(c.icon); // Set active icon in picker
       setActiveColor(c.backgroundColor || availableColors[0]); // Set active color in picker
@@ -209,12 +251,68 @@ const Conexoes = () => {
       setEditingIndex(index); // Set editing index
       setErrorMessage(''); // Clear any previous error messages
       setChatAddedDevice(null); // Reset chat-added device when editing
+      setShowDeviceDetails(null); // Ensure details modal is closed
     }
   };
 
   // Toggles the connection status of a device
   const toggleConnection = (index) => {
-    setConexions(conexions.map((c, i) => i === index ? { ...c, connected: !c.connected } : c));
+    setConexions(prevConexions => prevConexions.map((c, i) => {
+      if (i === index) {
+        const now = Date.now();
+        const duration = now - new Date(c.lastStatusChange).getTime();
+
+        return {
+          ...c,
+          connected: !c.connected,
+          lastStatusChange: new Date(now).toISOString(),
+          connectedDuration: c.connected ? c.connectedDuration + duration : c.connectedDuration,
+          disconnectedDuration: !c.connected ? c.disconnectedDuration + duration : c.disconnectedDuration
+        };
+      }
+      return c;
+    }));
+  };
+
+  // NEW HANDLER: To show device details
+  const handleDeviceCardClick = (device) => {
+    // Only show details if the device is connected
+    if (device.connected) {
+      setShowDeviceDetails(device);
+    }
+  };
+
+  // Helper to format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  // Helper to format duration for display
+  const formatDuration = (milliseconds) => {
+    if (milliseconds === undefined || milliseconds === null) return 'N/A';
+
+    const seconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+      return `${days} dia${days > 1 ? 's' : ''}, ${hours % 24} hora${(hours % 24) !== 1 ? 's' : ''}`;
+    } else if (hours > 0) {
+      return `${hours} hora${hours > 1 ? 's' : ''}, ${minutes % 60} minuto${(minutes % 60) !== 1 ? 's' : ''}`;
+    } else if (minutes > 0) {
+      return `${minutes} minuto${minutes > 1 ? 's' : ''}, ${seconds % 60} segundo${(seconds % 60) !== 1 ? 's' : ''}`;
+    } else {
+      return `${seconds} segundo${seconds !== 1 ? 's' : ''}`;
+    }
   };
 
   return (
@@ -308,6 +406,7 @@ const Conexoes = () => {
                 key={c.id || `${c.text}-${index}`} // Use unique ID as key for better list performance
                 className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''} ${isEntering ? 'entering' : ''} ${isChatAdded ? 'entering-from-chat' : ''}`}
                 style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+                onClick={() => handleDeviceCardClick(c)} // NEW: Click handler for the device card
               >
                 {/* QR Code Button (visible only if connected) */}
                 {c.connected && (
@@ -338,7 +437,7 @@ const Conexoes = () => {
                 <div className="actions-overlay">
                   <button
                     className="remove-button"
-                    onClick={() => removeConexion(index)}
+                    onClick={(e) => { e.stopPropagation(); removeConexion(index); }} // Prevent card click
                     title="Remover"
                     disabled={!c.connected} // Disable if disconnected
                     style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
@@ -348,7 +447,7 @@ const Conexoes = () => {
 
                   <button
                     className="edit-button"
-                    onClick={() => handleEditClick(index)}
+                    onClick={(e) => { e.stopPropagation(); handleEditClick(index); }} // Prevent card click
                     title="Editar"
                     disabled={!c.connected} // Disable if disconnected
                     style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
@@ -356,7 +455,7 @@ const Conexoes = () => {
                     <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
                   </button>
 
-                  <div className="switch-container">
+                  <div className="switch-container" onClick={(e) => e.stopPropagation()}> {/* Prevent card click */}
                     <label className="switch">
                       <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
                       <span className="slider round"></span>
@@ -388,6 +487,50 @@ const Conexoes = () => {
               excavate: true,
             }}
           />
+        </div>
+      )}
+
+      {/* NEW: Device Details Modal */}
+      {showDeviceDetails && (
+        <div className="modal-overlay">
+          <div className="device-details-modal">
+            <button className="close-details-modal" onClick={() => setShowDeviceDetails(null)}>X</button>
+            <h2>Detalhes do Aparelho</h2>
+            <div className="details-content">
+              <div className="detail-item">
+                <span className="detail-label">Nome:</span>
+                <span className="detail-value">{showDeviceDetails.text}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Tipo:</span>
+                <span className="detail-value">{getIconNameBySrc(showDeviceDetails.icon)}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Conectado em:</span>
+                <span className="detail-value">{formatDate(showDeviceDetails.connectedDate)}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Tempo Conectado:</span>
+                <span className="detail-value">
+                  {formatDuration(
+                    showDeviceDetails.connected
+                      ? showDeviceDetails.connectedDuration + (Date.now() - new Date(showDeviceDetails.lastStatusChange).getTime())
+                      : showDeviceDetails.connectedDuration
+                  )}
+                </span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Tempo Desconectado:</span>
+                <span className="detail-value">
+                  {formatDuration(
+                    !showDeviceDetails.connected
+                      ? showDeviceDetails.disconnectedDuration + (Date.now() - new Date(showDeviceDetails.lastStatusChange).getTime())
+                      : showDeviceDetails.disconnectedDuration
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
