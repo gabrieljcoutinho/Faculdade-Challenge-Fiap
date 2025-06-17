@@ -142,12 +142,13 @@ const Conexoes = () => {
         };
         setConexions(prev => [...prev, novo]);
         setChatAddedDevice(novo.id); // Set the ID of the newly chat-added device
-        // Optionally, remove the 'add', 'iconId', and 'bgColor' parameters from the URL after processing
-        // const newUrl = new URL(window.location.href);
-        // newUrl.searchParams.delete('add');
-        // newUrl.searchParams.delete('iconId');
-        // newUrl.searchParams.delete('bgColor');
-        // window.history.replaceState({}, document.title, newUrl.toString());
+
+        // IMPORTANT: Remove the 'add', 'iconId', and 'bgColor' parameters from the URL after processing
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete('add');
+        newUrl.searchParams.delete('iconId');
+        newUrl.searchParams.delete('bgColor');
+        window.history.replaceState({}, document.title, newUrl.toString());
       }
     }
   }, [conexions]); // Added conexions to dependency array to re-run effect if connections change (e.g., manual add)
