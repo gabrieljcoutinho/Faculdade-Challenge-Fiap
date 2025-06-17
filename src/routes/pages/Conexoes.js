@@ -31,11 +31,36 @@ import connectDeviceImage from '../../imgs/imgConectarAppAntesdeSairDaTela.png';
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 
 const Conexoes = () => {
+  // Array of available icons for devices with a unique 'id'
+  const availableIcons = [
+    { id: 'tv', name: 'TV', src: tvIcon },
+    { id: 'airConditioner', name: 'Ar Condicionado', src: airConditionerIcon },
+    { id: 'lamp', name: 'Lâmpada', src: lampIcon },
+    { id: 'airfry', name: 'Airfry', src: airfry },
+    { id: 'charger', name: 'Carregador', src: carregador }
+  ];
+
+  // Helper to find icon src by its ID
+  const getIconSrcById = (iconId) => {
+    const icon = availableIcons.find(i => i.id === iconId);
+    return icon ? icon.src : tvIcon; // Default to tvIcon if not found
+  };
+
+  // Helper to find icon ID by its src
+  const getIconIdBySrc = (iconSrc) => {
+    const icon = availableIcons.find(i => i.src === iconSrc);
+    return icon ? icon.id : 'tv'; // Default to 'tv' if not found
+  };
+
   // State to manage the list of connected devices
   const [conexions, setConexions] = useState(() => {
     try {
       const stored = JSON.parse(localStorage.getItem('conexions'));
-      return Array.isArray(stored) ? stored : [];
+      // Ensure stored connections use a valid icon src if coming from old format
+      return Array.isArray(stored) ? stored.map(c => ({
+        ...c,
+        icon: getIconSrcById(getIconIdBySrc(c.icon)) // Re-map to ensure valid src
+      })) : [];
     } catch {
       return [];
     }
@@ -45,7 +70,7 @@ const Conexoes = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   // State for the new device being added or edited
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true });
-  // State to track the active icon selected in the form
+  // State to track the active icon selected in the form (now uses src directly for display)
   const [activeIcon, setActiveIcon] = useState(null);
   // State to track the active background color selected in the form
   const [activeColor, setActiveColor] = useState(availableColors[0]);
@@ -62,46 +87,50 @@ const Conexoes = () => {
   // New state to track the ID of a device added via chat (URL parameter)
   const [chatAddedDevice, setChatAddedDevice] = useState(null);
 
-  // Array of available icons for devices
-  const availableIcons = [
-    { name: 'TV', src: tvIcon },
-    { name: 'Ar Condicionado', src: airConditionerIcon },
-    { name: 'Lâmpada', src: lampIcon },
-    { name: 'Airfry', src: airfry },
-    { name: 'Carregador', src: carregador }
-  ];
-
   // Effect to save connections to localStorage whenever `conexions` changes
   useEffect(() => {
     localStorage.setItem('conexions', JSON.stringify(conexions));
   }, [conexions]);
 
-  // Effect to check for 'add' parameter in the URL for chat-initiated connections
+  // Effect to check for 'add', 'iconId', and 'bgColor' parameters in the URL for chat-initiated connections
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const aparelhoParaAdicionar = params.get('add');
+    const iconIdParaAdicionar = params.get('iconId'); // Get the icon ID parameter
+    const bgColorParaAdicionar = params.get('bgColor'); // Get the background color parameter
+
     if (aparelhoParaAdicionar) {
       // Check if the device already exists to avoid duplicates
       const jaExiste = conexions.some(c => c.text.toLowerCase() === aparelhoParaAdicionar.toLowerCase());
       if (!jaExiste) {
+        // Determine the icon source to use based on the iconId
+        const iconSrc = getIconSrcById(iconIdParaAdicionar);
+
+        // Determine the background color. Use if it's one of the available colors, else default.
+        const finalBgColor = availableColors.includes(bgColorParaAdicionar)
+          ? bgColorParaAdicionar
+          : availableColors[0]; // Default color
+
         // Create a new device object with a unique ID and chat-added flag
         const novo = {
           id: Date.now(), // Assign a unique ID for React keys and animation tracking
           text: aparelhoParaAdicionar,
-          icon: tvIcon, // Default icon for chat-added devices
-          backgroundColor: availableColors[0], // Default color
+          icon: iconSrc, // Use the extracted or default icon src
+          backgroundColor: finalBgColor, // Use the extracted or default background color
           connected: true,
           addedViaChat: true // Flag to indicate it was added via chat
         };
         setConexions(prev => [...prev, novo]);
         setChatAddedDevice(novo.id); // Set the ID of the newly chat-added device
-        // Optionally, remove the 'add' parameter from the URL after processing
+        // Optionally, remove the 'add', 'iconId', and 'bgColor' parameters from the URL after processing
         // const newUrl = new URL(window.location.href);
         // newUrl.searchParams.delete('add');
+        // newUrl.searchParams.delete('iconId');
+        // newUrl.searchParams.delete('bgColor');
         // window.history.replaceState({}, document.title, newUrl.toString());
       }
     }
-  }, []); // Empty dependency array means this effect runs only once on mount
+  }, [conexions]); // Added conexions to dependency array to re-run effect if connections change (e.g., manual add)
 
   // Handles click on the "Add Device" button
   const handleAddClick = () => {
@@ -213,7 +242,7 @@ const Conexoes = () => {
               <div className="icons">
                 {availableIcons.map((icon) => (
                   <button
-                    key={icon.name}
+                    key={icon.id} // Use icon.id as key
                     className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`}
                     onClick={() => {
                       setNewConexion({ ...newConexion, icon: icon.src });
@@ -346,13 +375,14 @@ const Conexoes = () => {
         <div className="qrcode-overlay">
           <button className="close-qrcode" onClick={() => setVisibleQRCode(null)}>X</button>
           <QRCodeCanvas
-            value={`https://challenge-fiap-nine.vercel.app/conexoes?add=${encodeURIComponent(conexions[visibleQRCode].text)}`}
+            // Encode the icon's ID and background color
+            value={`https://challenge-fiap-nine.vercel.app/conexoes?add=${encodeURIComponent(conexions[visibleQRCode].text)}&iconId=${encodeURIComponent(getIconIdBySrc(conexions[visibleQRCode].icon))}&bgColor=${encodeURIComponent(conexions[visibleQRCode].backgroundColor)}`}
             size={300}
             bgColor="#ffffff"
             fgColor="#000000"
             level="H"
             imageSettings={{
-              src: conexions[visibleQRCode].icon,
+              src: conexions[visibleQRCode].icon, // Still use the actual image src for the QR code overlay itself
               height: 40,
               width: 40,
               excavate: true,
