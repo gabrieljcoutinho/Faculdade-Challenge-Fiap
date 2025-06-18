@@ -13,7 +13,7 @@ import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
-import '../../CSS/Conexao/deviceDetails.css'; // We'll create this CSS file
+import '../../CSS/Conexao/deviceDetails.css';
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -29,7 +29,6 @@ const Conexoes = () => {
   const [conexions, setConexions] = useState(() => {
     try {
       const stored = JSON.parse(localStorage.getItem('conexions'));
-      // Ensure each stored conexion has a connectedDate property
       return Array.isArray(stored)
         ? stored.map(c => ({ ...c, connectedDate: c.connectedDate || new Date().toISOString() }))
         : [];
@@ -47,7 +46,7 @@ const Conexoes = () => {
   const [removingIndex, setRemovingIndex] = useState(null);
   const [enteringMap, setEnteringMap] = useState({});
   const [visibleQRCode, setVisibleQRCode] = useState(null);
-  const [selectedDevice, setSelectedDevice] = useState(null); // New state for selected device details
+  const [selectedDevice, setSelectedDevice] = useState(null);
 
   const availableIcons = [
     { name: 'TV', src: tvIcon },
@@ -64,20 +63,29 @@ const Conexoes = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const aparelhoParaAdicionar = params.get('add');
+
     if (aparelhoParaAdicionar) {
-      const jaExiste = conexions.some(c => c.text.toLowerCase() === aparelhoParaAdicionar.toLowerCase());
+      // Decode the URI component to handle spaces and special characters correctly
+      const decodedAparelho = decodeURIComponent(aparelhoParaAdicionar);
+      const jaExiste = conexions.some(c => c.text.toLowerCase() === decodedAparelho.toLowerCase());
+
       if (!jaExiste) {
         const novo = {
-          text: aparelhoParaAdicionar,
-          icon: tvIcon,
-          backgroundColor: availableColors[0],
+          text: decodedAparelho, // Use the decoded name
+          icon: tvIcon, // Default icon, you might want to make this dynamic
+          backgroundColor: availableColors[0], // Default color
           connected: true,
-          connectedDate: new Date().toISOString() // Set connection date
+          connectedDate: new Date().toISOString()
         };
         setConexions(prev => [...prev, novo]);
       }
+
+      // Remove the 'add' parameter from the URL to prevent re-adding
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('add');
+      window.history.replaceState({}, document.title, newUrl.toString());
     }
-  }, []);
+  }, [conexions]); // Depend on conexions to ensure it has the latest state
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -100,11 +108,11 @@ const Conexoes = () => {
 
     if (editingIndex !== null) {
       const updated = [...conexions];
-      updated[editingIndex] = { ...newConexion, connectedDate: updated[editingIndex].connectedDate || new Date().toISOString() }; // Preserve original date or set new if none
+      updated[editingIndex] = { ...newConexion, connectedDate: updated[editingIndex].connectedDate || new Date().toISOString() };
       setConexions(updated);
     } else {
       const newConexions = [...conexions, { ...newConexion, connectedDate: new Date().toISOString() }];
-      const id = Date.now();
+      const id = Date.now(); // Using Date.now() for unique key for animation
       setEnteringMap((prev) => ({ ...prev, [id]: true }));
       setConexions(newConexions);
       setTimeout(() => {
@@ -119,13 +127,13 @@ const Conexoes = () => {
   };
 
   const removeConexion = (index) => {
-    if (conexions[index].connected) {
-      setRemovingIndex(index);
-      setTimeout(() => {
-        setConexions((prev) => prev.filter((_, i) => i !== index));
-        setRemovingIndex(null);
-      }, 300);
-    }
+    // We remove the connection regardless of its 'connected' status,
+    // but the UI only allows removal if it's connected (due to disabled prop on button).
+    setRemovingIndex(index);
+    setTimeout(() => {
+      setConexions((prev) => prev.filter((_, i) => i !== index));
+      setRemovingIndex(null);
+    }, 300);
   };
 
   const handleEditClick = (index) => {
@@ -149,12 +157,11 @@ const Conexoes = () => {
   const toggleConnection = (index) => {
     setConexions(conexions.map((c, i) =>
       i === index
-        ? { ...c, connected: !c.connected, connectedDate: !c.connected ? new Date().toISOString() : c.connectedDate } // Update date if connecting
+        ? { ...c, connected: !c.connected, connectedDate: !c.connected ? new Date().toISOString() : c.connectedDate }
         : c
     ));
   };
 
-  // New function to handle device click for details
   const handleDeviceClick = (device) => {
     if (device.connected) {
       setSelectedDevice(device);
@@ -169,7 +176,7 @@ const Conexoes = () => {
     if (!connectedDate) return 'N/A';
     const connectionTime = new Date(connectedDate);
     const now = new Date();
-    const diff = now.getTime() - connectionTime.getTime(); // Difference in milliseconds
+    const diff = now.getTime() - connectionTime.getTime();
 
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -181,7 +188,6 @@ const Conexoes = () => {
     if (minutes > 0) return `${minutes} minuto(s) ${seconds % 60} segundo(s)`;
     return `${seconds} segundo(s)`;
   };
-
 
   return (
     <div className="conexao-container">
@@ -249,14 +255,16 @@ const Conexoes = () => {
       <div className="conexions-list">
         {conexions.map((c, index) => {
           const isRemoving = removingIndex === index;
-          const isEntering = enteringMap[c.text + c.icon + c.backgroundColor + index];
+          // Use a more robust key for enteringMap to avoid conflicts
+          const animationKey = `${c.text}-${c.icon}-${c.backgroundColor}-${index}`;
+          const isEntering = enteringMap[animationKey];
 
           return (
             <div
               key={`${c.text}-${index}`}
               className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''} ${isEntering ? 'entering' : ''}`}
               style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-              onClick={() => handleDeviceClick(c)} // Add onClick to the device card
+              onClick={() => handleDeviceClick(c)}
             >
               {c.connected && (
                 <div className="qrcode-top-left">
@@ -281,7 +289,7 @@ const Conexoes = () => {
               <div className="actions-overlay">
                 <button
                   className="remove-button"
-                  onClick={(e) => { e.stopPropagation(); removeConexion(index); }} // Stop propagation
+                  onClick={(e) => { e.stopPropagation(); removeConexion(index); }}
                   title="Remover"
                   disabled={!c.connected}
                   style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
@@ -289,7 +297,7 @@ const Conexoes = () => {
 
                 <button
                   className="edit-button"
-                  onClick={(e) => { e.stopPropagation(); handleEditClick(index); }} // Stop propagation
+                  onClick={(e) => { e.stopPropagation(); handleEditClick(index); }}
                   title="Editar"
                   disabled={!c.connected}
                   style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
@@ -297,7 +305,7 @@ const Conexoes = () => {
                   <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
                 </button>
 
-                <div className="switch-container" onClick={(e) => e.stopPropagation()}> {/* Stop propagation */}
+                <div className="switch-container" onClick={(e) => e.stopPropagation()}>
                   <label className="switch">
                     <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
                     <span className="slider round"></span>
@@ -329,7 +337,6 @@ const Conexoes = () => {
         </div>
       )}
 
-      {/* Device Details Modal/Panel */}
       {selectedDevice && (
         <div className="device-details-overlay">
           <div className="device-details-panel">
