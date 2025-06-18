@@ -47,7 +47,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
         for (let i = 0; i < labels.length; i++) {
             const hour = labels[i];
             const value = productionValues[i];
-            response += `| ${hour} | ${value} kW/h       |\n`;
+            response += `| ${hour} | ${value} kW/h      |\n`;
             totalProduction += value;
         }
 
@@ -71,49 +71,59 @@ const Chat = ({ onConnectDevice, productionData }) => {
         let handledByLocalCommand = false;
         let botResponseContent = '';
 
+        // ATENÇÃO: Adicionado 'oconectar' aos triggers
         const connectionCommands = [
-            { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão'] },
-            { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado'] },
-            { type: 'Lâmpada', triggers: ['conectar lâmpada', 'ligar lâmpada', 'conectar lampada', 'ligar lampada'] },
-            { type: 'Airfry', triggers: ['conectar airfry', 'ligar airfry'] },
-            { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador'] }
+            { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão', 'oconectar tv', 'oconectar televisão'] },
+            { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado', 'oconectar ar-condicionado', 'oconectar ar condicionado'] },
+            { type: 'Lâmpada', triggers: ['conectar lâmpada', 'ligar lâmpada', 'conectar lampada', 'ligar lampada', 'oconectar lâmpada', 'oconectar lampada'] },
+            { type: 'Airfry', triggers: ['conectar airfry', 'ligar airfry', 'oconectar airfry'] },
+            { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador', 'oconectar carregador'] }
         ];
 
-        let deviceToConnect = null;
-        let customDeviceName = null;
+        let identifiedDeviceType = null; // Ex: 'TV'
+        let fullDeviceNameForConnection = null; // Ex: 'TV Sala', 'Lâmpada do Quarto'
 
         for (const cmd of connectionCommands) {
             for (const trigger of cmd.triggers) {
                 const normalizedTrigger = normalizeText(trigger);
                 if (textoNormalizado.startsWith(normalizedTrigger)) {
-                    deviceToConnect = cmd.type;
-                    customDeviceName = texto.substring(trigger.length).trim();
-                    if (customDeviceName === '') {
-                        customDeviceName = deviceToConnect;
+                    identifiedDeviceType = cmd.type; // Captura o tipo base do aparelho (ex: 'TV')
+                    let remainingText = texto.substring(trigger.length).trim(); // Captura o resto da string (ex: "sala")
+
+                    if (remainingText === '') {
+                        // Se não houver nome customizado, usa o tipo base como nome final
+                        fullDeviceNameForConnection = cmd.type;
                     } else {
-                        customDeviceName = customDeviceName.charAt(0).toUpperCase() + customDeviceName.slice(1);
+                        // Concatena o tipo base com o restante do texto (capitalizando a primeira letra do restante)
+                        // Ex: "TV" + " Sala" = "TV Sala"
+                        fullDeviceNameForConnection = `${cmd.type} ${remainingText.charAt(0).toUpperCase() + remainingText.slice(1)}`;
                     }
-                    break;
+                    handledByLocalCommand = true;
+                    break; // Encontrou um trigger, para de procurar por outros para este comando
                 }
             }
-            if (deviceToConnect) break;
+            if (identifiedDeviceType) break; // Encontrou um tipo de aparelho, para de procurar em connectionCommands
         }
 
-        if (deviceToConnect) {
+        if (fullDeviceNameForConnection) { // Se um comando de conexão foi identificado
             if (typeof onConnectDevice === 'function') {
-                onConnectDevice(deviceToConnect, customDeviceName);
+                // Chama a função onConnectDevice do componente pai (App.js)
+                // Passa o tipo do aparelho (para talvez escolher o ícone) e o nome completo
+                onConnectDevice(identifiedDeviceType, fullDeviceNameForConnection);
             }
 
+            // Define a resposta do bot para o comando de conexão
+            // Busca a resposta no comandos.json, se não encontrar, usa uma genérica
             const connectionCommandInJson = comandosData.comandos.find(cmd =>
-                cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
+                cmd.triggers.some(jsonTrigger => normalizeText(jsonTrigger) === textoNormalizado)
             );
 
             botResponseContent = connectionCommandInJson
                 ? connectionCommandInJson.resposta
-                : `${customDeviceName} Conectado.`;
+                : `${fullDeviceNameForConnection} conectado!`;
 
             handledByLocalCommand = true;
-        } else {
+        } else { // Se não foi um comando de conexão, tenta comandos gerais ou Gemini
             const comandoEncontrado = comandosData.comandos.find(cmd =>
                 cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
             );
@@ -224,7 +234,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
             <div className="message-display-area">
                 {firstInteraction && (
                    <div className="movimentoDaDiv">
-                      <div className="messageBot">
+                     <div className="messageBot">
                         <span className="message-bubble">
                             💡 Digite <strong>Comandos</strong> para receber comandos específicos do site.
                         </span>
