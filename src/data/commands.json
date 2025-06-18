@@ -34,7 +34,7 @@
       "resposta": "TV Conectada"
     },
     {
-      "triggers": ["Conectar Ar-Condicionado", "Ligar Ar-Condicionado", "Conectar ar condicionado", "Ligar ar condicionado", "conectar ar-condicionado", "ligar ar-condicionado", "conectar ar condicionado", "ligar ar condicionado"],
+      "triggers": ["Conectar Ar-Condicionado", "Conectar Arcondiconado", "Ligar Ar-Condicionado", "Conectar ar condicionado", "Ligar ar condicionado", "conectar ar-condicionado", "ligar ar-condicionado", "conectar ar condicionado", "ligar ar condicionado"],
       "resposta": "Ar-Condicionado Conectado"
     },
     {
