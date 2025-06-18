@@ -13,7 +13,6 @@ import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
-import '../../CSS/Conexao/deviceDetails.css'; // We'll create this CSS file
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -29,9 +28,13 @@ const Conexoes = () => {
   const [conexions, setConexions] = useState(() => {
     try {
       const stored = JSON.parse(localStorage.getItem('conexions'));
-      // Ensure each stored conexion has a connectedDate property
+      // Garante que cada conexão armazenada tenha uma propriedade connectedDate e um ID único
       return Array.isArray(stored)
-        ? stored.map(c => ({ ...c, connectedDate: c.connectedDate || new Date().toISOString() }))
+        ? stored.map(c => ({
+            ...c,
+            connectedDate: c.connectedDate || new Date().toISOString(),
+            id: c.id || Date.now() + Math.random() // Garante um ID único
+          }))
         : [];
     } catch {
       return [];
@@ -45,9 +48,7 @@ const Conexoes = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [removingIndex, setRemovingIndex] = useState(null);
-  const [enteringMap, setEnteringMap] = useState({});
   const [visibleQRCode, setVisibleQRCode] = useState(null);
-  const [selectedDevice, setSelectedDevice] = useState(null); // New state for selected device details
 
   const availableIcons = [
     { name: 'TV', src: tvIcon },
@@ -72,12 +73,13 @@ const Conexoes = () => {
           icon: tvIcon,
           backgroundColor: availableColors[0],
           connected: true,
-          connectedDate: new Date().toISOString() // Set connection date
+          connectedDate: new Date().toISOString(), // Define a data de conexão
+          id: Date.now() + Math.random() // Atribui um ID único
         };
         setConexions(prev => [...prev, novo]);
       }
     }
-  }, []);
+  }, []); // Adicionado 'conexions' como dependência para garantir que a verificação de existência seja atualizada
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -100,20 +102,12 @@ const Conexoes = () => {
 
     if (editingIndex !== null) {
       const updated = [...conexions];
-      updated[editingIndex] = { ...newConexion, connectedDate: updated[editingIndex].connectedDate || new Date().toISOString() }; // Preserve original date or set new if none
+      updated[editingIndex] = { ...newConexion, connectedDate: updated[editingIndex].connectedDate || new Date().toISOString() }; // Preserva a data original ou define uma nova se não houver
       setConexions(updated);
     } else {
-      const newConexions = [...conexions, { ...newConexion, connectedDate: new Date().toISOString() }];
-      const id = Date.now();
-      setEnteringMap((prev) => ({ ...prev, [id]: true }));
-      setConexions(newConexions);
-      setTimeout(() => {
-        setEnteringMap((prev) => {
-          const updated = { ...prev };
-          delete updated[id];
-          return updated;
-        });
-      }, 300);
+      // Adiciona um ID único ao novo aparelho
+      const newConexionWithId = { ...newConexion, connectedDate: new Date().toISOString(), id: Date.now() + Math.random() };
+      setConexions([...conexions, newConexionWithId]);
     }
     setShowAddForm(false);
   };
@@ -149,39 +143,10 @@ const Conexoes = () => {
   const toggleConnection = (index) => {
     setConexions(conexions.map((c, i) =>
       i === index
-        ? { ...c, connected: !c.connected, connectedDate: !c.connected ? new Date().toISOString() : c.connectedDate } // Update date if connecting
+        ? { ...c, connected: !c.connected, connectedDate: !c.connected ? new Date().toISOString() : c.connectedDate } // Atualiza a data se for conectar
         : c
     ));
   };
-
-  // New function to handle device click for details
-  const handleDeviceClick = (device) => {
-    if (device.connected) {
-      setSelectedDevice(device);
-    }
-  };
-
-  const closeDeviceDetails = () => {
-    setSelectedDevice(null);
-  };
-
-  const formatConnectedTime = (connectedDate) => {
-    if (!connectedDate) return 'N/A';
-    const connectionTime = new Date(connectedDate);
-    const now = new Date();
-    const diff = now.getTime() - connectionTime.getTime(); // Difference in milliseconds
-
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days} dia(s) ${hours % 24} hora(s)`;
-    if (hours > 0) return `${hours} hora(s) ${minutes % 60} minuto(s)`;
-    if (minutes > 0) return `${minutes} minuto(s) ${seconds % 60} segundo(s)`;
-    return `${seconds} segundo(s)`;
-  };
-
 
   return (
     <div className="conexao-container">
@@ -249,14 +214,12 @@ const Conexoes = () => {
       <div className="conexions-list">
         {conexions.map((c, index) => {
           const isRemoving = removingIndex === index;
-          const isEntering = enteringMap[c.text + c.icon + c.backgroundColor + index];
 
           return (
             <div
-              key={`${c.text}-${index}`}
-              className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''} ${isEntering ? 'entering' : ''}`}
+              key={c.id} // Usando o ID único como chave, o que é mais robusto
+              className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''}`}
               style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-              onClick={() => handleDeviceClick(c)} // Add onClick to the device card
             >
               {c.connected && (
                 <div className="qrcode-top-left">
@@ -281,7 +244,7 @@ const Conexoes = () => {
               <div className="actions-overlay">
                 <button
                   className="remove-button"
-                  onClick={(e) => { e.stopPropagation(); removeConexion(index); }} // Stop propagation
+                  onClick={(e) => { e.stopPropagation(); removeConexion(index); }} // Para a propagação
                   title="Remover"
                   disabled={!c.connected}
                   style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
@@ -289,7 +252,7 @@ const Conexoes = () => {
 
                 <button
                   className="edit-button"
-                  onClick={(e) => { e.stopPropagation(); handleEditClick(index); }} // Stop propagation
+                  onClick={(e) => { e.stopPropagation(); handleEditClick(index); }} // Para a propagação
                   title="Editar"
                   disabled={!c.connected}
                   style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
@@ -297,7 +260,7 @@ const Conexoes = () => {
                   <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
                 </button>
 
-                <div className="switch-container" onClick={(e) => e.stopPropagation()}> {/* Stop propagation */}
+                <div className="switch-container" onClick={(e) => e.stopPropagation()}> {/* Para a propagação */}
                   <label className="switch">
                     <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(index)} />
                     <span className="slider round"></span>
@@ -326,25 +289,6 @@ const Conexoes = () => {
               excavate: true,
             }}
           />
-        </div>
-      )}
-
-      {/* Device Details Modal/Panel */}
-      {selectedDevice && (
-        <div className="device-details-overlay">
-          <div className="device-details-panel">
-            <button className="close-details-button" onClick={closeDeviceDetails}>X</button>
-            <div className="device-details-header">
-              <img src={selectedDevice.icon} alt={selectedDevice.text} className="device-details-icon" />
-              <h2>{selectedDevice.text}</h2>
-            </div>
-            <div className="device-details-body">
-              <p><strong>Status:</strong> {selectedDevice.connected ? 'Conectado' : 'Desconectado'}</p>
-              <p><strong>Tipo:</strong> {availableIcons.find(icon => icon.src === selectedDevice.icon)?.name || 'Desconhecido'}</p>
-              <p><strong>Conectado desde:</strong> {new Date(selectedDevice.connectedDate).toLocaleString()}</p>
-              <p><strong>Tempo Conectado:</strong> {formatConnectedTime(selectedDevice.connectedDate)}</p>
-            </div>
-          </div>
         </div>
       )}
     </div>

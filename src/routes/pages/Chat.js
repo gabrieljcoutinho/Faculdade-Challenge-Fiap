@@ -9,19 +9,9 @@ import sendBtn from '../../imgs/sendBtn.png';
 import comandosData from '../../data/commands.json';
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-
-const modePrompts = {
-    professor: 'Você é um professor didático e paciente. Explique conceitos com clareza, usando exemplos práticos simples, de forma que até iniciantes compreendam. Seja sempre gentil e objetivo.',
-    profissional: 'Você é um assistente profissional e técnico. Forneça respostas detalhadas, precisas e formais, utilizando termos técnicos quando apropriado. Seja claro e direto.',
-    engracado: 'Você é engraçado e descontraído. Responda de forma leve e divertida, usando humor e analogias engraçadas para facilitar o entendimento.',
-    coaching: 'Você é um coach motivador. Inspire o usuário com respostas positivas, motivacionais e encorajadoras, ajudando-o a superar dúvidas com confiança.',
-    calmo: 'Você é calmo e reflexivo. Responda com tranquilidade, promovendo reflexão e clareza, usando linguagem serena e acolhedora.'
-};
-
 const normalizeText = (text) => text.trim().toLowerCase();
 
 const Chat = ({ onConnectDevice, productionData }) => {
-    const [mode, setMode] = useState('profissional');
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
@@ -70,6 +60,13 @@ const Chat = ({ onConnectDevice, productionData }) => {
 
         let handledByLocalCommand = false;
         let botResponseContent = '';
+
+
+
+
+
+
+
 
         // ATENÇÃO: Adicionado 'oconectar' aos triggers
         const connectionCommands = [
@@ -153,7 +150,6 @@ const Chat = ({ onConnectDevice, productionData }) => {
 
         try {
             const geminiMessages = [
-                { role: 'user', parts: [{ text: modePrompts[mode] }] },
                 { role: 'model', parts: [{ text: "Ok, entendi. Como posso ajudar?" }] },
                 ...messages.map(msg => ({
                     role: msg.role === 'user' ? 'user' : 'model',
@@ -211,25 +207,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
 
     return (
         <div className="chat-container">
-            <div className="mode-selector-container">
-                <label htmlFor="mode-select">Modo de resposta</label>
-                <select
-                    id="mode-select"
-                    value={mode}
-                    onChange={(e) => setMode(e.target.value)}
-                    disabled={loading}
-                >
-                    {Object.entries({
-                        professor: 'Professor (didático)',
-                        profissional: 'Profissional / Técnico',
-                        engracado: 'Engraçado / Descontraído',
-                        coaching: 'Coaching / Motivador',
-                        calmo: 'Calmo / Reflexivo'
-                    }).map(([key, label]) => (
-                        <option key={key} value={key}>{label}</option>
-                    ))}
-                </select>
-            </div>
+
 
             <div className="message-display-area">
                 {firstInteraction && (
