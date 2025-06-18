@@ -48,7 +48,6 @@
     border: none;
     font-size: 1.5rem;
     font-weight: bold;
-    color: #555;
     cursor: pointer;
     padding: 5px 10px;
     border-radius: 50%;
@@ -72,7 +71,7 @@
     width: 60px;
     height: 60px;
     margin-bottom: 15px;
-    border-radius: 50%;
+    border-radius: 30%;
     /* Make the icon background round if desired */
     padding: 10px;
     background-color: #f5f5f5;
