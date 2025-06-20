@@ -1,0 +1,48 @@
+.conexion-details-modal {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.conexion-details-modal h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.conexion-details-modal img {
+    margin-bottom: 25px;
+}
+
+.conexion-details-modal h3 {
+    color: #34495e;
+    font-size: 1.3em;
+}
+
+.conexion-details-modal p {
+    color: #617d8a;
+    font-size: 1.05em;
+}
+
+.close-button-styled {
+    background-color: red;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 17px;
+    margin-top: 30px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+
+}
+
+
+
+.close-button-styled:hover {
+    background-color: red;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}

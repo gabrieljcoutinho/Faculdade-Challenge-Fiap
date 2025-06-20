@@ -13,6 +13,7 @@ import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
+import '../../CSS/Conexao/detalhesAparelhos.css'
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -49,6 +50,7 @@ const Conexoes = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [removingIndex, setRemovingIndex] = useState(null);
   const [visibleQRCode, setVisibleQRCode] = useState(null);
+  const [selectedConexion, setSelectedConexion] = useState(null); // New state for selected device details
 
   const availableIcons = [
     { name: 'TV', src: tvIcon },
@@ -79,7 +81,7 @@ const Conexoes = () => {
         setConexions(prev => [...prev, novo]);
       }
     }
-  }, []); // Adicionado 'conexions' como dependência para garantir que a verificação de existência seja atualizada
+  }, []);
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -88,6 +90,7 @@ const Conexoes = () => {
     setActiveColor(availableColors[0]);
     setEditingIndex(null);
     setErrorMessage('');
+    setSelectedConexion(null); // Close details when opening add form
   };
 
   const saveConexion = () => {
@@ -118,6 +121,7 @@ const Conexoes = () => {
       setTimeout(() => {
         setConexions((prev) => prev.filter((_, i) => i !== index));
         setRemovingIndex(null);
+        setSelectedConexion(null); // Close details if the removed item was selected
       }, 300);
     }
   };
@@ -137,6 +141,7 @@ const Conexoes = () => {
       setShowAddForm(true);
       setEditingIndex(index);
       setErrorMessage('');
+      setSelectedConexion(null); // Close details when opening edit form
     }
   };
 
@@ -146,7 +151,52 @@ const Conexoes = () => {
         ? { ...c, connected: !c.connected, connectedDate: !c.connected ? new Date().toISOString() : c.connectedDate } // Atualiza a data se for conectar
         : c
     ));
+    if (selectedConexion && selectedConexion.id === conexions[index].id && !conexions[index].connected) {
+        setSelectedConexion(null); // Close details if the selected item is disconnected
+    }
   };
+
+  // New function to handle click on a conexion item
+  const handleConexionClick = (conexion) => {
+    if (conexion.connected) {
+      setSelectedConexion(conexion);
+    }
+  };
+
+  // Utility function to format date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('pt-BR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  // Utility function to calculate connection duration
+  const getConnectionDuration = (connectedDateString) => {
+    const connected = new Date(connectedDateString);
+    const now = new Date();
+    const diffMs = now - connected; // Difference in milliseconds
+
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) {
+      return `${diffDays} dia(s) e ${diffHours % 24} hora(s)`;
+    } else if (diffHours > 0) {
+      return `${diffHours} hora(s) e ${diffMinutes % 60} minuto(s)`;
+    } else if (diffMinutes > 0) {
+      return `${diffMinutes} minuto(s) e ${diffSeconds % 60} segundo(s)`;
+    } else {
+      return `${diffSeconds} segundo(s)`;
+    }
+  };
+
 
   return (
     <div className="conexao-container">
@@ -220,6 +270,7 @@ const Conexoes = () => {
               key={c.id} // Usando o ID único como chave, o que é mais robusto
               className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''}`}
               style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+              onClick={() => handleConexionClick(c)} // Add click handler here
             >
               {c.connected && (
                 <div className="qrcode-top-left">
@@ -291,6 +342,22 @@ const Conexoes = () => {
           />
         </div>
       )}
+
+    {selectedConexion && (
+  <div className="modal-overlay">
+    <div className="conexion-details-modal">
+      <h2>Detalhes do Aparelho</h2>
+      <img src={selectedConexion.icon} alt={selectedConexion.text} style={{ width: '60px', height: '60px' }} />
+      <h3>{selectedConexion.text}</h3>
+      <p><strong>Status:</strong> {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
+      <p><strong>Conectado em:</strong> {formatDate(selectedConexion.connectedDate)}</p>
+      <p><strong>Tempo conectado:</strong> {getConnectionDuration(selectedConexion.connectedDate)}</p>
+      <p><strong>ID do aparelho:</strong> <code>{selectedConexion.id}</code></p>
+      <button onClick={() => setSelectedConexion(null)} className="close-button-styled">Fechar</button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
