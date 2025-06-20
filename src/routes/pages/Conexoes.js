@@ -349,7 +349,6 @@ const Conexoes = () => {
       <h2>Detalhes do Aparelho</h2>
       <img src={selectedConexion.icon} alt={selectedConexion.text} style={{ width: '60px', height: '60px' }} />
       <h3>{selectedConexion.text}</h3>
-      <p><strong>Status:</strong> {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
       <p><strong>Conectado :</strong> {formatDate(selectedConexion.connectedDate)}</p>
       <p><strong>Tempo conectado:</strong> {getConnectionDuration(selectedConexion.connectedDate)}</p>
       <p><strong>ID do aparelho:</strong> <code>{selectedConexion.id}</code></p>
