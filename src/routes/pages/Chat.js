@@ -63,12 +63,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
 
 
 
-
-
-
-
-
-        // ATENÇÃO: Adicionado 'oconectar' aos triggers
+        // ATENÇÃO: Adicionado 'o conectar' aos triggers
         const connectionCommands = [
             { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão', 'oconectar tv', 'oconectar televisão'] },
             { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado', 'oconectar ar-condicionado', 'oconectar ar condicionado'] },
