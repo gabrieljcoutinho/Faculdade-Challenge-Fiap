@@ -180,8 +180,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {/* IMAGEM quando não há conexões */}
       {conexions.length === 0 && !showAddForm && (
         <div className="placeholder-image-container">
+          <br /><br /><br />
           <img src={placeholderImage} alt="Nenhum aparelho conectado" className="placeholder-image" />
-          <p className="placeholder-text">Nenhum aparelho conectado</p>
+          <p className="placeholder-text">Nenhum aparelho conectado...</p>
         </div>
       )}
 
