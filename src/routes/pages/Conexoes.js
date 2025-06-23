@@ -40,26 +40,36 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [selectedConexion, setSelectedConexion] = useState(null);
 
   const availableIcons = [
-    { name: 'TV', src: tvIcon },
-    { name: 'Ar Condicionado', src: airConditionerIcon },
-    { name: 'Lâmpada', src: lampIcon },
-    { name: 'Airfry', src: airfry },
-    { name: 'Carregador', src: carregador }
+    { name: 'tv', src: tvIcon },
+    { name: 'arcondicionado', src: airConditionerIcon },
+    { name: 'lampada', src: lampIcon },
+    { name: 'airfry', src: airfry },
+    { name: 'carregador', src: carregador }
   ];
 
-  // ✅ Detecta QR code via ID
+  const getIconKeyBySrc = (src) => {
+    const found = availableIcons.find(icon => icon.src === src);
+    return found ? found.name : '';
+  };
+
+  const iconMap = {
+    tv: tvIcon,
+    arcondicionado: airConditionerIcon,
+    airfry: airfry,
+    lampada: lampIcon,
+    carregador: carregador
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const deviceId = params.get('deviceId');
+    const nome = params.get('add');
+    const iconKey = params.get('icon');
 
-    if (deviceId) {
-      const device = conexions.find(d => d.id === deviceId);
-      if (device) {
-        onConnectDevice(device.text, device.text, device.icon, device.backgroundColor);
-      }
-      window.history.replaceState({}, document.title, window.location.pathname); // limpa os parâmetros da URL
+    if (nome && iconKey && iconMap[iconKey]) {
+      onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
+      window.history.replaceState({}, document.title, location.pathname);
     }
-  }, [location.search, conexions, onConnectDevice]);
+  }, [location.search]);
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -83,18 +93,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }
 
     if (editingId !== null) {
-      setConexions(prevConexions => prevConexions.map(c =>
-        c.id === editingId
-          ? { ...newConexion, id: c.id, connectedDate: c.connectedDate || new Date().toISOString() }
-          : c
-      ));
+      setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate } : c));
     } else {
-      onConnectDevice(
-        newConexion.text,
-        newConexion.text,
-        newConexion.icon,
-        newConexion.backgroundColor
-      );
+      onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
     }
 
     setShowAddForm(false);
@@ -109,19 +110,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }, 300);
   };
 
-  const handleEditClick = (conexionToEdit) => {
-    if (conexionToEdit.connected) {
-      setNewConexion({
-        text: conexionToEdit.text,
-        icon: conexionToEdit.icon,
-        backgroundColor: conexionToEdit.backgroundColor || availableColors[0],
-        connected: conexionToEdit.connected !== undefined ? conexionToEdit.connected : true,
-        connectedDate: conexionToEdit.connectedDate || new Date().toISOString()
-      });
-      setActiveIcon(conexionToEdit.icon);
-      setActiveColor(conexionToEdit.backgroundColor || availableColors[0]);
+  const handleEditClick = (c) => {
+    if (c.connected) {
+      setNewConexion({ text: c.text, icon: c.icon, backgroundColor: c.backgroundColor || availableColors[0], connected: c.connected, connectedDate: c.connectedDate });
+      setActiveIcon(c.icon);
+      setActiveColor(c.backgroundColor || availableColors[0]);
       setShowAddForm(true);
-      setEditingId(conexionToEdit.id);
+      setEditingId(c.id);
       setErrorMessage('');
       setSelectedConexion(null);
     }
@@ -129,42 +124,25 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   const toggleConnection = (id) => {
     onToggleConnection(id);
-    const conexionBeingToggled = conexions.find(c => c.id === id);
-    if (selectedConexion && selectedConexion.id === id && conexionBeingToggled.connected) {
-      setSelectedConexion(null);
-    }
+    const c = conexions.find(c => c.id === id);
+    if (selectedConexion && selectedConexion.id === id && c.connected) setSelectedConexion(null);
   };
 
-  const handleConexionClick = (conexion) => {
-    if (conexion.connected) {
-      setSelectedConexion(conexion);
-    }
+  const handleConexionClick = (c) => {
+    if (c.connected) setSelectedConexion(c);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('pt-BR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  const formatDate = (d) => new Date(d).toLocaleString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
   const getConnectionDuration = (connectedDateString) => {
     const connected = new Date(connectedDateString);
     const now = new Date();
-    const diffMs = now - connected;
-    const diffSeconds = Math.floor(diffMs / 1000);
-    const diffMinutes = Math.floor(diffSeconds / 60);
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffDays > 0) return `${diffDays} dia(s) e ${diffHours % 24} hora(s)`;
-    if (diffHours > 0) return `${diffHours} hora(s) e ${diffMinutes % 60} minuto(s)`;
-    if (diffMinutes > 0) return `${diffMinutes} minuto(s) e ${diffSeconds % 60} segundo(s)`;
-    return `${diffSeconds} segundo(s)`;
+    const diff = now - connected;
+    const s = Math.floor(diff / 1000), m = Math.floor(s / 60), h = Math.floor(m / 60), d = Math.floor(h / 24);
+    if (d > 0) return `${d} dia(s) e ${h % 24} hora(s)`;
+    if (h > 0) return `${h} hora(s) e ${m % 60} minuto(s)`;
+    if (m > 0) return `${m} minuto(s) e ${s % 60} segundo(s)`;
+    return `${s} segundo(s)`;
   };
 
   return (
@@ -177,27 +155,14 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {showAddForm && (
         <div className="modal-overlay">
           <div className="add-form-styled">
-            <h2>{editingId !== null ? 'Editar Aparelho' : 'Adicionar Novo Aparelho'}</h2>
+            <h2>{editingId ? 'Editar Aparelho' : 'Adicionar Novo Aparelho'}</h2>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <input
-              type="text"
-              placeholder="Nome do Aparelho"
-              value={newConexion.text}
-              onChange={(e) => setNewConexion({ ...newConexion, text: e.target.value })}
-            />
+            <input type="text" placeholder="Nome do Aparelho" value={newConexion.text} onChange={(e) => setNewConexion({ ...newConexion, text: e.target.value })} />
             <div className="icon-picker-styled">
               <label>Escolha o ícone:</label>
               <div className="icons">
                 {availableIcons.map((icon) => (
-                  <button
-                    key={icon.name}
-                    className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`}
-                    onClick={() => {
-                      setNewConexion({ ...newConexion, icon: icon.src });
-                      setActiveIcon(icon.src);
-                    }}
-                    title={icon.name}
-                  >
+                  <button key={icon.name} className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`} onClick={() => { setNewConexion({ ...newConexion, icon: icon.src }); setActiveIcon(icon.src); }}>
                     <img src={icon.src} alt={icon.name} style={{ width: '30px', height: '30px' }} />
                   </button>
                 ))}
@@ -207,23 +172,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               <label className='tipoDoFundoConexao'>Escolha a cor de fundo:</label>
               <div className="colors">
                 {availableColors.map((color) => (
-                  <button
-                    key={color}
-                    className={`color-option ${activeColor === color ? 'active' : ''}`}
-                    style={{ backgroundColor: color }}
-                    onClick={() => {
-                      setNewConexion({ ...newConexion, backgroundColor: color });
-                      setActiveColor(color);
-                    }}
-                    title={color}
-                  ></button>
+                  <button key={color} className={`color-option ${activeColor === color ? 'active' : ''}`} style={{ backgroundColor: color }} onClick={() => { setNewConexion({ ...newConexion, backgroundColor: color }); setActiveColor(color); }}></button>
                 ))}
               </div>
             </div>
             <div className="form-actions">
-              <button onClick={saveConexion} className="save-button-styled">
-                {editingId !== null ? 'Salvar Edição' : 'Salvar'}
-              </button>
+              <button onClick={saveConexion} className="save-button-styled">{editingId ? 'Salvar Edição' : 'Salvar'}</button>
               <button onClick={() => setShowAddForm(false)} className="cancel-button-styled">Cancelar</button>
             </div>
           </div>
@@ -231,65 +185,34 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       )}
 
       <div className="conexions-list">
-        {conexions.map((c) => {
-          const isRemoving = removingId === c.id;
-
-          return (
-            <div
-              key={c.id}
-              className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''}`}
-              style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-              onClick={() => handleConexionClick(c)}
-            >
-              {c.connected && (
-                <div className="qrcode-top-left">
-                  <button
-                    className="qrcode-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setVisibleQRCode(c);
-                    }}
-                    title="Gerar QR Code"
-                  >
-                    <img src={imgQrcode} alt="QR Code" className='qrCodeAparelhoConectado' />
-                  </button>
-                </div>
-              )}
-
-              {!c.connected && <div className="disconnected-overlay">Desativado</div>}
-              <div className="icon-text-overlay">
-                <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-                <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
-              </div>
-              <div className="actions-overlay">
-                <button
-                  className="remove-button"
-                  onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }}
-                  title="Remover"
-                  disabled={!c.connected}
-                  style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
-                >X</button>
-
-                <button
-                  className="edit-button"
-                  onClick={(e) => { e.stopPropagation(); handleEditClick(c); }}
-                  title="Editar"
-                  disabled={!c.connected}
-                  style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
-                >
-                  <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
+        {conexions.map((c) => (
+          <div key={c.id} className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''}`} style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }} onClick={() => handleConexionClick(c)}>
+            {c.connected && (
+              <div className="qrcode-top-left">
+                <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); setVisibleQRCode(c); }}>
+                  <img src={imgQrcode} alt="QR Code" className='qrCodeAparelhoConectado' />
                 </button>
-
-                <div className="switch-container" onClick={(e) => e.stopPropagation()}>
-                  <label className="switch">
-                    <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(c.id)} />
-                    <span className="slider round"></span>
-                  </label>
-                </div>
+              </div>
+            )}
+            {!c.connected && <div className="disconnected-overlay">Desativado</div>}
+            <div className="icon-text-overlay">
+              <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
+              <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
+            </div>
+            <div className="actions-overlay">
+              <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} disabled={!c.connected}>X</button>
+              <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} disabled={!c.connected}>
+                <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
+              </button>
+              <div className="switch-container" onClick={(e) => e.stopPropagation()}>
+                <label className="switch">
+                  <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(c.id)} />
+                  <span className="slider round"></span>
+                </label>
               </div>
             </div>
-          );
-        })}
+          </div>
+        ))}
         <div style={{ height: '60px' }}></div>
       </div>
 
@@ -297,17 +220,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <div className="qrcode-overlay">
           <button className="close-qrcode" onClick={() => setVisibleQRCode(null)}>X</button>
           <QRCodeCanvas
-            value={`${siteBaseURL}/conexoes?deviceId=${visibleQRCode.id}`}
+            value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${encodeURIComponent(getIconKeyBySrc(visibleQRCode.icon))}`}
             size={300}
             bgColor="#ffffff"
             fgColor="#000000"
             level="H"
-            imageSettings={{
-              src: visibleQRCode.icon,
-              height: 40,
-              width: 40,
-              excavate: true,
-            }}
           />
         </div>
       )}
