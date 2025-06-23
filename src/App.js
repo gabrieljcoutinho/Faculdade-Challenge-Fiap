@@ -78,20 +78,21 @@ function App() {
    * @param {string} deviceType O tipo genérico do aparelho (ex: 'TV', 'Lâmpada').
    * @param {string} customName O nome que o usuário deu ao aparelho (ex: 'TV Sala', 'Lâmpada Cozinha').
    */
-  const handleConnectDevice = (deviceType, customName) => {
-    setConexions((prevConexions) => {
-      const finalDeviceName = customName || deviceType; // Usa o nome personalizado ou o tipo
-      const normalizedFinalDeviceName = finalDeviceName.toLowerCase();
 
-      // Procura por um aparelho com o MESMO NOME (case-insensitive)
-      const existingDeviceIndex = prevConexions.findIndex(
-        (c) => c.text.toLowerCase() === normalizedFinalDeviceName
-      );
 
-      let defaultIcon;
-      let defaultColor;
+  const handleConnectDevice = (deviceType, customName, icon = null, backgroundColor = null) => {
+  setConexions((prevConexions) => {
+    const finalDeviceName = customName || deviceType;
+    const normalizedFinalDeviceName = finalDeviceName.toLowerCase();
 
-      // Define ícone e cor com base no tipo de aparelho (case-insensitive)
+    const existingDeviceIndex = prevConexions.findIndex(
+      (c) => c.text.toLowerCase() === normalizedFinalDeviceName
+    );
+
+    let defaultIcon = icon;
+    let defaultColor = backgroundColor;
+
+    if (!icon || !backgroundColor) {
       switch (deviceType.toLowerCase()) {
         case 'tv':
           defaultIcon = tvIcon;
@@ -114,43 +115,42 @@ function App() {
           defaultColor = '#FFE4E1';
           break;
         default:
-          defaultIcon = ''; // Ícone padrão para não reconhecido
-          defaultColor = '#CCCCCC'; // Cor padrão para não reconhecido
+          defaultIcon = icon || ''; // ícone customizado ou vazio
+          defaultColor = backgroundColor || '#CCCCCC';
           break;
       }
+    }
 
-      if (existingDeviceIndex !== -1) {
-        // Se o aparelho já existe (mesmo que estivesse desconectado ou em outro estado),
-        // Apenas o ATIVA e atualiza suas propriedades.
-        // Isso impede a duplicação se você "re-conectar" um aparelho já conhecido.
-        console.log(`[handleConnectDevice] Aparelho "${finalDeviceName}" já existe. Atualizando status.`);
-        return prevConexions.map((c, index) =>
-          index === existingDeviceIndex
-            ? {
-                ...c,
-                connected: true, // Garante que esteja conectado
-                icon: defaultIcon, // Atualiza o ícone (pode ser útil se o aparelho foi criado com ícone genérico)
-                backgroundColor: defaultColor, // Atualiza a cor
-                // Se ele estava desconectado e foi reconectado, atualiza a data de conexão
-                connectedDate: c.connected ? c.connectedDate : new Date().toISOString()
-              }
-            : c
-        );
-      } else {
-        // Se NÃO existe na lista (ou foi excluído e não está mais no array), adiciona um novo aparelho.
-        console.log(`[handleConnectDevice] Aparelho "${finalDeviceName}" NÃO existe. Adicionando novo.`);
-        const newDevice = {
-          id: window.crypto.randomUUID(), // Geração de ID robusta
-          text: finalDeviceName,
-          icon: defaultIcon,
-          backgroundColor: defaultColor,
-          connected: true,
-          connectedDate: new Date().toISOString(), // Define a data de conexão
-        };
-        return [...prevConexions, newDevice];
-      }
-    });
-  };
+    if (existingDeviceIndex !== -1) {
+      console.log(`[handleConnectDevice] Aparelho "${finalDeviceName}" já existe. Atualizando status.`);
+      return prevConexions.map((c, index) =>
+        index === existingDeviceIndex
+          ? {
+              ...c,
+              connected: true,
+              icon: defaultIcon,
+              backgroundColor: defaultColor,
+              connectedDate: c.connected ? c.connectedDate : new Date().toISOString()
+            }
+          : c
+      );
+    } else {
+      console.log(`[handleConnectDevice] Aparelho "${finalDeviceName}" NÃO existe. Adicionando novo.`);
+      const newDevice = {
+        id: window.crypto.randomUUID(),
+        text: finalDeviceName,
+        icon: defaultIcon,
+        backgroundColor: defaultColor,
+        connected: true,
+        connectedDate: new Date().toISOString(),
+      };
+      return [...prevConexions, newDevice];
+    }
+  });
+};
+
+
+
 
   /**
    * Função para remover um aparelho da lista.

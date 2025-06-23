@@ -71,33 +71,62 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setSelectedConexion(null);
   };
 
-  const saveConexion = () => {
-    if (!newConexion.text || !newConexion.icon) {
-      setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
-      return;
-    }
-    // Verifica se já existe um aparelho com o mesmo nome (ignorando o que está sendo editado)
-    if (conexions.some((c) => c.text.toLowerCase() === newConexion.text.toLowerCase() && c.id !== editingId)) {
-      setErrorMessage(`Hummm, parece que já temos um aparelho chamado "${newConexion.text}" por aqui. Que tal escolher outro nome? 😊`);
-      return;
-    }
 
-    if (editingId !== null) {
-        // Encontra o índice pelo ID para atualização
-        setConexions(prevConexions => prevConexions.map(c =>
-            c.id === editingId
-                ? { ...newConexion, id: c.id, connectedDate: c.connectedDate || new Date().toISOString() } // Mantém o ID existente
-                : c
-        ));
-    } else {
-        // Quando adicionado via formulário, chame onConnectDevice para adicionar como novo
-        // O `newConexion.icon` contém o caminho do ícone, que é mapeado para o tipo em App.js
-        // Para simplificar, passamos o nome do aparelho como tipo e nome customizado
-        onConnectDevice(newConexion.text, newConexion.text);
-        // O `onConnectDevice` em App.js irá lidar com a adição e a geração do ID.
-    }
-    setShowAddForm(false);
-  };
+
+
+
+
+
+
+
+
+
+
+
+const saveConexion = () => {
+  if (!newConexion.text || !newConexion.icon) {
+    setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
+    return;
+  }
+
+  if (conexions.some((c) => c.text.toLowerCase() === newConexion.text.toLowerCase() && c.id !== editingId)) {
+    setErrorMessage(`Hummm, parece que já temos um aparelho chamado "${newConexion.text}" por aqui. Que tal escolher outro nome? 😊`);
+    return;
+  }
+
+  if (editingId !== null) {
+    setConexions(prevConexions => prevConexions.map(c =>
+      c.id === editingId
+        ? { ...newConexion, id: c.id, connectedDate: c.connectedDate || new Date().toISOString() }
+        : c
+    ));
+  } else {
+    // ✅ Aqui está a correção importante!
+    onConnectDevice(
+      newConexion.text,
+      newConexion.text,
+      newConexion.icon,
+      newConexion.backgroundColor
+    );
+  }
+
+  setShowAddForm(false);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const removeConexion = (id) => {
     setRemovingId(id);
