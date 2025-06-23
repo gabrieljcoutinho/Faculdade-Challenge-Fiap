@@ -1,48 +1,61 @@
 .conexion-details-modal {
-    background-color: white;
-    padding: 40px;
-    border-radius: 10px;
+    background-color: #ffffff;
+    padding: 40px 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 480px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .conexion-details-modal h2 {
     margin-top: 0;
-    color: #2c3e50;
-    margin-bottom: 20px;
+    color: #1f2a38;
+    margin-bottom: 24px;
+    font-weight: 700;
+    font-size: 1.9rem;
+    letter-spacing: 0.03em;
 }
 
-.conexion-details-modal img {
-    margin-bottom: 25px;
-}
 
 .conexion-details-modal h3 {
     color: #34495e;
-    font-size: 1.3em;
+    font-size: 1.4em;
+    margin-bottom: 12px;
+    font-weight: 600;
 }
 
 .conexion-details-modal p {
-    color: #617d8a;
-    font-size: 1.05em;
+    color: #5a7184;
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 28px;
 }
 
 .close-button-styled {
-    background-color: red;
-    color: white;
-    padding: 12px 25px;
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 14px 30px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 17px;
-    margin-top: 30px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    letter-spacing: 0.5px;
-    font-weight: 600;
-
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transition: background-color 0.25s ease, box-shadow 0.3s ease, transform 0.15s ease;
+    box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+    user-select: none;
 }
 
+.close-button-styled:hover,
+.close-button-styled:focus {
+    background-color: #c0392b;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(192, 57, 43, 0.6);
+    outline: none;
+}
 
-
-.close-button-styled:hover {
-    background-color: red;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+.close-button-styled:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 10px rgba(192, 57, 43, 0.7);
 }
