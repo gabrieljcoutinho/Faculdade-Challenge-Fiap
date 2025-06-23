@@ -71,18 +71,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setSelectedConexion(null);
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
 const saveConexion = () => {
   if (!newConexion.text || !newConexion.icon) {
     setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
@@ -112,19 +100,6 @@ const saveConexion = () => {
 
   setShowAddForm(false);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
