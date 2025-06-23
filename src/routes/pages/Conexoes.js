@@ -23,6 +23,7 @@ import lampIcon from '../../imgs/lampada.png';
 import carregador from '../../imgs/carregador.png';
 import editIcon from '../../imgs/pencil.png';
 import imgQrcode from '../../imgs/qrCode.png';
+import placeholderImage from '../../imgs/semConexao.png'; // <-- Imagem que aparece quando não há conexões
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
@@ -151,6 +152,14 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       <button className="add-button-styled" onClick={handleAddClick}>
         <span className="plus-icon">+</span> Adicionar Aparelho
       </button>
+
+      {/* IMAGEM quando não há conexões */}
+      {conexions.length === 0 && !showAddForm && (
+        <div className="placeholder-image-container">
+          <img src={placeholderImage} alt="Nenhum aparelho conectado" className="placeholder-image" />
+          <p className="placeholder-text">Nenhum aparelho conectado</p>
+        </div>
+      )}
 
       {showAddForm && (
         <div className="modal-overlay">
