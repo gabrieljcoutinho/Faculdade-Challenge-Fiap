@@ -1,6 +1,6 @@
+// src/routes/pages/Conexoes.js
 import React, { useState, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { useLocation } from 'react-router-dom';
 
 import '../../CSS/Conexao/conexao.css';
 import '../../CSS/Conexao/mediaScreen.css';
@@ -14,7 +14,7 @@ import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
-import '../../CSS/Conexao/detalhesAparelhos.css';
+import '../../CSS/Conexao/detalhesAparelhos.css'
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -25,17 +25,17 @@ import editIcon from '../../imgs/pencil.png';
 import imgQrcode from '../../imgs/qrCode.png';
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
-const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
 
+// Conexoes agora recebe onConnectDevice, onRemoveDevice e onToggleConnection
 const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, onToggleConnection }) => {
-  const location = useLocation();
   const [showAddForm, setShowAddForm] = useState(false);
+  // O ID agora é gerado apenas na adição final, não no estado temporário
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
   const [activeIcon, setActiveIcon] = useState(null);
   const [activeColor, setActiveColor] = useState(availableColors[0]);
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState(null); // Usar ID para edição
   const [errorMessage, setErrorMessage] = useState('');
-  const [removingId, setRemovingId] = useState(null);
+  const [removingId, setRemovingId] = useState(null); // Usar ID para remoção
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
 
@@ -47,21 +47,19 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     { name: 'Carregador', src: carregador }
   ];
 
-  // ✅ Adiciona aparelho automaticamente se acessar via URL com parâmetros completos (nome, ícone e cor)
+  // Efeito para lidar com a adição via parâmetro de URL (QR Code)
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const nome = params.get('add');
-    const iconURL = params.get('icon');
-    const corFundo = params.get('color') || availableColors[0];
+    const params = new URLSearchParams(window.location.search);
+    const aparelhoParaAdicionar = params.get('add');
+    const deviceTypeFromUrl = params.get('type') || aparelhoParaAdicionar; // Pega o tipo, se houver
 
-    if (nome && iconURL) {
-      console.log('[QR CODE] Adicionando via QR:', nome, iconURL, corFundo);
-
-      onConnectDevice(nome, nome, iconURL, corFundo);
-
-      window.history.replaceState({}, document.title, window.location.pathname); // Limpa os parâmetros da URL
+    if (aparelhoParaAdicionar && deviceTypeFromUrl) {
+      // Chama a função centralizada no App.js para lidar com a conexão
+      onConnectDevice(deviceTypeFromUrl, aparelhoParaAdicionar);
+      // Limpa os parâmetros da URL para evitar adições repetidas em recarregamentos
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, [location.search]);
+  }, [onConnectDevice]); // Adicione onConnectDevice como dependência
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -73,42 +71,45 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setSelectedConexion(null);
   };
 
-  const saveConexion = () => {
-    if (!newConexion.text || !newConexion.icon) {
-      setErrorMessage('Ops! Dê um nome e selecione um ícone para o aparelho 😊');
-      return;
-    }
+const saveConexion = () => {
+  if (!newConexion.text || !newConexion.icon) {
+    setErrorMessage('Ops! Para adicionar um aparelho, você precisa dar um nome e escolher um ícone para ele, tá? 😉');
+    return;
+  }
 
-    if (conexions.some((c) => c.text.toLowerCase() === newConexion.text.toLowerCase() && c.id !== editingId)) {
-      setErrorMessage(`Já existe um aparelho com o nome "${newConexion.text}" 😅`);
-      return;
-    }
+  if (conexions.some((c) => c.text.toLowerCase() === newConexion.text.toLowerCase() && c.id !== editingId)) {
+    setErrorMessage(`Hummm, parece que já temos um aparelho chamado "${newConexion.text}" por aqui. Que tal escolher outro nome? 😊`);
+    return;
+  }
 
-    if (editingId !== null) {
-      setConexions(prevConexions => prevConexions.map(c =>
-        c.id === editingId
-          ? { ...newConexion, id: c.id, connectedDate: c.connectedDate || new Date().toISOString() }
-          : c
-      ));
-    } else {
-      onConnectDevice(
-        newConexion.text,
-        newConexion.text,
-        newConexion.icon,
-        newConexion.backgroundColor
-      );
-    }
+  if (editingId !== null) {
+    setConexions(prevConexions => prevConexions.map(c =>
+      c.id === editingId
+        ? { ...newConexion, id: c.id, connectedDate: c.connectedDate || new Date().toISOString() }
+        : c
+    ));
+  } else {
+    // ✅ Aqui está a correção importante!
+    onConnectDevice(
+      newConexion.text,
+      newConexion.text,
+      newConexion.icon,
+      newConexion.backgroundColor
+    );
+  }
 
-    setShowAddForm(false);
-  };
+  setShowAddForm(false);
+};
+
+
 
   const removeConexion = (id) => {
     setRemovingId(id);
     setTimeout(() => {
-      onRemoveDevice(id);
+      onRemoveDevice(id); // Chama a função do App.js para remover
       setRemovingId(null);
       setSelectedConexion(null);
-    }, 300);
+    }, 300); // Duração da animação de saída
   };
 
   const handleEditClick = (conexionToEdit) => {
@@ -123,17 +124,18 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setActiveIcon(conexionToEdit.icon);
       setActiveColor(conexionToEdit.backgroundColor || availableColors[0]);
       setShowAddForm(true);
-      setEditingId(conexionToEdit.id);
+      setEditingId(conexionToEdit.id); // Define o ID do aparelho que está sendo editado
       setErrorMessage('');
       setSelectedConexion(null);
     }
   };
 
   const toggleConnection = (id) => {
-    onToggleConnection(id);
+    onToggleConnection(id); // Chama a função do App.js para alternar
+    // Se o aparelho selecionado for desconectado, fecha os detalhes
     const conexionBeingToggled = conexions.find(c => c.id === id);
     if (selectedConexion && selectedConexion.id === id && conexionBeingToggled.connected) {
-      setSelectedConexion(null);
+        setSelectedConexion(null);
     }
   };
 
@@ -158,15 +160,21 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const connected = new Date(connectedDateString);
     const now = new Date();
     const diffMs = now - connected;
+
     const diffSeconds = Math.floor(diffMs / 1000);
     const diffMinutes = Math.floor(diffSeconds / 60);
     const diffHours = Math.floor(diffMinutes / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffDays > 0) return `${diffDays} dia(s) e ${diffHours % 24} hora(s)`;
-    if (diffHours > 0) return `${diffHours} hora(s) e ${diffMinutes % 60} minuto(s)`;
-    if (diffMinutes > 0) return `${diffMinutes} minuto(s) e ${diffSeconds % 60} segundo(s)`;
-    return `${diffSeconds} segundo(s)`;
+    if (diffDays > 0) {
+      return `${diffDays} dia(s) e ${diffHours % 24} hora(s)`;
+    } else if (diffHours > 0) {
+      return `${diffHours} hora(s) e ${diffMinutes % 60} minuto(s)`;
+    } else if (diffMinutes > 0) {
+      return `${diffMinutes} minuto(s) e ${diffSeconds % 60} segundo(s)`;
+    } else {
+      return `${diffSeconds} segundo(s)`;
+    }
   };
 
   return (
@@ -233,12 +241,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       )}
 
       <div className="conexions-list">
-        {conexions.map((c) => {
+        {conexions.map((c) => { // Removi o 'index' aqui, usaremos o ID para operações
           const isRemoving = removingId === c.id;
 
           return (
             <div
-              key={c.id}
+              key={c.id} // Chaveada pelo ID
               className={`retanguloAdicionado ${isRemoving ? 'exiting' : ''}`}
               style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
               onClick={() => handleConexionClick(c)}
@@ -249,7 +257,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                     className="qrcode-button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setVisibleQRCode(c);
+                      setVisibleQRCode(c); // Passa o objeto completo
                     }}
                     title="Gerar QR Code"
                   >
@@ -266,7 +274,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               <div className="actions-overlay">
                 <button
                   className="remove-button"
-                  onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }}
+                  onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} // Usa o ID para remover
                   title="Remover"
                   disabled={!c.connected}
                   style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
@@ -274,7 +282,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
                 <button
                   className="edit-button"
-                  onClick={(e) => { e.stopPropagation(); handleEditClick(c); }}
+                  onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} // Passa o objeto para editar
                   title="Editar"
                   disabled={!c.connected}
                   style={{ cursor: !c.connected ? 'not-allowed' : 'pointer', opacity: !c.connected ? 0.5 : 1 }}
@@ -284,7 +292,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
                 <div className="switch-container" onClick={(e) => e.stopPropagation()}>
                   <label className="switch">
-                    <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(c.id)} />
+                    <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(c.id)} /> {/* Usa o ID para alternar */}
                     <span className="slider round"></span>
                   </label>
                 </div>
@@ -295,11 +303,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <div style={{ height: '60px' }}></div>
       </div>
 
-      {visibleQRCode && (
+      {visibleQRCode && ( // Agora visibleQRCode armazena o objeto completo
         <div className="qrcode-overlay">
           <button className="close-qrcode" onClick={() => setVisibleQRCode(null)}>X</button>
           <QRCodeCanvas
-            value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${encodeURIComponent(visibleQRCode.icon)}&color=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
+            // O QR Code agora gera uma URL que o App.js pode interpretar
+            value={`${window.location.origin}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&type=${encodeURIComponent(visibleQRCode.text)}`}
             size={300}
             bgColor="#ffffff"
             fgColor="#000000"
