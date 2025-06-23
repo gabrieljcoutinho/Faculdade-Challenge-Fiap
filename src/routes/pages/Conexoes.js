@@ -25,9 +25,10 @@ import editIcon from '../../imgs/pencil.png';
 import imgQrcode from '../../imgs/qrCode.png';
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
+const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
 
 const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, onToggleConnection }) => {
-  const location = useLocation(); // CORREÇÃO AQUI ✅
+  const location = useLocation();
   const [showAddForm, setShowAddForm] = useState(false);
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
   const [activeIcon, setActiveIcon] = useState(null);
@@ -46,18 +47,30 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     { name: 'Carregador', src: carregador }
   ];
 
-  // ✅ CORREÇÃO: agora detecta mudança na URL
+  // ✅ Adiciona aparelho automaticamente se acessar via URL com parâmetros
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const aparelhoParaAdicionar = params.get('add');
-    const deviceTypeFromUrl = params.get('type') || aparelhoParaAdicionar;
+    const tipo = params.get('type') || aparelhoParaAdicionar;
 
-    if (aparelhoParaAdicionar && deviceTypeFromUrl) {
+    if (aparelhoParaAdicionar && tipo) {
       console.log('[QR CODE] Adicionando via URL:', aparelhoParaAdicionar);
-      onConnectDevice(deviceTypeFromUrl, aparelhoParaAdicionar);
-      window.history.replaceState({}, document.title, window.location.pathname);
+
+      const iconMap = {
+        'TV': tvIcon,
+        'Ar Condicionado': airConditionerIcon,
+        'Airfry': airfry,
+        'Lâmpada': lampIcon,
+        'Carregador': carregador
+      };
+
+      const icon = iconMap[tipo] || lampIcon;
+
+      onConnectDevice(aparelhoParaAdicionar, tipo, icon, availableColors[0]);
+
+      window.history.replaceState({}, document.title, window.location.pathname); // Limpa os parâmetros da URL
     }
-  }, [location.search]); // <- Detecta mudança nos parâmetros da URL
+  }, [location.search]);
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -295,7 +308,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <div className="qrcode-overlay">
           <button className="close-qrcode" onClick={() => setVisibleQRCode(null)}>X</button>
           <QRCodeCanvas
-            value={`${window.location.origin}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&type=${encodeURIComponent(visibleQRCode.text)}`}
+            value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&type=${encodeURIComponent(visibleQRCode.text)}`}
             size={300}
             bgColor="#ffffff"
             fgColor="#000000"
