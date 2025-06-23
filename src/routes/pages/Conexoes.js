@@ -47,26 +47,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     { name: 'Carregador', src: carregador }
   ];
 
-  // ✅ Adiciona aparelho automaticamente se acessar via URL com parâmetros
+  // ✅ Adiciona aparelho automaticamente se acessar via URL com parâmetros completos (nome, ícone e cor)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const aparelhoParaAdicionar = params.get('add');
-    const tipo = params.get('type') || aparelhoParaAdicionar;
+    const nome = params.get('add');
+    const iconURL = params.get('icon');
+    const corFundo = params.get('color') || availableColors[0];
 
-    if (aparelhoParaAdicionar && tipo) {
-      console.log('[QR CODE] Adicionando via URL:', aparelhoParaAdicionar);
+    if (nome && iconURL) {
+      console.log('[QR CODE] Adicionando via QR:', nome, iconURL, corFundo);
 
-      const iconMap = {
-        'TV': tvIcon,
-        'Ar Condicionado': airConditionerIcon,
-        'Airfry': airfry,
-        'Lâmpada': lampIcon,
-        'Carregador': carregador
-      };
-
-      const icon = iconMap[tipo] || lampIcon;
-
-      onConnectDevice(aparelhoParaAdicionar, tipo, icon, availableColors[0]);
+      onConnectDevice(nome, nome, iconURL, corFundo);
 
       window.history.replaceState({}, document.title, window.location.pathname); // Limpa os parâmetros da URL
     }
@@ -308,7 +299,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <div className="qrcode-overlay">
           <button className="close-qrcode" onClick={() => setVisibleQRCode(null)}>X</button>
           <QRCodeCanvas
-            value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&type=${encodeURIComponent(visibleQRCode.text)}`}
+            value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${encodeURIComponent(visibleQRCode.icon)}&color=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
             size={300}
             bgColor="#ffffff"
             fgColor="#000000"
