@@ -16,6 +16,7 @@ import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
 import '../../CSS/Conexao/detalhesAparelhos.css';
 import '../../CSS/Conexao/imgNaoConectado.css'
+import '../../CSS/Conexao/mensagemRemoverAparelho.css'
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -40,6 +41,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [removingId, setRemovingId] = useState(null);
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
+
+  // New state for confirmation dialog
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [conexionToDelete, setConexionToDelete] = useState(null);
 
   const availableIcons = [
     { name: 'tv', src: tvIcon },
@@ -71,7 +76,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
       window.history.replaceState({}, document.title, location.pathname);
     }
-  }, [location.search]);
+  }, [location.search, onConnectDevice]); // Added onConnectDevice to dependency array
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -104,12 +109,26 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   };
 
   const removeConexion = (id) => {
-    setRemovingId(id);
-    setTimeout(() => {
-      onRemoveDevice(id);
-      setRemovingId(null);
-      setSelectedConexion(null);
-    }, 300);
+    setConexionToDelete(id);
+    setShowConfirmDialog(true);
+  };
+
+  const handleConfirmRemove = () => {
+    if (conexionToDelete) {
+      setRemovingId(conexionToDelete);
+      setTimeout(() => {
+        onRemoveDevice(conexionToDelete);
+        setRemovingId(null);
+        setSelectedConexion(null);
+        setConexionToDelete(null);
+        setShowConfirmDialog(false);
+      }, 300);
+    }
+  };
+
+  const handleCancelRemove = () => {
+    setConexionToDelete(null);
+    setShowConfirmDialog(false);
   };
 
   const handleEditClick = (c) => {
@@ -140,7 +159,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const connected = new Date(connectedDateString);
     const now = new Date();
     const diff = now - connected;
-    const s = Math.floor(diff / 1000), m = Math.floor(s / 60), h = Math.floor(m / 60), d = Math.floor(h / 24);
+    const s = Math.floor(diff / 1000);
+    const m = Math.floor(s / 60);
+    const h = Math.floor(m / 60);
+    const d = Math.floor(h / 24);
+
     if (d > 0) return `${d} dia(s) e ${h % 24} hora(s)`;
     if (h > 0) return `${h} hora(s) e ${m % 60} minuto(s)`;
     if (m > 0) return `${m} minuto(s) e ${s % 60} segundo(s)`;
@@ -249,6 +272,20 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             <p><strong>Tempo conectado:</strong> {getConnectionDuration(selectedConexion.connectedDate)}</p>
             <p><strong>ID do aparelho:</strong> <code>{selectedConexion.id}</code></p>
             <button onClick={() => setSelectedConexion(null)} className="close-button-styled">Fechar</button>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Dialog */}
+      {showConfirmDialog && (
+        <div className="modal-overlay">
+          <div className="confirmation-dialog">
+            <h2>Excluir este aparelho?</h2>
+            <p>Você tem certeza que deseja excluir "{conexions.find(c => c.id === conexionToDelete)?.text}"?</p>
+            <div className="dialog-actions">
+              <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
+              <button onClick={handleCancelRemove} className="cancel-button-styled">Não</button>
+            </div>
           </div>
         </div>
       )}
