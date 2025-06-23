@@ -6,7 +6,6 @@
     justify-content: flex-start;
     width: 100%;
     box-sizing: border-box;
-
 }
 
 h1 {
@@ -14,7 +13,6 @@ h1 {
     margin-bottom: 30px;
     color: #333;
 }
-
 
 .plus-icon {
     font-size: 1.2em;
@@ -29,7 +27,6 @@ h1 {
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
-    /* Alterado de center para flex-start */
     flex-wrap: wrap;
     width: 95%;
     padding: 20px;
@@ -38,25 +35,23 @@ h1 {
     box-sizing: border-box;
 }
 
+/* Efeito vidro aplicado */
 .retanguloAdicionado {
     position: relative;
     width: 255px;
     height: 110px;
-    /*altura da vid adicioando o aprelho*/
-    background-color: #e0e0e0;
-    /* Cor de fundo padrão */
-    margin: 0;
-    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 10px;
     display: flex;
     justify-content: center;
-    /* Centraliza o overlay */
     align-items: center;
-    /* Centraliza o overlay */
-    color: #333;
+    color: #000;
     font-size: 1.1em;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     transition: transform 0.2s ease-in-out;
 }
 
@@ -67,64 +62,56 @@ h1 {
 .icon-text-overlay {
     display: flex;
     flex-direction: column;
-    /* Coloca o ícone e o texto em coluna */
     justify-content: center;
-    /* Centraliza verticalmente */
     align-items: center;
-    /* Centraliza horizontalmente */
     width: 100%;
     height: 100%;
 }
 
 .conexion-icon-overlay {
     width: 60px;
-    /* Aumentei um pouco mais o tamanho do ícone na overlay */
     height: 60px;
-    /* Aumentei um pouco mais o tamanho do ícone na overlay */
     margin-bottom: 5px;
-    /* Espaço entre o ícone e o texto */
 }
 
 .conexion-text-overlay {
     text-align: center;
-    color: #333;
-    /* Cor do texto sobre o ícone */
+    color: #fff;
     font-size: 1.2em;
-    /* Aumentei um pouco a fonte do texto */
     font-weight: bold;
-    /* Deixei o texto em negrito para destacar */
 }
 
 .remove-button {
-    background: #FF0000;
+    background: rgba(255, 0, 0, 0.8);
     border: none;
     color: white;
     font-size: 0.9em;
     cursor: pointer;
     padding: 6px 10px;
     border-radius: 6px;
-    opacity: 0.8;
     transition: opacity 0.3s ease;
+    opacity: 0.8;
 }
 
 .remove-button:hover {
     opacity: 1;
 }
 
-/* Estilos para o modal de adicionar */
+/* Efeito vidro para modal */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
 }
-
 
 .form-actions {
     display: flex;
@@ -132,15 +119,12 @@ h1 {
     justify-content: flex-end;
 }
 
-
 .actions-overlay {
     position: absolute;
     top: 8px;
     right: 8px;
     display: flex;
     flex-direction: column;
-    /* Coloca os botões em coluna */
     align-items: flex-end;
-    /* Alinha os botões à direita */
     gap: 5px;
 }
