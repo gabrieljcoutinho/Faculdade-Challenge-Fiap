@@ -15,8 +15,9 @@ import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
 import '../../CSS/Conexao/detalhesAparelhos.css';
-import '../../CSS/Conexao/imgNaoConectado.css'
-import '../../CSS/Conexao/mensagemRemoverAparelho.css'
+import '../../CSS/Conexao/imgNaoConectado.css';
+import '../../CSS/Conexao/mensagemRemoverAparelho.css';
+import '../../CSS/Conexao/connectionSuccessAnimation.css'; // New CSS for animation
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -25,7 +26,8 @@ import lampIcon from '../../imgs/lampada.png';
 import carregador from '../../imgs/carregador.png';
 import editIcon from '../../imgs/pencil.png';
 import imgQrcode from '../../imgs/qrCode.png';
-import placeholderImage from '../../imgs/semConexao.png'; // <-- Imagem que aparece quando não há conexões
+import placeholderImage from '../../imgs/semConexao.png';
+import checkmarkIcon from '../../imgs/checkmark.png'; // Assuming you have a checkmark icon
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
@@ -41,10 +43,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [removingId, setRemovingId] = useState(null);
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
-
-  // New state for confirmation dialog
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [conexionToDelete, setConexionToDelete] = useState(null);
+  const [showConnectionSuccess, setShowConnectionSuccess] = useState(false); // New state for animation
 
   const availableIcons = [
     { name: 'tv', src: tvIcon },
@@ -67,6 +68,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     carregador: carregador
   };
 
+  // Effect for handling URL parameters and triggering success animation
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const nome = params.get('add');
@@ -74,9 +76,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
     if (nome && iconKey && iconMap[iconKey]) {
       onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
-      window.history.replaceState({}, document.title, location.pathname);
+      setShowConnectionSuccess(true); // Trigger success animation
+      setTimeout(() => {
+        setShowConnectionSuccess(false); // Hide animation after some time
+        window.history.replaceState({}, document.title, location.pathname); // Clean up URL
+      }, 2000); // Animation visible for 2 seconds
     }
-  }, [location.search, onConnectDevice]); // Added onConnectDevice to dependency array
+  }, [location.search, onConnectDevice]);
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -176,6 +182,16 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       <button className="add-button-styled" onClick={handleAddClick}>
         <span className="plus-icon">+</span> Adicionar Aparelho
       </button>
+
+      {/* Connection Success Animation */}
+      {showConnectionSuccess && (
+        <div className="connection-success-overlay">
+          <div className="connection-success-animation">
+            <img src={checkmarkIcon} alt="Conectado com Sucesso" className="checkmark-icon" />
+            <p>Aparelho Conectado!</p>
+          </div>
+        </div>
+      )}
 
       {/* IMAGEM quando não há conexões */}
       {conexions.length === 0 && !showAddForm && (
