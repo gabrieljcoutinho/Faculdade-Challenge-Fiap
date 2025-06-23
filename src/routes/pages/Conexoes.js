@@ -15,6 +15,7 @@ import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
 import '../../CSS/Conexao/detalhesAparelhos.css';
+import '../../CSS/Conexao/imgNaoConectado.css'
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';

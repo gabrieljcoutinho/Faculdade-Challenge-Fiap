@@ -1,0 +1,22 @@
+.placeholder-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    opacity: 0.2;
+    /* evita seleção acidental */
+}
+
+.placeholder-image {
+    width: 300px;
+}
+
+.placeholder-text {
+    margin-top: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #888888;
+    /* cor cinza suave */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
