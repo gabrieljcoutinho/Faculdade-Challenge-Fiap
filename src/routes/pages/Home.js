@@ -320,6 +320,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                     >
                         {isAnalyzing ? 'Analisando...' : 'Atualizar Produção'}
                     </button>
+                    <p className='paragrafoFonteGrafico'>Fonte: Placas GoodWe</p>
                 </section>
 
                 <section className="weather-forecast-section">
