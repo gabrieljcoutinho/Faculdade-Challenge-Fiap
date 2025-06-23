@@ -42,29 +42,26 @@
 }
 
 
-
 .close-qrcode {
     position: absolute;
-    top: 18px;
-    right: 18px;
-    width: 32px;
-    height: 32px;
-    font-size: 20px;
-    background-color: transparent;
-    color: #00fff7;
-    border: 2px solid #00fff7;
-    border-radius: 50%;
+    top: 20px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    background-color: #22e0ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
     z-index: 10000;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s, color 0.3s;
-    font-weight: 600;
+    box-shadow: 0 0 10px rgba(15, 240, 252);
+    transition: background-color 0.2s ease;
 }
 
 .close-qrcode:hover {
-    background-color: #00fff7;
-    color: #000;
-    border-color: #00fff7;
+    background-color: #22e0ff;
 }
