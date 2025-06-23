@@ -60,6 +60,9 @@ const Conexoes = () => {
     { name: 'Carregador', src: carregador }
   ];
 
+  useEffect(() => {
+    localStorage.setItem('conexions', JSON.stringify(conexions));
+  }, [conexions]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
