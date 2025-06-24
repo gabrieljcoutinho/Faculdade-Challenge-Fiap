@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Import useRef
 import { QRCodeCanvas } from 'qrcode.react';
 import { useLocation } from 'react-router-dom';
 
@@ -15,9 +15,9 @@ import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
 import '../../CSS/Conexao/detalhesAparelhos.css';
-import '../../CSS/Conexao/imgNaoConectado.css'
-import '../../CSS/Conexao/mensagemRemoverAparelho.css'
-import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css'
+import '../../CSS/Conexao/imgNaoConectado.css';
+import '../../CSS/Conexao/mensagemRemoverAparelho.css';
+import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css';
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -46,14 +46,20 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   // New state for confirmation dialog
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [conexionToDelete, setConexionToDelete] = useState(null);
-  const [showLimitWarning, setShowLimitWarning] = useState(false); // New state for the warning
+  const [showLimitWarning, setShowLimitWarning] = useState(false);
+
+  // New states for camera functionality
+  const [showCamera, setShowCamera] = useState(false);
+  const videoRef = useRef(null);
+  const [cameraError, setCameraError] = useState('');
+  const [recognizedDevice, setRecognizedDevice] = useState(null); // To store recognized device
 
   const availableIcons = [
-    { name: 'tv', src: tvIcon },
-    { name: 'arcondicionado', src: airConditionerIcon },
-    { name: 'lampada', src: lampIcon },
-    { name: 'airfry', src: airfry },
-    { name: 'carregador', src: carregador }
+    { name: 'tv', src: tvIcon, keywords: ['tv', 'televisão', 'monitor'] },
+    { name: 'arcondicionado', src: airConditionerIcon, keywords: ['ar condicionado', 'climatizador'] },
+    { name: 'lampada', src: lampIcon, keywords: ['lâmpada', 'iluminação', 'luz'] },
+    { name: 'airfry', src: airfry, keywords: ['airfryer', 'fritadeira'] },
+    { name: 'carregador', src: carregador, keywords: ['carregador', 'cabo', 'adaptador'] }
   ];
 
   const getIconKeyBySrc = (src) => {
@@ -75,14 +81,91 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const iconKey = params.get('icon');
 
     if (nome && iconKey && iconMap[iconKey]) {
-      // Check for device limit before connecting
       if (conexions.length >= 5) {
         setShowLimitWarning(true);
+      } else {
+        onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
       }
-      onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
       window.history.replaceState({}, document.title, location.pathname);
     }
-  }, [location.search, onConnectDevice, conexions.length]); // Added conexions.length to dependency array
+  }, [location.search, onConnectDevice, conexions.length]);
+
+  // Camera functionality
+  useEffect(() => {
+    if (showCamera) {
+      startCamera();
+    } else {
+      stopCamera();
+    }
+    // Cleanup function to stop camera when component unmounts or showCamera becomes false
+    return () => {
+      stopCamera();
+    };
+  }, [showCamera]);
+
+  const startCamera = async () => {
+    setCameraError('');
+    setRecognizedDevice(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }); // 'environment' for back camera
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+        // You would typically start a continuous recognition process here
+        // For demonstration, we'll just show the camera feed.
+      }
+    } catch (err) {
+      console.error("Error accessing camera: ", err);
+      setCameraError('Não foi possível acessar a câmera. Verifique as permissões.');
+    }
+  };
+
+  const stopCamera = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const tracks = videoRef.current.srcObject.getTracks();
+      tracks.forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
+
+  // This function would contain your image recognition logic
+  // For this example, it's a placeholder.
+  const recognizeImageFromStream = () => {
+    // In a real application, you would:
+    // 1. Capture a frame from the videoRef.current.
+    // 2. Send this frame to a machine learning model (e.g., TensorFlow.js, or a backend API).
+    // 3. The model would analyze the image and return a prediction (e.g., 'tv', 'lampada').
+    // 4. Based on the prediction, you'd set the recognizedDevice state.
+
+    // Placeholder logic: Simulate recognition after a delay
+    setTimeout(() => {
+      const simulatedDevices = ['tv', 'lampada', 'arcondicionado', 'airfry', 'carregador', 'unknown'];
+      const randomDevice = simulatedDevices[Math.floor(Math.random() * simulatedDevices.length)];
+
+      if (randomDevice !== 'unknown') {
+        const recognizedIcon = availableIcons.find(icon => icon.name === randomDevice);
+        if (recognizedIcon) {
+          setRecognizedDevice({ name: recognizedIcon.name, iconSrc: recognizedIcon.src });
+          // Automatically connect if recognized
+          connectRecognizedDevice(recognizedIcon.name, recognizedIcon.src);
+        }
+      } else {
+        setRecognizedDevice(null); // Or show a message that nothing was recognized
+      }
+      setShowCamera(false); // Close camera after "recognition"
+    }, 2000); // Simulate 2-second recognition time
+  };
+
+  const connectRecognizedDevice = (deviceName, deviceIconSrc) => {
+    if (conexions.length >= 5) {
+      setShowLimitWarning(true);
+      return;
+    }
+    const uniqueName = `${deviceName}-${Date.now().toString().slice(-4)}`; // Simple unique name
+    onConnectDevice(uniqueName, uniqueName, deviceIconSrc, availableColors[0]);
+    setShowCamera(false); // Close camera after connection
+    setRecognizedDevice(null);
+  };
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -92,7 +175,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setEditingId(null);
     setErrorMessage('');
     setSelectedConexion(null);
-    setShowLimitWarning(false); // Reset warning when opening add form
+    setShowLimitWarning(false);
   };
 
   const saveConexion = () => {
@@ -109,9 +192,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     if (editingId !== null) {
       setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate } : c));
     } else {
-      // Check for device limit before connecting
       if (conexions.length >= 5) {
         setShowLimitWarning(true);
+        return;
       }
       onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
     }
@@ -151,7 +234,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setEditingId(c.id);
       setErrorMessage('');
       setSelectedConexion(null);
-      setShowLimitWarning(false); // Reset warning when opening edit form
+      setShowLimitWarning(false);
     }
   };
 
@@ -185,12 +268,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   return (
     <div className="conexao-container">
       <h1 className='tituloConexao'>Aparelhos Conectados</h1>
-      <button className="add-button-styled" onClick={handleAddClick}>
-        <span className="plus-icon">+</span> Adicionar Aparelho
-      </button>
+      <div className="button-group">
+        <button className="add-button-styled" onClick={handleAddClick}>
+          <span className="plus-icon">+</span> Adicionar Aparelho Manualmente
+        </button>
+        <button className="add-button-styled" onClick={() => setShowCamera(true)}>
+          <span className="camera-icon">📷</span> Conectar via Câmera
+        </button>
+      </div>
 
       {/* IMAGEM quando não há conexões */}
-      {conexions.length === 0 && !showAddForm && (
+      {conexions.length === 0 && !showAddForm && !showCamera && (
         <div className="placeholder-image-container">
           <br /><br /><br />
           <img src={placeholderImage} alt="Nenhum aparelho conectado" className="placeholder-image" />
@@ -226,6 +314,26 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               <button onClick={saveConexion} className="save-button-styled">{editingId ? 'Salvar Edição' : 'Salvar'}</button>
               <button onClick={() => setShowAddForm(false)} className="cancel-button-styled">Cancelar</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Camera Modal */}
+      {showCamera && (
+        <div className="modal-overlay">
+          <div className="camera-modal">
+            <h2>Mire a Câmera no Aparelho</h2>
+            {cameraError && <p className="error-message">{cameraError}</p>}
+            <video ref={videoRef} className="camera-feed"></video>
+            <button onClick={recognizeImageFromStream} className="capture-button">Reconhecer Aparelho</button>
+            <button onClick={() => { setShowCamera(false); setCameraError(''); setRecognizedDevice(null); }} className="cancel-button-styled">Cancelar</button>
+            {recognizedDevice && (
+              <div className="recognized-device-info">
+                <p>Aparelho reconhecido: <strong>{recognizedDevice.name}</strong></p>
+                <img src={recognizedDevice.iconSrc} alt={recognizedDevice.name} style={{ width: '50px', height: '50px' }} />
+                <button onClick={() => connectRecognizedDevice(recognizedDevice.name, recognizedDevice.iconSrc)} className="save-button-styled">Conectar {recognizedDevice.name}</button>
+              </div>
+            )}
           </div>
         </div>
       )}
