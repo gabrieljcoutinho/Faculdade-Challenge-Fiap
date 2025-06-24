@@ -57,20 +57,22 @@
 
 .message-input {
     flex-grow: 1;
-    padding: 14px 16px;
+    padding: 14px 20px;
     font-size: 16px;
-    border-radius: 24px;
+    border-radius: 30px;
     border: 1px solid #ccc;
     outline: none;
-    transition: border-color 0.25s ease;
-    background-color: #000;
-    color: #333;
+    transition: all 0.3s ease;
+    background-color: #333;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .message-input:focus {
     border-color: #4facfe;
+    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
     background-color: #252525;
-    color: white;
+    color: #fff;
 }
 
 .message-input::placeholder {
