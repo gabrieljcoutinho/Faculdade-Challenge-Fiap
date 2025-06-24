@@ -1,0 +1,163 @@
+/* Overlay com fundo escurecido + blur suave */
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+/* Modal centralizado com sombra mais suave e fundo com leve gradiente */
+.warning-dialog {
+    background: linear-gradient(135deg, #fff, #fefefe);
+    color: #3a3a3a;
+    padding: 48px 36px;
+    border-radius: 16px;
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    width: 90%;
+    max-width: 460px;
+    transform: translateY(-60px);
+    opacity: 0;
+    animation: slideInFromTop 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    position: relative;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Ícone maior com sombra e animação mais suave */
+.warning-dialog::before {
+    content: '⚠️';
+    font-size: 4em;
+    display: block;
+    margin-bottom: 22px;
+    color: #ffb74d;
+    /* Laranja suave */
+    text-shadow:
+        0 2px 6px rgba(255, 183, 77, 0.6);
+    animation: bounceIn 0.9s ease-out;
+}
+
+/* Título com cor mais suave e sombra sutil */
+.warning-dialog h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 2.2em;
+    color: #ffb74d;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(255, 183, 77, 0.4);
+}
+
+/* Parágrafo com espaçamento e cor mais leve */
+.warning-dialog p {
+    font-size: 1.2em;
+    line-height: 1.8;
+    margin-bottom: 35px;
+    color: #666666;
+    letter-spacing: 0.02em;
+}
+
+/* Botão com efeito gradiente, sombra e hover animado */
+.warning-dialog button.close-button-styled {
+    background: linear-gradient(135deg, #ffb74d, #ff9800);
+    color: #fff;
+    border: none;
+    padding: 16px 36px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.15em;
+    font-weight: 700;
+    box-shadow:
+        0 6px 15px rgba(255, 152, 0, 0.5);
+
+}
+
+.warning-dialog button.close-button-styled:hover {
+    background: linear-gradient(135deg, #ffa726, #fb8c00);
+    transform: translateY(-4px);
+    box-shadow:
+        0 10px 20px rgba(251, 140, 0, 0.7);
+}
+
+.warning-dialog button.close-button-styled:active {
+    transform: translateY(0);
+    box-shadow:
+        0 4px 10px rgba(251, 140, 0, 0.5);
+}
+
+/* Animação entrada modal */
+@keyframes slideInFromTop {
+    from {
+        transform: translateY(-60px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Animação do ícone */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.1);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+
+    80% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .warning-dialog {
+        padding: 36px 24px;
+        max-width: 360px;
+    }
+
+    .warning-dialog h2 {
+        font-size: 1.8em;
+    }
+
+    .warning-dialog p {
+        font-size: 1.05em;
+        margin-bottom: 28px;
+    }
+
+    .warning-dialog button.close-button-styled {
+        padding: 14px 28px;
+        font-size: 1.05em;
+    }
+}
+
+@media (max-width: 400px) {
+    .warning-dialog {
+        padding: 28px 18px;
+    }
+
+    .warning-dialog h2 {
+        font-size: 1.5em;
+    }
+
+    .warning-dialog p {
+        font-size: 0.95em;
+    }
+}

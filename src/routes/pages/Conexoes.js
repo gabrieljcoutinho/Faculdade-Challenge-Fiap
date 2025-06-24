@@ -17,6 +17,7 @@ import '../../CSS/Conexao/qrCode.css';
 import '../../CSS/Conexao/detalhesAparelhos.css';
 import '../../CSS/Conexao/imgNaoConectado.css'
 import '../../CSS/Conexao/mensagemRemoverAparelho.css'
+import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css'
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -45,6 +46,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   // New state for confirmation dialog
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [conexionToDelete, setConexionToDelete] = useState(null);
+  const [showLimitWarning, setShowLimitWarning] = useState(false); // New state for the warning
 
   const availableIcons = [
     { name: 'tv', src: tvIcon },
@@ -73,10 +75,14 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const iconKey = params.get('icon');
 
     if (nome && iconKey && iconMap[iconKey]) {
+      // Check for device limit before connecting
+      if (conexions.length >= 5) {
+        setShowLimitWarning(true);
+      }
       onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
       window.history.replaceState({}, document.title, location.pathname);
     }
-  }, [location.search, onConnectDevice]); // Added onConnectDevice to dependency array
+  }, [location.search, onConnectDevice, conexions.length]); // Added conexions.length to dependency array
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -86,6 +92,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setEditingId(null);
     setErrorMessage('');
     setSelectedConexion(null);
+    setShowLimitWarning(false); // Reset warning when opening add form
   };
 
   const saveConexion = () => {
@@ -102,6 +109,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     if (editingId !== null) {
       setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate } : c));
     } else {
+      // Check for device limit before connecting
+      if (conexions.length >= 5) {
+        setShowLimitWarning(true);
+      }
       onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
     }
 
@@ -140,6 +151,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setEditingId(c.id);
       setErrorMessage('');
       setSelectedConexion(null);
+      setShowLimitWarning(false); // Reset warning when opening edit form
     }
   };
 
@@ -287,6 +299,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
               <button onClick={handleCancelRemove} className="cancel-button-styled">Não</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Device Limit Warning Dialog */}
+      {showLimitWarning && (
+        <div className="modal-overlay">
+          <div className="warning-dialog">
+            <h2>Aviso!</h2>
+            <p>Você tem MUITOS aparelhos conectados. Considere desconectar alguns para um melhor gerenciamento.</p>
+            <button onClick={() => setShowLimitWarning(false)} className="close-button-styled">Entendi</button>
           </div>
         </div>
       )}
