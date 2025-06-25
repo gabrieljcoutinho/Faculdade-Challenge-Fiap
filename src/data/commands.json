@@ -8,18 +8,18 @@
         "Quais dispositivos posso conectar",
         "Quais dispositivos posso conectar?",
         "Quais dispositivos posso conectar ?",
-        "quais dispositivos eu posso conectar",
-        "quais dispositivos eu posso conectar?",
-        "quais dispositivos eu posso conectar ?",
-        "quais dispositivos posso conectar",
-        "quais dispositivos posso conectar?",
-        "quais dispositivos posso conectar ?",
         "Qual dispositivo eu posso conectar",
         "Qual dispositivo eu posso conectar?",
         "Qual dispositivo eu posso conectar ?",
         "Qual dispositivo posso conectar",
         "Qual dispositivo posso conectar?",
         "Qual dispositivo posso conectar ?",
+        "quais dispositivos eu posso conectar",
+        "quais dispositivos eu posso conectar?",
+        "quais dispositivos eu posso conectar ?",
+        "quais dispositivos posso conectar",
+        "quais dispositivos posso conectar?",
+        "quais dispositivos posso conectar ?",
         "qual dispositivo eu posso conectar",
         "qual dispositivo eu posso conectar?",
         "qual dispositivo eu posso conectar ?",
@@ -30,106 +30,71 @@
       "resposta": "TV, Ar-Condicionado, Lâmpada, Airfry e Carregador. Caso queira conectar algum desses dispositivos, basta dizer 'Conectar [nome do dispositivo]'."
     },
     {
-      "triggers": ["Conectar TV", "Conectar Televisao", "Conectar Televisão", "Ligar tv", "conectar tv", "conectar televisao", "conectar televisão", "ligar tv"],
+      "triggers": [
+        "Conectar TV", "Conectar Televisao", "Conectar Televisão",
+        "Ligar tv", "conectar tv", "conectar televisao", "conectar televisão", "ligar tv"
+      ],
       "resposta": "TV Conectada"
     },
     {
-      "triggers": ["Conectar Ar-Condicionado", "Conectar Arcondiconado", "Ligar Ar-Condicionado", "Conectar ar condicionado", "Ligar ar condicionado", "conectar ar-condicionado", "ligar ar-condicionado", "conectar ar condicionado", "ligar ar condicionado"],
+      "triggers": [
+        "Conectar Ar-Condicionado", "Conectar Arcondiconado", "Ligar Ar-Condicionado",
+        "Conectar ar condicionado", "Ligar ar condicionado", "conectar ar-condicionado",
+        "ligar ar-condicionado", "conectar ar condicionado", "ligar ar condicionado"
+      ],
       "resposta": "Ar-Condicionado Conectado"
     },
     {
-      "triggers": ["Conectar Lâmpada", "Ligar Lâmpada", "Conectar lampada", "Ligar lampada", "conectar lâmpada", "ligar lâmpada", "conectar lampada", "ligar lampada"],
+      "triggers": [
+        "Conectar Lâmpada", "Ligar Lâmpada", "Conectar lampada", "Ligar lampada",
+        "conectar lâmpada", "ligar lâmpada", "conectar lampada", "ligar lampada"
+      ],
       "resposta": "Lâmpada Conectada"
     },
     {
-      "triggers": ["Conectar Airfry", "Ligar Airfry", "conectar airfry", "ligar airfry"],
+      "triggers": [
+        "Conectar Airfry", "Ligar Airfry", "conectar airfry", "ligar airfry"
+      ],
       "resposta": "Airfry Conectada"
     },
     {
-      "triggers": ["Conectar Carregador", "Ligar Carregador", "Conectar carregador", "Ligar carregador", "conectar carregador", "ligar carregador"],
+      "triggers": [
+        "Conectar Carregador", "Ligar Carregador", "Conectar carregador",
+        "Ligar carregador", "conectar carregador", "ligar carregador"
+      ],
       "resposta": "Carregador Conectado"
     },
     {
       "triggers": [
-" Analisar gráfico",
-  " Analisar o gráfico",
-  " Analisar grafico",
-  " Análise Grafico",
-  " Análise do Grafico",
-  " Dados do grafico",
-  " Dados do Grafico",
-  " Producao de energia",
-  " Producao de energia do gráfico",
-  " Produção de energia do Gráfico",
-
-  "Analise o grafico",
-    "Analise o gráfico",
-      "Analise o Grafico",
-    "Analise o Gráfico",
-
-
-      "Análise o grafico",
-    "Análise o gráfico",
-      "Análise o Grafico",
-    "Análise o Gráfico",
-
-  " Como esta a energia",
-
-  " Como tá a produção de energia",
-  " Como tá a produção do gráfico ?",
-  " Como tá a produção do gráfico",
-  " Informação do gráfico",
-  " Informações do gráfico",
-  " Informação do grafico",
-  " Informações do grafico",
-
-
-  " Analisar gráfico",
-  " Analisar o gráfico",
-  " Analisar grafico",
-  " Analisar o grafico",
-
-    " Análise do Grafico",
-     " Análise do grafico",
-     " Analise do Grafico",
-    " Analise do grafico",
-
-  " Análise Grafico",
-  " Análise o Grafico",
-  " Análise do grafico",
-  " Análise do gráfico",
-  " Análise do Gráfico",
-  " Análise do Grafico",
-  " Relatório de produção",
-  " Relatório de produção do gráfico",
-  " Relatório de produção do Gráfico",
-  " Relatório de produção do grafico",
-  " Relatório de produção do Grafico",
-  " Dados do gráfico",
-  " Dados do Gráfico",
-  " Dados do grafico",
-  " Meus dados de energia do Grafico",
-  " Como esta a energia",
-  " Como está a energia do gráfico",
-  " Como esta a energia do Gráfico",
-  " Informação do grafico",
-  " Informações do grafico"
-
-
+        "Comandos", "Comandos ?", "Comandos?", "comandos", "comandos ?", "comandos?"
+      ],
+      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Mudar para o modo escuro** / **claro**: Para trocar o tema da interface.\n\nOu acesse o menu de configurações para mais opções."
+    },
+    {
+      "triggers": [
+        "Analisar gráfico", "Analisar o gráfico", "Analisar grafico",
+        "Análise do Grafico", "Dados do grafico", "Producao de energia",
+        "Produção de energia do Gráfico", "Analise o grafico", "Análise o Gráfico",
+        "Relatório de produção", "Dados do gráfico", "Meus dados de energia do Grafico",
+        "Como está a energia", "Informações do gráfico"
       ],
       "resposta": "PRODUCAO_GRAFICO"
     },
     {
       "triggers": [
-        "Comandos",
-        "Comandos ?",
-        "Comandos?",
-        "comandos",
-        "comandos ?",
-        "comandos?"
+        "Mudar para o modo escuro", "Ativar modo escuro", "Modo escuro",
+        "Tema escuro", "mudar para o modo escuro", "ativar modo escuro",
+        "modo escuro", "tema escuro"
       ],
-      "resposta":
-      "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n\n Caso preferir, acesse as configurações e clique no ícone de um papel e lápis no qual terá todos os comandos detalhados."
+      "resposta": "TEMA_ESCURO"
+    },
+    {
+      "triggers": [
+        "Mudar para o modo claro", "Ativar modo claro", "Modo claro",
+        "Tema claro", "mudar para o modo claro", "ativar modo claro",
+        "modo claro", "tema claro"
+      ],
+      "resposta": "TEMA_CLARO"
     }
   ]
 }

@@ -75,6 +75,75 @@ const ComandosChat = () => {
               ))}
             </ul>
           </li>
+
+
+
+    <li className="comando-item">
+            <strong>Tema Claro </strong>
+
+
+
+
+<ul className="sub-lista-comandos">
+              {/* Grouped common phrases for better readability */}
+              {[
+         '➤ Mudar para o modo claro',
+              '➤ Ativar modo claro',
+               '➤ Modo claro',
+        '➤ Tema claro',
+        '➤ mudar para o modo claro',
+        '➤ ativar modo claro',
+        '➤ modo claro, tema claro'
+
+
+              ].map((command, index) => (
+                <li key={index}>{command}</li>
+              ))}
+            </ul>
+
+          </li>
+
+
+
+           <li className="comando-item">
+                  <strong>Tema Escuro </strong>
+
+
+
+
+
+<ul className="sub-lista-comandos">
+              {/* Grouped common phrases for better readability */}
+              {[
+
+
+
+            '➤ Mudar para o modo escuro',
+            '➤ Ativar modo escuro',
+             '➤ Modo escuro',
+        '➤ Tema escuro',
+        '➤ mudar para o modo escuro',
+        '➤ ativar modo escuro',
+        '➤ modo escuro',
+        '➤ tema escuro'
+
+
+              ].map((command, index) => (
+                <li key={index}>{command}</li>
+              ))}
+            </ul>
+
+
+
+                     {[
+
+
+            ] }
+
+
+          </li>
+
+
         </ul>
       </div>
       <br />

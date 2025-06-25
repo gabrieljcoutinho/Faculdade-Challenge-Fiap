@@ -63,7 +63,7 @@ const Configuracoes = () => {
             title="Mudar tema"
             style={{ fontSize: '16px', padding: '10px', marginTop: '10px' }}
           >
-            {theme === 'light-theme' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+            {theme === 'light-theme' ? '🌙 Modo Escuro' : '☀️ Modo Claro'}
           </button>
 
           <div className="top-buttons">

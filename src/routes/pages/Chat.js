@@ -5,13 +5,12 @@ import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
-
 import comandosData from '../../data/commands.json';
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const normalizeText = (text) => text.trim().toLowerCase();
 
-const Chat = ({ onConnectDevice, productionData }) => {
+const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
@@ -37,7 +36,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
         for (let i = 0; i < labels.length; i++) {
             const hour = labels[i];
             const value = productionValues[i];
-            response += `| ${hour} | ${value} kW/h      |\n`;
+            response += `| ${hour} | ${value} kW/h |\n`;
             totalProduction += value;
         }
 
@@ -53,7 +52,6 @@ const Chat = ({ onConnectDevice, productionData }) => {
         if (firstInteraction) setFirstInteraction(false);
 
         const textoNormalizado = normalizeText(texto);
-
         setMessages(prev => [...prev, { role: 'user', content: texto }]);
         setNewMessage('');
         setLoading(true);
@@ -61,9 +59,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
         let handledByLocalCommand = false;
         let botResponseContent = '';
 
-
-
-        // ATENÇÃO: Adicionado 'o conectar' aos triggers
+        // Comandos de conexão
         const connectionCommands = [
             { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão', 'oconectar tv', 'oconectar televisão'] },
             { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado', 'oconectar ar-condicionado', 'oconectar ar condicionado'] },
@@ -72,40 +68,30 @@ const Chat = ({ onConnectDevice, productionData }) => {
             { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador', 'oconectar carregador'] }
         ];
 
-        let identifiedDeviceType = null; // Ex: 'TV'
-        let fullDeviceNameForConnection = null; // Ex: 'TV Sala', 'Lâmpada do Quarto'
+        let identifiedDeviceType = null;
+        let fullDeviceNameForConnection = null;
 
         for (const cmd of connectionCommands) {
             for (const trigger of cmd.triggers) {
                 const normalizedTrigger = normalizeText(trigger);
                 if (textoNormalizado.startsWith(normalizedTrigger)) {
-                    identifiedDeviceType = cmd.type; // Captura o tipo base do aparelho (ex: 'TV')
-                    let remainingText = texto.substring(trigger.length).trim(); // Captura o resto da string (ex: "sala")
-
-                    if (remainingText === '') {
-                        // Se não houver nome customizado, usa o tipo base como nome final
-                        fullDeviceNameForConnection = cmd.type;
-                    } else {
-                        // Concatena o tipo base com o restante do texto (capitalizando a primeira letra do restante)
-                        // Ex: "TV" + " Sala" = "TV Sala"
-                        fullDeviceNameForConnection = `${cmd.type} ${remainingText.charAt(0).toUpperCase() + remainingText.slice(1)}`;
-                    }
+                    identifiedDeviceType = cmd.type;
+                    let remainingText = texto.substring(trigger.length).trim();
+                    fullDeviceNameForConnection = remainingText
+                        ? `${cmd.type} ${remainingText.charAt(0).toUpperCase() + remainingText.slice(1)}`
+                        : cmd.type;
                     handledByLocalCommand = true;
-                    break; // Encontrou um trigger, para de procurar por outros para este comando
+                    break;
                 }
             }
-            if (identifiedDeviceType) break; // Encontrou um tipo de aparelho, para de procurar em connectionCommands
+            if (identifiedDeviceType) break;
         }
 
-        if (fullDeviceNameForConnection) { // Se um comando de conexão foi identificado
+        if (fullDeviceNameForConnection) {
             if (typeof onConnectDevice === 'function') {
-                // Chama a função onConnectDevice do componente pai (App.js)
-                // Passa o tipo do aparelho (para talvez escolher o ícone) e o nome completo
                 onConnectDevice(identifiedDeviceType, fullDeviceNameForConnection);
             }
 
-            // Define a resposta do bot para o comando de conexão
-            // Busca a resposta no comandos.json, se não encontrar, usa uma genérica
             const connectionCommandInJson = comandosData.comandos.find(cmd =>
                 cmd.triggers.some(jsonTrigger => normalizeText(jsonTrigger) === textoNormalizado)
             );
@@ -115,7 +101,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
                 : `${fullDeviceNameForConnection} conectado!`;
 
             handledByLocalCommand = true;
-        } else { // Se não foi um comando de conexão, tenta comandos gerais ou Gemini
+        } else {
             const comandoEncontrado = comandosData.comandos.find(cmd =>
                 cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
             );
@@ -125,6 +111,25 @@ const Chat = ({ onConnectDevice, productionData }) => {
                     comandoEncontrado.resposta === 'PRODUCAO_GRAFICO'
                         ? formatProductionData(productionData)
                         : comandoEncontrado.resposta;
+
+                // Comando especial: mudar tema para escuro
+                if (botResponseContent === 'TEMA_ESCURO') {
+                    document.body.classList.remove('light-theme');
+                    document.body.classList.add('dark-theme');
+                    localStorage.setItem('theme', 'dark-theme');
+                    if (setTheme) setTheme('dark-theme');
+                    botResponseContent = "Tema escuro ativado! 🌙";
+                }
+
+                // Comando especial: mudar tema para claro
+                if (botResponseContent === 'TEMA_CLARO') {
+                    document.body.classList.remove('dark-theme');
+                    document.body.classList.add('light-theme');
+                    localStorage.setItem('theme', 'light-theme');
+                    if (setTheme) setTheme('light-theme');
+                    botResponseContent = "Tema claro ativado! ☀️";
+                }
+
                 handledByLocalCommand = true;
             }
         }
@@ -202,24 +207,19 @@ const Chat = ({ onConnectDevice, productionData }) => {
 
     return (
         <div className="chat-container">
-
-
             <div className="message-display-area">
                 {firstInteraction && (
-                   <div className="movimentoDaDiv">
-                     <div className="messageBot">
-                        <span className="message-bubble  messagemInicial">
-                            💡 Digite <strong>Comandos</strong> para receber comandos específicos do site.
-                        </span>
+                    <div className="movimentoDaDiv">
+                        <div className="messageBot">
+                            <span className="message-bubble messagemInicial">
+                                💡 Digite <strong>Comandos</strong> para receber comandos específicos do site.
+                            </span>
+                        </div>
                     </div>
-                   </div>
                 )}
 
                 {messages.filter(msg => msg.role !== 'system').map((message, index) => (
-                    <div
-                        key={index}
-                        className={`message ${message.role === 'user' ? 'user' : 'bot'}`}
-                    >
+                    <div key={index} className={`message ${message.role === 'user' ? 'user' : 'bot'}`}>
                         <span
                             className="message-bubble"
                             dangerouslySetInnerHTML={{
