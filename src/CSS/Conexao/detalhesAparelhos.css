@@ -1,48 +1,75 @@
+/* Base styling for the modal container */
 .conexion-details-modal {
-    background-color: white;
+    background-color: #ffffff; /* Use full hex for clarity */
     padding: 40px;
     border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
+    max-width: 500px; /* Constrain width for better readability on large screens */
+    margin: 30px auto; /* Center the modal if it's not absolutely positioned */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Specify a modern, readable font-family */
 }
 
+/* Headings within the modal */
 .conexion-details-modal h2 {
     margin-top: 0;
-    color: #2c3e50;
+    color: #2c3e50; /* Darker blue for primary headings */
     margin-bottom: 20px;
+    font-size: 2em; /* Increase font size for better hierarchy */
+    text-align: center; /* Center the main title */
 }
 
+/* Image styling */
 .conexion-details-modal img {
-    margin-bottom: 25px;
+    max-width: 100%; /* Ensure image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove extra space below the image */
+    margin: 0 auto 25px auto; /* Center the image and adjust bottom margin */
+    border-radius: 5px; /* Slightly round the image corners */
 }
 
+/* Subheadings */
 .conexion-details-modal h3 {
-    color: #34495e;
-    font-size: 1.3em;
+    color: #34495e; /* Slightly lighter dark blue for subheadings */
+    font-size: 1.5em; /* Slightly larger for emphasis */
+    margin-top: 25px; /* Add space above subheadings */
+    margin-bottom: 10px;
 }
 
+/* Paragraph text */
 .conexion-details-modal p {
-    color: #617d8a;
-    font-size: 1.05em;
+    color: #617d8a; /* Soft gray for body text */
+    font-size: 1.1em; /* Slightly larger for readability */
+    line-height: 1.6; /* Improve line spacing for better legibility */
+    margin-bottom: 15px; /* Space out paragraphs */
 }
 
+/* Close button styling */
 .close-button-styled {
-    background-color: red;
-    color: white;
+    background-color: #e74c3c; /* A more vibrant red for the button */
+    color: #ffffff; /* White text */
     padding: 12px 25px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 17px;
     margin-top: 30px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Add box-shadow to transition */
     letter-spacing: 0.5px;
     font-weight: 600;
-
+    display: block; /* Make it a block element to control margin:auto */
+    margin-left: auto; /* Center the button */
+    margin-right: auto; /* Center the button */
+    text-transform: uppercase; /* Make button text uppercase for more impact */
 }
 
-
-
 .close-button-styled:hover {
-    background-color: red;
+    background-color: #c0392b; /* Darker red on hover */
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* More pronounced shadow on hover */
+}
+
+.close-button-styled:active {
+    transform: translateY(0); /* Button goes back to original position on click */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Smaller shadow on click */
+    background-color: #a52a22; /* Even darker red when active */
 }
