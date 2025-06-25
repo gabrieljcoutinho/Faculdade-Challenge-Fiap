@@ -38,8 +38,7 @@ recognitionRef.current.onresult = event => {
     navigate('/');
   } else if (speechToText.includes('pagina inicial')) {
     navigate('/');
-  }
-   else if (speechToText.includes('conexão') || speechToText.includes('conexao')) {
+  }else if (speechToText.includes('conexão') || speechToText.includes('conexao')) {
     navigate('/conexoes');
   } else if (speechToText.includes('chat')) {
     navigate('/chat');
