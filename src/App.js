@@ -13,6 +13,7 @@ import carregador from './imgs/carregador.png';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ThemeToggle from './components/ThemeToggle';
 
 // Pages
 import Home from './routes/pages/Home';
@@ -193,6 +194,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header />
+        <ThemeToggle />
         <Routes>
           <Route
             path="/"

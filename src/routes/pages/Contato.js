@@ -6,9 +6,7 @@ import { FaInstagram, FaLinkedin, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaPhone
 const Contato = () => {
   return (
     <div className="contato-container">
-      <div className="contato-header">
-        <br />
-      </div>
+
 
       <div className="contato-wrapper">
         <form className="contato-form">

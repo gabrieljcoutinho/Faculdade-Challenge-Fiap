@@ -1,0 +1,73 @@
+/* theme.css */
+:root {
+    --bg-light: #fff;
+    --text-light: #000;
+
+    --bg-dark: #121212;
+    --text-dark: hsl(0, 0%, 93%);
+}
+
+body.light-theme,
+.tipoGrafico {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+}
+
+
+
+body.dark-theme {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+body.dark,
+.paragrafoFonteGrafico,
+.tipoDoFundoConexao {
+    color: var(--bg-dark);
+}
+
+body.dark,
+.placeholder-text,
+.tituloHelpCenter {
+    color: #fff;
+
+}
+
+body.dark,
+.paragrafoContatoTitulo {
+    color: #000;
+}
+
+
+body.light-theme .tituloConexao {
+    color: black;
+}
+
+body.dark-theme .tituloConexao,
+.placeholder-texte {
+    color: white;
+}
+
+
+body.dark-theme .chat-container {
+    background-color: #000;
+    border: #000;
+}
+
+body.dark-theme .messagemInicial {
+    color: #000;
+}
+
+
+body.dark-theme .contato-container {
+    background-color: #000;
+}
+
+
+body.dark-theme .tituloHelpCenter {
+    color: #fff;
+}
+
+body.light-theme .tituloHelpCenter {
+    color: #000;
+}

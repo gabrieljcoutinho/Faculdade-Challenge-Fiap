@@ -152,6 +152,8 @@ const Logar = () => {
           <p><Link to="/cadastro"> Não tem conta? Crie uma agora</Link></p>
         </div>
       </section>
+
+      
       <aside className="login-info">
         <h2>Por que se juntar a nós?</h2>
         <ul>

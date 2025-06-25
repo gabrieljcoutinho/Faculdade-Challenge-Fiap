@@ -208,7 +208,7 @@ const Chat = ({ onConnectDevice, productionData }) => {
                 {firstInteraction && (
                    <div className="movimentoDaDiv">
                      <div className="messageBot">
-                        <span className="message-bubble">
+                        <span className="message-bubble  messagemInicial">
                             💡 Digite <strong>Comandos</strong> para receber comandos específicos do site.
                         </span>
                     </div>
