@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import '../../CSS/Home/home.css';
 import '../../CSS/Home/expanded.css';
 import '../../CSS/Home/analyze.css';
@@ -65,7 +65,11 @@ const WEATHER_ICONS = {
 const Home = ({ productionData, onUpdateProductionData }) => {
     // UI state management
     const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [currentChartType, setCurrentChartType] = useState('line');
+    // Initialize currentChartType from localStorage or default to 'line'
+    const [currentChartType, setCurrentChartType] = useState(() => {
+        const savedChartType = localStorage.getItem('selectedChartType');
+        return savedChartType || 'line';
+    });
     const [expandedChartType, setExpandedChartType] = useState(null); // Stores the type of the currently expanded chart
 
     // Sample data for weather and forecast (can be moved to props or fetched from an API)
@@ -78,6 +82,11 @@ const Home = ({ productionData, onUpdateProductionData }) => {
 
     // Ref for the main chart element to capture its image
     const chartRef = useRef(null);
+
+    // Use useEffect to save currentChartType to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem('selectedChartType', currentChartType);
+    }, [currentChartType]);
 
     // Common chart options memoized for performance
     const commonChartOptions = useMemo(() => ({
