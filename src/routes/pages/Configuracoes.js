@@ -44,7 +44,9 @@ recognitionRef.current.onresult = event => {
     navigate('/chat');
   } else if (speechToText.includes('Contato')) {
     navigate('/contato');
-  } else if (speechToText.includes('configuração') || speechToText.includes('configuracao')) {
+  } else if (speechToText.includes('Contato')) {
+    navigate('/contato');
+  }else if (speechToText.includes('configuração') || speechToText.includes('configuracao')) {
     navigate('/configuracoes');
   } else if (speechToText.includes('comandos')) {
     navigate('/comandosChat');
