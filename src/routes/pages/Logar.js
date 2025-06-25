@@ -169,7 +169,7 @@ const Logar = () => {
           ))}
         </ul>
       </aside>
-      <br /><br /><br /><br /><br />
+      <br /><br /><br />
     </main>
   );
 };

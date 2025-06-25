@@ -1,309 +1,144 @@
-/* CSS/Login/login.css */
+/* General Body and Container Styles */
+
+
 .login-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f2f5;
-    padding: 20px;
-    padding-top: 5rem;
+    flex-direction: column;
+    /* Stack elements vertically on small screens */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 90%;
+    /* Responsive width */
+    max-width: 900px;
+    /* Max width for larger screens */
+    margin: 2rem auto;
+    /* Center the container with some margin */
 }
 
+/* Media query for larger screens (e.g., tablets and desktops) */
+@media (min-width: 768px) {
+    .login-container {
+        flex-direction: row;
+        /* Side-by-side on larger screens */
+        height: 600px;
+        /* Fixed height for a more structured layout */
+    }
+}
+
+/* Login Box Styles */
 .login-box {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    width: 450px;
+    flex: 1;
+    /* Takes equal space */
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }
 
-h1 {
-    color: #283149;
-    margin-bottom: 30px;
-    font-size: 2.2em;
-    font-weight: 700;
+.login-box h1 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
 }
 
+/* Login Form Styles */
 .login-form {
-    display: flex;
-    flex-direction: column;
+    width: 100%;
+    max-width: 350px;
+    /* Max width for the form elements */
 }
 
 .input-group {
-    margin-bottom: 25px;
+    margin-bottom: 1rem;
     text-align: left;
-    position: relative;
-    /* Garante que o botão seja posicionado corretamente */
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 8px;
-    color: #545e6f;
-    font-weight: 600;
-    font-size: 1em;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: bold;
 }
 
 .input-group input[type="email"],
 .input-group input[type="password"] {
     width: calc(100% - 20px);
-    padding: 12px;
-    border: 1px solid #d1d7e0;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-}
-
-.input-group input[type="email"]:focus,
-.input-group input[type="password"]:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    /* Adjust for padding */
+    padding: 0.8rem 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
 }
 
 .password-input-group {
-    display: flex;
-    align-items: center;
-    /* Alinha verticalmente os itens */
-}
-
-.password-input-group input[type="password"],
-.password-input-group input[type="text"] {
-    width: calc(100% - 50px);
-    /* Ajusta a largura para o botão */
-    padding-right: 40px;
-    /* Espaço para o botão */
+    position: relative;
 }
 
 .password-toggle-button {
     position: absolute;
     right: 10px;
     top: 50%;
-    /* Centraliza verticalmente */
     transform: translateY(-50%);
-    /* Ajusta o alinhamento */
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2em;
-    color: #6c757d;
-    outline: none;
-}
-
-.login-button {
-    background-color: #007bff;
-    color: white;
-    padding: 14px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-}
-
-.login-button:hover {
-    background-color: #0056b3;
-}
-
-.links {
-    margin-top: 30px;
-    color: #6c757d;
-    font-size: 0.9em;
-}
-
-.links a {
-    color: #007bff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.links a:hover {
-    text-decoration: underline;
-    color: #0056b3;
-}
-
-.login-info {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    width: 350px;
-    margin-left: 40px;
-}
-
-.login-info h2 {
-    color: #283149;
-    margin-bottom: 20px;
-    font-size: 1.8em;
-    font-weight: 700;
-}
-
-.login-info ul {
-    list-style: none;
-    padding: 0;
-}
-
-.login-info li {
-    margin-bottom: 15px;
-    color: #545e6f;
-    font-size: 1em;
-    position: relative;
-    padding-left: 25px;
-}
-
-.login-info li span {
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 1.2em;
-    color: #007bff;
-}
-
-/* Estilos responsivos */
-@media (max-width: 992px) {
-    .login-container {
-        flex-direction: column;
-    }
-
-    .login-box {
-        width: 90%;
-        margin-bottom: 30px;
-    }
-
-    .login-info {
-        width: 90%;
-        margin-left: 0;
-    }
-}
-
-@media (max-width: 576px) {
-    .login-box {
-        padding: 30px;
-    }
-
-    .login-info {
-        padding: 20px;
-    }
-
-    .login-info h2 {
-        font-size: 1.5em;
-    }
-
-    .login-info li {
-        font-size: 0.95em;
-    }
-}
-
-
-
-
-
-
-
-
-/* Estilos padrão (modo claro) */
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f2f5;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.login-box {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.login-box h1 {
-    font-size: 2rem;
-    margin-bottom: 25px;
-    color: #333;
-}
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.input-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-
-.password-input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-input-group input {
-    padding-right: 40px;
-    /* Espaço para o botão */
-}
-
-.password-toggle-button {
-    position: absolute;
-    right: 10px;
     background: none;
     border: none;
     cursor: pointer;
     font-size: 1.2rem;
-    color: #888;
+    padding: 0;
 }
 
 .login-button {
+    width: 100%;
+    padding: 0.9rem;
     background-color: #007bff;
+    /* Primary blue for login */
     color: white;
-    padding: 12px 20px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     font-size: 1.1rem;
     font-weight: bold;
-    margin-top: 15px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 1rem;
 }
 
 .login-button:hover {
     background-color: #0056b3;
+    /* Darker blue on hover */
 }
 
+/* Social Login Buttons */
+.social-login-buttons button {
+    /* Styles are applied inline in the JS, but these provide a fallback/base */
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    color: white;
+}
+
+/* Separator */
 .or-separator {
-    position: relative;
+    margin: 1.5rem 0;
     text-align: center;
-    margin: 25px 0;
+    position: relative;
+    color: #aaa;
 }
 
 .or-separator span {
     background-color: #ffffff;
     padding: 0 10px;
-    color: #888;
     position: relative;
     z-index: 1;
 }
@@ -318,169 +153,60 @@ h1 {
     z-index: 0;
 }
 
-/* Estilos para os links (esqueceu senha, criar conta) */
+/* Links (Forgot Password, Create Account) */
 .links {
-    margin-top: 20px;
-    font-size: 0.95rem;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
 }
 
 .links a {
     color: #007bff;
     text-decoration: none;
-    margin-bottom: 10px;
+    margin: 0.5rem 0;
     display: block;
+    /* Each link on its own line */
 }
 
 .links a:hover {
     text-decoration: underline;
 }
 
-.links p {
-    color: #555;
-}
-
-/* Estilos da seção de informações (aside) */
+/* Login Info Section */
 .login-info {
-    background-color: #e2f0fb;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    width: 100%;
-    max-width: 400px;
-    margin-left: 20px;
-    /* Espaçamento entre as caixas */
+    flex: 1;
+    background: linear-gradient(to bottom right, #6a11cb, #2575fc);
+    /* Linear gradient from top-left to bottom-right */
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     text-align: left;
+
 }
 
 .login-info h2 {
-    font-size: 1.8rem;
-    color: #007bff;
-    margin-bottom: 20px;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 3rem;
 }
 
 .login-info ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .login-info li {
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
     font-size: 1.1rem;
-    color: #444;
+    line-height: 1.5;
     display: flex;
     align-items: center;
 }
 
 .login-info li span {
-    margin-right: 10px;
     font-size: 1.5rem;
-    /* Para os ícones emoji */
-}
-
-/* --------------------------------------------------------------------- */
-/* Estilos para o Modo Escuro */
-body.dark .login-container {
-    background-color: #121212;
-    /* Fundo mais escuro */
-}
-
-body.dark .login-box {
-    background-color: #1e1e1e;
-    /* Fundo da caixa de login */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-body.dark .login-box h1,
-body.dark .input-group label {
-    color: #f0f0f0;
-    /* Cor do texto para títulos e labels */
-}
-
-body.dark .input-group input {
-    background-color: #2a2a2a;
-    /* Fundo dos inputs */
-    color: #f0f0f0;
-    /* Cor do texto digitado nos inputs */
-    border: 1px solid #444;
-}
-
-body.dark .input-group input::placeholder {
-    color: #b0b0b0;
-    /* Cor do placeholder */
-}
-
-body.dark .password-toggle-button {
-    color: #f0f0f0;
-    /* Cor do ícone de mostrar/esconder senha */
-}
-
-body.dark .login-button {
-    background-color: #0056b3;
-    /* Cor do botão de login no modo escuro */
-    color: #ffffff;
-}
-
-body.dark .login-button:hover {
-    background-color: #003d80;
-}
-
-body.dark .or-separator span {
-    background-color: #1e1e1e;
-    /* Fundo do texto "ou" */
-    color: #b0b0b0;
-}
-
-body.dark .or-separator::before {
-    border-top: 1px solid #333;
-    /* Cor da linha separadora */
-}
-
-body.dark .links a {
-    color: #80c0ff;
-    /* Cor dos links no modo escuro */
-}
-
-body.dark .links p {
-    color: #f0f0f0;
-    /* Cor do texto "Não tem conta?" */
-}
-
-body.dark .login-info {
-    background-color: #2a2a2a;
-    /* Fundo da seção de informações */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-body.dark .login-info h2 {
-    color: #80c0ff;
-    /* Cor do título da seção de informações */
-}
-
-body.dark .login-info li {
-    color: #e0e0e0;
-    /* Cor do texto da lista de informações */
-}
-
-/* Ajustes para os botões sociais - os backgrounds são inline, então afetamos a cor do texto e SVG */
-body.dark .social-login-buttons button {
-    color: white;
-    /* Mantém a cor do texto branca */
-}
-
-body.dark .social-login-buttons button svg path {
-    /* Pode ser necessário ajustar a cor de preenchimento de SVGs individuais se eles não forem brancos */
-    /* Por exemplo, para o Google, a parte branca do 'G' não mudará, mas os preenchimentos coloridos sim. */
-    /* Você pode precisar de regras mais específicas se o SVG não for monochroático */
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .login-container {
-        flex-direction: column;
-    }
-
-    .login-info {
-        margin-left: 0;
-        margin-top: 20px;
-    }
+    margin-right: 0.8rem;
 }
