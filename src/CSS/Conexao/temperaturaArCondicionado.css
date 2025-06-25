@@ -1,0 +1,112 @@
+/* Estilos para o controle de temperatura */
+.temperature-control {
+    margin-top: 15px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+.temperature-control h4 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.temperature-control input[type="range"] {
+    width: 90%;
+    -webkit-appearance: none;
+    /* Remove o estilo padrão do navegador */
+    appearance: none;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    /* Cor do fundo do slider */
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+}
+
+.temperature-control input[type="range"]:hover {
+    opacity: 1;
+}
+
+.temperature-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #007bff;
+    /* Cor do "pino" do slider */
+    cursor: grab;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.temperature-control input[type="range"]::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: grab;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.temperature-control span {
+    display: block;
+    /* Para que a temperatura fique abaixo do slider */
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #555;
+}
+
+/* --- Estilo para a exibição da temperatura na lista de aparelhos --- */
+.temperature-display {
+    /* Layout */
+    display: inline-flex;
+    /* Permite alinhamento de itens internos */
+    align-items: center;
+    /* Centraliza verticalmente o texto e o valor */
+    margin-left: 10px;
+    /* Um pouco mais de espaço à esquerda */
+    padding: 2px 8px;
+    /* Espaçamento interno para um visual de "tag" */
+    border-radius: 5px;
+    /* Cantos levemente arredondados */
+
+    /* Tipografia e Cores */
+    font-size: 0.8em;
+    /* Tamanho da fonte um pouco menor para compactar */
+    color: #4a6a8a;
+    /* Uma cor azulada que remete ao ar-condicionado */
+    background-color: #e6f0fa;
+    /* Um fundo suave para o "tag" de temperatura */
+    border: 1px solid #cce0f5;
+    /* Borda sutil */
+    font-weight: 600;
+    /* Seminegrito para legibilidade */
+    white-space: nowrap;
+    /* Impede que o texto quebre em várias linhas */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Sombra sutil para destaque */
+}
+
+.temperature-display .temperature-value {
+    font-weight: 700;
+    /* Apenas o valor da temperatura mais forte */
+    color: #007bff;
+    /* Cor mais vibrante para o valor em si */
+    margin-left: 4px;
+    /* Espaço entre "Temp:" e o valor */
+}
+
+/* Opcional: Ajuste para telas menores se o espaço for um problema */
+@media (max-width: 768px) {
+    .temperature-display {
+        margin-left: 5px;
+        font-size: 0.75em;
+        padding: 1px 6px;
+    }
+}
