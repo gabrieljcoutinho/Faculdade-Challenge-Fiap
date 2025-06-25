@@ -42,7 +42,7 @@ recognitionRef.current.onresult = event => {
     navigate('/conexoes');
   } else if (speechToText.includes('chat')) {
     navigate('/chat');
-  } else if (speechToText.includes('contato')) {
+  } else if (speechToText.includes('Contato')) {
     navigate('/contato');
   } else if (speechToText.includes('configuração') || speechToText.includes('configuracao')) {
     navigate('/configuracoes');
