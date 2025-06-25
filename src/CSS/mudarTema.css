@@ -1,29 +1,20 @@
-/* theme.css */
-:root {
-    --bg-light: #fff;
-    --text-light: #000;
-
-    --bg-dark: #121212;
-    --text-dark: hsl(0, 0%, 93%);
-}
-
 body.light-theme,
 .tipoGrafico {
-    background-color: var(--bg-light);
-    color: var(--text-light);
+    background-color: #fff;
+    color: #000;
 }
 
 
 
 body.dark-theme {
-    background-color: var(--bg-dark);
-    color: var(--text-dark);
+    background-color: #121212;
+    color: hsl(0, 0%, 93%);
 }
 
 body.dark,
 .paragrafoFonteGrafico,
 .tipoDoFundoConexao {
-    color: var(--bg-dark);
+    color: #121212;
 }
 
 body.dark,
