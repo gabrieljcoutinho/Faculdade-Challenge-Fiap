@@ -153,7 +153,7 @@ const Logar = () => {
         </div>
       </section>
 
-      
+
       <aside className="login-info">
         <h2>Por que se juntar a nós?</h2>
         <ul>
