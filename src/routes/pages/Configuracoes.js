@@ -34,8 +34,13 @@ recognitionRef.current.onresult = event => {
 
   if (speechToText.includes('home')) {
     navigate('/');
-  } else if (speechToText.includes('conexão') || speechToText.includes('conexao')) {
-    navigate('/conexao');
+  } else if (speechToText.includes('início')) {
+    navigate('/');
+  } else if (speechToText.includes('pagina inicial')) {
+    navigate('/');
+  }
+   else if (speechToText.includes('conexão') || speechToText.includes('conexao')) {
+    navigate('/conexoes');
   } else if (speechToText.includes('chat')) {
     navigate('/chat');
   } else if (speechToText.includes('contato')) {
