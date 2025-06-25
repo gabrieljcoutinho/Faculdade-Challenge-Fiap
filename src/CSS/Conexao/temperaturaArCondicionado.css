@@ -1,7 +1,6 @@
 /* Estilos para o controle de temperatura */
 .temperature-control {
     margin-top: 15px;
-    text-align: center;
     padding: 10px;
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -12,6 +11,7 @@
     margin-bottom: 10px;
     color: #333;
     font-size: 1.1em;
+
 }
 
 .temperature-control input[type="range"] {
@@ -26,6 +26,7 @@
     outline: none;
     opacity: 0.7;
     transition: opacity .2s;
+
 }
 
 .temperature-control input[type="range"]:hover {
@@ -42,6 +43,7 @@
     /* Cor do "pino" do slider */
     cursor: grab;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+
 }
 
 .temperature-control input[type="range"]::-moz-range-thumb {
@@ -51,6 +53,7 @@
     background: #007bff;
     cursor: grab;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+
 }
 
 .temperature-control span {
@@ -60,6 +63,7 @@
     font-weight: bold;
     margin-top: 10px;
     color: #555;
+
 }
 
 /* --- Estilo para a exibição da temperatura na lista de aparelhos --- */
@@ -91,6 +95,7 @@
     /* Impede que o texto quebre em várias linhas */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     /* Sombra sutil para destaque */
+
 }
 
 .temperature-display .temperature-value {
@@ -100,6 +105,7 @@
     /* Cor mais vibrante para o valor em si */
     margin-left: 4px;
     /* Espaço entre "Temp:" e o valor */
+
 }
 
 /* Opcional: Ajuste para telas menores se o espaço for um problema */

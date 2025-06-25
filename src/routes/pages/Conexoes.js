@@ -18,7 +18,7 @@ import '../../CSS/Conexao/detalhesAparelhos.css';
 import '../../CSS/Conexao/imgNaoConectado.css'
 import '../../CSS/Conexao/mensagemRemoverAparelho.css'
 import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css'
-import '../../CSS/Conexao/temperaturaArCondicionado.css' // Certifique-se de que este arquivo existe e está sendo importado
+import '../../CSS/Conexao/temperaturaArCondicionado.css'
 
 import tvIcon from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
@@ -27,7 +27,7 @@ import lampIcon from '../../imgs/lampada.png';
 import carregador from '../../imgs/carregador.png';
 import editIcon from '../../imgs/pencil.png';
 import imgQrcode from '../../imgs/qrCode.png';
-import placeholderImage from '../../imgs/semConexao.png'; // <-- Imagem que aparece quando não há conexões
+import placeholderImage from '../../imgs/semConexao.png';
 
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
@@ -35,7 +35,6 @@ const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
 const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, onToggleConnection }) => {
   const location = useLocation();
   const [showAddForm, setShowAddForm] = useState(false);
-  // Adicionado 'temperature' ao estado inicial de newConexion
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString(), temperature: null });
   const [activeIcon, setActiveIcon] = useState(null);
   const [activeColor, setActiveColor] = useState(availableColors[0]);
@@ -45,13 +44,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
 
-  // Novo estado para controlar a temperatura dos aparelhos (específico para AC)
   const [acTemperatures, setAcTemperatures] = useState({});
 
-  // New state for confirmation dialog
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [conexionToDelete, setConexionToDelete] = useState(null);
-  const [showLimitWarning, setShowLimitWarning] = useState(false); // New state for the warning
+  const [showLimitWarning, setShowLimitWarning] = useState(false);
 
   const availableIcons = [
     { name: 'tv', src: tvIcon },
@@ -80,18 +77,16 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const iconKey = params.get('icon');
 
     if (nome && iconKey && iconMap[iconKey]) {
-      // Check for device limit before connecting
       if (conexions.length >= 5) {
         setShowLimitWarning(true);
       }
-      // Passa a temperatura inicial para o ar-condicionado (ex: 22°C)
+      // Define a temperatura inicial para o ar-condicionado (padrão: 22°C)
       const initialTemperature = iconMap[iconKey] === airConditionerIcon ? 22 : null;
       onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0], initialTemperature);
       window.history.replaceState({}, document.title, location.pathname);
     }
-  }, [location.search, onConnectDevice, conexions.length]); // Added conexions.length to dependency array
+  }, [location.search, onConnectDevice, conexions.length]);
 
-  // Atualiza acTemperatures quando conexions muda
   useEffect(() => {
     const newAcTemperatures = {};
     conexions.forEach(c => {
@@ -104,14 +99,15 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   const handleAddClick = () => {
     setShowAddForm(true);
-    // Resetar newConexion com temperatura nula por padrão
+    // Reinicia newConexion com temperatura nula por padrão,
+    // será definida para 22 se o ícone de AC for escolhido.
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString(), temperature: null });
     setActiveIcon(null);
     setActiveColor(availableColors[0]);
     setEditingId(null);
     setErrorMessage('');
     setSelectedConexion(null);
-    setShowLimitWarning(false); // Reset warning when opening add form
+    setShowLimitWarning(false);
   };
 
   const saveConexion = () => {
@@ -126,16 +122,15 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }
 
     if (editingId !== null) {
-      // Se estiver editando, mantém a temperatura existente ou define null se não for AC
+      // Se estiver editando, mantém a temperatura existente ou define 22 se for AC e ainda não tiver temperatura
       const updatedTemperature = newConexion.icon === airConditionerIcon ? (newConexion.temperature || acTemperatures[editingId] || 22) : null;
       setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate, temperature: updatedTemperature } : c));
     } else {
-      // Check for device limit before connecting
+      // **AQUI: Define a temperatura inicial para o ar-condicionado (padrão: 22)**
       if (conexions.length >= 5) {
         setShowLimitWarning(true);
         return; // Impede a adição se o limite for atingido
       }
-      // Define a temperatura inicial para o ar-condicionado (padrão: 22)
       const initialTemperature = newConexion.icon === airConditionerIcon ? 22 : null;
       onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor, initialTemperature);
     }
@@ -168,15 +163,22 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   const handleEditClick = (c) => {
     if (c.connected) {
-      // Ao editar, define a temperatura atual do AC se existir
-      setNewConexion({ text: c.text, icon: c.icon, backgroundColor: c.backgroundColor || availableColors[0], connected: c.connected, connectedDate: c.connectedDate, temperature: c.temperature });
+      // Ao editar, define a temperatura atual do AC se existir, ou 22 como padrão
+      setNewConexion({
+        text: c.text,
+        icon: c.icon,
+        backgroundColor: c.backgroundColor || availableColors[0],
+        connected: c.connected,
+        connectedDate: c.connectedDate,
+        temperature: c.icon === airConditionerIcon ? (c.temperature || 22) : null
+      });
       setActiveIcon(c.icon);
       setActiveColor(c.backgroundColor || availableColors[0]);
       setShowAddForm(true);
       setEditingId(c.id);
       setErrorMessage('');
       setSelectedConexion(null);
-      setShowLimitWarning(false); // Reset warning when opening edit form
+      setShowLimitWarning(false);
     }
   };
 
@@ -190,7 +192,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     if (c.connected) setSelectedConexion(c);
   };
 
-  // Nova função para manipular a mudança de temperatura
+  // Função para manipular a mudança de temperatura
   const handleTemperatureChange = (deviceId, newTemperature) => {
     setAcTemperatures(prev => ({
       ...prev,
@@ -204,8 +206,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           : conn
       )
     );
-    // Se desejar, adicione aqui uma chamada para uma função externa
-    // (ex: onUpdateDeviceTemperature(deviceId, newTemperature))
   };
 
   const formatDate = (d) => new Date(d).toLocaleString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -251,7 +251,19 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               <label>Escolha o ícone:</label>
               <div className="icons">
                 {availableIcons.map((icon) => (
-                  <button key={icon.name} className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`} onClick={() => { setNewConexion({ ...newConexion, icon: icon.src, temperature: icon.src === airConditionerIcon ? (newConexion.temperature || 22) : null }); setActiveIcon(icon.src); }}>
+                  <button
+                    key={icon.name}
+                    className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`}
+                    onClick={() => {
+                      // Se o ícone for ar-condicionado, define a temperatura padrão para 22
+                      setNewConexion({
+                        ...newConexion,
+                        icon: icon.src,
+                        temperature: icon.src === airConditionerIcon ? (newConexion.temperature || 22) : null
+                      });
+                      setActiveIcon(icon.src);
+                    }}
+                  >
                     <img src={icon.src} alt={icon.name} style={{ width: '30px', height: '30px' }} />
                   </button>
                 ))}
@@ -289,7 +301,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
               {/* Exibir temperatura se for um ar-condicionado e estiver conectado */}
               {c.icon === airConditionerIcon && c.connected && c.temperature !== undefined && (
-                // AQUI É A LINHA ALTERADA para melhorar o texto
                 <span className="temperature-display">
                   Temp: <span className="temperature-value">{c.temperature}°C</span>
                 </span>
