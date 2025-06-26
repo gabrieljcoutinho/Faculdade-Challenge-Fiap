@@ -157,11 +157,22 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       if (device) {
         const deviceName = device.name || 'Dispositivo Bluetooth Desconhecido';
 
-        let guessedIcon = lampIcon;
-        if (deviceName.toLowerCase().includes('tv')) guessedIcon = tvIcon;
-        else if (deviceName.toLowerCase().includes('ar')) guessedIcon = airConditionerIcon;
-        else if (deviceName.toLowerCase().includes('carregador')) guessedIcon = carregador;
-        else if (deviceName.toLowerCase().includes('airfry')) guessedIcon = airfry;
+        let guessedIcon = lampIcon; // Fallback padrão
+
+const name = deviceName.toLowerCase();
+
+if (name.includes('tv') || name.includes('televisão')) {
+  guessedIcon = tvIcon;
+} else if (name.includes('ar') || name.includes('ac') || name.includes('condicionado')) {
+  guessedIcon = airConditionerIcon;
+} else if (name.includes('lamp') || name.includes('lâmpada') || name.includes('lampada') || name.includes('led')) {
+  guessedIcon = lampIcon;
+} else if (name.includes('airfry') || name.includes('fritadeira')) {
+  guessedIcon = airfry;
+} else if (name.includes('carregador') || name.includes('charger') || name.includes('usb')) {
+  guessedIcon = carregador;
+}
+
 
         if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
           setErrorMessage(`Já existe um aparelho chamado "${deviceName}".`);
