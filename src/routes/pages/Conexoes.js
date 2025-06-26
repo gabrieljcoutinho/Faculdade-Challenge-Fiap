@@ -61,7 +61,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     icon: '',
     backgroundColor: availableColors[0],
     connected: true,
-    connectedDate: new Date().toISOString()
+    connectedDate: new Date().toISOString(),
+    device: null,             // Aqui armazenaremos o BluetoothDevice real
+    gattServer: null,         // conexão GATT para enviar comandos
+    powerCharacteristic: null // characteristic para ligar/desligar
   });
   const [activeIcon, setActiveIcon] = useState(null);
   const [activeColor, setActiveColor] = useState(availableColors[0]);
@@ -90,7 +93,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   };
 
   const handleAddClick = () => {
-    setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
+    setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString(), device: null, gattServer: null, powerCharacteristic: null });
     setActiveIcon(null);
     setActiveColor(availableColors[0]);
     setEditingId(null);
@@ -99,6 +102,22 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setShowLimitWarning(false);
     setShowAddForm(true);
     setIsSearchingBluetooth(false);
+  };
+
+  // Função para conectar e obter characteristic para controle (exemplo)
+  const connectToDeviceAndGetPowerCharacteristic = async (device) => {
+    try {
+      const server = await device.gatt.connect();
+      // Exemplo: usar serviço 'device_information' ou outro correto
+      // Aqui você deve usar o UUID correto do seu aparelho
+      const service = await server.getPrimaryService('battery_service'); // Troque pelo serviço real do seu dispositivo
+      // Característica hipotética para ligar/desligar
+      const characteristic = await service.getCharacteristic('00002a19-0000-1000-8000-00805f9b34fb'); // Exemplo, troque pelo UUID real
+      return { server, characteristic };
+    } catch (error) {
+      console.error('Erro ao conectar e obter característica:', error);
+      throw error;
+    }
   };
 
   const handleSearchAndConnectBluetooth = async () => {
@@ -135,7 +154,23 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           return;
         }
 
-        onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
+        // Aqui conectamos e pegamos characteristic para controle
+        const { server, characteristic } = await connectToDeviceAndGetPowerCharacteristic(device);
+
+        // Criamos o objeto da conexão incluindo device real e characteristic
+        const newDevice = {
+          id: Date.now().toString(),
+          text: deviceName,
+          icon: guessedIcon,
+          backgroundColor: availableColors[0],
+          connected: true,
+          connectedDate: new Date().toISOString(),
+          device,
+          gattServer: server,
+          powerCharacteristic: characteristic,
+        };
+
+        setConexions(prev => [...prev, newDevice]);
         setShowAddForm(false);
       } else {
         setErrorMessage('Nenhum aparelho Bluetooth selecionado.');
@@ -148,6 +183,23 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       else setErrorMessage('Falha na conexão Bluetooth. Tente novamente.');
     } finally {
       setIsSearchingBluetooth(false);
+    }
+  };
+
+  // Função para ligar/desligar o dispositivo via Bluetooth
+  const sendPowerCommand = async (deviceObj, ligar) => {
+    if (!deviceObj || !deviceObj.powerCharacteristic) {
+      console.warn('Dispositivo não tem característica para controle.');
+      return;
+    }
+    try {
+      // Exemplo: ligar = 1, desligar = 0
+      const value = new Uint8Array([ligar ? 1 : 0]);
+      await deviceObj.powerCharacteristic.writeValue(value);
+      console.log(`Comando para ${ligar ? 'ligar' : 'desligar'} enviado com sucesso.`);
+    } catch (error) {
+      console.error('Erro ao enviar comando power:', error);
+      setErrorMessage('Erro ao enviar comando para o dispositivo.');
     }
   };
 
@@ -192,7 +244,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   const handleEditClick = (c) => {
     if (c.connected) {
-      setNewConexion({ text: c.text, icon: c.icon, backgroundColor: c.backgroundColor || availableColors[0], connected: c.connected, connectedDate: c.connectedDate });
+      setNewConexion({ ...c }); // inclui device, gattServer, powerCharacteristic
       setActiveIcon(c.icon);
       setActiveColor(c.backgroundColor || availableColors[0]);
       setEditingId(c.id);
@@ -204,10 +256,39 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }
   };
 
-  const toggleConnection = (id) => {
-    onToggleConnection(id);
+  const toggleConnection = async (id) => {
     const c = conexions.find(device => device.id === id);
-    if (selectedConexion && selectedConexion.id === id && c.connected) {
+    if (!c) return;
+
+    const newConnectedState = !c.connected;
+
+    // Tentar enviar comando via Bluetooth para ligar/desligar
+    if (c.gattServer && c.gattServer.connected) {
+      try {
+        await sendPowerCommand(c, newConnectedState);
+      } catch {
+        // Caso erro, podemos desconectar ou tentar reconectar
+      }
+    } else {
+      // Se não estiver conectado, tenta reconectar para enviar comando
+      if (c.device) {
+        try {
+          const server = await c.device.gatt.connect();
+          c.gattServer = server;
+          // Re-obtenha characteristic se quiser mais robustez
+          // ...
+          await sendPowerCommand(c, newConnectedState);
+        } catch (error) {
+          setErrorMessage('Não foi possível conectar ao dispositivo para alterar estado.');
+          return;
+        }
+      }
+    }
+
+    // Atualiza o estado local (ligado/desligado)
+    onToggleConnection(id);
+
+    if (selectedConexion && selectedConexion.id === id && !newConnectedState) {
       setSelectedConexion(null);
     }
   };
@@ -337,75 +418,62 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             )}
             {!c.connected && <div className="disconnected-overlay">Desativado</div>}
             <div className="icon-text-overlay">
-              <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-              <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
+              <img src={c.icon} alt={c.text} style={{ width: '50px', height: '50px' }} />
+              <span className="device-name">{c.text}</span>
             </div>
-            <div className="actions-overlay">
-              <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} disabled={!c.connected}>X</button>
-              <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} disabled={!c.connected}>
-                <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px' }} />
-              </button>
-              <div className="switch-container" onClick={(e) => e.stopPropagation()}>
-                <label className="switch">
-                  <input type="checkbox" checked={c.connected} onChange={() => toggleConnection(c.id)} />
-                  <span className="slider round"></span>
-                </label>
-              </div>
-            </div>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={c.connected}
+                onChange={() => toggleConnection(c.id)}
+                onClick={(e) => e.stopPropagation()}
+              />
+              <span className="slider round"></span>
+            </label>
+            <button
+              className="edit-button"
+              onClick={(e) => { e.stopPropagation(); handleEditClick(c); }}
+              disabled={!c.connected}
+              title="Editar aparelho"
+            >
+              <img src={editIcon} alt="Editar" />
+            </button>
+            <button
+              className="remove-button"
+              onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }}
+              title="Remover aparelho"
+            >
+              &times;
+            </button>
           </div>
         ))}
-        <div style={{ height: '60px' }}></div>
       </div>
 
       {visibleQRCode && (
-        <div className="qrcode-overlay">
-          <button className="close-qrcode" onClick={() => setVisibleQRCode(null)}>X</button>
-          <div className="qrcode-container">
-            <h3>Escaneie para Conectar</h3>
-            <QRCodeCanvas
-              value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${encodeURIComponent(getIconKeyBySrc(visibleQRCode.icon))}`}
-              size={256}
-              bgColor="#ffffff"
-              fgColor="#000000"
-              level="H"
-            />
-            <p className="qr-code-text">{visibleQRCode.text}</p>
-          </div>
-        </div>
-      )}
-
-      {selectedConexion && (
-        <div className="modal-overlay">
-          <div className="conexion-details-modal">
-            <h2>Detalhes do Aparelho</h2>
-            <img src={selectedConexion.icon} alt={selectedConexion.text} style={{ width: '60px', height: '60px' }} />
-            <h3>{selectedConexion.text}</h3>
-            <p><strong>Conectado em:</strong> {formatDate(selectedConexion.connectedDate)}</p>
-            <p><strong>Tempo conectado:</strong> {getConnectionDuration(selectedConexion.connectedDate)}</p>
-            <p><strong>ID do aparelho:</strong> <code>{selectedConexion.id}</code></p>
-            <button onClick={() => setSelectedConexion(null)} className="close-button-styled">Fechar</button>
+        <div className="qr-code-modal" onClick={() => setVisibleQRCode(null)}>
+          <div className="qr-code-content" onClick={(e) => e.stopPropagation()}>
+            <QRCodeCanvas value={`${siteBaseURL}/Conexao?id=${visibleQRCode.id}`} size={256} />
+            <button onClick={() => setVisibleQRCode(null)} className="close-qr-button">Fechar</button>
           </div>
         </div>
       )}
 
       {showConfirmDialog && (
-        <div className="modal-overlay">
-          <div className="confirmation-dialog">
-            <h2>Excluir este aparelho?</h2>
-            <p>Esta ação não pode ser desfeita.</p>
-            <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
-            <button onClick={handleCancelRemove} className="cancel-button">Não</button>
+        <div className="confirm-dialog-overlay">
+          <div className="confirm-dialog">
+            <p>Tem certeza que deseja remover este aparelho?</p>
+            <div className="confirm-buttons">
+              <button onClick={handleConfirmRemove} className="confirm-yes">Sim</button>
+              <button onClick={handleCancelRemove} className="confirm-no">Não</button>
+            </div>
           </div>
         </div>
       )}
 
       {showLimitWarning && (
-        <div className="modal-overlay">
-          <div className="limit-warning-dialog">
-            <h2>Limite máximo atingido</h2>
-            <p>Você não pode conectar mais do que {DEVICE_LIMIT} aparelhos.</p>
-            <button onClick={() => setShowLimitWarning(false)} className="ok-button">OK</button>
-          </div>
+        <div className="limit-warning">
+          <p>Você atingiu o limite máximo de aparelhos conectados ({DEVICE_LIMIT}). Remova algum antes de adicionar outro.</p>
+          <button onClick={() => setShowLimitWarning(false)}>Fechar</button>
         </div>
       )}
     </div>
