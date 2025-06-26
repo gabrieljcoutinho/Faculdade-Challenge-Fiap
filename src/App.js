@@ -14,8 +14,6 @@ import carregador from './imgs/carregador.png';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
-import BluetoothScanner from './components/BluetoothScanner';
-
 
 // Pages
 import Home from './routes/pages/Home';
@@ -194,7 +192,6 @@ function App() {
 
   return (
     <div className="App">
-       <BluetoothScanner />
       <BrowserRouter>
         <Header />
         <ThemeToggle />
