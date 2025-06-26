@@ -1,66 +1,73 @@
 import React, { useState } from 'react';
 
-const BluetoothScanner = () => {
-  const [status, setStatus] = useState('');
-  const [deviceName, setDeviceName] = useState('');
-  const [deviceId, setDeviceId] = useState('');
-  const [error, setError] = useState('');
+// Se este componente fosse usado, ele precisaria de uma prop:
+// Ex: const BluetoothScanner = ({ onDeviceConnected }) => {
+const BluetoothScanner = ({ onDeviceConnected }) => { // <--- Adicionando a prop
 
-  const handleBluetoothConnect = async () => {
-    setStatus('Procurando dispositivos Bluetooth...');
-    setError('');
-    setDeviceName('');
-    setDeviceId('');
+    const [status, setStatus] = useState('');
+    const [deviceName, setDeviceName] = useState('');
+    const [deviceId, setDeviceId] = useState('');
+    const [error, setError] = useState('');
 
-    if (!navigator.bluetooth) {
-      setError('Seu navegador não suporta Web Bluetooth. Use o Chrome ou Edge.');
-      return;
-    }
+    const handleBluetoothConnect = async () => {
+        setStatus('Procurando dispositivos Bluetooth...');
+        setError('');
+        setDeviceName('');
+        setDeviceId('');
 
-    try {
-      const device = await navigator.bluetooth.requestDevice({
-        acceptAllDevices: true // Detecta qualquer tipo de dispositivo disponível
-      });
+        if (!navigator.bluetooth) {
+            setError('Seu navegador não suporta Web Bluetooth. Use o Chrome ou Edge.');
+            return;
+        }
 
-      setDeviceName(device.name || 'Sem nome disponível');
-      setDeviceId(device.id);
-      setStatus('Dispositivo selecionado com sucesso!');
+        try {
+            const device = await navigator.bluetooth.requestDevice({
+                acceptAllDevices: true
+            });
 
-      // Você pode tentar se conectar ao GATT aqui se o dispositivo suportar
-      // const server = await device.gatt.connect();
-      // setStatus('Conectado ao GATT!');
+            // Conectar ao GATT server imediatamente após a seleção
+            const server = await device.gatt.connect();
+            setStatus('Dispositivo selecionado e conectado ao GATT server!');
 
-    } catch (err) {
-      console.error(err);
-      if (err.name === 'NotFoundError') {
-        setError('Nenhum dispositivo foi selecionado.');
-      } else if (err.name === 'NotAllowedError') {
-        setError('Permissão negada. Libere o acesso ao Bluetooth.');
-      } else {
-        setError('Erro desconhecido: ' + err.message);
-      }
-      setStatus('');
-    }
-  };
+            setDeviceName(device.name || 'Sem nome disponível');
+            setDeviceId(device.id);
 
-  return (
-    <div style={{ padding: '30px', fontFamily: 'Arial' }}>
-      <h2>Conectar via Bluetooth</h2>
-      <button onClick={handleBluetoothConnect} style={{ padding: '10px 20px', fontSize: '16px' }}>
-        Procurar Dispositivos Bluetooth
-      </button>
+            // Chamar o callback para o componente pai
+            if (onDeviceConnected) {
+                onDeviceConnected(device, server); // <--- Passa o device e o server
+            }
 
-      {status && <p style={{ color: 'green' }}>{status}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+        } catch (err) {
+            console.error(err);
+            if (err.name === 'NotFoundError') {
+                setError('Nenhum dispositivo foi selecionado.');
+            } else if (err.name === 'NotAllowedError') {
+                setError('Permissão negada. Libere o acesso ao Bluetooth.');
+            } else {
+                setError('Erro desconhecido: ' + err.message);
+            }
+            setStatus('');
+        }
+    };
 
-      {deviceName && (
-        <div>
-          <p><strong>Nome do dispositivo:</strong> {deviceName}</p>
-          <p><strong>ID:</strong> {deviceId}</p>
+    return (
+        <div style={{ padding: '30px', fontFamily: 'Arial' }}>
+            <h2>Conectar via Bluetooth</h2>
+            <button onClick={handleBluetoothConnect} style={{ padding: '10px 20px', fontSize: '16px' }}>
+                Procurar Dispositivos Bluetooth
+            </button>
+
+            {status && <p style={{ color: 'green' }}>{status}</p>}
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+
+            {deviceName && (
+                <div>
+                    <p><strong>Nome do dispositivo:</strong> {deviceName}</p>
+                    <p><strong>ID:</strong> {deviceId}</p>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default BluetoothScanner;

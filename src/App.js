@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Importe seus CSS e imagens
 import './CSS/Reset.css';
+// Importa imagens (garanta que estes caminhos estejam corretos)
 import tvIcon from './imgs/TV.png';
 import airConditionerIcon from './imgs/ar-condicionado.png';
 import airfry from './imgs/airfry.png';
@@ -33,11 +34,16 @@ function App() {
     try {
       const savedConexions = localStorage.getItem('conexions');
       // Garante que cada conexão armazenada tenha um ID único
+      // E que 'bluetoothDeviceInfo' seja tratada corretamente
       return savedConexions
         ? JSON.parse(savedConexions).map(c => ({
             ...c,
             id: c.id || window.crypto.randomUUID(), // Garante que todos os itens tenham um ID
-            connectedDate: c.connectedDate || new Date().toISOString() // Garante data de conexão
+            connectedDate: c.connectedDate || new Date().toISOString(), // Garante data de conexão
+            // Garante que bluetoothDeviceInfo seja um objeto ou null
+            bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object'
+              ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name }
+              : null
           }))
         : [];
     } catch (e) {
@@ -63,7 +69,14 @@ function App() {
   // Efeito para salvar 'conexions' no localStorage sempre que ele muda
   useEffect(() => {
     try {
-      localStorage.setItem('conexions', JSON.stringify(conexions));
+      // Antes de salvar, garantimos que apenas os dados serializáveis de bluetoothDeviceInfo sejam mantidos
+      const serializableConexions = conexions.map(c => ({
+        ...c,
+        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object'
+          ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name }
+          : null
+      }));
+      localStorage.setItem('conexions', JSON.stringify(serializableConexions));
     } catch (e) {
       console.error("Erro ao salvar conexões no localStorage:", e);
     }
@@ -75,83 +88,93 @@ function App() {
 
   /**
    * Função central para conectar/ativar um aparelho.
-   * Chamada pelo Chat ou por QR Code.
-   * @param {string} deviceType O tipo genérico do aparelho (ex: 'TV', 'Lâmpada').
-   * @param {string} customName O nome que o usuário deu ao aparelho (ex: 'TV Sala', 'Lâmpada Cozinha').
+   * Chamada pelo Chat, por QR Code, ou pela conexão Bluetooth.
+   * @param {string} deviceName O nome do aparelho (pode ser o nome do Bluetooth Device ou nome customizado).
+   * @param {string} uniqueId O ID único do aparelho (para Bluetooth, é o device.id; para manual, é um UUID).
+   * @param {string} icon O caminho da imagem do ícone.
+   * @param {string} backgroundColor A cor de fundo.
+   * @param {object|null} bluetoothDeviceInfo Informações serializáveis do BluetoothDevice (id, name).
    */
+  const handleConnectDevice = (deviceName, uniqueId, icon = null, backgroundColor = null, bluetoothDeviceInfo = null) => {
+    setConexions((prevConexions) => {
+      const normalizedDeviceName = deviceName.toLowerCase();
 
-
-  const handleConnectDevice = (deviceType, customName, icon = null, backgroundColor = null) => {
-  setConexions((prevConexions) => {
-    const finalDeviceName = customName || deviceType;
-    const normalizedFinalDeviceName = finalDeviceName.toLowerCase();
-
-    const existingDeviceIndex = prevConexions.findIndex(
-      (c) => c.text.toLowerCase() === normalizedFinalDeviceName
-    );
-
-    let defaultIcon = icon;
-    let defaultColor = backgroundColor;
-
-    if (!icon || !backgroundColor) {
-      switch (deviceType.toLowerCase()) {
-        case 'tv':
-          defaultIcon = tvIcon;
-          defaultColor = '#B0E0E6';
-          break;
-        case 'ar-condicionado':
-          defaultIcon = airConditionerIcon;
-          defaultColor = '#E0FFFF';
-          break;
-        case 'lâmpada':
-          defaultIcon = lampIcon;
-          defaultColor = '#FFEBCD';
-          break;
-        case 'airfry':
-          defaultIcon = airfry;
-          defaultColor = '#FFDAB9';
-          break;
-        case 'carregador':
-          defaultIcon = carregador;
-          defaultColor = '#FFE4E1';
-          break;
-        default:
-          defaultIcon = icon || ''; // ícone customizado ou vazio
-          defaultColor = backgroundColor || '#CCCCCC';
-          break;
-      }
-    }
-
-    if (existingDeviceIndex !== -1) {
-      console.log(`[handleConnectDevice] Aparelho "${finalDeviceName}" já existe. Atualizando status.`);
-      return prevConexions.map((c, index) =>
-        index === existingDeviceIndex
-          ? {
-              ...c,
-              connected: true,
-              icon: defaultIcon,
-              backgroundColor: defaultColor,
-              connectedDate: c.connected ? c.connectedDate : new Date().toISOString()
-            }
-          : c
+      // Verifica se já existe um aparelho com o mesmo ID (prioriza IDs Bluetooth)
+      const existingDeviceIndex = prevConexions.findIndex(
+        (c) => c.id === uniqueId || (c.bluetoothDeviceInfo && bluetoothDeviceInfo && c.bluetoothDeviceInfo.id === bluetoothDeviceInfo.id)
       );
-    } else {
-      console.log(`[handleConnectDevice] Aparelho "${finalDeviceName}" NÃO existe. Adicionando novo.`);
-      const newDevice = {
-        id: window.crypto.randomUUID(),
-        text: finalDeviceName,
-        icon: defaultIcon,
-        backgroundColor: defaultColor,
-        connected: true,
-        connectedDate: new Date().toISOString(),
-      };
-      return [...prevConexions, newDevice];
-    }
-  });
-};
 
+      let defaultIcon = icon;
+      let defaultColor = backgroundColor;
 
+      if (!icon || !backgroundColor) {
+        switch (deviceName.toLowerCase()) { // Usamos deviceName para determinar o ícone padrão
+          case 'tv':
+          case 'televisão':
+          case 'smart tv':
+            defaultIcon = tvIcon;
+            defaultColor = '#B0E0E6';
+            break;
+          case 'ar-condicionado':
+          case 'ar':
+          case 'ac':
+            defaultIcon = airConditionerIcon;
+            defaultColor = '#E0FFFF';
+            break;
+          case 'lâmpada':
+          case 'lampada':
+          case 'lamp':
+            defaultIcon = lampIcon;
+            defaultColor = '#FFEBCD';
+            break;
+          case 'airfry':
+          case 'fritadeira':
+            defaultIcon = airfry;
+            defaultColor = '#FFDAB9';
+            break;
+          case 'carregador':
+          case 'charger':
+            defaultIcon = carregador;
+            defaultColor = '#FFE4E1';
+            break;
+          default:
+            defaultIcon = icon || ''; // ícone customizado ou vazio
+            defaultColor = backgroundColor || '#CCCCCC';
+            break;
+        }
+      }
 
+      if (existingDeviceIndex !== -1) {
+        console.log(`[handleConnectDevice] Aparelho "${deviceName}" (ID: ${uniqueId}) já existe. Atualizando status.`);
+        return prevConexions.map((c, index) =>
+          index === existingDeviceIndex
+            ? {
+                ...c,
+                connected: true,
+                icon: defaultIcon,
+                backgroundColor: defaultColor,
+                // Mantém o ID original, mesmo se for um UUID gerado para um manual
+                id: c.id,
+                connectedDate: c.connected ? c.connectedDate : new Date().toISOString(),
+                bluetoothDeviceInfo: bluetoothDeviceInfo // Atualiza/adiciona info Bluetooth
+              }
+            : c
+        );
+      } else {
+        console.log(`[handleConnectDevice] Aparelho "${deviceName}" (ID: ${uniqueId}) NÃO existe. Adicionando novo.`);
+        const newDevice = {
+          id: uniqueId, // Usa o uniqueId fornecido (do Bluetooth ou UUID gerado)
+          text: deviceName,
+          icon: defaultIcon,
+          backgroundColor: defaultColor,
+          connected: true,
+          connectedDate: new Date().toISOString(),
+          bluetoothDeviceInfo: bluetoothDeviceInfo // Adiciona info Bluetooth (id e name)
+        };
+        return [...prevConexions, newDevice];
+      }
+    });
+  };
 
   /**
    * Função para remover um aparelho da lista.
@@ -171,18 +194,18 @@ function App() {
    * Função para alternar o estado de conexão de um aparelho.
    * Usada na página Conexões (switch de ligar/desligar).
    * @param {string} id O ID único do aparelho a ser alternado.
+   * @param {boolean} newDesiredState O novo estado de conexão desejado (true para conectado, false para desconectado).
    */
-  const handleToggleConnection = (id) => {
+  const handleToggleConnection = (id, newDesiredState) => {
     setConexions(prevConexions => {
       return prevConexions.map(c => {
         if (c.id === id) {
-          const newConnectedState = !c.connected;
-          console.log(`[handleToggleConnection] Aparelho "${c.text}" (ID: ${id}) alterado para conectado: ${newConnectedState}`);
+          console.log(`[handleToggleConnection] Aparelho "${c.text}" (ID: ${id}) alterado para conectado: ${newDesiredState}`);
           return {
             ...c,
-            connected: newConnectedState,
+            connected: newDesiredState,
             // Atualiza a data de conexão apenas se estiver sendo conectado agora
-            connectedDate: newConnectedState ? new Date().toISOString() : c.connectedDate
+            connectedDate: newDesiredState ? new Date().toISOString() : c.connectedDate
           };
         }
         return c;
@@ -202,14 +225,14 @@ function App() {
           />
           <Route
             path="/conexoes"
-            // Passamos as funções de manipulação diretamente para Conexoes
             element={
               <Conexoes
                 conexions={conexions}
-                setConexions={setConexions} // Mantido, mas handleRemoveDevice e handleToggleConnection são preferidos
-                onConnectDevice={handleConnectDevice} // Para adicionar via QR Code/URL
-                onRemoveDevice={handleRemoveDevice} // Nova prop para remover
-                onToggleConnection={handleToggleConnection} // Nova prop para alternar estado
+                // setConexions não é mais necessário aqui, já que as manipulações
+                // são feitas pelas funções onConnectDevice, onRemoveDevice, onToggleConnection
+                onConnectDevice={handleConnectDevice}
+                onRemoveDevice={handleRemoveDevice}
+                onToggleConnection={handleToggleConnection}
               />
             }
           />
