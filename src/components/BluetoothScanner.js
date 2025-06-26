@@ -19,15 +19,14 @@ const BluetoothScanner = () => {
 
     try {
       const device = await navigator.bluetooth.requestDevice({
-        acceptAllDevices: true,
-        optionalServices: ['battery_service', 'device_information']
+        acceptAllDevices: true // Detecta qualquer tipo de dispositivo disponível
       });
 
       setDeviceName(device.name || 'Sem nome disponível');
       setDeviceId(device.id);
       setStatus('Dispositivo selecionado com sucesso!');
 
-      // Aqui você pode conectar ao GATT (se quiser)
+      // Você pode tentar se conectar ao GATT aqui se o dispositivo suportar
       // const server = await device.gatt.connect();
       // setStatus('Conectado ao GATT!');
 
