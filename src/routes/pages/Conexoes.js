@@ -159,20 +159,21 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
         let guessedIcon = lampIcon; // Fallback padrão
 
-const name = deviceName.toLowerCase();
+        const name = deviceName.toLowerCase();
 
-if (name.includes('tv') || name.includes('televisão')) {
-  guessedIcon = tvIcon;
-} else if (name.includes('ar') || name.includes('ac') || name.includes('condicionado')) {
-  guessedIcon = airConditionerIcon;
-} else if (name.includes('lamp') || name.includes('lâmpada') || name.includes('lampada') || name.includes('led')) {
-  guessedIcon = lampIcon;
-} else if (name.includes('airfry') || name.includes('fritadeira')) {
-  guessedIcon = airfry;
-} else if (name.includes('carregador') || name.includes('charger') || name.includes('usb')) {
-  guessedIcon = carregador;
-}
-
+        // --- ALTERAÇÃO AQUI: Melhorando o mapeamento de ícones ---
+        if (name.includes('tv') || name.includes('televisão') || name.includes('smart tv') || name.includes('monitor') || name.includes('samsung tv') || name.includes('lg tv') || name.includes('roku tv') || name.includes('fire tv') || name.includes('madara akatsuki')) {
+          guessedIcon = tvIcon;
+        } else if (name.includes('ar') || name.includes('ac') || name.includes('condicionado') || name.includes('split') || name.includes('climatizador')) {
+          guessedIcon = airConditionerIcon;
+        } else if (name.includes('lamp') || name.includes('lâmpada') || name.includes('lampada') || name.includes('led') || name.includes('smart light') || name.includes('bulb')) {
+          guessedIcon = lampIcon;
+        } else if (name.includes('airfry') || name.includes('fritadeira') || name.includes('fritadeira eletrica')) {
+          guessedIcon = airfry;
+        } else if (name.includes('carregador') || name.includes('charger') || name.includes('usb') || name.includes('power bank')) {
+          guessedIcon = carregador;
+        }
+        // --- FIM DA ALTERAÇÃO ---
 
         if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
           setErrorMessage(`Já existe um aparelho chamado "${deviceName}".`);
