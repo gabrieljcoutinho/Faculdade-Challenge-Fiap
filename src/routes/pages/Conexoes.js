@@ -440,7 +440,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               </>
             ) : (
               <>
-                <p>Clique no botão abaixo para procurar e conectar aparelhos Bluetooth próximos:</p>
+                <p className='paragrafoAdiconarAparelhos'>Clique no botão abaixo para procurar e conectar aparelhos Bluetooth próximos:</p>
                 <button
                   onClick={handleSearchAndConnectBluetooth}
                   className="add-button-styled"
@@ -600,8 +600,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {visibleQRCode && (
         <div className="modal-overlay" onClick={() => setVisibleQRCode(null)}>
           <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
-            <h3>QR Code para: {visibleQRCode.text}</h3>
-            <p>Escaneie este QR Code em outro dispositivo para adicionar este aparelho.</p>
+            <h3>QR Code do aparelho: {visibleQRCode.text}</h3>
+            <br />
             <QRCodeCanvas
               // Generates the QR code with the correct URL for automatic connection
               value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
