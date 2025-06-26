@@ -77,40 +77,43 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [removingId, setRemovingId] = useState(null);
   const [conexionToDelete, setConexionToDelete] = useState(null);
 
-  // Handle params URL para adicionar direto
-  // ESTE useEffect JÁ CUIDA DA LÓGICA DE CONEXÃO AO LER O QR CODE
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const nome = params.get('add');
-    const iconKey = params.get('icon'); // O nome do ícone (ex: 'lampada')
-
-    if (nome && iconKey) {
-        // Encontra o src do ícone a partir do nome
-        const iconSrc = iconMap[iconKey];
-        if (iconSrc) {
-            if (conexions.length >= DEVICE_LIMIT) {
-                setShowLimitWarning(true);
-            } else {
-                // Modificado aqui: Adicionado para simular conexão imediata ao escanear QR Code
-                const existingConexion = conexions.find(c => c.text.toLowerCase() === nome.toLowerCase());
-                if (existingConexion) {
-                    setErrorMessage(`Já existe um aparelho chamado "${nome}".`);
-                } else {
-                    onConnectDevice(nome, nome, iconSrc, availableColors[0]);
-                }
-            }
-        }
-        // Limpa os parâmetros da URL para evitar adição repetida ao recarregar a página
-        window.history.replaceState({}, document.title, location.pathname);
-    }
-  }, [location.search, onConnectDevice, conexions]); // Adicionado 'conexions' como dependência para verificar se já existe
-
-  // Função para obter o nome do ícone a partir do src
-  // Necessário para montar a URL do QR Code
+  // Helper function to get icon key by its source
   const getIconKeyBySrc = (src) => {
     const found = availableIcons.find(icon => icon.src === src);
     return found ? found.name : '';
   };
+
+  // Helper function to check if a color is one of the available colors
+  const isValidColor = (color) => availableColors.includes(color);
+
+  // ESTE useEffect JÁ CUIDA DA LÓGICA DE CONEXÃO AO LER O QR CODE
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const nome = params.get('add');
+    const iconKey = params.get('icon');
+    const bgColor = params.get('bgColor'); // Get the background color from URL
+
+    if (nome && iconKey) {
+      const iconSrc = iconMap[iconKey];
+      const actualBgColor = isValidColor(bgColor) ? bgColor : availableColors[0]; // Use provided color or default
+
+      if (iconSrc) {
+        if (conexions.length >= DEVICE_LIMIT) {
+          setShowLimitWarning(true);
+        } else {
+          const existingConexion = conexions.find(c => c.text.toLowerCase() === nome.toLowerCase());
+          if (existingConexion) {
+            setErrorMessage(`Já existe um aparelho chamado "${nome}".`);
+          } else {
+            // Pass the retrieved background color to onConnectDevice
+            onConnectDevice(nome, nome, iconSrc, actualBgColor);
+          }
+        }
+      }
+      // Limpa os parâmetros da URL para evitar adição repetida ao recarregar a página
+      window.history.replaceState({}, document.title, location.pathname);
+    }
+  }, [location.search, onConnectDevice, conexions]);
 
   // Abrir formulário para adicionar (modo bluetooth por padrão)
   const handleAddClick = () => {
@@ -215,6 +218,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           return;
         }
 
+        // When connecting via Bluetooth, we'll assign a default background color
         onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
         setShowAddForm(false);
       } else {
@@ -602,7 +606,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             <p>Escaneie este QR Code em outro dispositivo para adicionar este aparelho.</p>
             <QRCodeCanvas
               // ESTA LINHA JÁ GERA O QR CODE COM A URL CORRETA PARA CONEXÃO AUTOMÁTICA
-              value={`${siteBaseURL}/conexao?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}`}
+              // Adicionamos o 'bgColor' como um parâmetro de URL
+              value={`${siteBaseURL}/conexao?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
               size={256}
               level="H"
               includeMargin={true}
