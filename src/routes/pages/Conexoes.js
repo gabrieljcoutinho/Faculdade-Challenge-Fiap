@@ -60,8 +60,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [errorMessage, setErrorMessage] = useState('');
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showLimitWarning, setShowLimitWarning] = useState(false);
-  const [visibleQRCode, setVisibleQRCode] = useState(null);
+  const [visibleQRCode, setVisibleQRCode] = useState(null); // This is for individual device QR
   const [selectedConexion, setSelectedConexion] = useState(null);
+  // Removed: const [showAddDeviceQRCode, setShowAddDeviceQRCode] = useState(false); // New state for add device QR
 
   // Dados do formulário
   const [newConexion, setNewConexion] = useState({
@@ -117,6 +118,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setShowAddForm(true);
     setIsSearchingBluetooth(false);
     setModoManual(false); // Sempre começar em modo Bluetooth ao abrir
+    // Removed: setShowAddDeviceQRCode(false); // Ensure add device QR is hidden
   };
 
   // Abrir formulário manual
@@ -134,6 +136,19 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setErrorMessage('');
     setEditingId(null);
     setIsSearchingBluetooth(false);
+    // Removed: setShowAddDeviceQRCode(false); // Ensure add device QR is hidden
+  };
+
+  // Removed: handleShowAddDeviceQRCode function as it's no longer needed
+
+  // Handle closing all add/edit/QR modals
+  const closeAllAddModals = () => {
+    setShowAddForm(false);
+    setModoManual(false);
+    setErrorMessage('');
+    setIsSearchingBluetooth(false);
+    // Removed: setShowAddDeviceQRCode(false);
+    setVisibleQRCode(null); // Close individual QR if open
   };
 
   // Buscar dispositivos Bluetooth e conectar
@@ -283,24 +298,24 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setShowAddForm(true);
       setIsSearchingBluetooth(false);
       setModoManual(true); // Modo formulário para editar
+      // Removed: setShowAddDeviceQRCode(false); // Ensure add device QR is hidden
     }
   };
 
   // Alternar status conexão (on/off)
   const toggleConnection = (id, newDesiredState) => {
     onToggleConnection(id, newDesiredState);
-    // Não precisamos de lógica adicional aqui para o modal de detalhes,
-    // pois o controle da abertura/fechamento do modal é feito pela prop `selectedConexion`.
-    // Se o aparelho ficar desconectado, `selectedConexion` precisaria ser `null` no componente pai
-    // ou um useEffect aqui para reagir a `conexions` e `selectedConexion.connected`.
+    // If the selected connection is the one being toggled off, close the details modal
+    if (selectedConexion && selectedConexion.id === id && !newDesiredState) {
+      setSelectedConexion(null);
+    }
   };
-
 
   // Abrir modal detalhes do dispositivo
   const handleConexionClick = (c, e) => { // Adicionei 'e' aqui para o evento
     // Verifica se o clique foi diretamente no elemento pai e não em um de seus filhos interativos
     // Esta é a solução mais robusta para evitar a abertura do modal em cliques de botões.
-    if (e.target === e.currentTarget || e.target.tagName === 'SPAN' && e.target.classList.contains('conexion-text-overlay')) {
+    if (e.target === e.currentTarget || (e.target.tagName === 'SPAN' && e.target.classList.contains('conexion-text-overlay')) || (e.target.tagName === 'IMG' && e.target.classList.contains('conexion-icon-overlay'))) {
       if (c.connected) {
         setSelectedConexion(c);
       }
@@ -343,7 +358,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <span className="plus-icon">+</span> Adicionar Aparelho
       </button>
 
-      {conexions.length === 0 && !showAddForm && (
+      {conexions.length === 0 && !showAddForm /* Removed !showAddDeviceQRCode */ && (
         <div className="placeholder-image-container">
           <br /><br /><br />
           <img src={placeholderImage} alt="Nenhum aparelho conectado" className="placeholder-image" />
@@ -404,7 +419,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                     {editingId ? 'Salvar Edição' : 'Adicionar Aparelho'}
                   </button>
                   <button
-                    onClick={() => { setShowAddForm(false); setModoManual(false); setErrorMessage(''); }}
+                    onClick={closeAllAddModals}
                     className="cancel-button-styled"
                     type="button"
                   >
@@ -432,12 +447,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                 >
                   Adicionar Aparelho Manualmente
                 </button>
+                {/* Removed: Button for "Conectar por QR Code" */}
                 {isSearchingBluetooth && (
                   <p className="connecting-message">Aguarde, a janela de seleção do navegador será aberta.</p>
                 )}
                 <div className="form-actions">
                   <button
-                    onClick={() => setShowAddForm(false)}
+                    onClick={closeAllAddModals}
                     className="cancel-button-styled"
                     disabled={isSearchingBluetooth}
                     type="button"
@@ -450,6 +466,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           </div>
         </div>
       )}
+
+      {/* Removed: Modal for "Add Device" QR Code (showAddDeviceQRCode) */}
 
       {/* Lista de aparelhos conectados */}
       <div className="conexions-list">
@@ -507,6 +525,48 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       </div>
 
 
+      {/* Modal de detalhes do aparelho (if selectedConexion is not null) */}
+      {selectedConexion && (
+        <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
+          <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
+            <button className="close-button" onClick={() => setSelectedConexion(null)}>X</button>
+            <h2>Detalhes do Aparelho</h2>
+            <div className="detalhes-content">
+              <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
+              <h3>{selectedConexion.text}</h3>
+              <p>Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
+              {selectedConexion.connected && (
+                <>
+                  <p>Conectado desde: {formatDate(selectedConexion.connectedDate)}</p>
+                  <p>Duração da Conexão: {getConnectionDuration(selectedConexion.connectedDate)}</p>
+                </>
+              )}
+              <div className="detalhes-actions">
+                <button
+                  onClick={() => toggleConnection(selectedConexion.id, !selectedConexion.connected)}
+                  className={`toggle-connection-button ${selectedConexion.connected ? 'disconnect' : 'connect'}`}
+                >
+                  {selectedConexion.connected ? 'Desconectar' : 'Conectar'}
+                </button>
+                <button
+                  onClick={() => { handleEditClick(selectedConexion); setSelectedConexion(null); }}
+                  className="edit-button-details"
+                  disabled={!selectedConexion.connected}
+                >
+                  Editar Aparelho
+                </button>
+                <button
+                  onClick={() => { removeConexion(selectedConexion.id); setSelectedConexion(null); }}
+                  className="remove-button-details"
+                >
+                  Remover Aparelho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* Modal confirmação remoção */}
       {showConfirmDialog && (
@@ -531,10 +591,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         </div>
       )}
 
-      {/* Modal QR Code */}
+      {/* Modal QR Code para um aparelho específico (o que já existia) */}
       {visibleQRCode && (
         <div className="modal-overlay" onClick={() => setVisibleQRCode(null)}>
           <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
+
             <QRCodeCanvas
               value={`${siteBaseURL}/aparelho/${encodeURIComponent(visibleQRCode.text)}`}
               size={256}
