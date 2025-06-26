@@ -443,16 +443,31 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
       {/* Diálogo de Confirmação para Remover */}
       {showConfirmDialog && (
-        <div className="modal-overlay">
-          <div className="confirmation-dialog">
-            <h2>Excluir este aparelho?</h2>
-            <p>Você tem certeza que deseja excluir "{conexions.find(c => c.id === conexionToDelete)?.text}"?</p>
-            <div className="dialog-actions">
-              <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
-              <button onClick={handleCancelRemove} className="cancel-button-styled">Não</button>
-            </div>
-          </div>
-        </div>
+        // <div className="modal-overlay">
+        //   <div className="confirmation-dialog">
+        //     <h2>Excluir este aparelho?</h2>
+        //     <p>Você tem certeza que deseja excluir "{conexions.find(c => c.id === conexionToDelete)?.text}"?</p>
+        //     <div className="dialog-actions">
+        //       <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
+        //       <button onClick={handleCancelRemove} className="cancel-button-styled">Não</button>
+        //     </div>
+        //   </div>
+        // </div>
+
+
+<div class="modal-overlay">
+  <div class="confirmation-dialog">
+    <h2>Remover Aparelho</h2>
+    <p>Tem certeza que deseja remover este aparelho?</p>
+    <div class="dialog-actions">
+    <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
+      <button onClick={handleCancelRemove} className="cancel-button-styled">Não</button>
+    </div>
+  </div>
+</div>
+
+
+
       )}
 
       {/* Diálogo de Aviso de Limite de Dispositivos */}
