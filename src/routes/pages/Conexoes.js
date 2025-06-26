@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'; // Adicionado useRef para persistir GATT server
+import React, { useState, useEffect, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useLocation } from 'react-router-dom';
 
@@ -51,13 +51,62 @@ const iconMap = availableIcons.reduce((acc, icon) => {
 }, {});
 
 // =========================================================================
-// !!! ATENÇÃO: ESTES SÃO UUIDs HIPOTÉTICOS !!!
-// VOCÊ PRECISA SUBSTITUIR PELOS UUIDs REAIS DO SEU APARELHO.
+// !!! ATENÇÃO: UUIDs E FORMATOS DE DADOS SÃO HIPOTÉTICOS NESTE EXEMPLO !!!
+// VOCÊ DEVE SUBSTITUIR PELOS UUIDs E FORMATOS REAIS DOS SEUS APARELHOS.
 // Use ferramentas como nRF Connect (mobile) ou a aba "Application" -> "Bluetooth" do Chrome DevTools
-// para inspecionar os serviços e características do seu dispositivo.
-const YOUR_DEVICE_SERVICE_UUID = 'your_custom_service_uuid_here'; // Ex: '19B10000-E8F2-537E-4F6C-D104768A1214'
-const YOUR_POWER_CHARACTERISTIC_UUID = 'your_power_characteristic_uuid_here'; // Ex: '19B10001-E8F2-537E-4F6C-D104768A1214'
+// para inspecionar os serviços e características do seu dispositivo real.
 // =========================================================================
+const DEVICE_PROFILES = {
+  'lampada': {
+    serviceUuid: '0000FF01-0000-1000-8000-00805F9B34FB', // Exemplo: UUID do serviço da lâmpada
+    characteristics: {
+      power: {
+        uuid: '0000FF02-0000-1000-8000-00805F9B34FB',
+        onValue: new Uint8Array([0x01]), // Ex: 1 para LIGAR
+        offValue: new Uint8Array([0x00]), // Ex: 0 para DESLIGAR
+      },
+      brightness: {
+        uuid: '0000FF03-0000-1000-8000-00805F9B34FB',
+        writeValue: (level) => new Uint8Array([level]), // Ex: 0-255
+      }
+    }
+  },
+  'tv': {
+    serviceUuid: '0000AA00-0000-1000-8000-00805F9B34FB', // Exemplo: UUID do serviço da TV
+    characteristics: {
+      power: {
+        uuid: '0000AA01-0000-1000-8000-00805F9B34FB',
+        onValue: new Uint8Array([0x01]),
+        offValue: new Uint8Array([0x00]),
+      },
+      volume: {
+        uuid: '0000AA02-0000-1000-8000-00805F9B34FB',
+        increaseValue: new Uint8Array([0x01]), // Ex: 1 para aumentar
+        decreaseValue: new Uint8Array([0x02]), // Ex: 2 para diminuir
+        muteValue: new Uint8Array([0x03]), // Ex: 3 para mudo
+      }
+    }
+  },
+  'arcondicionado': {
+    serviceUuid: '0000BB00-0000-1000-8000-00805F9B34FB', // Exemplo: UUID do serviço do Ar Condicionado
+    characteristics: {
+      power: {
+        uuid: '0000BB01-0000-1000-8000-00805F9B34FB',
+        onValue: new Uint8Array([0x01]),
+        offValue: new Uint8Array([0x00]),
+      },
+      temperature: {
+        uuid: '0000BB02-0000-1000-8000-00805F9B34FB',
+        writeValue: (temp) => new Uint8Array([temp]), // Ex: temperatura em Celsius
+      },
+      mode: {
+        uuid: '0000BB03-0000-1000-8000-00805F9B34FB',
+        coolValue: new Uint8Array([0x01]),
+        heatValue: new Uint8Array([0x02]),
+      }
+    }
+  }
+};
 
 const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, onToggleConnection }) => {
   const location = useLocation();
@@ -73,16 +122,16 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [selectedConexion, setSelectedConexion] = useState(null);
 
   // Ref para armazenar os objetos BluetoothDevice e GATTServer ativos
-  // Isso permite que a conexão persista enquanto o componente está montado
-  const activeBluetoothDevices = useRef({}); // { deviceId: { bluetoothDevice: obj, gattServer: obj } }
+  const activeBluetoothDevices = useRef({});
 
-  // Dados do formulário
+  // Dados do formulário (agora inclui 'type' para aparelhos manuais)
   const [newConexion, setNewConexion] = useState({
     text: '',
     icon: '',
     backgroundColor: availableColors[0],
     connected: true,
-    connectedDate: new Date().toISOString()
+    connectedDate: new Date().toISOString(),
+    type: null // Novo campo para o tipo do aparelho
   });
   const [activeIcon, setActiveIcon] = useState(null);
   const [activeColor, setActiveColor] = useState(availableColors[0]);
@@ -115,7 +164,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       } else {
         // Para aparelhos adicionados via URL, eles são considerados "virtuais"
         // sem uma conexão Bluetooth ativa real por padrão.
-        onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0], null, null);
+        // Tentamos adivinhar o tipo a partir do nome aqui também.
+        const guessedType = guessDeviceType(nome);
+        onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0], null, null, guessedType);
       }
       window.history.replaceState({}, document.title, location.pathname);
     }
@@ -127,6 +178,20 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     return found ? found.name : '';
   };
 
+  // Função para adivinhar o tipo do aparelho com base no nome
+  const guessDeviceType = (deviceName) => {
+    const name = deviceName.toLowerCase();
+    if (name.includes('tv') || name.includes('televisão') || name.includes('smart tv') || name.includes('monitor')) {
+      return 'tv';
+    } else if (name.includes('ar') || name.includes('ac') || name.includes('condicionado') || name.includes('split') || name.includes('climatizador')) {
+      return 'arcondicionado';
+    } else if (name.includes('lamp') || name.includes('lâmpada') || name.includes('lampada') || name.includes('led') || name.includes('smart light') || name.includes('bulb')) {
+      return 'lampada';
+    }
+    // Adicione mais regras conforme necessário para outros tipos que você queira controlar
+    return null; // Retorna null se não conseguir adivinhar
+  };
+
   // Abrir formulário para adicionar (modo bluetooth por padrão)
   const handleAddClick = () => {
     setNewConexion({
@@ -134,7 +199,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       icon: '',
       backgroundColor: availableColors[0],
       connected: true,
-      connectedDate: new Date().toISOString()
+      connectedDate: new Date().toISOString(),
+      type: null
     });
     setActiveIcon(null);
     setActiveColor(availableColors[0]);
@@ -155,7 +221,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       icon: '',
       backgroundColor: availableColors[0],
       connected: true,
-      connectedDate: new Date().toISOString()
+      connectedDate: new Date().toISOString(),
+      type: null // Limpa o tipo ao iniciar o modo manual
     });
     setActiveIcon(null);
     setActiveColor(availableColors[0]);
@@ -165,38 +232,25 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   };
 
   // =====================================================================
-  // *** FUNÇÃO CENTRAL PARA CONTROLE REAL DO APARELHO BLUETOOTH ***
+  // *** FUNÇÃO GENÉRICA PARA ENVIAR COMANDOS BLUETOOTH ***
   // =====================================================================
-  const controlBluetoothDevicePower = async (device, server, enable) => {
+  const sendBluetoothCommand = async (device, server, serviceUuid, characteristicUuid, value) => {
     if (!device || !server || !server.connected) {
       throw new Error("Conexão Bluetooth não está ativa para este dispositivo.");
     }
 
     try {
-      // 1. Obter o Serviço
-      const service = await server.getPrimaryService(YOUR_DEVICE_SERVICE_UUID);
-      console.log('Serviço Bluetooth encontrado:', service.uuid);
+      const service = await server.getPrimaryService(serviceUuid);
+      console.log(`Serviço Bluetooth ${serviceUuid} encontrado.`);
+      const characteristic = await service.getCharacteristic(characteristicUuid);
+      console.log(`Característica ${characteristicUuid} encontrada.`);
 
-      // 2. Obter a Característica de Controle de Energia
-      const characteristic = await service.getCharacteristic(YOUR_POWER_CHARACTERISTIC_UUID);
-      console.log('Característica de controle de energia encontrada:', characteristic.uuid);
-
-      // 3. Preparar o valor para escrita (MUITO IMPORTANTE: AJUSTE PARA O SEU APARELHO)
-      // Exemplo: new Uint8Array([1]) para LIGAR, new Uint8Array([0]) para DESLIGAR
-      const valueToWrite = new Uint8Array([enable ? 1 : 0]); // OU [0x01] para ON, [0x00] para OFF
-
-      // 4. Escrever o valor na Característica
-      await characteristic.writeValue(valueToWrite);
-      console.log(`Comando de energia enviado para ${device.name}: ${enable ? 'LIGAR' : 'DESLIGAR'}`);
-      return true; // Sucesso
+      await characteristic.writeValue(value);
+      console.log(`Comando enviado para ${device.name}: Característica ${characteristicUuid}, Valor:`, value);
+      return true;
     } catch (error) {
-      console.error(`Erro ao controlar o aparelho Bluetooth ${device.name}:`, error);
-      // Aqui você pode adicionar lógica para reconectar se a conexão caiu
-      if (error.message.includes('disconnected')) {
-        setErrorMessage('O aparelho Bluetooth foi desconectado. Tente reconectar.');
-        // Opcional: Remover o aparelho da lista ou marcá-lo como desconectado
-      }
-      throw error; // Propagar o erro para ser tratado no toggleConnection
+      console.error(`Erro ao enviar comando Bluetooth para ${device.name}:`, error);
+      throw error;
     }
   };
 
@@ -217,9 +271,19 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
     try {
       // Solicita o dispositivo. Isso abre a UI do navegador.
-      // Você pode tentar filtrar por serviços se tiver os UUIDs.
-      // Ex: { filters: [{ services: [YOUR_DEVICE_SERVICE_UUID] }] }
-      const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+      // Você pode adicionar filtros aqui para serviços conhecidos,
+      // o que ajuda o navegador a mostrar dispositivos mais relevantes.
+      const device = await navigator.bluetooth.requestDevice({
+        // filters: [ // Use filters se quiser mostrar apenas certos tipos de dispositivos
+        //   { services: [DEVICE_PROFILES.lampada.serviceUuid] },
+        //   { services: [DEVICE_PROFILES.tv.serviceUuid] },
+        //   { services: [DEVICE_PROFILES.arcondicionado.serviceUuid] },
+        // ],
+        acceptAllDevices: true, // Mantido para demonstrar a busca geral
+        optionalServices: Object.values(DEVICE_PROFILES).flatMap(profile =>
+          Object.values(profile.characteristics).map(char => char.uuid)
+        ) // Permite acessar outras características após a conexão
+      });
 
       if (!device) {
         setErrorMessage('Nenhum aparelho Bluetooth selecionado.');
@@ -231,35 +295,27 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       console.log(`Conectado ao GATT server do aparelho: ${device.name || 'Desconhecido'}`);
 
       // Armazena a referência do dispositivo e do servidor GATT
-      // Isso é CRUCIAL para poder interagir com ele depois
       activeBluetoothDevices.current[device.id] = { bluetoothDevice: device, gattServer: server };
 
       // Opcional: Adicionar um ouvinte para desconexão
       device.addEventListener('gattserverdisconnected', () => {
         console.log(`GATT server de ${device.name} (${device.id}) desconectado.`);
-        // Atualize o estado do seu aplicativo para mostrar que o aparelho está desconectado
-        // Por exemplo, você pode chamar onToggleConnection(device.id, false)
-        onToggleConnection(device.id, false);
+        onToggleConnection(device.id, false); // Atualiza o estado da UI para desconectado
         delete activeBluetoothDevices.current[device.id]; // Remove da ref quando desconectado
       });
 
       const deviceName = device.name || 'Dispositivo Bluetooth Desconhecido';
 
+      // --- Melhorando o mapeamento de ícones e adivinhando o tipo ---
       let guessedIcon = lampIcon; // Fallback padrão
-      const name = deviceName.toLowerCase();
+      const deviceType = guessDeviceType(deviceName); // Adivinha o tipo do aparelho
 
-      // --- ALTERAÇÃO AQUI: Melhorando o mapeamento de ícones ---
-      if (name.includes('tv') || name.includes('televisão') || name.includes('smart tv') || name.includes('monitor') || name.includes('samsung tv') || name.includes('lg tv') || name.includes('roku tv') || name.includes('fire tv') || name.includes('madara akatsuki')) {
-        guessedIcon = tvIcon;
-      } else if (name.includes('ar') || name.includes('ac') || name.includes('condicionado') || name.includes('split') || name.includes('climatizador')) {
-        guessedIcon = airConditionerIcon;
-      } else if (name.includes('lamp') || name.includes('lâmpada') || name.includes('lampada') || name.includes('led') || name.includes('smart light') || name.includes('bulb')) {
-        guessedIcon = lampIcon;
-      } else if (name.includes('airfry') || name.includes('fritadeira') || name.includes('fritadeira eletrica')) {
-        guessedIcon = airfry;
-      } else if (name.includes('carregador') || name.includes('charger') || name.includes('usb') || name.includes('power bank')) {
-        guessedIcon = carregador;
-      }
+      if (deviceType === 'tv') guessedIcon = tvIcon;
+      else if (deviceType === 'arcondicionado') guessedIcon = airConditionerIcon;
+      else if (deviceType === 'lampada') guessedIcon = lampIcon;
+      // Adicione aqui se quiser mapear airfryer/carregador para tipos específicos de BLE
+      else if (deviceName.toLowerCase().includes('airfry')) guessedIcon = airfry;
+      else if (deviceName.toLowerCase().includes('carregador')) guessedIcon = carregador;
       // --- FIM DA ALTERAÇÃO ---
 
       // Verifica se já existe um aparelho com este ID Bluetooth (evita duplicatas reais)
@@ -270,7 +326,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         return;
       }
 
-      onConnectDevice(deviceName, device.id, guessedIcon, availableColors[0], device, server);
+      // Passa o tipo do aparelho para onConnectDevice
+      onConnectDevice(deviceName, device.id, guessedIcon, availableColors[0], device, server, deviceType);
       setShowAddForm(false);
 
     } catch (error) {
@@ -296,7 +353,18 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       return;
     }
 
-    setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate, bluetoothDevice: c.bluetoothDevice } : c));
+    setConexions(prev => prev.map(c =>
+      c.id === editingId
+        ? {
+          ...newConexion,
+          id: c.id,
+          connectedDate: c.connectedDate,
+          bluetoothDevice: c.bluetoothDevice,
+          gattServer: c.gattServer, // Garante que a referência do GATT server seja mantida
+          type: newConexion.type || guessDeviceType(newConexion.text) // Atualiza tipo ao editar manualmente
+        }
+        : c
+    ));
     setShowAddForm(false);
     setModoManual(false);
     setErrorMessage('');
@@ -338,14 +406,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   // Abrir edição do dispositivo
   const handleEditClick = (c) => {
-    // Permite editar mesmo se estiver desconectado, mas o controle Bluetooth
-    // só funcionaria se estiver conectado.
     setNewConexion({
       text: c.text,
       icon: c.icon,
       backgroundColor: c.backgroundColor || availableColors[0],
       connected: c.connected,
-      connectedDate: c.connectedDate
+      connectedDate: c.connectedDate,
+      type: c.type || guessDeviceType(c.text) // Preenche o tipo existente ou tenta adivinhar
     });
     setActiveIcon(c.icon);
     setActiveColor(c.backgroundColor || availableColors[0]);
@@ -363,40 +430,206 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const conexion = conexions.find(device => device.id === id);
     if (!conexion) return;
 
-    // A nova estado desejado (se estava conectado, queremos desligar; se não, queremos ligar)
-    const newDesiredState = !currentConnectedState;
+    const newDesiredState = !currentConnectedState; // O novo estado desejado
 
-    // Tenta controlar o aparelho Bluetooth real se ele foi conectado via Bluetooth API
+    // Tenta controlar o aparelho Bluetooth real se ele foi conectado via Bluetooth API e tem um perfil
     const bluetoothRef = activeBluetoothDevices.current[id];
 
-    if (bluetoothRef && bluetoothRef.bluetoothDevice && bluetoothRef.gattServer) {
+    if (bluetoothRef && bluetoothRef.bluetoothDevice && bluetoothRef.gattServer && conexion.type && DEVICE_PROFILES[conexion.type]) {
       try {
-        // Chama a função de controle Bluetooth
-        await controlBluetoothDevicePower(bluetoothRef.bluetoothDevice, bluetoothRef.gattServer, newDesiredState);
-        // Se o comando foi bem-sucedido, atualiza o estado visual
-        onToggleConnection(id, newDesiredState);
+        const profile = DEVICE_PROFILES[conexion.type];
+        const powerChar = profile.characteristics.power;
+
+        if (!powerChar || !powerChar.uuid) {
+          console.warn(`Perfil de ${conexion.type} não tem característica de energia definida.`);
+          // Se não tem power char, apenas alterna o UI (comporta-se como um aparelho manual)
+          onToggleConnection(id, newDesiredState);
+          return;
+        }
+
+        const valueToSend = newDesiredState ? powerChar.onValue : powerChar.offValue;
+        await sendBluetoothCommand(
+          bluetoothRef.bluetoothDevice,
+          bluetoothRef.gattServer,
+          profile.serviceUuid,
+          powerChar.uuid,
+          valueToSend
+        );
+        onToggleConnection(id, newDesiredState); // Atualiza o estado da UI após sucesso
         if (selectedConexion && selectedConexion.id === id && !newDesiredState) {
           setSelectedConexion(null); // Fecha detalhes se desligou
         }
+        setErrorMessage(''); // Limpa qualquer erro anterior
       } catch (error) {
         console.error("Falha ao enviar comando Bluetooth:", error);
-        setErrorMessage(`Não foi possível controlar ${conexion.text}. O aparelho pode estar fora de alcance ou desconectado.`);
-        // Mantém o estado visual antigo ou força para desconectado se houve erro de comunicação real
+        setErrorMessage(`Não foi possível controlar ${conexion.text}. O aparelho pode estar fora de alcance ou desconectado. Detalhes: ${error.message}`);
         onToggleConnection(id, false); // Força para desconectado no UI em caso de erro no controle real
       }
     } else {
-      // Se não é um aparelho Bluetooth real ou não tem ref ativa, apenas alterna o estado visual
+      // Se não é um aparelho Bluetooth real ou não tem ref ativa/perfil, apenas alterna o estado visual
       onToggleConnection(id, newDesiredState);
       if (selectedConexion && selectedConexion.id === id && !newDesiredState) {
         setSelectedConexion(null);
       }
+      setErrorMessage(''); // Limpa qualquer erro anterior
+    }
+  };
+
+  // Funções de controle específicas para diferentes tipos de aparelhos
+  const handleVolumeUp = async (id) => {
+    const conexion = conexions.find(device => device.id === id);
+    if (!conexion || conexion.type !== 'tv' || !conexion.connected) return;
+
+    const bluetoothRef = activeBluetoothDevices.current[id];
+    if (bluetoothRef && bluetoothRef.bluetoothDevice && bluetoothRef.gattServer) {
+      try {
+        const profile = DEVICE_PROFILES.tv;
+        const volumeChar = profile.characteristics.volume;
+        await sendBluetoothCommand(
+          bluetoothRef.bluetoothDevice,
+          bluetoothRef.gattServer,
+          profile.serviceUuid,
+          volumeChar.uuid,
+          volumeChar.increaseValue
+        );
+        setErrorMessage('');
+      } catch (error) {
+        setErrorMessage(`Erro ao aumentar volume de ${conexion.text}: ${error.message}`);
+      }
+    } else {
+      setErrorMessage(`Aparelho ${conexion.text} não está conectado via Bluetooth.`);
+    }
+  };
+
+  const handleVolumeDown = async (id) => {
+    const conexion = conexions.find(device => device.id === id);
+    if (!conexion || conexion.type !== 'tv' || !conexion.connected) return;
+
+    const bluetoothRef = activeBluetoothDevices.current[id];
+    if (bluetoothRef && bluetoothRef.bluetoothDevice && bluetoothRef.gattServer) {
+      try {
+        const profile = DEVICE_PROFILES.tv;
+        const volumeChar = profile.characteristics.volume;
+        await sendBluetoothCommand(
+          bluetoothRef.bluetoothDevice,
+          bluetoothRef.gattServer,
+          profile.serviceUuid,
+          volumeChar.uuid,
+          volumeChar.decreaseValue
+        );
+        setErrorMessage('');
+      } catch (error) {
+        setErrorMessage(`Erro ao diminuir volume de ${conexion.text}: ${error.message}`);
+      }
+    } else {
+      setErrorMessage(`Aparelho ${conexion.text} não está conectado via Bluetooth.`);
+    }
+  };
+
+  const handleMuteToggle = async (id) => {
+    const conexion = conexions.find(device => device.id === id);
+    if (!conexion || conexion.type !== 'tv' || !conexion.connected) return;
+
+    const bluetoothRef = activeBluetoothDevices.current[id];
+    if (bluetoothRef && bluetoothRef.bluetoothDevice && bluetoothRef.gattServer) {
+      try {
+        const profile = DEVICE_PROFILES.tv;
+        const volumeChar = profile.characteristics.volume;
+        await sendBluetoothCommand(
+          bluetoothRef.bluetoothDevice,
+          bluetoothRef.gattServer,
+          profile.serviceUuid,
+          volumeChar.uuid,
+          volumeChar.muteValue
+        );
+        setErrorMessage('');
+      } catch (error) {
+        setErrorMessage(`Erro ao silenciar ${conexion.text}: ${error.message}`);
+      }
+    } else {
+      setErrorMessage(`Aparelho ${conexion.text} não está conectado via Bluetooth.`);
+    }
+  };
+
+  const handleSetTemperature = async (id, temperature) => {
+    const conexion = conexions.find(device => device.id === id);
+    if (!conexion || conexion.type !== 'arcondicionado' || !conexion.connected) return;
+
+    const bluetoothRef = activeBluetoothDevices.current[id];
+    if (bluetoothRef && bluetoothRef.bluetoothDevice && bluetoothRef.gattServer) {
+      try {
+        const profile = DEVICE_PROFILES.arcondicionado;
+        const tempChar = profile.characteristics.temperature;
+        const valueToSend = tempChar.writeValue(temperature);
+        await sendBluetoothCommand(
+          bluetoothRef.bluetoothDevice,
+          bluetoothRef.gattServer,
+          profile.serviceUuid,
+          tempChar.uuid,
+          valueToSend
+        );
+        setErrorMessage('');
+      } catch (error) {
+        setErrorMessage(`Erro ao definir temperatura de ${conexion.text}: ${error.message}`);
+      }
+    } else {
+      setErrorMessage(`Aparelho ${conexion.text} não está conectado via Bluetooth.`);
+    }
+  };
+
+  const handleSetAcMode = async (id, modeValue) => { // modeValue seria tipo 0x01 para cool, 0x02 para heat
+    const conexion = conexions.find(device => device.id === id);
+    if (!conexion || conexion.type !== 'arcondicionado' || !conexion.connected) return;
+
+    const bluetoothRef = activeBluetoothDevices.current[id];
+    if (bluetoothRef && bluetoothRef.bluetoothDevice && bluetoothRef.gattServer) {
+      try {
+        const profile = DEVICE_PROFILES.arcondicionado;
+        const modeChar = profile.characteristics.mode;
+        await sendBluetoothCommand(
+          bluetoothRef.bluetoothDevice,
+          bluetoothRef.gattServer,
+          profile.serviceUuid,
+          modeChar.uuid,
+          modeValue
+        );
+        setErrorMessage('');
+      } catch (error) {
+        setErrorMessage(`Erro ao definir modo do ar condicionado ${conexion.text}: ${error.message}`);
+      }
+    } else {
+      setErrorMessage(`Aparelho ${conexion.text} não está conectado via Bluetooth.`);
+    }
+  };
+
+  const handleSetBrightness = async (id, brightnessLevel) => {
+    const conexion = conexions.find(device => device.id === id);
+    if (!conexion || conexion.type !== 'lampada' || !conexion.connected) return;
+
+    const bluetoothRef = activeBluetoothDevices.current[id];
+    if (bluetoothRef && bluetoothRef.bluetoothDevice && bluetoothRef.gattServer) {
+      try {
+        const profile = DEVICE_PROFILES.lampada;
+        const brightnessChar = profile.characteristics.brightness;
+        const valueToSend = brightnessChar.writeValue(brightnessLevel);
+        await sendBluetoothCommand(
+          bluetoothRef.bluetoothDevice,
+          bluetoothRef.gattServer,
+          profile.serviceUuid,
+          brightnessChar.uuid,
+          valueToSend
+        );
+        setErrorMessage('');
+      } catch (error) {
+        setErrorMessage(`Erro ao definir brilho de ${conexion.text}: ${error.message}`);
+      }
+    } else {
+      setErrorMessage(`Aparelho ${conexion.text} não está conectado via Bluetooth.`);
     }
   };
 
   // Abrir modal detalhes do dispositivo
   const handleConexionClick = (c) => {
-    // Mostra detalhes apenas se estiver conectado ou se for um aparelho manual
-    // Para aparelhos Bluetooth, ele deve estar 'connected' no seu estado.
     setSelectedConexion(c);
   };
 
@@ -421,6 +654,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     let duration = [];
     if (days > 0) duration.push(`${days} dia(s)`);
     if (hours % 24 > 0) duration.push(`${hours % 24} hora(s)`);
+    // Para minutos e segundos, só mostra se a duração total for menor que um dia/hora
     if (minutes % 60 > 0 && days === 0) duration.push(`${minutes % 60} minuto(s)`);
     if (seconds % 60 > 0 && hours === 0 && days === 0) duration.push(`${seconds % 60} segundo(s)`);
 
@@ -466,7 +700,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                       <button
                         key={icon.name}
                         className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`}
-                        onClick={() => { setNewConexion({ ...newConexion, icon: icon.src }); setActiveIcon(icon.src); }}
+                        onClick={() => { setNewConexion({ ...newConexion, icon: icon.src, type: guessDeviceType(newConexion.text || icon.name) }); setActiveIcon(icon.src); }}
                         type="button"
                       >
                         <img src={icon.src} alt={icon.name} style={{ width: 30, height: 30 }} />
@@ -488,6 +722,23 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                     ))}
                   </div>
                 </div>
+                {/* Seleção do tipo de aparelho para aparelhos manuais */}
+                {modoManual && (
+                  <div className="device-type-picker">
+                    <label>Tipo de Aparelho (para controle):</label>
+                    <select
+                      value={newConexion.type || ''}
+                      onChange={(e) => setNewConexion({ ...newConexion, type: e.target.value || null })}
+                    >
+                      <option value="">Automático (pelo nome) / Nenhum</option>
+                      {Object.keys(DEVICE_PROFILES).map(type => (
+                        <option key={type} value={type}>
+                          {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <div className="form-actions">
                   <button
                     onClick={editingId ? saveEditedConexion : () => {
@@ -500,13 +751,16 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                         return;
                       }
                       // Para aparelhos adicionados manualmente, não há BluetoothDevice
+                      // O tipo é pego do estado newConexion.type ou adivinhado pelo nome
+                      const finalType = newConexion.type || guessDeviceType(newConexion.text);
                       onConnectDevice(
                         newConexion.text,
                         Date.now().toString(), // ID único para aparelhos manuais
                         newConexion.icon,
                         newConexion.backgroundColor,
                         null, // bluetoothDevice
-                        null  // bluetoothGattServer
+                        null,  // bluetoothGattServer
+                        finalType // Passa o tipo para aparelhos manuais
                       );
                       setShowAddForm(false);
                       setModoManual(false);
@@ -528,7 +782,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               </>
             ) : (
               <>
-                <p>Clique no botão abaixo para procurar e conectar aparelhos Bluetooth próximos:</p>
+                <p>Clique no botão abaixo para **procurar e conectar aparelhos Bluetooth próximos**. Seu navegador irá abrir uma janela para você selecionar o dispositivo.</p>
                 <button
                   onClick={handleSearchAndConnectBluetooth}
                   className="add-button-styled"
@@ -639,12 +893,67 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                 <strong>ID Bluetooth:</strong> {selectedConexion.bluetoothDevice.id}
               </p>
             )}
+            {selectedConexion.type && (
+              <p>
+                <strong>Tipo:</strong> {selectedConexion.type.charAt(0).toUpperCase() + selectedConexion.type.slice(1)}
+              </p>
+            )}
             <p>
               <strong>Data de conexão:</strong> {formatDate(selectedConexion.connectedDate)}
             </p>
             <p>
               <strong>Duração da conexão:</strong> {getConnectionDuration(selectedConexion.connectedDate)}
             </p>
+
+            {/* Controles Específicos por Tipo de Aparelho */}
+            {selectedConexion.connected && selectedConexion.bluetoothDevice && selectedConexion.type === 'tv' && (
+              <div className="device-controls">
+                <h4>Controles da TV</h4>
+                <button onClick={() => handleVolumeUp(selectedConexion.id)}>Volume +</button>
+                <button onClick={() => handleVolumeDown(selectedConexion.id)}>Volume -</button>
+                <button onClick={() => handleMuteToggle(selectedConexion.id)}>Mudo</button>
+              </div>
+            )}
+
+            {selectedConexion.connected && selectedConexion.bluetoothDevice && selectedConexion.type === 'arcondicionado' && (
+              <div className="device-controls">
+                <h4>Controles do Ar Condicionado</h4>
+                <label>Temperatura:</label>
+                <input
+                  type="number"
+                  min="16"
+                  max="30"
+                  defaultValue="22"
+                  onChange={(e) => handleSetTemperature(selectedConexion.id, parseInt(e.target.value))}
+                />
+                <button onClick={() => handleSetAcMode(selectedConexion.id, DEVICE_PROFILES.arcondicionado.characteristics.mode.coolValue)}>Modo Frio</button>
+                <button onClick={() => handleSetAcMode(selectedConexion.id, DEVICE_PROFILES.arcondicionado.characteristics.mode.heatValue)}>Modo Quente</button>
+              </div>
+            )}
+
+            {selectedConexion.connected && selectedConexion.bluetoothDevice && selectedConexion.type === 'lampada' && (
+              <div className="device-controls">
+                <h4>Controles da Lâmpada</h4>
+                <label>Brilho: </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="255"
+                  defaultValue="128"
+                  onChange={(e) => handleSetBrightness(selectedConexion.id, parseInt(e.target.value))}
+                />
+              </div>
+            )}
+            {selectedConexion.bluetoothDevice && !selectedConexion.connected && (
+                <p className="error-message">Este aparelho Bluetooth está desconectado. Ative-o novamente pelo botão abaixo ou na lista.</p>
+            )}
+            {selectedConexion.bluetoothDevice && selectedConexion.connected && !selectedConexion.type && (
+                <p className="error-message">Não foi possível determinar o tipo deste aparelho Bluetooth. Controles específicos podem não estar disponíveis.</p>
+            )}
+
+
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
             <button
               className="close-button-styled"
               onClick={() => setSelectedConexion(null)}
