@@ -78,6 +78,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [conexionToDelete, setConexionToDelete] = useState(null);
 
   // Handle params URL para adicionar direto
+  // ESTE useEffect JÁ CUIDA DA LÓGICA DE CONEXÃO AO LER O QR CODE
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const nome = params.get('add');
@@ -597,10 +598,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {visibleQRCode && (
         <div className="modal-overlay" onClick={() => setVisibleQRCode(null)}>
           <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
-
+            <h3>QR Code para: {visibleQRCode.text}</h3>
+            <p>Escaneie este QR Code em outro dispositivo para adicionar este aparelho.</p>
             <QRCodeCanvas
-              // ALTERADO AQUI: O valor do QR Code agora aponta para a página de conexões
-              // com os parâmetros 'add' (nome do aparelho) e 'icon' (nome do ícone)
+              // ESTA LINHA JÁ GERA O QR CODE COM A URL CORRETA PARA CONEXÃO AUTOMÁTICA
               value={`${siteBaseURL}/conexao?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}`}
               size={256}
               level="H"
