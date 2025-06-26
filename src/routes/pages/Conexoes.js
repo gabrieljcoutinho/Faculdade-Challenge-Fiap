@@ -244,6 +244,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       return;
     }
 
+    // AQUI É ONDE O setConexions É CHAMADO PARA ATUALIZAR O ESTADO
     setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate } : c));
     closeAllModals(); // Use centralized close function
   };

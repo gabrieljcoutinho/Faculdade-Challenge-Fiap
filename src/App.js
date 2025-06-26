@@ -230,6 +230,8 @@ function App() {
             element={
               <Conexoes
                 conexions={conexions}
+                // ESSA É A ALTERAÇÃO CHAVE: PASSAR setConexions COMO PROP!
+                setConexions={setConexions}
                 onConnectDevice={handleConnectDevice} // Passa a função central para Conexoes
                 onRemoveDevice={handleRemoveDevice}
                 onToggleConnection={handleToggleConnection}
