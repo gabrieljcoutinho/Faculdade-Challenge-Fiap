@@ -90,13 +90,19 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             if (conexions.length >= DEVICE_LIMIT) {
                 setShowLimitWarning(true);
             } else {
-                onConnectDevice(nome, nome, iconSrc, availableColors[0]);
+                // Modificado aqui: Adicionado para simular conexão imediata ao escanear QR Code
+                const existingConexion = conexions.find(c => c.text.toLowerCase() === nome.toLowerCase());
+                if (existingConexion) {
+                    setErrorMessage(`Já existe um aparelho chamado "${nome}".`);
+                } else {
+                    onConnectDevice(nome, nome, iconSrc, availableColors[0]);
+                }
             }
         }
         // Limpa os parâmetros da URL para evitar adição repetida ao recarregar a página
         window.history.replaceState({}, document.title, location.pathname);
     }
-  }, [location.search, onConnectDevice, conexions.length]);
+  }, [location.search, onConnectDevice, conexions]); // Adicionado 'conexions' como dependência para verificar se já existe
 
   // Função para obter o nome do ícone a partir do src
   // Necessário para montar a URL do QR Code
@@ -591,8 +597,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {visibleQRCode && (
         <div className="modal-overlay" onClick={() => setVisibleQRCode(null)}>
           <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
-            <h3>QR Code para: {visibleQRCode.text}</h3>
-            <p>Escaneie este QR Code em outro dispositivo para adicionar este aparelho.</p>
+
             <QRCodeCanvas
               // ALTERADO AQUI: O valor do QR Code agora aponta para a página de conexões
               // com os parâmetros 'add' (nome do aparelho) e 'icon' (nome do ícone)
