@@ -1,75 +1,97 @@
-/* Base styling for the modal container */
+/* Modal overlay com efeito escuro suave */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Container do modal com efeito glass e transição */
 .conexion-details-modal {
-    background-color: #ffffff; /* Use full hex for clarity */
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
-    max-width: 500px; /* Constrain width for better readability on large screens */
-    margin: 30px auto; /* Center the modal if it's not absolutely positioned */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Specify a modern, readable font-family */
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px 40px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    animation: fadeIn 0.3s ease;
+    color: #2c3e50;
+    text-align: center;
 }
 
-/* Headings within the modal */
-.conexion-details-modal h2 {
-    margin-top: 0;
-    color: #2c3e50; /* Darker blue for primary headings */
-    margin-bottom: 20px;
-    font-size: 2em; /* Increase font size for better hierarchy */
-    text-align: center; /* Center the main title */
+/* Animação de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Image styling */
-.conexion-details-modal img {
-    max-width: 100%; /* Ensure image is responsive */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Remove extra space below the image */
-    margin: 0 auto 25px auto; /* Center the image and adjust bottom margin */
-    border-radius: 5px; /* Slightly round the image corners */
-}
-
-/* Subheadings */
 .conexion-details-modal h3 {
-    color: #34495e; /* Slightly lighter dark blue for subheadings */
-    font-size: 1.5em; /* Slightly larger for emphasis */
-    margin-top: 25px; /* Add space above subheadings */
-    margin-bottom: 10px;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: #1f2d3d;
 }
 
-/* Paragraph text */
+.conexion-details-modal img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin: 20px auto;
+    display: block;
+}
+
 .conexion-details-modal p {
-    color: #617d8a; /* Soft gray for body text */
-    font-size: 1.1em; /* Slightly larger for readability */
-    line-height: 1.6; /* Improve line spacing for better legibility */
-    margin-bottom: 15px; /* Space out paragraphs */
+    font-size: 1.1em;
+    color: #4a6670;
+    margin-bottom: 12px;
+    line-height: 1.6;
 }
 
-/* Close button styling */
-.close-button-styled {
-    background-color: #e74c3c; /* A more vibrant red for the button */
-    color: #ffffff; /* White text */
-    padding: 12px 25px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 17px;
-    margin-top: 30px;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Add box-shadow to transition */
-    letter-spacing: 0.5px;
+/* Estilo da tag de cor de fundo */
+.conexion-details-modal span {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 5px;
+    color: #fff;
     font-weight: 600;
-    display: block; /* Make it a block element to control margin:auto */
-    margin-left: auto; /* Center the button */
-    margin-right: auto; /* Center the button */
-    text-transform: uppercase; /* Make button text uppercase for more impact */
+}
+
+/* Botão moderno e estiloso */
+.close-button-styled {
+    background: linear-gradient(to right, #ff6a6a, #e74c3c);
+    color: white;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: all 0.3s ease;
 }
 
 .close-button-styled:hover {
-    background-color: #c0392b; /* Darker red on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* More pronounced shadow on hover */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(231, 76, 60, 0.4);
 }
 
 .close-button-styled:active {
-    transform: translateY(0); /* Button goes back to original position on click */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Smaller shadow on click */
-    background-color: #a52a22; /* Even darker red when active */
+    transform: translateY(0);
+    box-shadow: 0 5px 10px rgba(231, 76, 60, 0.2);
 }
