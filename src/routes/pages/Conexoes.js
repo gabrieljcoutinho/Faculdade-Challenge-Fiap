@@ -288,30 +288,22 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   // Alternar status conexão (on/off)
   const toggleConnection = (id, newDesiredState) => {
-    // AQUI ESTÁ A CORREÇÃO: Passando o newDesiredState para o onToggleConnection
     onToggleConnection(id, newDesiredState);
-
-    // Esta parte é para fechar o modal de detalhes se o aparelho for desconectado ENQUANTO está aberto.
-    // É uma lógica de UI local, e não afeta o estado 'connected' em si diretamente neste componente.
-    // A atualização real do 'connected' acontece via onToggleConnection no componente pai.
-    // Precisamos de um pequeno delay ou usar useEffect no componente pai para reagir à mudança do 'connected'
-    // antes de tentar acessar 'c.connected' aqui, pois 'conexions' ainda é o estado antigo neste render ciclo.
-    // No entanto, para garantir o efeito visual imediato da sobreposição, mantemos a lógica condicional
-    // diretamente ligada à prop 'c.connected' no JSX.
-    // Para fechar o modal de detalhes, precisamos que 'conexions' já tenha sido atualizado.
-    // Uma solução mais robusta para o modal seria:
-    // useEffect(() => {
-    //   if (selectedConexion && !selectedConexion.connected) {
-    //     setSelectedConexion(null);
-    //   }
-    // }, [conexions, selectedConexion]); // Reage a mudanças em conexions
+    // Não precisamos de lógica adicional aqui para o modal de detalhes,
+    // pois o controle da abertura/fechamento do modal é feito pela prop `selectedConexion`.
+    // Se o aparelho ficar desconectado, `selectedConexion` precisaria ser `null` no componente pai
+    // ou um useEffect aqui para reagir a `conexions` e `selectedConexion.connected`.
   };
 
 
   // Abrir modal detalhes do dispositivo
-  const handleConexionClick = (c) => {
-    if (c.connected) {
-      setSelectedConexion(c);
+  const handleConexionClick = (c, e) => { // Adicionei 'e' aqui para o evento
+    // Verifica se o clique foi diretamente no elemento pai e não em um de seus filhos interativos
+    // Esta é a solução mais robusta para evitar a abertura do modal em cliques de botões.
+    if (e.target === e.currentTarget || e.target.tagName === 'SPAN' && e.target.classList.contains('conexion-text-overlay')) {
+      if (c.connected) {
+        setSelectedConexion(c);
+      }
     }
   };
 
@@ -466,7 +458,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             key={c.id}
             className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''}`}
             style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-            onClick={() => handleConexionClick(c)}
+            // AQUI ESTÁ A MUDANÇA PRINCIPAL: Verificar se o clique é no elemento pai ou texto
+            onClick={(e) => handleConexionClick(c, e)}
           >
             {c.connected && (
               <div className="qrcode-top-left">
@@ -504,7 +497,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                 <input
                   type="checkbox"
                   checked={c.connected}
-                  // AQUI ESTÁ A CORREÇÃO REAL: Passando o estado do checkbox
                   onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }}
                 />
                 <span className="slider round"></span>
