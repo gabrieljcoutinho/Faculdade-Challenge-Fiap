@@ -25,7 +25,9 @@ body.dark,
 }
 
 body.dark,
-.paragrafoContatoTitulo, .paragrafoAdiconarAparelhos{
+.paragrafoContatoTitulo,
+.paragrafoAdiconarAparelhos,
+.connecting-message {
     color: #000;
 }
 
