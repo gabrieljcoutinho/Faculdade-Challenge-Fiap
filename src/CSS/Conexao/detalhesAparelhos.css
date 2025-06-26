@@ -1,199 +1,50 @@
-/* CSS para o Modal de Detalhes do Aparelho */
+/* CSS APRIMORADO para o Modal de Detalhes do Aparelho */
+
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Fundo mais escuro para destaque */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    /* Garante que fique acima de outros elementos */
+    backdrop-filter: blur(5px);
+    /* Efeito de desfoque no fundo */
+}
 
 .detalhes-aparelho-modal {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #f0f4f8, #e5e9ef);
+    /* Gradiente suave de cinza/azul claro */
+    padding: 35px;
+    border-radius: 15px;
+    /* Bordas mais arredondadas */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    /* Sombra mais difusa e perceptível */
     width: 90%;
-    max-width: 450px;
-    /* Limite a largura para melhor visualização */
+    max-width: 480px;
+    /* Um pouco mais largo para melhor espaçamento */
     text-align: center;
     position: relative;
-    animation: slideIn 0.3s ease-out forwards;
-    /* Reutiliza a animação existente */
-}
-
-.detalhes-aparelho-modal h2 {
-    color: #333;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-    font-weight: 600;
-}
-
-.detalhes-aparelho-modal .close-button {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    color: #888;
-    cursor: pointer;
-    padding: 5px;
-    transition: color 0.2s ease;
-}
-
-.detalhes-aparelho-modal .close-button:hover {
-    color: #333;
-}
-
-.detalhes-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    /* Espaçamento entre os elementos */
-}
-
-.detalhes-icon {
-    width: 80px;
-    /* Tamanho maior para o ícone no detalhe */
-    height: 80px;
-    object-fit: contain;
-    margin-bottom: 10px;
-}
-
-.detalhes-aparelho-modal h3 {
-    color: #444;
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
-
-.detalhes-aparelho-modal p {
-    color: #666;
-    font-size: 1em;
-    line-height: 1.5;
-    margin-bottom: 5px;
-}
-
-/* Estilo para a nova informação "Assistindo:" */
-.now-playing-detail {
-    font-size: 1.1em;
-    color: #007bff;
-    /* Cor destacada para o conteúdo */
-    margin-top: 15px;
-    font-weight: bold;
-    padding: 8px 15px;
-    background-color: #e6f7ff;
-    /* Fundo suave */
-    border-radius: 8px;
-    width: 100%;
-    box-sizing: border-box;
-    /* Garante que padding não estoure a largura */
-    text-align: center;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilo para o botão "Simular Conteúdo" */
-.set-now-playing-button {
-    background-color: #28a745;
-    /* Um verde vibrante */
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 500;
-    margin-top: 20px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.set-now-playing-button:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
-
-.set-now-playing-button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Garante que a animação comece do zero */
+    animation: fadeInScaleUp 0.4s ease-out forwards;
+    /* Nova animação */
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    /* Borda sutil */
+    box-sizing: border-box;
+    /* Inclui padding e borda na largura total */
 }
 
-
-.detalhes-actions {
-    display: flex;
-    flex-direction: column;
-    /* Botões um abaixo do outro */
-    gap: 10px;
-    margin-top: 25px;
-    width: 100%;
-}
-
-.toggle-connection-button,
-.edit-button-details,
-.remove-button-details {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 500;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    width: 100%;
-    /* Ocupa a largura total */
-}
-
-/* Estilo para o botão de Desconectar/Conectar */
-.toggle-connection-button.disconnect {
-    background-color: #dc3545;
-    /* Vermelho para desconectar */
-    color: white;
-}
-
-.toggle-connection-button.disconnect:hover {
-    background-color: #c82333;
-    transform: translateY(-1px);
-}
-
-.toggle-connection-button.connect {
-    background-color: #17a2b8;
-    /* Azul claro para conectar */
-    color: white;
-}
-
-.toggle-connection-button.connect:hover {
-    background-color: #138496;
-    transform: translateY(-1px);
-}
-
-
-/* Estilo para o botão de Editar */
-.edit-button-details {
-    background-color: #ffc107;
-    /* Amarelo para editar */
-    color: #333;
-}
-
-.edit-button-details:hover {
-    background-color: #e0a800;
-    transform: translateY(-1px);
-}
-
-.edit-button-details:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-/* Estilo para o botão de Remover */
-.remove-button-details {
-    background-color: #6c757d;
-    /* Cinza para remover */
-    color: white;
-}
-
-.remove-button-details:hover {
-    background-color: #5a6268;
-    transform: translateY(-1px);
-}
-
-/* Animação para a entrada do modal (se slideIn for definida em outro lugar) */
-@keyframes slideIn {
+/* Animação de entrada do modal */
+@keyframes fadeInScaleUp {
     from {
         opacity: 0;
-        transform: translateY(-50px) scale(0.95);
+        transform: translateY(-30px) scale(0.95);
     }
 
     to {
@@ -202,10 +53,255 @@
     }
 }
 
-/* Media Queries para responsividade, se necessário */
-@media (max-width: 768px) {
+.detalhes-aparelho-modal h2 {
+    color: #2c3e50;
+    /* Cor de título mais escura e elegante */
+    margin-bottom: 25px;
+    font-size: 2em;
+    /* Título maior */
+    font-weight: 700;
+    /* Mais negrito */
+    letter-spacing: -0.5px;
+}
+
+.detalhes-aparelho-modal .close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    /* Ícone de fechar maior */
+    color: #95a5a6;
+    /* Cor mais suave */
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.detalhes-aparelho-modal .close-button:hover {
+    color: #34495e;
+    /* Fica mais escuro ao passar o mouse */
+    transform: rotate(90deg);
+    /* Efeito de rotação */
+}
+
+.detalhes-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.detalhes-icon {
+    width: 90px;
+    /* Ícone ainda maior */
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    /* Sombra para o ícone */
+}
+
+.detalhes-aparelho-modal h3 {
+    color: #34495e;
+    font-size: 1.6em;
+    /* Nome do aparelho maior */
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.detalhes-aparelho-modal p {
+    color: #555;
+    font-size: 1.05em;
+    /* Texto ligeiramente maior */
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+/* Estilo para a nova informação "Assistindo:" */
+.now-playing-detail {
+    font-size: 1.15em;
+    color: #e74c3c;
+    /* Um vermelho mais vibrante e moderno */
+    margin-top: 20px;
+    font-weight: bold;
+    padding: 12px 20px;
+    background-color: #fcebeb;
+    /* Fundo suave para o destaque */
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+    /* Sombra interna sutil */
+    border: 1px solid #f9d9d9;
+    letter-spacing: 0.2px;
+}
+
+/* Estilo para o botão "Simular Conteúdo" */
+.set-now-playing-button {
+    background-color: #2ecc71;
+    /* Um verde moderno e amigável */
+    color: white;
+    padding: 14px 28px;
+    /* Padding generoso */
+    border: none;
+    border-radius: 10px;
+    /* Bordas mais arredondadas */
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    /* Mais negrito */
+    margin-top: 25px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 12px rgba(46, 204, 113, 0.3);
+    /* Sombra colorida */
+    letter-spacing: 0.5px;
+}
+
+.set-now-playing-button:hover {
+    background-color: #27ae60;
+    /* Verde mais escuro ao hover */
+    transform: translateY(-3px);
+    /* Leve elevação */
+    box-shadow: 0 8px 16px rgba(46, 204, 113, 0.4);
+}
+
+.set-now-playing-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
+}
+
+.detalhes-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* Espaçamento entre os botões de ação */
+    margin-top: 30px;
+    /* Mais espaçamento do conteúdo acima */
+    width: 100%;
+}
+
+.toggle-connection-button,
+.edit-button-details,
+.remove-button-details {
+    padding: 14px 25px;
+    /* Padding generoso para os botões de ação */
+    border: none;
+    border-radius: 10px;
+    /* Bordas arredondadas */
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.3px;
+}
+
+/* Estilo para o botão de Desconectar/Conectar */
+.toggle-connection-button.disconnect {
+    background-color: #e74c3c;
+    /* Vermelho forte para desconectar */
+    color: white;
+}
+
+.toggle-connection-button.disconnect:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(231, 76, 60, 0.3);
+}
+
+.toggle-connection-button.connect {
+    background-color: #3498db;
+    /* Azul vibrante para conectar */
+    color: white;
+}
+
+.toggle-connection-button.connect:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+}
+
+/* Estilo para o botão de Editar */
+.edit-button-details {
+    background-color: #f39c12;
+    /* Laranja dourado para editar */
+    color: white;
+}
+
+.edit-button-details:hover {
+    background-color: #e67e22;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(243, 156, 18, 0.3);
+}
+
+.edit-button-details:disabled {
+    background-color: #bdc3c7;
+    /* Cinza claro quando desabilitado */
+    cursor: not-allowed;
+    opacity: 0.8;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Estilo para o botão de Remover */
+.remove-button-details {
+    background-color: #95a5a6;
+    /* Cinza médio para remover */
+    color: white;
+}
+
+.remove-button-details:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(149, 165, 166, 0.3);
+}
+
+/* Media Queries para responsividade aprimorada */
+@media (max-width: 600px) {
     .detalhes-aparelho-modal {
         width: 95%;
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    .detalhes-aparelho-modal h2 {
+        font-size: 1.7em;
+        margin-bottom: 20px;
+    }
+
+    .detalhes-icon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .detalhes-aparelho-modal h3 {
+        font-size: 1.4em;
+    }
+
+    .detalhes-aparelho-modal p {
+        font-size: 0.95em;
+    }
+
+    .set-now-playing-button,
+    .toggle-connection-button,
+    .edit-button-details,
+    .remove-button-details {
+        padding: 12px 20px;
+        font-size: 0.95em;
+        border-radius: 8px;
+    }
+
+    .detalhes-actions {
+        gap: 10px;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .detalhes-aparelho-modal {
         padding: 20px;
     }
 
@@ -223,14 +319,6 @@
     }
 
     .detalhes-aparelho-modal p {
-        font-size: 0.9em;
-    }
-
-    .toggle-connection-button,
-    .edit-button-details,
-    .remove-button-details,
-    .set-now-playing-button {
-        padding: 10px 15px;
         font-size: 0.9em;
     }
 }

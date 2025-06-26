@@ -617,7 +617,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             <div className="detalhes-content">
               <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
               <h3>{selectedConexion.text}</h3>
-              <p>Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
+
               {selectedConexion.connected && (
                 <>
                   <p>Conectado desde: {formatDate(selectedConexion.connectedDate)}</p>
@@ -634,14 +634,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                     </p>
                   )}
                   {/* Botão para simular conteúdo (apenas para TV) */}
-                  {selectedConexion.icon === tvIcon && selectedConexion.connected && (
-                    <button
-                      onClick={() => handleSetNowPlaying(selectedConexion.id)}
-                      className="set-now-playing-button"
-                    >
-                      Simular Conteúdo
-                    </button>
-                  )}
+
                 </>
               )}
               <div className="detalhes-actions">
