@@ -1,113 +1,77 @@
-/* Modal overlay */
+/* Fundo semi-transparente cobrindo toda a tela */
 .modal-overlay {
     position: fixed;
+    /* fixa na tela */
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    width: 100vw;
+    /* largura total da tela */
+    height: 100vh;
+    /* altura total da tela */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* fundo preto transparente */
     display: flex;
     justify-content: center;
+    /* centraliza horizontalmente */
     align-items: center;
+    /* centraliza verticalmente */
     z-index: 1000;
-    /* acima do conteúdo mas abaixo do diálogo */
+    /* para garantir que fique por cima */
 }
 
-/* Dialog box */
+/* Caixa do diálogo */
 .confirmation-dialog {
     background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     max-width: 400px;
     width: 90%;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1001;
+    /* responsivo em telas pequenas */
+    text-align: center;
+    user-select: none;
+    /* opcional para não selecionar texto */
 }
 
-/* Heading */
-.confirmation-dialog h2 {
-    margin-top: 0;
-    color: #333;
-    font-size: 1.8em;
-    margin-bottom: 15px;
-}
-
-/* Paragraph */
+/* Texto da mensagem */
 .confirmation-dialog p {
-    color: #555;
-    font-size: 1.1em;
-    line-height: 1.5;
-    margin-bottom: 25px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: #333;
 }
 
-/* Buttons container */
-.dialog-actions {
+/* Container dos botões */
+.confirmation-actions {
     display: flex;
     justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
+    gap: 20px;
+    /* espaço entre os botões */
 }
 
-/* Confirm button - verde transparente */
-.dialog-actions .confirm-button {
-    background-color: rgba(57, 255, 20, 0.3);
-    color: #000;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    transition: background-color 0.2s ease;
-    min-width: 100px;
-}
-
-.dialog-actions .confirm-button:hover {
-    background-color: green;
+/* Estilo botão Sim */
+.confirm-button {
+    background-color: #007bff;
     color: white;
-}
-
-/* Cancel button - vermelho transparente */
-.dialog-actions .cancel-button-styled {
-    background-color: rgba(255, 0, 51, 0.7);
-    color: #000;
     border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 1.1em;
-    transition: background-color 0.2s ease;
-    min-width: 100px;
+    transition: background-color 0.25s ease;
 }
 
-.dialog-actions .cancel-button-styled:hover {
-    background-color: rgba(255, 0, 51, 0.9);
-    color: white;
+.confirm-button:hover {
+    background-color: #0056b3;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .confirmation-dialog {
-        padding: 20px;
-        width: 90%;
-    }
-
-    .confirmation-dialog h2 {
-        font-size: 1.5em;
-    }
-
-    .confirmation-dialog p {
-        font-size: 1em;
-    }
-
-    .dialog-actions .confirm-button,
-    .dialog-actions .cancel-button-styled {
-        padding: 10px 20px;
-        font-size: 1em;
-        min-width: 80px;
-    }
+/* Estilo botão Não */
+.cancel-button {
+    background-color: red;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
 }
