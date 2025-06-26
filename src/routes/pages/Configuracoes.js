@@ -66,10 +66,15 @@ const Configuracoes = () => {
             {theme === 'light-theme' ? '🌙 Modo Escuro' : '☀️ Modo Claro'}
           </button>
 
+                   <button className="comando-btn">
+            Test
+          </button>
+
           <div className="top-buttons">
             <button title="Logar" onClick={navegarParaLogin}>Log In</button>
             <button title="Deslogar">Log out</button>
           </div>
+
 
         </div>
       </div>
