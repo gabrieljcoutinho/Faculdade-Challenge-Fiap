@@ -78,30 +78,7 @@ const ComandosChat = () => {
 
 
 
-    <li className="comando-item">
-            <strong>Tema Claro </strong>
 
-
-
-
-<ul className="sub-lista-comandos">
-              {/* Grouped common phrases for better readability */}
-              {[
-         '➤ Mudar para o modo claro',
-              '➤ Ativar modo claro',
-               '➤ Modo claro',
-        '➤ Tema claro',
-        '➤ mudar para o modo claro',
-        '➤ ativar modo claro',
-        '➤ modo claro, tema claro'
-
-
-              ].map((command, index) => (
-                <li key={index}>{command}</li>
-              ))}
-            </ul>
-
-          </li>
 
 
 
@@ -113,7 +90,7 @@ const ComandosChat = () => {
 
 
 <ul className="sub-lista-comandos">
-              {/* Grouped common phrases for better readability */}
+
               {[
 
 
