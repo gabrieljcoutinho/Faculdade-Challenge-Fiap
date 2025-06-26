@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../CSS/Settings/setting.css';
 import '../../CSS/mudarTema.css'; // importe o CSS do tema aqui
-import '../../CSS/estiloBrnMudarTema.css'
+
 import comandosImg from '../../imgs/comandos.png';
 import atendimentoImg from '../../imgs/atendimento.png';
 
