@@ -55,7 +55,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   // Estados de UI
   const [showAddForm, setShowAddForm] = useState(false);
-  const [modoManual, setModoManual] = useState(false); // Novo estado para controle do modo manual
+  const [modoManual, setModoManual] = useState(false);
   const [isSearchingBluetooth, setIsSearchingBluetooth] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -215,6 +215,28 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setErrorMessage('');
   };
 
+  // Salvar novo aparelho manualmente
+  const saveManualConexion = () => {
+    if (!newConexion.text.trim() || !newConexion.icon) {
+      setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊');
+      return;
+    }
+    if (conexions.some(c => c.text.toLowerCase() === newConexion.text.toLowerCase())) {
+      setErrorMessage(`Já existe um aparelho com o nome "${newConexion.text}".`);
+      return;
+    }
+    if (conexions.length >= DEVICE_LIMIT) {
+      setShowLimitWarning(true);
+      return;
+    }
+
+    // Call onConnectDevice for consistency
+    onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
+    setShowAddForm(false);
+    setModoManual(false);
+    setErrorMessage('');
+  };
+
   // Solicitar remoção do aparelho (abre confirmação)
   const removeConexion = (id) => {
     setConexionToDelete(id);
@@ -369,28 +391,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                 </div>
                 <div className="form-actions">
                   <button
-                    onClick={editingId ? saveEditedConexion : () => {
-                      if (!newConexion.text.trim() || !newConexion.icon) {
-                        setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊');
-                        return;
-                      }
-                      if (conexions.some(c => c.text.toLowerCase() === newConexion.text.toLowerCase())) {
-                        setErrorMessage(`Já existe um aparelho com o nome "${newConexion.text}".`);
-                        return;
-                      }
-                      const newDevice = {
-                        id: Date.now().toString(),
-                        text: newConexion.text,
-                        icon: newConexion.icon,
-                        backgroundColor: newConexion.backgroundColor,
-                        connected: true,
-                        connectedDate: new Date().toISOString()
-                      };
-                      setConexions(prev => [...prev, newDevice]);
-                      setShowAddForm(false);
-                      setModoManual(false);
-                      setErrorMessage('');
-                    }}
+                    onClick={editingId ? saveEditedConexion : saveManualConexion}
                     className="save-button-styled"
                     type="button"
                   >
@@ -500,31 +501,30 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
       {/* Modal detalhes aparelho */}
       {selectedConexion && (
-     <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
-  <div className="conexion-details-modal" onClick={e => e.stopPropagation()}>
-    <h3>{selectedConexion.text}</h3>
-    <img
-      src={selectedConexion.icon}
-      alt={selectedConexion.text}
-      style={{ width: 80, height: 80 }}
-    />
-    <p>
-
-    </p>
-    <p>
-      <strong>Data de conexão:</strong> {formatDate(selectedConexion.connectedDate)}
-    </p>
-    <p>
-      <strong>Duração da conexão:</strong> {getConnectionDuration(selectedConexion.connectedDate)}
-    </p>
-    <button
-      className="close-button-styled"
-      onClick={() => setSelectedConexion(null)}
-    >
-      Fechar
-    </button>
-  </div>
-</div>
+        <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
+          <div className="conexion-details-modal" onClick={e => e.stopPropagation()}>
+            <h3>{selectedConexion.text}</h3>
+            <img
+              src={selectedConexion.icon}
+              alt={selectedConexion.text}
+              style={{ width: 80, height: 80 }}
+            />
+            <p>
+            </p>
+            <p>
+              <strong>Data de conexão:</strong> {formatDate(selectedConexion.connectedDate)}
+            </p>
+            <p>
+              <strong>Duração da conexão:</strong> {getConnectionDuration(selectedConexion.connectedDate)}
+            </p>
+            <button
+              className="close-button-styled"
+              onClick={() => setSelectedConexion(null)}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
 
       )}
 
