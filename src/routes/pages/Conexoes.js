@@ -33,7 +33,7 @@ import placeholderImage from '../../imgs/semConexao.png';
 // Constantes
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
-const DEVICE_LIMIT = 5;
+const DEVICE_LIMIT = 5; // Keep this for the warning, not for blocking
 
 // Ícones disponíveis
 const availableIcons = [
@@ -59,7 +59,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [isSearchingBluetooth, setIsSearchingBluetooth] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [showLimitWarning, setShowLimitWarning] = useState(false);
+  const [showLimitWarning, setShowLimitWarning] = useState(false); // This will now just be a warning
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
 
@@ -84,11 +84,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const iconKey = params.get('icon');
 
     if (nome && iconKey && iconMap[iconKey]) {
+      // Always allow connection, but show warning if limit is reached
       if (conexions.length >= DEVICE_LIMIT) {
         setShowLimitWarning(true);
-      } else {
-        onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
       }
+      onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
       window.history.replaceState({}, document.title, location.pathname);
     }
   }, [location.search, onConnectDevice, conexions.length]);
@@ -143,9 +143,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       return;
     }
 
+    // Show warning but don't prevent connection
     if (conexions.length >= DEVICE_LIMIT) {
       setShowLimitWarning(true);
-      return;
     }
 
     setIsSearchingBluetooth(true);
@@ -225,9 +225,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setErrorMessage(`Já existe um aparelho com o nome "${newConexion.text}".`);
       return;
     }
+    // Show warning but don't prevent connection
     if (conexions.length >= DEVICE_LIMIT) {
       setShowLimitWarning(true);
-      return;
     }
 
     // Call onConnectDevice for consistency
@@ -545,7 +545,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {showLimitWarning && (
         <div className="modal-overlay" onClick={() => setShowLimitWarning(false)}>
           <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
-            <p>Você atingiu o limite máximo de aparelhos conectados ({DEVICE_LIMIT}).</p>
+            <p className="limit-warning-message">
+              Você tem muitos aparelhos conectados ({conexions.length}). Você pode adicionar mais, mas considere gerenciar seus dispositivos.
+            </p>
             <button onClick={() => setShowLimitWarning(false)} className="confirm-button">OK</button>
           </div>
         </div>
