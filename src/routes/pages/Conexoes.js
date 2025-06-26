@@ -506,34 +506,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         ))}
       </div>
 
-      {/* Modal detalhes aparelho */}
-      {selectedConexion && (
-        <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
-          <div className="conexion-details-modal" onClick={e => e.stopPropagation()}>
-            <h3>{selectedConexion.text}</h3>
-            <img
-              src={selectedConexion.icon}
-              alt={selectedConexion.text}
-              style={{ width: 80, height: 80 }}
-            />
-            <p>
-            </p>
-            <p>
-              <strong>Data de conexão:</strong> {formatDate(selectedConexion.connectedDate)}
-            </p>
-            <p>
-              <strong>Duração da conexão:</strong> {getConnectionDuration(selectedConexion.connectedDate)}
-            </p>
-            <button
-              className="close-button-styled"
-              onClick={() => setSelectedConexion(null)}
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
 
-      )}
 
       {/* Modal confirmação remoção */}
       {showConfirmDialog && (
@@ -568,7 +541,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               level="H"
               includeMargin={true}
             />
-            <button className="close-button" onClick={() => setVisibleQRCode(null)}>Fechar</button>
+            <button className="close-button" onClick={() => setVisibleQRCode(null)}>X</button>
           </div>
         </div>
       )}
