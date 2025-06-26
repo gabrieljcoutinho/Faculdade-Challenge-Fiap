@@ -33,7 +33,7 @@ import placeholderImage from '../../imgs/semConexao.png';
 // Constantes
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
-const DEVICE_LIMIT = 5; // Keep this for the warning, not for blocking
+const DEVICE_LIMIT = 5;
 
 // Ícones disponíveis
 const availableIcons = [
@@ -59,7 +59,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [isSearchingBluetooth, setIsSearchingBluetooth] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [showLimitWarning, setShowLimitWarning] = useState(false); // This will now just be a warning
+  const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
 
@@ -84,11 +84,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const iconKey = params.get('icon');
 
     if (nome && iconKey && iconMap[iconKey]) {
-      // Always allow connection, but show warning if limit is reached
       if (conexions.length >= DEVICE_LIMIT) {
         setShowLimitWarning(true);
+      } else {
+        onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
       }
-      onConnectDevice(nome, nome, iconMap[iconKey], availableColors[0]);
       window.history.replaceState({}, document.title, location.pathname);
     }
   }, [location.search, onConnectDevice, conexions.length]);
@@ -143,9 +143,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       return;
     }
 
-    // Show warning but don't prevent connection
     if (conexions.length >= DEVICE_LIMIT) {
       setShowLimitWarning(true);
+      return;
     }
 
     setIsSearchingBluetooth(true);
@@ -209,6 +209,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       return;
     }
 
+    // Use setConexions here as it's for an update of an existing item
     setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate } : c));
     setShowAddForm(false);
     setModoManual(false);
@@ -225,9 +226,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setErrorMessage(`Já existe um aparelho com o nome "${newConexion.text}".`);
       return;
     }
-    // Show warning but don't prevent connection
     if (conexions.length >= DEVICE_LIMIT) {
       setShowLimitWarning(true);
+      return;
     }
 
     // Call onConnectDevice for consistency
@@ -286,13 +287,26 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   };
 
   // Alternar status conexão (on/off)
-  const toggleConnection = (id) => {
-    onToggleConnection(id);
-    const c = conexions.find(device => device.id === id);
-    if (selectedConexion && selectedConexion.id === id && c.connected) {
-      setSelectedConexion(null);
-    }
+  const toggleConnection = (id, newDesiredState) => {
+    // AQUI ESTÁ A CORREÇÃO: Passando o newDesiredState para o onToggleConnection
+    onToggleConnection(id, newDesiredState);
+
+    // Esta parte é para fechar o modal de detalhes se o aparelho for desconectado ENQUANTO está aberto.
+    // É uma lógica de UI local, e não afeta o estado 'connected' em si diretamente neste componente.
+    // A atualização real do 'connected' acontece via onToggleConnection no componente pai.
+    // Precisamos de um pequeno delay ou usar useEffect no componente pai para reagir à mudança do 'connected'
+    // antes de tentar acessar 'c.connected' aqui, pois 'conexions' ainda é o estado antigo neste render ciclo.
+    // No entanto, para garantir o efeito visual imediato da sobreposição, mantemos a lógica condicional
+    // diretamente ligada à prop 'c.connected' no JSX.
+    // Para fechar o modal de detalhes, precisamos que 'conexions' já tenha sido atualizado.
+    // Uma solução mais robusta para o modal seria:
+    // useEffect(() => {
+    //   if (selectedConexion && !selectedConexion.connected) {
+    //     setSelectedConexion(null);
+    //   }
+    // }, [conexions, selectedConexion]); // Reage a mudanças em conexions
   };
+
 
   // Abrir modal detalhes do dispositivo
   const handleConexionClick = (c) => {
@@ -490,7 +504,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                 <input
                   type="checkbox"
                   checked={c.connected}
-                  onChange={(e) => { e.stopPropagation(); toggleConnection(c.id); }}
+                  // AQUI ESTÁ A CORREÇÃO REAL: Passando o estado do checkbox
+                  onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }}
                 />
                 <span className="slider round"></span>
               </label>
@@ -545,9 +560,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {showLimitWarning && (
         <div className="modal-overlay" onClick={() => setShowLimitWarning(false)}>
           <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
-            <p className="limit-warning-message">
-              Você tem muitos aparelhos conectados ({conexions.length}). Você pode adicionar mais, mas considere gerenciar seus dispositivos.
-            </p>
+            <p>Você atingiu o limite máximo de aparelhos conectados ({DEVICE_LIMIT}).</p>
             <button onClick={() => setShowLimitWarning(false)} className="confirm-button">OK</button>
           </div>
         </div>
