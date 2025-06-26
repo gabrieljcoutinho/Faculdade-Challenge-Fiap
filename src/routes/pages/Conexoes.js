@@ -53,17 +53,17 @@ const iconMap = availableIcons.reduce((acc, icon) => {
 const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, onToggleConnection }) => {
   const location = useLocation();
 
-  // Estados de UI
+  // UI States
   const [showAddForm, setShowAddForm] = useState(false);
   const [modoManual, setModoManual] = useState(false);
   const [isSearchingBluetooth, setIsSearchingBluetooth] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showLimitWarning, setShowLimitWarning] = useState(false);
-  const [visibleQRCode, setVisibleQRCode] = useState(null); // Este é para o QR de detalhes do aparelho individual
-  const [selectedConexion, setSelectedConexion] = useState(null);
+  const [visibleQRCode, setVisibleQRCode] = useState(null); // For individual device QR code
+  const [selectedConexion, setSelectedConexion] = useState(null); // For device details modal
 
-  // Dados do formulário
+  // Form data states
   const [newConexion, setNewConexion] = useState({
     text: '',
     icon: '',
@@ -83,19 +83,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     return found ? found.name : '';
   };
 
-  // Helper function to check if a color is one of the available colors
-  const isValidColor = (color) => availableColors.includes(color);
-
-  // ESTE useEffect JÁ CUIDA DA LÓGICA DE CONEXÃO AO LER O QR CODE
+  // EFFECT HOOK: Handles URL parameters for automatic device connection via QR code scan
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const nome = params.get('add');
     const iconKey = params.get('icon');
-    const bgColor = params.get('bgColor'); // Get the background color from URL
+    const bgColor = params.get('bgColor'); // Get background color from URL
 
     if (nome && iconKey) {
       const iconSrc = iconMap[iconKey];
-      const actualBgColor = isValidColor(bgColor) ? bgColor : availableColors[0]; // Use provided color or default
+      // Ensure the color from URL is valid, otherwise use a default
+      const actualBgColor = availableColors.includes(bgColor) ? bgColor : availableColors[0];
 
       if (iconSrc) {
         if (conexions.length >= DEVICE_LIMIT) {
@@ -105,17 +103,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           if (existingConexion) {
             setErrorMessage(`Já existe um aparelho chamado "${nome}".`);
           } else {
-            // Pass the retrieved background color to onConnectDevice
+            // Call the parent's onConnectDevice function with all details
             onConnectDevice(nome, nome, iconSrc, actualBgColor);
           }
         }
       }
-      // Limpa os parâmetros da URL para evitar adição repetida ao recarregar a página
+      // Clear URL parameters to prevent re-adding on page refresh
       window.history.replaceState({}, document.title, location.pathname);
     }
-  }, [location.search, onConnectDevice, conexions]);
+  }, [location.search, onConnectDevice, conexions]); // Dependencies for useEffect
 
-  // Abrir formulário para adicionar (modo bluetooth por padrão)
+  // Open add device form (Bluetooth mode by default)
   const handleAddClick = () => {
     setNewConexion({
       text: '',
@@ -132,10 +130,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setShowLimitWarning(false);
     setShowAddForm(true);
     setIsSearchingBluetooth(false);
-    setModoManual(false); // Sempre começar em modo Bluetooth ao abrir
+    setModoManual(false); // Always start in Bluetooth mode when opening
   };
 
-  // Abrir formulário manual
+  // Open manual add form
   const abrirModoManual = () => {
     setModoManual(true);
     setNewConexion({
@@ -152,7 +150,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setIsSearchingBluetooth(false);
   };
 
-  // Funções de fechamento centralizadas
+  // Centralized close function for all modals/forms
   const closeAllModals = () => {
     setShowAddForm(false);
     setModoManual(false);
@@ -160,9 +158,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setIsSearchingBluetooth(false);
     setShowConfirmDialog(false);
     setShowLimitWarning(false);
-    setVisibleQRCode(null); // Fecha o QR code de detalhes do aparelho
-    setSelectedConexion(null); // Fecha o modal de detalhes do aparelho
-    // **ADICIONADO/REVISADO:** Garante que newConexion sempre tenha valores definidos ao fechar
+    setVisibleQRCode(null); // Close individual QR code modal
+    setSelectedConexion(null); // Close device details modal
+    // Ensure newConexion is reset
     setNewConexion({
       text: '',
       icon: '',
@@ -170,11 +168,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       connected: true,
       connectedDate: new Date().toISOString()
     });
-    setActiveIcon(null); // Limpa o ícone ativo
-    setActiveColor(availableColors[0]); // Reseta a cor ativa
+    setActiveIcon(null); // Clear active icon
+    setActiveColor(availableColors[0]); // Reset active color
   };
 
-  // Buscar dispositivos Bluetooth e conectar
+  // Search and connect Bluetooth devices
   const handleSearchAndConnectBluetooth = async () => {
     if (!navigator.bluetooth) {
       setErrorMessage('Seu navegador não suporta Web Bluetooth. Use Chrome, Edge ou Opera.');
@@ -194,12 +192,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
       if (device) {
         const deviceName = device.name || 'Dispositivo Bluetooth Desconhecido';
-
-        let guessedIcon = lampIcon; // Fallback padrão
+        let guessedIcon = lampIcon; // Default fallback icon
 
         const name = deviceName.toLowerCase();
 
-        // Mapeamento de ícones (mantido como está)
+        // Icon mapping logic
         if (name.includes('tv') || name.includes('televisão') || name.includes('smart tv') || name.includes('monitor') || name.includes('samsung tv') || name.includes('lg tv') || name.includes('roku tv') || name.includes('fire tv') || name.includes('madara akatsuki')) {
           guessedIcon = tvIcon;
         } else if (name.includes('ar') || name.includes('ac') || name.includes('condicionado') || name.includes('split') || name.includes('climatizador')) {
@@ -218,7 +215,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           return;
         }
 
-        // When connecting via Bluetooth, we'll assign a default background color
+        // When connecting via Bluetooth, assign a default background color
         onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
         setShowAddForm(false);
       } else {
@@ -235,7 +232,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }
   };
 
-  // Salvar edição do dispositivo
+  // Save edited device
   const saveEditedConexion = () => {
     if (!newConexion.text.trim() || !newConexion.icon) {
       setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊');
@@ -248,10 +245,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }
 
     setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate } : c));
-    closeAllModals(); // Usa a função centralizada
+    closeAllModals(); // Use centralized close function
   };
 
-  // Salvar novo aparelho manualmente
+  // Save new device manually
   const saveManualConexion = () => {
     if (!newConexion.text.trim() || !newConexion.icon) {
       setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊');
@@ -267,35 +264,35 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }
 
     onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
-    closeAllModals(); // Usa a função centralizada
+    closeAllModals(); // Use centralized close function
   };
 
-  // Solicitar remoção do aparelho (abre confirmação)
+  // Request device removal (opens confirmation dialog)
   const removeConexion = (id) => {
     setConexionToDelete(id);
     setShowConfirmDialog(true);
   };
 
-  // Confirmar remoção do aparelho
+  // Confirm device removal
   const handleConfirmRemove = () => {
     if (conexionToDelete) {
       setRemovingId(conexionToDelete);
       setTimeout(() => {
         onRemoveDevice(conexionToDelete);
         setRemovingId(null);
-        closeAllModals(); // Usa a função centralizada
+        closeAllModals(); // Use centralized close function
       }, 300);
     }
   };
 
-  // Cancelar remoção
+  // Cancel removal
   const handleCancelRemove = () => {
-    closeAllModals(); // Usa a função centralizada
+    closeAllModals(); // Use centralized close function
   };
 
-  // Abrir edição do dispositivo
+  // Open device edit form
   const handleEditClick = (c) => {
-    if (c.connected) {
+    if (c.connected) { // Only allow editing if connected
       setNewConexion({
         text: c.text,
         icon: c.icon,
@@ -307,41 +304,41 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setActiveColor(c.backgroundColor || availableColors[0]);
       setEditingId(c.id);
       setErrorMessage('');
-      setSelectedConexion(null); // Garante que o modal de detalhes seja fechado
+      setSelectedConexion(null); // Ensure details modal is closed
       setShowLimitWarning(false);
       setShowAddForm(true);
       setIsSearchingBluetooth(false);
-      setModoManual(true); // Modo formulário para editar
+      setModoManual(true); // Switch to form mode for editing
     }
   };
 
-  // Alternar status conexão (on/off)
+  // Toggle connection status (on/off)
   const toggleConnection = (id, newDesiredState) => {
     onToggleConnection(id, newDesiredState);
-    // Se a conexão selecionada for a que está sendo desligada, feche o modal de detalhes
+    // If the selected connection is being turned off, close the details modal
     if (selectedConexion && selectedConexion.id === id && !newDesiredState) {
       setSelectedConexion(null);
     }
   };
 
-  // Abrir modal detalhes do dispositivo
+  // Open device details modal
   const handleConexionClick = (c, e) => {
-    // Verifica se o clique foi diretamente no elemento pai ou em seus filhos de texto/imagem,
-    // para evitar que cliques nos botões internos abram o modal de detalhes.
+    // Only open if click is on the parent div or its direct text/image children,
+    // to avoid opening when clicking internal buttons.
     if (e.target === e.currentTarget || (e.target.tagName === 'SPAN' && e.target.classList.contains('conexion-text-overlay')) || (e.target.tagName === 'IMG' && e.target.classList.contains('conexion-icon-overlay'))) {
-      if (c.connected) {
+      if (c.connected) { // Only show details if connected
         setSelectedConexion(c);
       }
     }
   };
 
-  // Formatação da data
+  // Date formatting
   const formatDate = (d) => {
     if (!d) return 'N/A';
     return new Date(d).toLocaleString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
-  // Calcular duração de conexão
+  // Calculate connection duration
   const getConnectionDuration = (connectedDateString) => {
     if (!connectedDateString) return 'N/A';
     const connected = new Date(connectedDateString);
@@ -371,6 +368,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <span className="plus-icon">+</span> Adicionar Aparelho
       </button>
 
+      {/* Placeholder image if no devices are connected and add form is not open */}
       {conexions.length === 0 && !showAddForm && (
         <div className="placeholder-image-container">
           <br /><br /><br />
@@ -379,7 +377,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         </div>
       )}
 
-      {/* Formulário para adicionar ou editar aparelho */}
+      {/* Form to add or edit device */}
       {showAddForm && (
         <div className="modal-overlay">
           <div className="add-form-styled">
@@ -479,7 +477,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         </div>
       )}
 
-      {/* Lista de aparelhos conectados */}
+      {/* List of connected devices */}
       <div className="conexions-list">
         {conexions.map(c => (
           <div
@@ -533,7 +531,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         ))}
       </div>
 
-      {/* Modal de detalhes do aparelho (se selectedConexion não for nulo) */}
+      {/* Device details modal */}
       {selectedConexion && (
         <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
           <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
@@ -575,7 +573,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         </div>
       )}
 
-      {/* Modal confirmação remoção */}
+      {/* Confirmation modal for removal */}
       {showConfirmDialog && (
         <div className="modal-overlay" onClick={handleCancelRemove}>
           <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
@@ -588,7 +586,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         </div>
       )}
 
-      {/* Modal aviso limite aparelhos */}
+      {/* Device limit warning modal */}
       {showLimitWarning && (
         <div className="modal-overlay" onClick={() => setShowLimitWarning(false)}>
           <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
@@ -598,16 +596,15 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         </div>
       )}
 
-      {/* Modal QR Code para um aparelho específico (AGORA COM LÓGICA DE CONEXÃO) */}
+      {/* QR Code modal for a specific device */}
       {visibleQRCode && (
         <div className="modal-overlay" onClick={() => setVisibleQRCode(null)}>
           <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
             <h3>QR Code para: {visibleQRCode.text}</h3>
             <p>Escaneie este QR Code em outro dispositivo para adicionar este aparelho.</p>
             <QRCodeCanvas
-              // ESTA LINHA JÁ GERA O QR CODE COM A URL CORRETA PARA CONEXÃO AUTOMÁTICA
-              // Adicionamos o 'bgColor' como um parâmetro de URL
-              value={`${siteBaseURL}/conexao?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
+              // Generates the QR code with the correct URL for automatic connection
+              value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
               size={256}
               level="H"
               includeMargin={true}

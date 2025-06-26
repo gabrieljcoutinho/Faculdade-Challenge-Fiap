@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Importe seus CSS e imagens
-import './CSS/Reset.css';
+import './CSS/Reset.css'; // Seu CSS de reset
 // Importa imagens (garanta que estes caminhos estejam corretos)
 import tvIcon from './imgs/TV.png';
 import airConditionerIcon from './imgs/ar-condicionado.png';
@@ -11,12 +11,12 @@ import airfry from './imgs/airfry.png';
 import lampIcon from './imgs/lampada.png';
 import carregador from './imgs/carregador.png';
 
-// Components
+// Components (ajuste os caminhos conforme sua estrutura de pastas)
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
 
-// Pages
+// Pages (ajuste os caminhos conforme sua estrutura de pastas)
 import Home from './routes/pages/Home';
 import Conexoes from './routes/pages/Conexoes';
 import Contato from './routes/pages/Contato';
@@ -91,15 +91,14 @@ function App() {
    * Chamada pelo Chat, por QR Code, ou pela conexão Bluetooth.
    * @param {string} deviceName O nome do aparelho (pode ser o nome do Bluetooth Device ou nome customizado).
    * @param {string} uniqueId O ID único do aparelho (para Bluetooth, é o device.id; para manual, é um UUID).
-   * @param {string} icon O caminho da imagem do ícone.
-   * @param {string} backgroundColor A cor de fundo.
-   * @param {object|null} bluetoothDeviceInfo Informações serializáveis do BluetoothDevice (id, name).
+   * @param {string} [icon=null] O caminho da imagem do ícone.
+   * @param {string} [backgroundColor=null] A cor de fundo.
+   * @param {object|null} [bluetoothDeviceInfo=null] Informações serializáveis do BluetoothDevice (id, name).
    */
   const handleConnectDevice = (deviceName, uniqueId, icon = null, backgroundColor = null, bluetoothDeviceInfo = null) => {
     setConexions((prevConexions) => {
-      const normalizedDeviceName = deviceName.toLowerCase();
-
       // Verifica se já existe um aparelho com o mesmo ID (prioriza IDs Bluetooth)
+      // ou pelo ID customizado/gerado (para manual/QR Code)
       const existingDeviceIndex = prevConexions.findIndex(
         (c) => c.id === uniqueId || (c.bluetoothDeviceInfo && bluetoothDeviceInfo && c.bluetoothDeviceInfo.id === bluetoothDeviceInfo.id)
       );
@@ -107,8 +106,9 @@ function App() {
       let defaultIcon = icon;
       let defaultColor = backgroundColor;
 
+      // Se o ícone ou cor não foram fornecidos (ou são nulos), tenta inferir com base no nome
       if (!icon || !backgroundColor) {
-        switch (deviceName.toLowerCase()) { // Usamos deviceName para determinar o ícone padrão
+        switch (deviceName.toLowerCase()) {
           case 'tv':
           case 'televisão':
           case 'smart tv':
@@ -138,8 +138,9 @@ function App() {
             defaultColor = '#FFE4E1';
             break;
           default:
-            defaultIcon = icon || ''; // ícone customizado ou vazio
-            defaultColor = backgroundColor || '#CCCCCC';
+            // Mantém o ícone/cor fornecidos ou usa um fallback genérico
+            defaultIcon = icon || lampIcon; // Fallback para ícone de lâmpada se nenhum for dado
+            defaultColor = backgroundColor || '#CCCCCC'; // Fallback para cinza claro
             break;
         }
       }
@@ -150,11 +151,12 @@ function App() {
           index === existingDeviceIndex
             ? {
                 ...c,
-                connected: true,
-                icon: defaultIcon,
-                backgroundColor: defaultColor,
-                // Mantém o ID original, mesmo se for um UUID gerado para um manual
+                connected: true, // Garante que está conectado
+                icon: defaultIcon, // Atualiza para o ícone (padrão ou fornecido)
+                backgroundColor: defaultColor, // Atualiza para a cor (padrão ou fornecida)
+                // Mantém o ID original
                 id: c.id,
+                // Atualiza a data de conexão apenas se o aparelho estava desconectado e agora está sendo conectado
                 connectedDate: c.connected ? c.connectedDate : new Date().toISOString(),
                 bluetoothDeviceInfo: bluetoothDeviceInfo // Atualiza/adiciona info Bluetooth
               }
@@ -228,9 +230,7 @@ function App() {
             element={
               <Conexoes
                 conexions={conexions}
-                // setConexions não é mais necessário aqui, já que as manipulações
-                // são feitas pelas funções onConnectDevice, onRemoveDevice, onToggleConnection
-                onConnectDevice={handleConnectDevice}
+                onConnectDevice={handleConnectDevice} // Passa a função central para Conexoes
                 onRemoveDevice={handleRemoveDevice}
                 onToggleConnection={handleToggleConnection}
               />
