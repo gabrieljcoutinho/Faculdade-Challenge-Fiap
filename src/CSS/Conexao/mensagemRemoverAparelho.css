@@ -85,19 +85,6 @@
     /* Below the dialog but above other content */
 }
 
-/* Keyframe for fade-in animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -60%);
-        /* Start slightly above and transparent */
-    }
-
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
-}
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
