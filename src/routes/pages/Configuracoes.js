@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../CSS/Settings/setting.css';
 import '../../CSS/mudarTema.css'; // importe o CSS do tema aqui
+import '../../CSS/estiloBrnMudarTema.css'
 import comandosImg from '../../imgs/comandos.png';
 import atendimentoImg from '../../imgs/atendimento.png';
 
@@ -58,7 +59,7 @@ const Configuracoes = () => {
 
           {/* Botão para trocar tema */}
           <button
-            className="comando-btn"
+            className="comando-btn btnMudarTema"
             onClick={toggleTheme}
             title="Mudar tema"
             style={{ fontSize: '16px', padding: '10px', marginTop: '10px' }}
