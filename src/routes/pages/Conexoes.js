@@ -69,9 +69,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     icon: '',
     backgroundColor: availableColors[0],
     connected: true,
-    connectedDate: new Date().toISOString(),
-    // NOVA PROPRIEDADE: para o que está sendo reproduzido na TV
-    nowPlaying: null,
+    connectedDate: new Date().toISOString()
   });
   const [activeIcon, setActiveIcon] = useState(null);
   const [activeColor, setActiveColor] = useState(availableColors[0]);
@@ -84,58 +82,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     const found = availableIcons.find(icon => icon.src === src);
     return found ? found.name : '';
   };
-
-  // Funções para simular o conteúdo da TV
-  const simulateTvContent = (deviceName) => {
-    const streamingServices = ['Netflix', 'YouTube', 'Prime Video', 'Disney+', 'Spotify'];
-    const moviesSeries = ['Stranger Things', 'The Crown', 'Squid Game', 'Bridgerton', 'The Witcher', 'The Mandalorian', 'Loki'];
-    const youtubeVideos = ['Música Relaxante', 'Tutorial de React', 'Notícias do Dia', 'Receita Culinária', 'GamePlay Fortnite'];
-    const musicTracks = ['Pop Hits 2024', 'Clássicos do Rock', 'Jazz Suave', 'Músicas para Estudar'];
-
-    const randomService = streamingServices[Math.floor(Math.random() * streamingServices.length)];
-
-    let content = '';
-    switch (randomService) {
-      case 'Netflix':
-      case 'Prime Video':
-      case 'Disney+':
-        content = `${randomService} - ${moviesSeries[Math.floor(Math.random() * moviesSeries.length)]}`;
-        break;
-      case 'YouTube':
-        content = `${randomService} - ${youtubeVideos[Math.floor(Math.random() * youtubeVideos.length)]}`;
-        break;
-      case 'Spotify':
-        content = `${randomService} - ${musicTracks[Math.floor(Math.random() * musicTracks.length)]}`;
-        break;
-      default:
-        content = `${randomService} - Conteúdo Aleatório`;
-        break;
-    }
-    return content;
-  };
-
-  // Função para atualizar o status 'nowPlaying' de uma conexão
-  const updateConexionNowPlaying = (id, newNowPlayingStatus) => {
-    setConexions(prev =>
-      prev.map(c =>
-        c.id === id ? { ...c, nowPlaying: newNowPlayingStatus } : c
-      )
-    );
-  };
-
-  // Função para simular a mudança de conteúdo ao clicar no botão
-  const handleSetNowPlaying = (id) => {
-    const conexionToUpdate = conexions.find(c => c.id === id);
-    if (conexionToUpdate && conexionToUpdate.icon === tvIcon) {
-      const newContent = simulateTvContent(conexionToUpdate.text);
-      updateConexionNowPlaying(id, newContent);
-      // Atualiza o selectedConexion para refletir a mudança no modal
-      if (selectedConexion && selectedConexion.id === id) {
-        setSelectedConexion(prev => ({ ...prev, nowPlaying: newContent }));
-      }
-    }
-  };
-
 
   // EFFECT HOOK: Handles URL parameters for automatic device connection via QR code scan
   useEffect(() => {
@@ -174,8 +120,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       icon: '',
       backgroundColor: availableColors[0],
       connected: true,
-      connectedDate: new Date().toISOString(),
-      nowPlaying: null, // Reset nowPlaying for new device
+      connectedDate: new Date().toISOString()
     });
     setActiveIcon(null);
     setActiveColor(availableColors[0]);
@@ -196,8 +141,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       icon: '',
       backgroundColor: availableColors[0],
       connected: true,
-      connectedDate: new Date().toISOString(),
-      nowPlaying: null, // Reset nowPlaying for manual add
+      connectedDate: new Date().toISOString()
     });
     setActiveIcon(null);
     setActiveColor(availableColors[0]);
@@ -222,8 +166,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       icon: '',
       backgroundColor: availableColors[0],
       connected: true,
-      connectedDate: new Date().toISOString(),
-      nowPlaying: null,
+      connectedDate: new Date().toISOString()
     });
     setActiveIcon(null); // Clear active icon
     setActiveColor(availableColors[0]); // Reset active color
@@ -250,14 +193,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       if (device) {
         const deviceName = device.name || 'Dispositivo Bluetooth Desconhecido';
         let guessedIcon = lampIcon; // Default fallback icon
-        let initialNowPlaying = null; // Default for nowPlaying
 
         const name = deviceName.toLowerCase();
 
         // Icon mapping logic
         if (name.includes('tv') || name.includes('televisão') || name.includes('smart tv') || name.includes('monitor') || name.includes('samsung tv') || name.includes('lg tv') || name.includes('roku tv') || name.includes('fire tv') || name.includes('madara akatsuki')) {
           guessedIcon = tvIcon;
-          initialNowPlaying = simulateTvContent(deviceName); // Simulate initial content for TVs
         } else if (name.includes('ar') || name.includes('ac') || name.includes('condicionado') || name.includes('split') || name.includes('climatizador')) {
           guessedIcon = airConditionerIcon;
         } else if (name.includes('lamp') || name.includes('lâmpada') || name.includes('lampada') || name.includes('led') || name.includes('smart light') || name.includes('bulb')) {
@@ -274,8 +215,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           return;
         }
 
-        // When connecting via Bluetooth, assign a default background color and nowPlaying
-        onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0], initialNowPlaying);
+        // When connecting via Bluetooth, assign a default background color
+        onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
         setShowAddForm(false);
       } else {
         setErrorMessage('Nenhum aparelho Bluetooth selecionado.');
@@ -303,16 +244,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       return;
     }
 
-    setConexions(prev => prev.map(c =>
-      c.id === editingId
-        ? {
-          ...newConexion,
-          id: c.id,
-          connectedDate: c.connectedDate,
-          nowPlaying: c.icon === tvIcon ? (newConexion.nowPlaying || c.nowPlaying) : null // Keep existing or update, only for TV
-        }
-        : c
-    ));
+    setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate } : c));
     closeAllModals(); // Use centralized close function
   };
 
@@ -331,9 +263,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       return;
     }
 
-    // Determine initial nowPlaying based on icon type for manual add
-    const initialNowPlaying = newConexion.icon === tvIcon ? simulateTvContent(newConexion.text) : null;
-    onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor, initialNowPlaying);
+    onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
     closeAllModals(); // Use centralized close function
   };
 
@@ -368,8 +298,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         icon: c.icon,
         backgroundColor: c.backgroundColor || availableColors[0],
         connected: c.connected,
-        connectedDate: c.connectedDate,
-        nowPlaying: c.nowPlaying // Keep existing nowPlaying for editing
+        connectedDate: c.connectedDate
       });
       setActiveIcon(c.icon);
       setActiveColor(c.backgroundColor || availableColors[0]);
@@ -572,12 +501,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             <div className="icon-text-overlay">
               <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
               <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
-              {/* NOVA EXIBIÇÃO: O que está passando na TV */}
-              {c.connected && c.icon === tvIcon && c.nowPlaying && (
-                <span className="now-playing-info">
-                  Assistindo: {c.nowPlaying}
-                </span>
-              )}
             </div>
             <div className="actions-overlay">
               <button
@@ -617,24 +540,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             <div className="detalhes-content">
               <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
               <h3>{selectedConexion.text}</h3>
-
+              <p>Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
               {selectedConexion.connected && (
                 <>
                   <p>Conectado desde: {formatDate(selectedConexion.connectedDate)}</p>
                   <p>Duração da Conexão: {getConnectionDuration(selectedConexion.connectedDate)}</p>
-                  {/* NOVA EXIBIÇÃO: Detalhes do que está passando */}
-                  {selectedConexion.icon === tvIcon && selectedConexion.nowPlaying && (
-                    <p className="now-playing-detail">
-                      **Assistindo:** {selectedConexion.nowPlaying}
-                    </p>
-                  )}
-                  {selectedConexion.icon === tvIcon && !selectedConexion.nowPlaying && (
-                    <p className="now-playing-detail">
-                      Nenhum conteúdo sendo assistido no momento.
-                    </p>
-                  )}
-                  {/* Botão para simular conteúdo (apenas para TV) */}
-
                 </>
               )}
               <div className="detalhes-actions">
