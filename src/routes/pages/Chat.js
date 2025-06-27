@@ -1,4 +1,6 @@
+// Chat.jsx
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { marked } from 'marked';
 import '../../CSS/Chat/chat.css';
 import '../../CSS/Chat/mensagem.css';
@@ -16,6 +18,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     const [loading, setLoading] = useState(false);
     const [firstInteraction, setFirstInteraction] = useState(true);
     const messagesEndRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -59,7 +62,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         let handledByLocalCommand = false;
         let botResponseContent = '';
 
-        // Comandos de conexão
         const connectionCommands = [
             { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão', 'oconectar tv', 'oconectar televisão'] },
             { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado', 'oconectar ar-condicionado', 'oconectar ar condicionado'] },
@@ -80,39 +82,42 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
                     fullDeviceNameForConnection = remainingText
                         ? `${cmd.type} ${remainingText.charAt(0).toUpperCase() + remainingText.slice(1)}`
                         : cmd.type;
+
+                    // Conectar o dispositivo
+                    if (typeof onConnectDevice === 'function') {
+                        onConnectDevice(identifiedDeviceType, fullDeviceNameForConnection);
+                    }
+
+                    // ✅ Redireciona para conexões automaticamente
+                    navigate('/conexoes');
+
+                    // Define mensagem do bot
+                    botResponseContent = `${fullDeviceNameForConnection} conectado!`;
                     handledByLocalCommand = true;
                     break;
                 }
             }
-            if (identifiedDeviceType) break;
+            if (handledByLocalCommand) break;
         }
 
-        if (fullDeviceNameForConnection) {
-            if (typeof onConnectDevice === 'function') {
-                onConnectDevice(identifiedDeviceType, fullDeviceNameForConnection);
-            }
-
-            const connectionCommandInJson = comandosData.comandos.find(cmd =>
-                cmd.triggers.some(jsonTrigger => normalizeText(jsonTrigger) === textoNormalizado)
-            );
-
-            botResponseContent = connectionCommandInJson
-                ? connectionCommandInJson.resposta
-                : `${fullDeviceNameForConnection} conectado!`;
-
-            handledByLocalCommand = true;
-        } else {
+        if (!handledByLocalCommand) {
             const comandoEncontrado = comandosData.comandos.find(cmd =>
-                cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
+                Array.isArray(cmd.triggers) && cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
             );
 
             if (comandoEncontrado) {
+                if (comandoEncontrado.resposta.startsWith("REDIRECT:")) {
+                    const path = comandoEncontrado.resposta.split(":")[1];
+                    navigate(path);
+                    setLoading(false);
+                    return;
+                }
+
                 botResponseContent =
                     comandoEncontrado.resposta === 'PRODUCAO_GRAFICO'
                         ? formatProductionData(productionData)
                         : comandoEncontrado.resposta;
 
-                // Comando especial: mudar tema para escuro
                 if (botResponseContent === 'TEMA_ESCURO') {
                     document.body.classList.remove('light-theme');
                     document.body.classList.add('dark-theme');
@@ -121,7 +126,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
                     botResponseContent = "Tema escuro ativado! 🌙";
                 }
 
-                // Comando especial: mudar tema para claro
                 if (botResponseContent === 'TEMA_CLARO') {
                     document.body.classList.remove('dark-theme');
                     document.body.classList.add('light-theme');

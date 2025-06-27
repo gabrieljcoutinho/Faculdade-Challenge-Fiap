@@ -132,17 +132,34 @@ const ComandosChat = () => {
                 <li key={index}>{command}</li>
               ))}
             </ul>
-
-
-
                      {[
-
-
             ] }
-
 
           </li>
 
+
+          <li className="comando-item">
+                <strong>Troca de página </strong>
+                <ul className="sub-lista-comandos">
+
+              {[
+
+
+
+         '➤ Ir para a página inicial',
+         '➤ Ir para conexões',
+         '➤ Ir para configurações',
+        '➤ Ir para contato ',
+        '➤ Ir para ajuda',
+        '➤ Ir para perguntas frequentes',
+        '➤ Ir para comandos do chat'
+
+
+              ].map((command, index) => (
+                <li key={index}>{command}</li>
+              ))}
+            </ul>
+          </li>
 
         </ul>
       </div>

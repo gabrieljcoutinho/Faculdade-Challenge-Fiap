@@ -68,7 +68,7 @@
       "triggers": [
         "Comandos", "Comandos ?", "Comandos?", "comandos", "comandos ?", "comandos?"
       ],
-      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Mudar para o modo escuro** / **claro**: Para trocar o tema da interface.\n\nOu acesse o menu de configurações para mais opções"
+      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Mudar para o modo escuro** / **claro**: Para trocar o tema da interface.\n- **Ir para [página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções"
     },
     {
       "triggers": [
@@ -95,6 +95,93 @@
         "modo claro", "tema claro"
       ],
       "resposta": "TEMA_CLARO"
+    },
+    {
+      "triggers": [
+        "Ir para a página inicial",
+        "Abrir página inicial",
+        "Voltar para a home",
+        "Página principal",
+        "Home",
+        "Início"
+      ],
+      "resposta": "REDIRECT:/"
+    },
+    {
+      "triggers": [
+        "Ir para conexões",
+        "Abrir conexões",
+        "Página de conexões",
+        "Ver meus dispositivos",
+        "Conexões",
+        "Conexao",
+            "Conexão"
+      ],
+      "resposta": "REDIRECT:/conexoes"
+    },
+    {
+      "triggers": [
+        "Ir para o chat",
+        "Abrir chat",
+        "Página do chat",
+        "Chat",
+        "chat"
+      ],
+      "resposta": "REDIRECT:/chat"
+    },
+    {
+      "triggers": [
+        "Ir para configurações",
+        "Abrir configurações",
+        "Página de configurações",
+        "Configurações",
+        "Configuracoes"
+      ],
+      "resposta": "REDIRECT:/configuracoes"
+    },
+    {
+      "triggers": [
+        "Ir para contato",
+        "Abrir contato",
+        "Página de contato",
+        "Fale conosco",
+        "Contato"
+      ],
+      "resposta": "REDIRECT:/contato"
+    },
+    {
+      "triggers": [
+        "Ir para ajuda",
+        "Abrir ajuda",
+        "Página de ajuda",
+        "Central de ajuda",
+        "Ajuda"
+      ],
+      "resposta": "REDIRECT:/helpCenter"
+    },
+    {
+      "triggers": [
+        "Ir para perguntas frequentes",
+        "Abrir FAQ",
+        "Perguntas frequentes",
+        "FAQ",
+        "Faq",
+        "Dúvidas frequentes",
+        "Duvidas frequentes",
+        "Duvidas",
+        "Duvida"
+      ],
+      "resposta": "REDIRECT:/perguntas-frequentes"
+    },
+    {
+      "triggers": [
+        "Ir para comandos do chat",
+        "Abrir comandos do chat",
+        "Ver comandos do chat",
+        "Comandos do chat",
+      "Comandos"
+          ],
+      "resposta": "REDIRECT:/comandosChat"
     }
   ]
 }
