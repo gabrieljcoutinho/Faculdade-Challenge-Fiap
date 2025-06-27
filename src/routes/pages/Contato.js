@@ -1,4 +1,3 @@
-// src/routes/pages/Contato.jsx
 import React from 'react';
 import '../../CSS/Contato/contato.css';
 import { FaInstagram, FaLinkedin, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
@@ -7,9 +6,8 @@ const Contato = () => {
   return (
     <div className="contato-container">
 
-
       <div className="contato-wrapper">
-        <form className="contato-form">
+        <form className="contato-form" encType="multipart/form-data">
           <h2 className="tituloContato">Envie sua Mensagem</h2>
 
           <div className="form-group">
@@ -35,6 +33,17 @@ const Contato = () => {
           <div className="form-group">
             <label htmlFor="mensagem">Mensagem:</label>
             <textarea id="mensagem" name="mensagem" rows="7" placeholder="Digite aqui..." required></textarea>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="arquivo">Anexar Arquivo:</label>
+            <input
+              type="file"
+              id="arquivo"
+              name="arquivo"
+              accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+            />
+            <small className="info-upload">Formatos permitidos: JPG, PNG, PDF, DOC</small>
           </div>
 
           <button type="submit" className="submit-button">Enviar Mensagem</button>
