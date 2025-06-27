@@ -177,7 +177,8 @@
     --amareloNeon: rgba(255, 240, 31, 0.6);
     --rosaNeon: rgba(255, 68, 204, 0.8);
     --roxoNeon: rgba(188, 19, 254, 0.7);
-    --roxoNeonClaro: rgb(138, 43, 226) --magentaNeon: rgba(255, 0, 255, 0.7);
+    --roxoNeonClaro: rgb(138, 43, 226);
+    --magentaNeon: rgba(255, 0, 255, 0.7);
     --lavandaNeon: rgba(230, 230, 250, 0.9);
     --laranjaVibranteNeon: rgba(255, 165, 0, 0.8);
     --amareloLimaoNeon: rgba(255, 255, 0, 0.7);
@@ -186,4 +187,10 @@
     --azulClaro2: #22e0ff;
     --aqua: #00FFFF;
     --verdeNeon: #00ffcc;
+
+    /*-------------------------------Cores RGBA-----------------------------------------*/
+    --rosaRoxoAzulad: linear-gradient(135deg, #6a82fb, #fc5c7d);
+    --azul: linear-gradient(135deg, #2980b9, #6dd5fa);
+
+
 }
