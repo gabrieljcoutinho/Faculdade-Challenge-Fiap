@@ -29,6 +29,8 @@ import carregador from '../../imgs/carregador.png';
 import editIcon from '../../imgs/pencil.png';
 import imgQrcode from '../../imgs/qrCode.png';
 import placeholderImage from '../../imgs/semConexao.png';
+import bluetoothIcon from '../../imgs/bluetooth.png'; // <--- Nova importação para o ícone Bluetooth
+import manual from '../../imgs/manual.png'; // <--- Nova importação para o ícone Bluetooth
 
 // Constantes
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
@@ -448,7 +450,14 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                   disabled={isSearchingBluetooth}
                   type="button"
                 >
-                  {isSearchingBluetooth ? 'Procurando Aparelhos...' : 'Procurar Aparelhos Bluetooth'}
+                  {isSearchingBluetooth ? (
+                    'Procurando Aparelhos...'
+                  ) : (
+                    <>
+                      <img src={bluetoothIcon} alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
+                      Procurar Aparelhos Bluetooth
+                    </>
+                  )}
                 </button>
                 <button
                   onClick={abrirModoManual}
@@ -457,6 +466,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                   disabled={isSearchingBluetooth}
                   type="button"
                 >
+                  <img src={manual} alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
                   Adicionar Aparelho Manualmente
                 </button>
                 {isSearchingBluetooth && (
