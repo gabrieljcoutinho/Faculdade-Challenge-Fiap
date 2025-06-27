@@ -27,6 +27,7 @@ import Chat from './routes/pages/Chat';
 import ComandosChat from './routes/pages/ComandosChat';
 import EsqueciSenha from './routes/pages/EsqueciSenha';
 import HelpCenter from './routes/HelpCenter';
+import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 
 function App() {
   // Inicialização do estado 'conexions' lendo do localStorage
@@ -247,6 +248,7 @@ function App() {
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />
+          <Route path="/perguntas-frequentes" element={<PerguntasFrequentes />} />
         </Routes>
         <Footer />
       </BrowserRouter>

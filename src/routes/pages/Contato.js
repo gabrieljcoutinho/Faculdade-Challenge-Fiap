@@ -1,11 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../CSS/Contato/contato.css';
 import { FaInstagram, FaLinkedin, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
 
 const Contato = () => {
+  const navigate = useNavigate();
+
+const handleFaqClick = () => {
+  navigate('/perguntas-frequentes');
+};
+
+
   return (
     <div className="contato-container">
-
       <div className="contato-wrapper">
         <form className="contato-form" encType="multipart/form-data">
           <h2 className="tituloContato">Envie sua Mensagem</h2>
@@ -48,6 +55,14 @@ const Contato = () => {
 
           <button type="submit" className="submit-button">Enviar Mensagem</button>
         </form>
+
+        {/* Botão de Perguntas Frequentes */}
+        <div className="faq-button-container">
+        <button onClick={handleFaqClick} className="faq-button">
+  <span role="img" aria-label="Clipboard">📋</span> Ver Perguntas Frequentes
+</button>
+
+        </div>
 
         <div className="contato-info">
           <p className="paragrafoContatoTitulo">Outras Formas de Contato</p>
