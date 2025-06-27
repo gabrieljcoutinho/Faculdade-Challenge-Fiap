@@ -323,6 +323,10 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                     <p className='paragrafoFonteGrafico'>Fonte: Placas GoodWe</p>
                 </section>
 
+
+
+                
+
                 <section className="weather-forecast-section">
                     <h2>Clima e Previsão</h2>
                     <div className="weather-cards-container">
@@ -341,6 +345,10 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                         ))}
                     </div>
                 </section>
+
+
+
+
                 <br /><br /><br /><br /><br />
             </main>
 
