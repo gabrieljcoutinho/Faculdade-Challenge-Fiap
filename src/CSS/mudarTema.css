@@ -64,3 +64,12 @@ body.dark-theme .tituloHelpCenter {
 body.light-theme .tituloHelpCenter {
     color: #000;
 }
+
+
+body.dark-theme .perguntasFrequentes {
+    color: #fff;
+}
+
+body.light-theme .perguntasFrequentes {
+    color: #000;
+}
