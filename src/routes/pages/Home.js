@@ -284,7 +284,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
     return (
         <div className="home-container">
             <main className="main-content">
-                <section className="production-section">
+  <section className="production-section">
                     <h2 className='tituloPrincipalHome'>Produção Atual</h2>
                     <div className="chart-type-selector">
                         <label className='tipoGrafico'>Tipo de Gráfico:</label>
