@@ -28,7 +28,32 @@ const faqs = [
     question: "Posso usar o sistema em vários dispositivos ao mesmo tempo?",
     answer: "Sim, o sistema permite o acesso simultâneo em diferentes aparelhos, como celular e tablet.",
   },
+  {
+    question: "É possível agendar o funcionamento de um aparelho?",
+    answer: "Sim. Acesse a aba de agendamentos, selecione o aparelho e defina o horário desejado.",
+  },
+  {
+    question: "O sistema funciona offline?",
+    answer: "Algumas funções básicas funcionam offline, mas o controle remoto e as atualizações exigem conexão com a internet.",
+  },
+  {
+    question: "Meus dados estão seguros?",
+    answer: "Sim, todos os dados são criptografados e protegidos conforme a LGPD. Nenhuma informação é compartilhada sem autorização.",
+  },
+  {
+    question: "Como redefinir minha senha?",
+    answer: "Na tela de login, clique em 'Esqueci minha senha' e siga as instruções enviadas para seu e-mail.",
+  },
+  {
+    question: "Posso personalizar os nomes dos aparelhos?",
+    answer: "Sim, ao clicar em um dispositivo na aba de conexões, você pode editar seu nome e ícone.",
+  },
+  {
+    question: "Como recebo alertas ou notificações?",
+    answer: "Você será notificado por alertas visuais e sonoros no sistema, além de notificações push se estiver ativado.",
+  },
 ];
+
 
 const PerguntasFrequentes = () => {
   const [openIndex, setOpenIndex] = useState(null);
