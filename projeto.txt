@@ -10,8 +10,9 @@ O que foi feito:
 9 - chat integrado com api co mapi externa do chat gpt e uma api interna com pergunats e repsotas pré-definidas;
 9 - interatividade com a página;
 10 - tema dark, light manual e via chat
+11- mostrar previsão de tempo de verdade (com ap se possiveli);
+
 
 O que fazer:
-1 - mostrar previsão de tempo de verdade (com api);
 2- acessibilidade de voz ao clicar em icones, texto ou imagem;
 3 - agendamento inteligente;
