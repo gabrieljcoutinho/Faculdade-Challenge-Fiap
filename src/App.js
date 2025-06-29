@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Importe seus CSS e imagens
+// Caminhos corrigidos para usar "./" assumindo que estas pastas são irmãs do arquivo App.js dentro de src
 import './CSS/Reset.css'; // Seu CSS de reset
 // Importa imagens (garanta que estes caminhos estejam corretos)
 import tvIcon from './imgs/TV.png';
@@ -10,6 +11,9 @@ import airConditionerIcon from './imgs/ar-condicionado.png';
 import airfry from './imgs/airfry.png';
 import lampIcon from './imgs/lampada.png';
 import carregador from './imgs/carregador.png';
+
+// Importa os dados iniciais do gráfico de produção
+import initialProductionData from './data/graficoHomeApi.json'; // Importação chave
 
 // Components (ajuste os caminhos conforme sua estrutura de pastas)
 import Header from './components/Header';
@@ -53,19 +57,8 @@ function App() {
     }
   });
 
-  // Estado para dados de produção (para o gráfico, etc.)
-  const [productionData, setProductionData] = useState({
-    labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
-    datasets: [
-      {
-        label: 'Produção (kWh)',
-        data: [5, 12, 25, 30, 22, 15, 8],
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        tension: 0.4,
-      },
-    ],
-  });
+  // Estado para dados de produção, agora inicializado com o JSON importado
+  const [productionData, setProductionData] = useState(initialProductionData); // Alteração aqui
 
   // Efeito para salvar 'conexions' no localStorage sempre que ele muda
   useEffect(() => {
@@ -83,6 +76,9 @@ function App() {
     }
   }, [conexions]);
 
+  // A função handleUpdateProductionData agora pode ser removida ou adaptada
+  // se você planeja atualizar esses dados em tempo real em outro lugar.
+  // Por enquanto, ela não será usada se os dados forem estáticos.
   const handleUpdateProductionData = (newData) => {
     setProductionData(newData);
   };
@@ -216,11 +212,19 @@ function App() {
     });
   };
 
+  // Estado do tema (exemplo, você pode ter o seu próprio gerenciamento de tema)
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark-theme');
+
+  useEffect(() => {
+    document.body.className = theme;
+  }, [theme]);
+
   return (
     <div className="App">
       <BrowserRouter>
         <Header />
-        <ThemeToggle />
+        {/* Passa o setTheme para ThemeToggle para que ele possa alterar o tema global */}
+        <ThemeToggle setTheme={setTheme} />
         <Routes>
           <Route
             path="/"
@@ -231,7 +235,6 @@ function App() {
             element={
               <Conexoes
                 conexions={conexions}
-                // ESSA É A ALTERAÇÃO CHAVE: PASSAR setConexions COMO PROP!
                 setConexions={setConexions}
                 onConnectDevice={handleConnectDevice} // Passa a função central para Conexoes
                 onRemoveDevice={handleRemoveDevice}
@@ -243,8 +246,17 @@ function App() {
           <Route path="/configuracoes" element={<Configuracoes />} />
           <Route path="/login" element={<Logar />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          {/* Chat agora usa handleConnectDevice para conectar aparelhos */}
-          <Route path="/chat" element={<Chat onConnectDevice={handleConnectDevice} productionData={productionData} />} />
+          {/* Chat agora usa handleConnectDevice para conectar aparelhos e recebe productionData */}
+          <Route
+            path="/chat"
+            element={
+              <Chat
+                onConnectDevice={handleConnectDevice}
+                productionData={productionData}
+                setTheme={setTheme} // Passa setTheme para Chat para que ele possa mudar o tema
+              />
+            }
+          />
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />

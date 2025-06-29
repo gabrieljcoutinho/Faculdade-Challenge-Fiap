@@ -46,9 +46,6 @@ ChartJS.register(
     Tooltip
 );
 
-// Import the JSON data directly into Home.js
-
-
 // Constants for chart colors
 const BAR_PIE_CHART_COLORS = [
     '#87CEFA', '#87CEEB', '#ADD8E6', '#1E90FF',
@@ -68,10 +65,9 @@ const Home = () => {
     const [expandedChartType, setExpandedChartType] = useState(null); // Stores the type of the currently expanded chart
 
     // State for production data, initialized directly from the imported JSON
-    // This data will now be static, not updated by a button
-    const [productionData] = useState(initialProductionData); // Removed setProductionData as it's no longer needed for updates
+    const [productionData] = useState(initialProductionData); // This data will now be static
 
-    // Sample data for weather and forecast (can be moved to props or fetched from an API)
+    // Sample data for weather and forecast
     const [currentWeather] = useState({ temperature: 28, condition: 'Ensolarado' });
     const [forecast] = useState([
         { day: 'Hoje', condition: 'Ensolarado', high: 30, low: 20 },
@@ -163,8 +159,6 @@ const Home = () => {
         }
         return options;
     }, [commonChartOptions]);
-
-    // Removed generateRandomData and handleAnalyzeProduction functions
 
     // Gets the weather icon based on condition
     const getWeatherIcon = useCallback((condition) => WEATHER_ICONS[condition] || '', []);
@@ -294,13 +288,8 @@ const Home = () => {
                             )}
                         </div>
                     </div>
-                    {/* Removed the "Atualizar Produção" button */}
                     <p className='paragrafoFonteGrafico'>Fonte: Placas GoodWe</p>
                 </section>
-
-
-
-
 
                 <section className="weather-forecast-section">
                     <h2>Clima e Previsão</h2>
@@ -320,9 +309,6 @@ const Home = () => {
                         ))}
                     </div>
                 </section>
-
-
-
 
                 <br /><br /><br /><br /><br />
             </main>
