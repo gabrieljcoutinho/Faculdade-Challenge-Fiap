@@ -15,6 +15,7 @@ import logoGmail from '../../imgs/Logogmail.png';
 import logoWhatsapp from '../../imgs/Logowhatsapp.png';
 import logoInstagram from '../../imgs/Logoinstagram.png';
 import logoLinkedin from '../../imgs/Logolinkedin.png';
+import initialProductionData from '../../data/graficoHomeApi.json';
 import {
     Chart as ChartJS,
     LineElement,
@@ -45,15 +46,14 @@ ChartJS.register(
     Tooltip
 );
 
-// Constants for chart colors and animation duration
+// Import the JSON data directly into Home.js
+
+
+// Constants for chart colors
 const BAR_PIE_CHART_COLORS = [
     '#87CEFA', '#87CEEB', '#ADD8E6', '#1E90FF',
     'rgba(31, 81, 255, 0.7)', '#0000FF', '#000080',
 ];
-const ANALYZE_DELAY_MS = 2000;
-const MAX_PRODUCTION_VALUE = 40;
-const MIN_PRODUCTION_VALUE = 0;
-const DATA_POINTS_COUNT = 7;
 
 // Weather icon mapping
 const WEATHER_ICONS = {
@@ -62,11 +62,14 @@ const WEATHER_ICONS = {
     'Chuvoso': '🌧️'
 };
 
-const Home = ({ productionData, onUpdateProductionData }) => {
+const Home = () => {
     // UI state management
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [currentChartType, setCurrentChartType] = useState('line');
     const [expandedChartType, setExpandedChartType] = useState(null); // Stores the type of the currently expanded chart
+
+    // State for production data, initialized directly from the imported JSON
+    // This data will now be static, not updated by a button
+    const [productionData] = useState(initialProductionData); // Removed setProductionData as it's no longer needed for updates
 
     // Sample data for weather and forecast (can be moved to props or fetched from an API)
     const [currentWeather] = useState({ temperature: 28, condition: 'Ensolarado' });
@@ -161,28 +164,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
         return options;
     }, [commonChartOptions]);
 
-    // Generates random production data
-    const generateRandomData = useCallback(() => {
-        return Array.from({ length: DATA_POINTS_COUNT }, () =>
-            Math.floor(Math.random() * (MAX_PRODUCTION_VALUE - MIN_PRODUCTION_VALUE + 1)) + MIN_PRODUCTION_VALUE
-        );
-    }, []);
-
-    // Handles the "Update Production" button click
-    const handleAnalyzeProduction = useCallback(() => {
-        setIsAnalyzing(true);
-        setTimeout(() => {
-            const newData = {
-                ...productionData,
-                datasets: [{
-                    ...productionData.datasets[0],
-                    data: generateRandomData()
-                }]
-            };
-            onUpdateProductionData(newData);
-            setIsAnalyzing(false);
-        }, ANALYZE_DELAY_MS);
-    }, [productionData, generateRandomData, onUpdateProductionData]);
+    // Removed generateRandomData and handleAnalyzeProduction functions
 
     // Gets the weather icon based on condition
     const getWeatherIcon = useCallback((condition) => WEATHER_ICONS[condition] || '', []);
@@ -227,7 +209,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
             }
         };
         actions[platform]?.();
-    }, [expandedChartType]); // handleSaveChart removed from dependencies as it's not called by shareChart directly anymore
+    }, [expandedChartType]);
 
     // Adapts production data for different chart types
     const getChartData = useCallback((type) => {
@@ -284,7 +266,7 @@ const Home = ({ productionData, onUpdateProductionData }) => {
     return (
         <div className="home-container">
             <main className="main-content">
-  <section className="production-section">
+                <section className="production-section">
                     <h2 className='tituloPrincipalHome'>Produção Atual</h2>
                     <div className="chart-type-selector">
                         <label className='tipoGrafico'>Tipo de Gráfico:</label>
@@ -312,20 +294,13 @@ const Home = ({ productionData, onUpdateProductionData }) => {
                             )}
                         </div>
                     </div>
-                    <button
-                        className="analyze-button"
-                        onClick={handleAnalyzeProduction}
-                        disabled={isAnalyzing}
-                        style={{ marginTop: '35px' }}
-                    >
-                        {isAnalyzing ? 'Analisando...' : 'Atualizar Produção'}
-                    </button>
+                    {/* Removed the "Atualizar Produção" button */}
                     <p className='paragrafoFonteGrafico'>Fonte: Placas GoodWe</p>
                 </section>
 
 
 
-                
+
 
                 <section className="weather-forecast-section">
                     <h2>Clima e Previsão</h2>
