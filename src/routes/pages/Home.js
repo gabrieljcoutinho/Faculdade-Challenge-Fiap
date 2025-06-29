@@ -56,7 +56,9 @@ const BAR_PIE_CHART_COLORS = [
 const WEATHER_ICONS = {
     'Ensolarado': '☀️',
     'Nublado': '☁️',
-    'Chuvoso': '🌧️'
+    'Chuvoso': '🌧️',
+    'Parcialmente Nublado': '⛅',
+    'Limpo': '🌙' // Adicionado para indicar céu limpo à noite
 };
 
 const Home = () => {
@@ -67,12 +69,12 @@ const Home = () => {
     // State for production data, initialized directly from the imported JSON
     const [productionData] = useState(initialProductionData); // This data will now be static
 
-    // Sample data for weather and forecast
-    const [currentWeather] = useState({ temperature: 28, condition: 'Ensolarado' });
+    // Realistic sample data for weather and forecast for São Paulo, June 29, 2025, 19:45
+    const [currentWeather] = useState({ temperature: 18, condition: 'Limpo' }); // Ajustado para noite em SP, céu limpo
     const [forecast] = useState([
-        { day: 'Hoje', condition: 'Ensolarado', high: 30, low: 20 },
-        { day: 'Amanhã', condition: 'Nublado', high: 25, low: 18 },
-        { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 22, low: 16 }
+        { day: 'Hoje', condition: 'Limpo', high: 22, low: 12 }, // June 29, 2025 (Reflete o dia e a noite atual)
+        { day: 'Amanhã', condition: 'Parcialmente Nublado', high: 21, low: 11 }, // June 30, 2025
+        { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 18, low: 10 } // July 1, 2025
     ]);
 
     // Ref for the main chart element to capture its image
@@ -271,7 +273,7 @@ const Home = () => {
                                     onClick={() => setCurrentChartType(type)}
                                     className={currentChartType === type ? 'active' : ''}
                                 >
-                                    {type === 'line' ? 'Linha' : type === 'bar' ? 'Barras' : 'Pizza'}
+                                    {type === 'line' ? 'Linha' : type === 'bar' ? 'Barra' : 'Pizza'}
                                 </button>
                             ))}
                         </div>
