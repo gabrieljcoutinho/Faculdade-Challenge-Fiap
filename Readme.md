@@ -1,99 +1,118 @@
-# Challenge: Monitoramento Inteligente de Energia Solar com IA e Integração Alexa
+# Projeto React Faculdade - Aplicativo de Monitoramento e Conexão
 
-## Visão Geral
+## Descrição Geral
 
-O **Challenge** é uma solução inovadora que combina o monitoramento em tempo real da captação, produção e armazenamento de energia solar com funcionalidades inteligentes de Inteligência Artificial (IA) e integração com a Alexa. Este sistema permite que os usuários acompanhem de perto a eficiência de seus painéis solares através de um aplicativo intuitivo, além de oferecer controle de dispositivos domésticos e automação por voz.
-
-## Funcionalidades Principais
-
-* **Monitoramento em Tempo Real:** Visualize instantaneamente a quantidade de energia solar que seus painéis estão captando e produzindo, bem como o nível de armazenamento da bateria (se aplicável).
-* **Gráficos e Análises:** Acompanhe o histórico de produção de energia através de gráficos detalhados, permitindo análises de desempenho ao longo do tempo e identificação de padrões.
-* **Integração com Alexa:** Utilize comandos de voz através da Alexa para interagir com o sistema e controlar dispositivos conectados.
-* **Controle de Dispositivos:** Desligue ou ligue aparelhos eletrônicos conectados ao sistema utilizando a energia solar disponível, tanto pelo aplicativo quanto por comandos de voz à Alexa.
-* **Agendamento Inteligente:** Programe o desligamento de dispositivos para horários específicos, seja através do aplicativo ou por comandos de voz à Alexa.
-* **Notificações Proativas com Alexa:** Receba alertas da Alexa sobre eventos programados, como o desligamento de um dispositivo, com antecedência configurável pelo usuário.
-* **Assistente de IA:** Uma IA integrada (futura implementação) auxiliará o usuário, respondendo a perguntas sobre o consumo de energia, sugerindo otimizações e aprendendo com os padrões de uso.
-
-## Funcionalidades Detalhadas
-
-1.  **Monitoramento da Captação e Produção:**
-    * Exibição em tempo real da potência instantânea gerada pelas placas solares (em Watts).
-    * Visualização da energia total produzida em um determinado período (dia, semana, mês, ano).
-    * Acompanhamento do status de carregamento e nível de carga das baterias (se aplicável).
-
-2.  **Gráficos de Análise:**
-    * Gráficos de linha mostrando a produção de energia ao longo do tempo.
-    * Gráficos de barras comparando a produção em diferentes períodos.
-    * Possibilidade de personalizar os períodos de análise.
-
-3.  **Integração com Alexa:**
-    * Utilize skills personalizadas da Alexa para interagir com o Challenge.
-    * Exemplos de comandos de voz:
-        * "Alexa, qual a produção de energia solar hoje?"
-        * "Alexa, desligue o ar condicionado."
-        * "Alexa, programe a TV da sala para desligar às 18 horas."
-        * "Alexa, me avise 5 minutos antes de desligar a TV da sala."
-
-4.  **Controle de Dispositivos:**
-    * Interface intuitiva no aplicativo para visualizar e controlar os dispositivos conectados.
-    * Possibilidade de nomear os dispositivos para facilitar o controle por voz.
-    * Indicação visual de quais dispositivos estão utilizando energia solar.
-
-5.  **Agendamento:**
-    * Crie agendamentos diretamente no aplicativo para ligar ou desligar dispositivos em horários específicos.
-    * Defina agendamentos recorrentes (diários, semanais, etc.).
-    * Utilize comandos de voz para criar, modificar ou deletar agendamentos através da Alexa.
-
-6.  **Notificações com Alexa:**
-    * Configure no aplicativo o tempo de antecedência para as notificações de desligamento programado.
-    * A Alexa enviará um alerta sonoro e/ou visual (dependendo das configurações do dispositivo Echo) antes do horário agendado.
-
-7.  **Assistente de IA (Futuro):**
-    * Capacidade de responder a perguntas sobre o consumo e produção de energia.
-    * Sugestões para otimizar o uso da energia solar.
-    * Aprendizado contínuo dos padrões de consumo do usuário para oferecer recomendações personalizadas.
-
-## Tecnologias Utilizadas
-
-* [Liste aqui as tecnologias principais utilizadas no seu projeto (ex: Linguagens de programação, frameworks, plataformas de nuvem, etc.)]
-    * Exemplo: Python, Flask/Django, React Native, AWS IoT Core, Alexa Skills Kit.
-
-## Pré-requisitos
-
-* [Liste aqui os pré-requisitos para utilizar o sistema (ex: Placas solares instaladas, dispositivos Alexa, conexão com a internet, etc.)]
-    * Exemplo: Painéis solares compatíveis com monitoramento remoto, dispositivo Amazon Echo, conexão Wi-Fi estável.
-
-## Instalação e Configuração
-
-* [Inclua aqui as instruções detalhadas para instalar e configurar o aplicativo e a skill da Alexa.]
-    * Exemplo:
-        1.  Clone este repositório.
-        2.  Instale as dependências do aplicativo (verifique o arquivo `requirements.txt` ou `package.json`).
-        3.  Configure as credenciais de acesso à API das placas solares.
-        4.  Implante o backend do aplicativo em um servidor (se aplicável).
-        5.  Crie e configure a skill da Alexa no Amazon Developer Console.
-        6.  Conecte a skill da Alexa ao seu backend.
-        7.  Instale o aplicativo no seu dispositivo móvel.
-        8.  Siga as instruções no aplicativo para conectar suas placas solares e dispositivos.
-
-## Como Contribuir
-
-* [Se você deseja receber contribuições, explique aqui como os outros desenvolvedores podem participar.]
-    * Exemplo: Sinta-se à vontade para abrir issues relatando bugs ou sugerindo novas funcionalidades. Pull requests com melhorias e novas funcionalidades são bem-vindos!
-
-## Licença
-
-* [Indique a licença sob a qual o seu projeto está distribuído.]
-    * Exemplo: MIT License
-
-## Autores
-
-* Gabriel Jorge Coutinho (https://github.com/gabrieljcoutinho)
-* Guilherme (https://github.com/bufungo)
-* Roberto (https://github.com/rmoreirafiap)
-* Lucas (https://github.com/LucasFLima21122)
-* Carlos (https://github.com/CarlosEduardoPires)
+Este projeto foi desenvolvido para a faculdade e consiste na criação de um aplicativo web utilizando **React.js**. O app reúne diversas funcionalidades focadas em monitoramento de dados, conexão de dispositivos, interação via chat e suporte ao usuário, tudo em uma interface intuitiva e moderna.
 
 ---
 
-Este README fornece uma visão geral completa do seu projeto Challenge. Lembre-se de substituir os placeholders com as informações específicas do seu desenvolvimento. Boa sorte com o seu projeto!
+## Funcionalidades do Projeto
+
+### 1. Home
+
+- **Gráficos Interativos:**
+  A tela inicial apresenta três tipos de gráficos para exibir dados de forma visual e dinâmica:
+  - Gráfico de linha
+  - Gráfico de barra
+  - Gráfico de pizza
+
+- **Clima em Tempo Real:**
+  Exibe informações meteorológicas atualizadas constantemente, permitindo que o usuário acompanhe as condições climáticas diretamente na aplicação.
+
+---
+
+### 2. Parte de Conexão
+
+- O usuário pode conectar dispositivos a partir de um botão que oferece duas opções principais:
+
+  - **Conexão via Bluetooth:**
+    Ao escolher essa opção, o app automaticamente procura por dispositivos Bluetooth disponíveis para conexão direta.
+
+  - **Conexão Manual:**
+    Caso o usuário prefira, pode adicionar um dispositivo manualmente, preenchendo:
+    - Nome do aparelho
+    - Ícone que representa o dispositivo
+    - Cor personalizada para facilitar a identificação
+
+- Após conectar um dispositivo, o usuário pode gerenciar seus aparelhos conectados com as seguintes opções:
+  - Remover dispositivo
+  - Editar informações do dispositivo
+  - Desconectar o dispositivo
+  - Ampliar um QR Code gerado para conexão rápida e prática com o dispositivo
+
+- Ao clicar em um aparelho conectado, uma área de detalhes é aberta mostrando:
+  - Ícone do dispositivo
+  - Nome do dispositivo
+  - Status atual da conexão (conectado ou desconectado)
+  - Data da conexão (dia e mês)
+  - Tempo total que o dispositivo está conectado
+
+---
+
+### 3. Chat Interativo
+
+- Chat integrado ao aplicativo que responde a perguntas aleatórias e a comandos específicos definidos na página.
+- Utiliza uma **API de Inteligência Artificial** para gerar respostas inteligentes e contextuais, auxiliando o usuário com dúvidas ou ações específicas.
+
+---
+
+### 4. Contato
+
+- Seção simples onde o usuário pode enviar mensagens e arquivos, como PDFs ou imagens, para suporte ou contato direto.
+- Um botão abaixo permite acessar as **Perguntas Frequentes (FAQ)**, que pode ser aberto para consultar respostas sobre dúvidas comuns dos usuários.
+
+---
+
+### 5. Configurações
+
+- A área de configurações conta com 5 botões principais:
+  1. **Login/Logout:** Para autenticar o usuário no sistema.
+  2. **Comandos:** Lista os comandos especiais disponíveis para usar no chat e outras áreas do app.
+  3. **Suporte e Ajuda:** Para o usuário buscar assistência ou tirar dúvidas.
+  4. **Tema Claro/Escuro:** Alterna entre os temas visual claro e escuro, melhorando a experiência visual conforme a preferência do usuário.
+
+---
+
+## APIs Integradas
+
+- **API de Inteligência Artificial:**
+  Responsável por gerar respostas no chat, oferecendo interação mais natural e eficiente.
+
+- **API Própria de Consumo:**
+  Fornece dados para alimentar os gráficos, mostrando informações reais e atualizadas de consumo e produção.
+
+---
+
+## Tecnologias Utilizadas
+
+- **React.js** — Framework JavaScript para construção da interface.
+- **Bluetooth Web API** — Para busca e conexão automática via Bluetooth.
+- **QR Code** — Para conexão rápida e prática de dispositivos.
+- **CSS** — Para estilização, incluindo suporte a temas claro e escuro.
+- **APIs REST** — Para comunicação com o backend de IA e dados.
+- **React Hooks** — Para gerenciamento do estado da aplicação.
+
+---
+
+## Como Usar o Projeto
+
+1. **Home:** Visualize gráficos dinâmicos e o clima em tempo real.
+2. **Conexão:** Clique no botão para conectar dispositivos via Bluetooth ou manualmente.
+3. **Chat:** Faça perguntas ou envie comandos para obter respostas interativas.
+4. **Contato:** Envie arquivos e consulte perguntas frequentes para suporte.
+5. **Configurações:** Faça login, visualize comandos, solicite ajuda ou alterne o tema da interface.
+
+---
+
+## Rodando o Projeto Localmente
+
+### Pré-requisitos
+
+- **Node.js** e **npm** instalados na máquina. Você pode baixar em: [https://nodejs.org/](https://nodejs.org/)
+- Navegador moderno (Chrome, Firefox, Edge, etc.) com suporte para Web Bluetooth (se desejar testar essa funcionalidade).
+
+### Passos para rodar
+
+1. Clone este repositório:
+   ```bash
+   git clone <URL_DO_REPOSITORIO>
