@@ -9,6 +9,7 @@ import '../../CSS/Home/forecast.css';
 import '../../CSS/Home/weather.css';
 import '../../CSS/Home/current.css';
 import '../../CSS/Home/production.css';
+import '../../CSS/Home/impactoAmbiental.css'
 import '../../CSS/Home/mediaScreen.css';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import logoGmail from '../../imgs/Logogmail.png';
