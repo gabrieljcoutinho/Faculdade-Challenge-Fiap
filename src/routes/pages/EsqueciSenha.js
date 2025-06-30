@@ -1,6 +1,13 @@
 // EsqueciSenha.jsx
 import React, { useState } from 'react';
-import '../../CSS/EsqueciSenha/style.css'; // Don't forget to create this CSS file!
+import '../../CSS/EsqueciSenha/resetJs.css';
+import '../../CSS/EsqueciSenha/layout.css';
+import '../../CSS/EsqueciSenha/form.css';
+import '../../CSS/EsqueciSenha/button.css';
+import '../../CSS/EsqueciSenha/animations.css';
+import '../../CSS/EsqueciSenha/messagens.css';
+import '../../CSS/EsqueciSenha/links.css';
+import '../../CSS/EsqueciSenha/mediaScreen.css';
 
 const EsqueciSenha = () => {
   const [email, setEmail] = useState('');
