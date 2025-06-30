@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import '../../CSS/Home/home.css';
 import '../../CSS/Home/expanded.css';
 import '../../CSS/Home/analyze.css';
@@ -9,405 +9,416 @@ import '../../CSS/Home/forecast.css';
 import '../../CSS/Home/weather.css';
 import '../../CSS/Home/current.css';
 import '../../CSS/Home/production.css';
-import '../../CSS/Home/impactoAmbiental.css'
+import '../../CSS/Home/impactoAmbiental.css';
 import '../../CSS/Home/mediaScreen.css';
+
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import logoGmail from '../../imgs/Logogmail.png';
 import logoWhatsapp from '../../imgs/Logowhatsapp.png';
 import logoInstagram from '../../imgs/Logoinstagram.png';
 import logoLinkedin from '../../imgs/Logolinkedin.png';
+
 import initialProductionData from '../../data/graficoHomeApi.json';
+
 import {
-    Chart as ChartJS,
-    LineElement,
-    PointElement,
-    LinearScale,
-    Title,
-    CategoryScale,
-    PieController,
-    ArcElement,
-    BarController,
-    BarElement,
-    Legend,
-    Tooltip
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+  PieController,
+  ArcElement,
+  BarController,
+  BarElement,
+  Legend,
+  Tooltip
 } from 'chart.js';
 
-// Register necessary Chart.js components
 ChartJS.register(
-    LineElement,
-    PointElement,
-    LinearScale,
-    Title,
-    CategoryScale,
-    PieController,
-    ArcElement,
-    BarController,
-    BarElement,
-    Legend,
-    Tooltip
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+  PieController,
+  ArcElement,
+  BarController,
+  BarElement,
+  Legend,
+  Tooltip
 );
 
-// Constants for chart colors
 const BAR_PIE_CHART_COLORS = [
-    '#87CEFA', '#87CEEB', '#ADD8E6', '#1E90FF',
-    'rgba(31, 81, 255, 0.7)', '#0000FF', '#000080',
+  '#87CEFA', '#87CEEB', '#ADD8E6', '#1E90FF',
+  'rgba(31, 81, 255, 0.7)', '#0000FF', '#000080',
 ];
 
-// Weather icon mapping
 const WEATHER_ICONS = {
-    'Ensolarado': '☀️',
-    'Nublado': '☁️',
-    'Chuvoso': '🌧️',
-    'Parcialmente Nublado': '⛅',
-    'Limpo': '🌙' // Adicionado para indicar céu limpo à noite
+  'Ensolarado': '☀️',
+  'Nublado': '☁️',
+  'Chuvoso': '🌧️',
+  'Parcialmente Nublado': '⛅',
+  'Limpo': '🌙'
 };
 
-// Environmental Constants
 const CO2_SAVED_PER_KWH = 0.85; // kg CO2 per kWh
 const CO2_ABSORBED_PER_TREE_PER_YEAR = 22; // kg CO2 per tree per year (average)
 
 const Home = () => {
-    // UI state management
-    const [currentChartType, setCurrentChartType] = useState('line');
-    const [expandedChartType, setExpandedChartType] = useState(null); // Stores the type of the currently expanded chart
+  // Estado para tipo de gráfico na visualização principal
+  const [currentChartType, setCurrentChartType] = useState('line');
+  // Estado para tipo de gráfico expandido
+  const [expandedChartType, setExpandedChartType] = useState(null);
+  // Índice do dataset escolhido aleatoriamente
+  const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
 
-    // State for production data, initialized directly from the imported JSON
-    const [productionData] = useState(initialProductionData); // This data will now be static
+  // Ref para o gráfico
+  const chartRef = useRef(null);
 
-    // Realistic sample data for weather and forecast for São Paulo, June 29, 2025, 19:45
-    const [currentWeather] = useState({ temperature: 18, condition: 'Limpo' }); // Ajustado para noite em SP, céu limpo
-    const [forecast] = useState([
-        { day: 'Hoje', condition: 'Limpo', high: 22, low: 12 }, // June 29, 2025 (Reflete o dia e a noite atual)
-        { day: 'Amanhã', condition: 'Parcialmente Nublado', high: 21, low: 11 }, // June 30, 2025
-        { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 18, low: 10 } // July 1, 2025
-    ]);
+  // Ao montar, escolhe um dataset aleatório dos disponíveis no JSON
+  useEffect(() => {
+    if (initialProductionData.datasetsOptions && initialProductionData.datasetsOptions.length > 0) {
+      const randomIndex = Math.floor(Math.random() * initialProductionData.datasetsOptions.length);
+      setChosenDatasetIndex(randomIndex);
+    }
+  }, []);
 
-    // Ref for the main chart element to capture its image
-    const chartRef = useRef(null);
+  // Monta os dados do gráfico com o dataset aleatório escolhido
+  const productionData = useMemo(() => {
+    if (!initialProductionData.datasetsOptions) return { labels: [], datasets: [] };
 
-    // Calculate total production for environmental impact
-    const totalProduction = useMemo(() => {
-        if (productionData && productionData.datasets && productionData.datasets.length > 0) {
-            return productionData.datasets[0].data.reduce((sum, value) => sum + value, 0);
+    const chosenDataset = initialProductionData.datasetsOptions[chosenDatasetIndex] || initialProductionData.datasetsOptions[0];
+
+    return {
+      labels: initialProductionData.labels,
+      datasets: [{
+        label: chosenDataset.label,
+        data: chosenDataset.data,
+        borderColor: "#0FF0FC",
+        backgroundColor: "rgba(15, 240, 252, 0.3)",
+        fill: true,
+        tension: 0.3
+      }]
+    };
+  }, [chosenDatasetIndex]);
+
+  // Total produção para cálculo de impacto ambiental
+  const totalProduction = useMemo(() => {
+    if (productionData.datasets.length > 0) {
+      return productionData.datasets[0].data.reduce((sum, v) => sum + v, 0);
+    }
+    return 0;
+  }, [productionData]);
+
+  const environmentalImpact = useMemo(() => {
+    const co2Avoided = (totalProduction * CO2_SAVED_PER_KWH).toFixed(2);
+    const equivalentTrees = (co2Avoided / CO2_ABSORBED_PER_TREE_PER_YEAR).toFixed(0);
+    return { co2Avoided, equivalentTrees };
+  }, [totalProduction]);
+
+  // Dados de clima fixos (exemplo São Paulo, noite 29/06/2025)
+  const [currentWeather] = useState({ temperature: 18, condition: 'Limpo' });
+  const [forecast] = useState([
+    { day: 'Hoje', condition: 'Limpo', high: 22, low: 12 },
+    { day: 'Amanhã', condition: 'Parcialmente Nublado', high: 21, low: 11 },
+    { day: 'Depois de Amanhã', condition: 'Chuvoso', high: 18, low: 10 }
+  ]);
+
+  // Opções comuns para os gráficos
+  const commonChartOptions = useMemo(() => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: '#fff',
+          font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }
         }
-        return 0;
-    }, [productionData]);
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        bodyColor: '#fff',
+        titleColor: '#fff',
+        borderColor: '#fff',
+        borderWidth: 1,
+        bodyFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" },
+        titleFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }
+      }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Hora', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
+        ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
+        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+      },
+      y: {
+        title: { display: true, text: 'Produção (kWh)', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
+        ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
+        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+      }
+    }
+  }), []);
 
-    // Calculate environmental impact metrics
-    const environmentalImpact = useMemo(() => {
-        const co2Avoided = (totalProduction * CO2_SAVED_PER_KWH).toFixed(2); // in kg
-        const equivalentTrees = (co2Avoided / CO2_ABSORBED_PER_TREE_PER_YEAR).toFixed(0); // number of trees
-        return { co2Avoided, equivalentTrees };
-    }, [totalProduction]);
-
-    // Common chart options memoized for performance
-    const commonChartOptions = useMemo(() => ({
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                labels: {
-                    color: '#fff',
-                    font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                bodyColor: '#fff',
-                titleColor: '#fff',
-                borderColor: '#fff',
-                borderWidth: 1,
-                bodyFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" },
-                titleFont: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }
-            }
+  // Gera opções específicas para cada tipo de gráfico
+  const getChartOptions = useCallback((type) => {
+    const options = {
+      ...commonChartOptions,
+      onClick: () => setExpandedChartType(type),
+      plugins: {
+        ...commonChartOptions.plugins,
+        title: {
+          display: true,
+          color: '#fff',
+          text: type === 'pie' ? 'Distribuição da Produção de Energia Solar por Hora' : `Produção de Energia Solar por Hora (${type === 'line' ? 'Linha' : 'Barras'})`,
+          font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", size: 16 }
         },
-        scales: {
-            x: {
-                title: { display: true, text: 'Hora', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
-                ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
-                grid: { color: 'rgba(255, 255, 255, 0.1)' }
-            },
-            y: {
-                title: { display: true, text: 'Produção (kWh)', color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
-                ticks: { color: '#fff', font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" } },
-                grid: { color: 'rgba(255, 255, 255, 0.1)' }
-            }
-        }
-    }), []);
+      },
+    };
 
-    // Function to get specific chart options based on type, memoized
-    const getChartOptions = useCallback((type) => {
-        const options = {
-            ...commonChartOptions,
-            onClick: () => setExpandedChartType(type),
-            plugins: {
-                ...commonChartOptions.plugins,
-                title: {
-                    display: true,
-                    color: '#fff',
-                    text: type === 'pie' ? 'Distribuição da Produção de Energia Solar por Hora' : `Produção de Energia Solar por Hora (${type === 'line' ? 'Linha' : 'Barras'})`,
-                    font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", size: 16 }
-                },
-            },
+    if (type === 'pie') {
+      options.plugins.legend = {
+        ...options.plugins.legend,
+        position: 'bottom',
+        labels: {
+          ...options.plugins.legend.labels,
+          font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }
+        }
+      };
+      options.plugins.tooltip = {
+        ...options.plugins.tooltip,
+        callbacks: {
+          label: (context) => {
+            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+            const percentage = Math.round((context.raw / total) * 100);
+            return `${context.label}: ${context.raw} kWh (${percentage}%)`;
+          }
+        }
+      };
+      options.scales = {};
+    } else {
+      options.plugins.tooltip = {
+        ...options.plugins.tooltip,
+        callbacks: {
+          label: (context) => `${context.dataset.label || ''}: ${context.parsed.y !== null ? `${context.parsed.y} kWh` : ''}`
+        }
+      };
+    }
+    return options;
+  }, [commonChartOptions]);
+
+  const getWeatherIcon = useCallback((condition) => WEATHER_ICONS[condition] || '', []);
+
+  const handleSaveChart = useCallback(() => {
+    if (chartRef.current && expandedChartType) {
+      const link = document.createElement('a');
+      link.download = `solar_production_chart_${expandedChartType}.png`;
+      link.href = chartRef.current.toBase64Image();
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }, [expandedChartType]);
+
+  const shareChart = useCallback((platform) => {
+    if (!chartRef.current || !expandedChartType) return;
+
+    const title = 'Gráfico de Produção Solar';
+    const summary = 'Confira o gráfico de produção de energia solar.';
+    const encodedTitle = encodeURIComponent(title);
+    const encodedSummary = encodeURIComponent(summary);
+
+    const actions = {
+      'email': () => {
+        alert('Para compartilhar por e-mail, salve a imagem e anexe ao seu e-mail manualmente.');
+        window.open(`mailto:?subject=${encodedTitle}&body=${encodedSummary}`, '_blank');
+      },
+      'whatsapp': () => {
+        alert('Para compartilhar no WhatsApp, salve a imagem e depois anexe manualmente.');
+        window.open(`https://wa.me/?text=${encodedSummary}`, '_blank');
+      },
+      'instagram': () => {
+        alert('Para compartilhar no Instagram, salve a imagem e faça upload manualmente.');
+      },
+      'linkedin': () => {
+        alert('Para compartilhar no LinkedIn, salve a imagem e faça upload manualmente, ou compartilhe o link da página.');
+      }
+    };
+    actions[platform]?.();
+  }, [expandedChartType]);
+
+  const getChartData = useCallback((type) => {
+    if (!productionData.datasets || productionData.datasets.length === 0) {
+      return { labels: [], datasets: [] };
+    }
+
+    const baseDataset = productionData.datasets[0];
+    const commonDatasetProps = {
+      label: baseDataset.label,
+      data: baseDataset.data,
+      borderColor: "#1E90FF",
+      borderWidth: 1,
+    };
+
+    switch (type) {
+      case 'line':
+        return {
+          labels: productionData.labels,
+          datasets: [{
+            ...commonDatasetProps,
+            backgroundColor: "rgba(30, 144, 255, 0.2)",
+            fill: true,
+            tension: 0.3
+          }]
         };
-
-        if (type === 'pie') {
-            options.plugins.legend = {
-                ...options.plugins.legend,
-                position: 'bottom',
-                labels: {
-                    ...options.plugins.legend.labels,
-                    font: { family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }
-                }
-            };
-            options.plugins.tooltip = {
-                ...options.plugins.tooltip,
-                callbacks: {
-                    label: (context) => {
-                        const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
-                        const percentage = Math.round((context.raw / total) * 100);
-                        return `${context.label}: ${context.raw} kWh (${percentage}%)`;
-                    }
-                }
-            };
-            options.scales = {}; // Pie charts do not have X and Y scales
-        } else {
-            options.plugins.tooltip = {
-                ...options.plugins.tooltip,
-                callbacks: {
-                    label: (context) => `${context.dataset.label || ''}: ${context.parsed.y !== null ? `${context.parsed.y} kWh` : ''}`
-                }
-            };
-        }
-        return options;
-    }, [commonChartOptions]);
-
-    // Gets the weather icon based on condition
-    const getWeatherIcon = useCallback((condition) => WEATHER_ICONS[condition] || '', []);
-
-    // Handles saving the expanded chart image
-    const handleSaveChart = useCallback(() => {
-        if (chartRef.current && expandedChartType) {
-            const link = document.createElement('a');
-            link.download = `solar_production_chart_${expandedChartType}.png`;
-            link.href = chartRef.current.toBase64Image();
-            document.body.appendChild(link); // Append to body to ensure it's clickable
-            link.click();
-            document.body.removeChild(link); // Clean up
-        }
-    }, [expandedChartType]);
-
-    // Handles sharing the chart on different platforms
-    const shareChart = useCallback((platform) => {
-        if (!chartRef.current || !expandedChartType) return;
-
-        const title = 'Gráfico de Produção Solar';
-        const summary = 'Confira o gráfico de produção de energia solar.';
-        const encodedTitle = encodeURIComponent(title);
-        const encodedSummary = encodeURIComponent(summary);
-
-        const actions = {
-            'email': () => {
-                alert('Para compartilhar por e-mail, por favor, salve o gráfico e anexe-o ao seu e-mail manualmente. A incorporação direta de imagens não é amplamente suportada.');
-                window.open(`mailto:?subject=${encodedTitle}&body=${encodedSummary}`, '_blank');
-            },
-            'whatsapp': () => {
-                alert('Para compartilhar no WhatsApp, você precisará salvar a imagem primeiro e depois anexá-la à sua conversa.');
-                window.open(`https://wa.me/?text=${encodedSummary}`, '_blank');
-            },
-            'instagram': () => {
-                alert('Para compartilhar no Instagram, você precisará salvar a imagem e fazer o upload manualmente através do aplicativo.');
-            },
-            'linkedin': () => {
-                alert('Para compartilhar no LinkedIn, você precisará salvar a imagem e fazer o upload manualmente, ou compartilhar um link para esta página se ela estiver online.');
-                // If you have a live URL for your app, you could share that instead:
-                // window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodedTitle}&summary=${encodedSummary}`, '_blank');
-            }
+      case 'bar':
+      case 'pie':
+        return {
+          labels: productionData.labels,
+          datasets: [{
+            ...commonDatasetProps,
+            backgroundColor: BAR_PIE_CHART_COLORS,
+          }]
         };
-        actions[platform]?.();
-    }, [expandedChartType]);
+      default:
+        return productionData;
+    }
+  }, [productionData]);
 
-    // Adapts production data for different chart types
-    const getChartData = useCallback((type) => {
-        if (!productionData || !productionData.datasets || productionData.datasets.length === 0) {
-            return { labels: [], datasets: [] };
-        }
+  const ChartComponent = useMemo(() => ({
+    'line': Line,
+    'bar': Bar,
+    'pie': Pie
+  })[currentChartType], [currentChartType]);
 
-        const baseDataset = productionData.datasets[0];
-        const commonDatasetProps = {
-            label: 'Produção (kWh)',
-            data: baseDataset.data,
-            borderColor: "#1E90FF",
-            borderWidth: 1,
-        };
+  const ExpandedChartComponent = useMemo(() => ({
+    'line': Line,
+    'bar': Bar,
+    'pie': Pie
+  })[expandedChartType], [expandedChartType]);
 
-        switch (type) {
-            case 'line':
-                return {
-                    labels: productionData.labels,
-                    datasets: [{
-                        ...commonDatasetProps,
-                        backgroundColor: "rgba(30, 144, 255, 0.2)",
-                        fill: true,
-                    }]
-                };
-            case 'bar':
-            case 'pie':
-                return {
-                    labels: productionData.labels,
-                    datasets: [{
-                        ...commonDatasetProps,
-                        backgroundColor: BAR_PIE_CHART_COLORS,
-                    }]
-                };
-            default:
-                return productionData;
-        }
-    }, [productionData]);
+  return (
+    <div className="home-container">
+      <main className="main-content">
+        <section className="production-section">
+          <h2 className='tituloPrincipalHome'>Produção Atual</h2>
+          <div className="chart-type-selector">
+            <label className='tipoGrafico'>Tipo de Gráfico:</label>
+            <div className="chart-buttons" title='Grafico'>
+              {['line', 'bar', 'pie'].map(type => (
+                <button
+                  key={type}
+                  onClick={() => setCurrentChartType(type)}
+                  className={currentChartType === type ? 'active' : ''}
+                >
+                  {type === 'line' ? 'Linha' : type === 'bar' ? 'Barra' : 'Pizza'}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px' }}>
+            <div className="chart-container" onClick={() => setExpandedChartType(currentChartType)}>
+              {ChartComponent && (
+                <ChartComponent
+                  data={getChartData(currentChartType)}
+                  options={getChartOptions(currentChartType)}
+                  ref={chartRef}
+                />
+              )}
+            </div>
+          </div>
+          <p className='paragrafoFonteGrafico'>Fonte: Placas GoodWe</p>
+        </section>
 
-    // Dynamically select the Chart.js component
-    const ChartComponent = useMemo(() => ({
-        'line': Line,
-        'bar': Bar,
-        'pie': Pie
-    })[currentChartType], [currentChartType]);
+        <section className="weather-forecast-section">
+          <h2>Clima e Previsão</h2>
+          <div className="weather-cards-container">
+            <div className="weather-card current-weather-card">
+              <h3>Agora</h3>
+              <p className="temperature">{currentWeather.temperature}°C</p>
+              <p className="condition">{getWeatherIcon(currentWeather.condition)} {currentWeather.condition}</p>
+            </div>
+            {forecast.map((item, index) => (
+              <div key={index} className="weather-card forecast-card">
+                <h3>{item.day}</h3>
+                <p className="condition">{getWeatherIcon(item.condition)}</p>
+                <p className="temp-range">Min: {item.low}°C | Max: {item.high}°C</p>
+                <p className="condition-text">{item.condition}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-    const ExpandedChartComponent = useMemo(() => ({
-        'line': Line,
-        'bar': Bar,
-        'pie': Pie
-    })[expandedChartType], [expandedChartType]);
+        <section className="environmental-impact-section">
+          <h2>Impacto Ambiental</h2>
+          <div className="impact-cards-container">
+            <div className="impact-card">
+              <h3>Economia de CO₂</h3>
+              <p className="impact-value">{environmentalImpact.co2Avoided} kg</p>
+              <p className="impact-description">de CO₂ deixaram de ser emitidos</p>
+            </div>
+            <div className="impact-card">
+              <h3>Árvores Equivalentes</h3>
+              <p className="impact-value">{environmentalImpact.equivalentTrees}</p>
+              <p className="impact-description">árvores seriam necessárias para absorver essa CO₂</p>
+            </div>
+            <div className="impact-card">
+              <h3>Redução de Poluição</h3>
+              <p className="impact-description">A energia solar contribui para um ar mais limpo e um ambiente mais saudável, reduzindo significativamente a poluição atmosférica.</p>
+            </div>
+          </div>
+        </section>
 
+        <br /><br /><br /><br /><br />
+      </main>
 
-    return (
-        <div className="home-container">
-            <main className="main-content">
-                <section className="production-section">
-                    <h2 className='tituloPrincipalHome'>Produção Atual</h2>
-                    <div className="chart-type-selector">
-                        <label className='tipoGrafico'>Tipo de Gráfico:</label>
-                        <div className="chart-buttons" title='Grafico'>
-                            {['line', 'bar', 'pie'].map(type => (
-                                <button
-                                    key={type}
-                                    onClick={() => setCurrentChartType(type)}
-                                    className={currentChartType === type ? 'active' : ''}
-                                >
-                                    {type === 'line' ? 'Linha' : type === 'bar' ? 'Barra' : 'Pizza'}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                    <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px' }}>
-                        {/* Main production chart */}
-                        <div className="chart-container" onClick={() => setExpandedChartType(currentChartType)}>
-                            {ChartComponent && (
-                                <ChartComponent
-                                    data={getChartData(currentChartType)}
-                                    options={getChartOptions(currentChartType)}
-                                    ref={chartRef}
-                                />
-                            )}
-                        </div>
-                    </div>
-                    <p className='paragrafoFonteGrafico'>Fonte: Placas GoodWe</p>
-                </section>
-
-                <section className="weather-forecast-section">
-                    <h2>Clima e Previsão</h2>
-                    <div className="weather-cards-container">
-                        <div className="weather-card current-weather-card">
-                            <h3>Agora</h3>
-                            <p className="temperature">{currentWeather.temperature}°C</p>
-                            <p className="condition">{getWeatherIcon(currentWeather.condition)} {currentWeather.condition}</p>
-                        </div>
-                        {forecast.map((item, index) => (
-                            <div key={index} className="weather-card forecast-card">
-                                <h3>{item.day}</h3>
-                                <p className="condition">{getWeatherIcon(item.condition)}</p>
-                                <p className="temp-range">Min: {item.low}°C | Max: {item.high}°C</p>
-                                <p className="condition-text">{item.condition}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                {/* --- */}
-                {/* Environmental Impact Section */}
-                <section className="environmental-impact-section">
-                    <h2>Impacto Ambiental</h2>
-                    <div className="impact-cards-container">
-                        <div className="impact-card">
-                            <h3>Economia de CO₂</h3>
-                            <p className="impact-value">{environmentalImpact.co2Avoided} kg</p>
-                            <p className="impact-description">de CO₂ deixaram de ser emitidos</p>
-                        </div>
-                        <div className="impact-card">
-                            <h3>Árvores Equivalentes</h3>
-                            <p className="impact-value">{environmentalImpact.equivalentTrees}</p>
-                            <p className="impact-description">árvores seriam necessárias para absorver essa CO₂</p>
-                        </div>
-                        <div className="impact-card">
-                            <h3>Redução de Poluição</h3>
-                            <p className="impact-description">A energia solar contribui para um ar mais limpo e um ambiente mais saudável, reduzindo significativamente a poluição atmosférica.</p>
-                        </div>
-                    </div>
-                </section>
-                {/* --- */}
-
-                <br /><br /><br /><br /><br />
-            </main>
-
-            {/* Expanded Chart Overlay */}
-            {expandedChartType && (
-                <div className="expanded-chart-overlay" onClick={() => setExpandedChartType(null)}>
-                    <div className="expanded-chart-container" onClick={e => e.stopPropagation()}>
-                        <button className="close-button" onClick={() => setExpandedChartType(null)} title="Fechar">X</button>
-                        <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px', height: 'calc(100% - 170px)', overflowY: 'auto' }}>
-                            <div className="chart-container">
-                                {/* Render the expanded chart */}
-                                {ExpandedChartComponent && (
-                                    <ExpandedChartComponent
-                                        data={getChartData(expandedChartType)}
-                                        options={getChartOptions(expandedChartType)}
-                                    />
-                                )}
-                            </div>
-                            <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }} title="Dados de Produção" >Dados de Produção</h3>
-                            <div className="data-table-container">
-                                {/* Table with raw data */}
-                                <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
-                                    <thead>
-                                        <tr style={{ borderBottom: '1px solid #fff' }}>
-                                            <th style={{ padding: '8px', textAlign: 'left', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Hora</th>
-                                            <th style={{ padding: '8px', textAlign: 'left', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Produção (kWh)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {productionData.labels && productionData.labels.map((label, index) => (
-                                            <tr key={index} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                                                <td style={{ padding: '8px', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>{label}</td>
-                                                <td style={{ padding: '8px', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>{productionData.datasets && productionData.datasets[0] && productionData.datasets[0].data[index]}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div className="expanded-chart-actions">
-                            <button onClick={handleSaveChart}>Salvar Imagem</button>
-                            <div className="share-options">
-                                <a href="#!" onClick={() => shareChart('email')} title="Compartilhar por Email"><img src={logoGmail} alt="Email" className="icones" /></a>
-                                <a href="#!" onClick={() => shareChart('whatsapp')} title="Compartilhar no WhatsApp"><img src={logoWhatsapp} alt="WhatsApp" className="icones" /></a>
-                                <a href="#!" onClick={() => shareChart('instagram')} title="Compartilhar no Instagram"><img src={logoInstagram} alt="Instagram" className="icones" /></a>
-                                <a href="#!" onClick={() => shareChart('linkedin')} title="Compartilhar no LinkedIn"><img src={logoLinkedin} alt="LinkedIn" className="icones" /></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+      {expandedChartType && (
+        <div className="expanded-chart-overlay" onClick={() => setExpandedChartType(null)}>
+          <div className="expanded-chart-container" onClick={e => e.stopPropagation()}>
+            <button className="close-button" onClick={() => setExpandedChartType(null)} title="Fechar">X</button>
+            <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px', height: 'calc(100% - 170px)', overflowY: 'auto' }}>
+              <div className="chart-container">
+                {ExpandedChartComponent && (
+                  <ExpandedChartComponent
+                    data={getChartData(expandedChartType)}
+                    options={getChartOptions(expandedChartType)}
+                  />
+                )}
+              </div>
+              <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }} title="Dados de Produção" >Dados de Produção</h3>
+              <div className="data-table-container">
+                <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid #fff' }}>
+                      <th style={{ padding: '8px', textAlign: 'left', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Hora</th>
+                      <th style={{ padding: '8px', textAlign: 'left', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Produção (kWh)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {productionData.labels && productionData.labels.map((label, index) => (
+                      <tr key={index} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                        <td style={{ padding: '8px', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>{label}</td>
+                        <td style={{ padding: '8px', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>{productionData.datasets && productionData.datasets[0] && productionData.datasets[0].data[index]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="expanded-chart-actions">
+              <button onClick={handleSaveChart}>Salvar Imagem</button>
+              <div className="share-options">
+                <a href="#!" onClick={() => shareChart('email')} title="Compartilhar por Email"><img src={logoGmail} alt="Email" className="icones" /></a>
+                <a href="#!" onClick={() => shareChart('whatsapp')} title="Compartilhar no WhatsApp"><img src={logoWhatsapp} alt="WhatsApp" className="icones" /></a>
+                <a href="#!" onClick={() => shareChart('instagram')} title="Compartilhar no Instagram"><img src={logoInstagram} alt="Instagram" className="icones" /></a>
+                <a href="#!" onClick={() => shareChart('linkedin')} title="Compartilhar no LinkedIn"><img src={logoLinkedin} alt="LinkedIn" className="icones" /></a>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default Home;
