@@ -48,3 +48,24 @@
         transform: rotate(360deg);
     }
 }
+
+
+/* Media query para telas grandes (PC) */
+@media (min-width: 1024px) {
+    .chat-container {
+        height: 700px;
+        /* Altura confortável para tela de desktop */
+        max-width: 700px;
+        /* limitar largura para melhor leitura */
+        margin: 0 auto;
+        /* centraliza horizontalmente */
+        padding-top: 2rem;
+        padding-bottom: 4rem;
+    }
+
+    /* Se quiser que a área de mensagens cresça também, ajuste as outras classes aqui */
+    .message-display-area {
+        max-height: 580px;
+        overflow-y: auto;
+    }
+}
