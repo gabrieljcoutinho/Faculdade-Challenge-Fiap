@@ -1,0 +1,28 @@
+@media screen and (min-width: 900px) {
+  .contato-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    /* tudo empilhado vertical */
+    align-items: center !important;
+    /* centraliza horizontal */
+    gap: 30px !important;
+    /* espaçamento entre blocos */
+    max-width: 700px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+  }
+
+  .contato-form,
+  .faq-button-container,
+  .contato-info {
+    width: 100% !important;
+    /* cada bloco ocupa 100% da largura */
+    max-width: none !important;
+  }
+
+  .faq-button-container {
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+}
