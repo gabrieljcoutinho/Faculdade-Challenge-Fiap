@@ -1,5 +1,9 @@
 import React from 'react';
-import '../CSS/HelpCenter/index.css'; // Estilo separado
+import '../CSS/HelpCenter/container.css';
+import '../CSS/HelpCenter/searchBox.css';
+import '../CSS/HelpCenter/titulo.css';
+import '../CSS/HelpCenter/categories.css';
+import '../CSS/HelpCenter/categoryCard.css';
 
 const categorias = [
   {
