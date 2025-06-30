@@ -1,0 +1,15 @@
+.links {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.links a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0.5rem 0;
+    display: block;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
