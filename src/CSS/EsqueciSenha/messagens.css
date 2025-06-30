@@ -1,0 +1,11 @@
+.success-message {
+    color: #2ECC71;
+    background-color: rgba(46, 204, 113, 0.1);
+    border: 1px solid #2ECC71;
+}
+
+.error-message {
+    color: #E74C3C;
+    background-color: rgba(231, 76, 60, 0.1);
+    border: 1px solid #E74C3C;
+}
