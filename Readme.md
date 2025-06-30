@@ -1,119 +1,115 @@
-# Projeto React Faculdade - Aplicativo de Monitoramento e Conexão
+# Aplicativo de Monitoramento e Conexão - Projeto React Faculdade
 
 ## Descrição Geral
 
-Este projeto foi desenvolvido para a faculdade e consiste na criação de um aplicativo web utilizando **React.js**. O app reúne diversas funcionalidades focadas em monitoramento de dados, conexão de dispositivos, interação via chat e suporte ao usuário, tudo em uma interface intuitiva e moderna.
+Este projeto é uma aplicação web desenvolvida em **React.js** para monitoramento de dados, conexão e gerenciamento de dispositivos, interação via chat inteligente e suporte ao usuário. O objetivo é oferecer uma interface moderna, responsiva e intuitiva, agregando funcionalidades inovadoras para facilitar o controle e análise em tempo real.
 
 ---
 
-## Funcionalidades do Projeto
+## Funcionalidades
 
 ### 1. Home
 
 - **Gráficos Interativos:**
-  A tela inicial apresenta três tipos de gráficos para exibir dados de forma visual e dinâmica:
   - Gráfico de linha
   - Gráfico de barra
   - Gráfico de pizza
+  Permitem visualização dinâmica dos dados para fácil análise.
 
 - **Clima em Tempo Real:**
-  Exibe informações meteorológicas atualizadas constantemente, permitindo que o usuário acompanhe as condições climáticas diretamente na aplicação.
+  Atualização constante das condições meteorológicas, oferecendo informações relevantes diretamente na aplicação.
 
 ---
 
-### 2. Parte de Conexão
+### 2. Dispositivos e Conexões
 
-- O usuário pode conectar dispositivos a partir de um botão que oferece duas opções principais:
+- **Conexão via Bluetooth:**
+  Busca automática e conexão com dispositivos Bluetooth disponíveis.
 
-  - **Conexão via Bluetooth:**
-    Ao escolher essa opção, o app automaticamente procura por dispositivos Bluetooth disponíveis para conexão direta.
+- **Conexão Manual:**
+  Permite ao usuário adicionar dispositivos informando:
+  - Nome
+  - Ícone personalizado
+  - Cor identificadora
 
-  - **Conexão Manual:**
-    Caso o usuário prefira, pode adicionar um dispositivo manualmente, preenchendo:
-    - Nome do aparelho
-    - Ícone que representa o dispositivo
-    - Cor personalizada para facilitar a identificação
-
-- Após conectar um dispositivo, o usuário pode gerenciar seus aparelhos conectados com as seguintes opções:
-  - Remover dispositivo
-  - Editar informações do dispositivo
-  - Desconectar o dispositivo
-  - Ampliar um QR Code gerado para conexão rápida e prática com o dispositivo
-
-- Ao clicar em um aparelho conectado, uma área de detalhes é aberta mostrando:
-  - Ícone do dispositivo
-  - Nome do dispositivo
-  - Status atual da conexão (conectado ou desconectado)
-  - Data da conexão (dia e mês)
-  - Tempo total que o dispositivo está conectado
+- **Gerenciamento de Dispositivos:**
+  - Remover, editar ou desconectar aparelhos
+  - Exibir QR Code para conexão rápida
+  - Visualizar detalhes como status, data e tempo conectado
 
 ---
 
-### 3. Chat Interativo
+### 3. Chat Interativo com IA
 
-- Chat integrado ao aplicativo que responde a perguntas aleatórias e a comandos específicos definidos na página.
-- Utiliza uma **API de Inteligência Artificial** para gerar respostas inteligentes e contextuais, auxiliando o usuário com dúvidas ou ações específicas.
+- Chat que responde perguntas gerais e comandos específicos.
+- Utiliza uma API de Inteligência Artificial para respostas contextuais e naturais, auxiliando o usuário.
 
 ---
 
-### 4. Contato
+### 4. Contato e Suporte
 
-- Seção simples onde o usuário pode enviar mensagens e arquivos, como PDFs ou imagens, para suporte ou contato direto.
-- Um botão abaixo permite acessar as **Perguntas Frequentes (FAQ)**, que pode ser aberto para consultar respostas sobre dúvidas comuns dos usuários.
+- Envio de mensagens e arquivos (PDF, imagens) para suporte.
+- Acesso rápido às Perguntas Frequentes (FAQ) para esclarecimento de dúvidas comuns.
 
 ---
 
 ### 5. Configurações
 
-- A área de configurações conta com 5 botões principais:
-  1. **Comandos:** Lista os comandos especiais disponíveis para usar no chat e outras áreas do app.
-  2. **Suporte e Ajuda:** Para o usuário buscar assistência ou tirar dúvidas.
-  3. **Leitor de Tela** Leitor de tela de todas as páginas para auxiliar pessoas nescessitadas
-  4. **Tema Claro/Escuro:** Alterna entre os temas visual claro e escuro, melhorando a experiência
-  5. **Login/Logout:** Para autenticar o usuário no sistema.
-visual conforme a preferência do usuário.
+- Botões principais:
+  1. **Comandos:** Lista de comandos especiais para uso no chat e outras funcionalidades.
+  2. **Suporte e Ajuda:** Canal para assistência ao usuário.
+  3. **Leitor de Tela:** Recurso de acessibilidade para leitura das páginas.
+  4. **Tema Claro/Escuro:** Alternância entre temas para melhor experiência visual.
+  5. **Login/Logout:** Autenticação de usuário para acesso seguro.
 
+---
+
+## Tecnologias Utilizadas
+
+- **React.js** — Construção da interface e gerenciamento do estado.
+- **Bluetooth Web API** — Conexão e comunicação via Bluetooth.
+- **QR Code** — Geração para facilitar conexões rápidas.
+- **CSS** — Estilização, incluindo suporte a temas claro e escuro.
+- **APIs REST** — Comunicação com backend para dados e IA.
+- **React Hooks** — Controle reativo do estado da aplicação.
 
 ---
 
 ## APIs Integradas
 
 - **API de Inteligência Artificial:**
-  Responsável por gerar respostas no chat, oferecendo interação mais natural e eficiente.
-
-
----
-
-## Tecnologias Utilizadas
-
-- **React.js** — Framework JavaScript para construção da interface.
-- **Bluetooth Web API** — Para busca e conexão automática via Bluetooth.
-- **QR Code** — Para conexão rápida e prática de dispositivos.
-- **CSS** — Para estilização, incluindo suporte a temas claro e escuro.
-- **APIs REST** — Para comunicação com o backend de IA e dados.
-- **React Hooks** — Para gerenciamento do estado da aplicação.
+  Responsável por gerar respostas inteligentes e contextuais para o chat, melhorando a interação.
 
 ---
 
-## Como Usar o Projeto
+## Como Usar
 
-1. **Home:** Visualize gráficos dinâmicos e o clima em tempo real.
-2. **Conexão:** Clique no botão para conectar dispositivos via Bluetooth ou manualmente.
-3. **Chat:** Faça perguntas ou envie comandos para obter respostas interativas.
-4. **Contato:** Envie arquivos e consulte perguntas frequentes para suporte.
-5. **Configurações:** Faça login, visualize comandos, solicite ajuda ou alterne o tema da interface.
+1. **Home:** Navegue pelos gráficos e confira o clima em tempo real.
+2. **Conexão:** Adicione dispositivos via Bluetooth ou manualmente.
+3. **Chat:** Faça perguntas ou envie comandos para respostas rápidas.
+4. **Contato:** Envie mensagens e arquivos para suporte e consulte FAQ.
+5. **Configurações:** Personalize o app, gerencie login e acessibilidade.
 
 ---
 
-## Rodando o Projeto Localmente
+## Instalação e Execução Local
 
 ### Pré-requisitos
 
-- **Node.js** e **npm** instalados na máquina. Você pode baixar em: [https://nodejs.org/](https://nodejs.org/)
-- Navegador moderno (Chrome, Firefox, Edge, etc.) com suporte para Web Bluetooth (se desejar testar essa funcionalidade).
+- [Node.js](https://nodejs.org/) (incluindo npm) instalado
+- Navegador moderno com suporte à Web Bluetooth (para testar conexão Bluetooth)
 
-### Passos para rodar
+### Passos
 
-1. Clone este repositório:
-   ```bash
-   git clone <URL_DO_REPOSITORIO>
+```bash
+# Clone o repositório
+git clone <URL_DO_REPOSITORIO>
+
+# Entre na pasta do projeto
+cd nome-do-projeto
+
+# Instale as dependências
+npm install
+
+# Inicie o servidor de desenvolvimento
+npm start

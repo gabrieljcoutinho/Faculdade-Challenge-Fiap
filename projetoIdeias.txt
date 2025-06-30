@@ -11,8 +11,9 @@ O que foi feito:
 9 - interatividade com a página;
 10 - tema dark, light manual e via chat
 11- mostrar previsão de tempo de verdade (com ap se possiveli);
+12- acessibilidade de voz ao clicar em icones, texto ou imagem;
 
 
 O que fazer:
-2- acessibilidade de voz ao clicar em icones, texto ou imagem;
+
 3 - agendamento inteligente;
