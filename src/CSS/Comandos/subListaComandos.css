@@ -1,0 +1,20 @@
+/* subListaComandos.css */
+.sub-lista-comandos {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-top: 1rem;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.sub-lista-comandos li {
+    margin-bottom: 0.5rem;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.sub-lista-comandos li:last-child {
+    margin-bottom: 0;
+}
