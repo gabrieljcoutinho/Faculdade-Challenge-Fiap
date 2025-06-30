@@ -1,0 +1,15 @@
+.contato-form .submit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.contato-form .submit-button:hover {
+    background-color: #0056b3;
+}
