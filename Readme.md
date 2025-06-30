@@ -66,10 +66,13 @@ Este projeto foi desenvolvido para a faculdade e consiste na criação de um apl
 ### 5. Configurações
 
 - A área de configurações conta com 5 botões principais:
-  1. **Login/Logout:** Para autenticar o usuário no sistema.
-  2. **Comandos:** Lista os comandos especiais disponíveis para usar no chat e outras áreas do app.
-  3. **Suporte e Ajuda:** Para o usuário buscar assistência ou tirar dúvidas.
-  4. **Tema Claro/Escuro:** Alterna entre os temas visual claro e escuro, melhorando a experiência visual conforme a preferência do usuário.
+  1. **Comandos:** Lista os comandos especiais disponíveis para usar no chat e outras áreas do app.
+  2. **Suporte e Ajuda:** Para o usuário buscar assistência ou tirar dúvidas.
+  3. **Leitor de Tela** Leitor de tela de todas as páginas para auxiliar pessoas nescessitadas
+  4. **Tema Claro/Escuro:** Alterna entre os temas visual claro e escuro, melhorando a experiência
+  5. **Login/Logout:** Para autenticar o usuário no sistema.
+visual conforme a preferência do usuário.
+
 
 ---
 
@@ -78,8 +81,6 @@ Este projeto foi desenvolvido para a faculdade e consiste na criação de um apl
 - **API de Inteligência Artificial:**
   Responsável por gerar respostas no chat, oferecendo interação mais natural e eficiente.
 
-- **API Própria de Consumo:**
-  Fornece dados para alimentar os gráficos, mostrando informações reais e atualizadas de consumo e produção.
 
 ---
 
