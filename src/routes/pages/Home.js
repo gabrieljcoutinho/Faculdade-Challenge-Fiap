@@ -283,12 +283,23 @@ const Home = () => {
           }]
         };
       case 'bar':
-      case 'pie':
         return {
           labels: productionData.labels,
           datasets: [{
             ...commonDatasetProps,
             backgroundColor: BAR_PIE_CHART_COLORS,
+          }]
+        };
+      case 'pie':
+        // Limit to 7 data points for the pie chart
+        const limitedLabels = productionData.labels.slice(0, 7);
+        const limitedData = baseDataset.data.slice(0, 7);
+        return {
+          labels: limitedLabels,
+          datasets: [{
+            ...commonDatasetProps,
+            data: limitedData,
+            backgroundColor: BAR_PIE_CHART_COLORS.slice(0, limitedLabels.length), // Ensure colors match the number of slices
           }]
         };
       default:
