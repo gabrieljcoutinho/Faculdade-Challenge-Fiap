@@ -3,7 +3,7 @@
   "datasets": [
     {
       "label": "Produção (kWh)",
-      "data": [2, 8, 15, 20, 18, 10, 3],
+      "data": [12, 8, 15, 20, 18, 100, 3],
       "borderColor": "#rgba(15, 240, 252);",
       "backgroundColor": "rgba(15, 240, 252);",
       "fill": true,

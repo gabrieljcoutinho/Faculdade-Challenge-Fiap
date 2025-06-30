@@ -61,6 +61,10 @@ const WEATHER_ICONS = {
     'Limpo': '🌙' // Adicionado para indicar céu limpo à noite
 };
 
+// Environmental Constants
+const CO2_SAVED_PER_KWH = 0.85; // kg CO2 per kWh
+const CO2_ABSORBED_PER_TREE_PER_YEAR = 22; // kg CO2 per tree per year (average)
+
 const Home = () => {
     // UI state management
     const [currentChartType, setCurrentChartType] = useState('line');
@@ -79,6 +83,21 @@ const Home = () => {
 
     // Ref for the main chart element to capture its image
     const chartRef = useRef(null);
+
+    // Calculate total production for environmental impact
+    const totalProduction = useMemo(() => {
+        if (productionData && productionData.datasets && productionData.datasets.length > 0) {
+            return productionData.datasets[0].data.reduce((sum, value) => sum + value, 0);
+        }
+        return 0;
+    }, [productionData]);
+
+    // Calculate environmental impact metrics
+    const environmentalImpact = useMemo(() => {
+        const co2Avoided = (totalProduction * CO2_SAVED_PER_KWH).toFixed(2); // in kg
+        const equivalentTrees = (co2Avoided / CO2_ABSORBED_PER_TREE_PER_YEAR).toFixed(0); // number of trees
+        return { co2Avoided, equivalentTrees };
+    }, [totalProduction]);
 
     // Common chart options memoized for performance
     const commonChartOptions = useMemo(() => ({
@@ -311,6 +330,29 @@ const Home = () => {
                         ))}
                     </div>
                 </section>
+
+                {/* --- */}
+                {/* Environmental Impact Section */}
+                <section className="environmental-impact-section">
+                    <h2>Impacto Ambiental</h2>
+                    <div className="impact-cards-container">
+                        <div className="impact-card">
+                            <h3>Economia de CO₂</h3>
+                            <p className="impact-value">{environmentalImpact.co2Avoided} kg</p>
+                            <p className="impact-description">de CO₂ deixaram de ser emitidos</p>
+                        </div>
+                        <div className="impact-card">
+                            <h3>Árvores Equivalentes</h3>
+                            <p className="impact-value">{environmentalImpact.equivalentTrees}</p>
+                            <p className="impact-description">árvores seriam necessárias para absorver essa CO₂</p>
+                        </div>
+                        <div className="impact-card">
+                            <h3>Redução de Poluição</h3>
+                            <p className="impact-description">A energia solar contribui para um ar mais limpo e um ambiente mais saudável, reduzindo significativamente a poluição atmosférica.</p>
+                        </div>
+                    </div>
+                </section>
+                {/* --- */}
 
                 <br /><br /><br /><br /><br />
             </main>
