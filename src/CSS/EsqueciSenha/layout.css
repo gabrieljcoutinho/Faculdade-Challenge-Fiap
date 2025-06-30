@@ -1,0 +1,35 @@
+.forgot-password-card {
+    background-color: var(--card-background);
+    padding: 10px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 100%;
+    max-width: 450px;
+    animation: fadeInScale 0.9s ease-out forwards;
+    box-sizing: border-box;
+}
+
+.forgot-password-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #F0F2F5 0%, #E0E6EB 100%);
+    height: 700px;
+    padding-bottom: 10rem;
+}
+
+.tituloEsqueciSenha {
+    margin-bottom: 25px;
+    font-size: 2.2em;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.paragrafoEsqueciSenha {
+    color: #5F7C8F;
+    margin-bottom: 30px;
+    line-height: 1.7;
+    font-size: 1em;
+    padding: 0 5px;
+}
