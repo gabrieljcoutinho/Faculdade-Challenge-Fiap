@@ -6,36 +6,26 @@ import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import sendBtn from '../../imgs/sendBtn.png';
-import comandosData from '../../data/commands.json'; // Ensure the path to commands.json is correct
+import comandosData from '../../data/commands.json'; // Verifique o caminho correto
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
-// Helper function to normalize text (remove spaces and convert to lowercase)
+// Função para normalizar texto
 const normalizeText = (text) => text.trim().toLowerCase();
 
 const Chat = ({ onConnectDevice, productionData, setTheme }) => {
-    // Component states
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [firstInteraction, setFirstInteraction] = useState(true);
 
-    // Ref for automatically scrolling the message area
     const messagesEndRef = useRef(null);
-
-    // Hook for programmatic navigation
     const navigate = useNavigate();
 
-    // Effect to scroll to the latest message whenever messages are updated
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    /**
-     * Formats solar production data into a readable string (Markdown table).
-     * @param {object} data - Object containing labels (hours) and datasets (production values).
-     * @returns {string} - Formatted string with production data.
-     */
     const formatProductionData = (data) => {
         if (!data || !data.labels || !data.datasets || data.datasets.length === 0) {
             return "Não há dados de produção solar disponíveis no momento.";
@@ -59,17 +49,11 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         return response;
     };
 
-    /**
-     * Handles sending user messages.
-     * Checks local commands, integrates with the Gemini API, and manages state.
-     * @param {Event} e - Form event.
-     */
     const handleSendMessage = async (e) => {
         e.preventDefault();
         const texto = newMessage.trim();
         if (!texto) return;
 
-        // Marks that there's been a first interaction
         if (firstInteraction) setFirstInteraction(false);
 
         const textoNormalizado = normalizeText(texto);
@@ -80,7 +64,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         let handledByLocalCommand = false;
         let botResponseContent = '';
 
-        // Device connection commands
+        // Comandos para conexão de dispositivos
         const connectionCommands = [
             { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão', 'oconectar tv', 'oconectar televisão'] },
             { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado', 'oconectar ar-condicionado', 'oconectar ar condicionado'] },
@@ -92,7 +76,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         let identifiedDeviceType = null;
         let fullDeviceNameForConnection = null;
 
-        // Check if the message corresponds to a connection command
         for (const cmd of connectionCommands) {
             for (const trigger of cmd.triggers) {
                 const normalizedTrigger = normalizeText(trigger);
@@ -103,15 +86,13 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
                         ? `${cmd.type} ${remainingText.charAt(0).toUpperCase() + remainingText.slice(1)}`
                         : cmd.type;
 
-                    // Call the function to connect the device (passed via prop)
                     if (typeof onConnectDevice === 'function') {
                         onConnectDevice(identifiedDeviceType, fullDeviceNameForConnection);
                     }
 
-                    // Redirect to the connections page automatically
-                    navigate('/conexoes');
+                    // Redirecionamento REMOVIDO para evitar navegação automática
+                    // navigate('/conexoes');
 
-                    // Define the bot's response message
                     botResponseContent = `${fullDeviceNameForConnection} conectado!`;
                     handledByLocalCommand = true;
                     break;
@@ -120,28 +101,24 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
             if (handledByLocalCommand) break;
         }
 
-        // If it wasn't a connection command, check other local commands from commands.json
         if (!handledByLocalCommand) {
             const comandoEncontrado = comandosData.comandos.find(cmd =>
                 Array.isArray(cmd.triggers) && cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
             );
 
             if (comandoEncontrado) {
-                // Handle redirects
                 if (comandoEncontrado.resposta.startsWith("REDIRECT:")) {
                     const path = comandoEncontrado.resposta.split(":")[1];
                     navigate(path);
                     setLoading(false);
-                    return; // Exit the function after redirecting
+                    return;
                 }
 
-                // Handle chart production response
                 botResponseContent =
                     comandoEncontrado.resposta === 'PRODUCAO_GRAFICO'
-                        ? formatProductionData(productionData) // <-- Using productionData directly here
+                        ? formatProductionData(productionData)
                         : comandoEncontrado.resposta;
 
-                // Handle theme change
                 if (botResponseContent === 'TEMA_ESCURO') {
                     document.body.classList.remove('light-theme');
                     document.body.classList.add('dark-theme');
@@ -162,25 +139,21 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
             }
         }
 
-        // If a local command was handled, display the response and finish
         if (handledByLocalCommand) {
             setTimeout(() => {
                 setMessages(prev => [...prev, { role: 'assistant', content: botResponseContent }]);
                 setLoading(false);
-            }, 500); // Small delay to simulate the bot "typing"
+            }, 500);
             return;
         }
 
-        // If no Gemini API key is configured
         if (!GEMINI_API_KEY) {
             setMessages(prev => [...prev, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
             setLoading(false);
             return;
         }
 
-        // If no local command was handled, send to the Gemini API
         try {
-            // Prepare messages for the Gemini API, including the initial model message
             const geminiMessages = [
                 { role: 'model', parts: [{ text: "Ok, entendi. Como posso ajudar?" }] },
                 ...messages.map(msg => ({
@@ -206,7 +179,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
             const data = await response.json();
 
-            // Handle API errors
             if (!response.ok) {
                 setMessages(prev => [
                     ...prev,
@@ -215,7 +187,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
                 return;
             }
 
-            // Process the Gemini API response
             if (data.candidates?.[0]?.content?.parts) {
                 setMessages(prev => [
                     ...prev,
@@ -252,12 +223,10 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
                     </div>
                 )}
 
-                {/* Renders chat messages */}
                 {messages.filter(msg => msg.role !== 'system').map((message, index) => (
                     <div key={index} className={`message ${message.role === 'user' ? 'user' : 'bot'}`}>
                         <span
                             className="message-bubble"
-                            // Uses marked.parse to render Markdown in the assistant's response
                             dangerouslySetInnerHTML={{
                                 __html: message.role === 'assistant'
                                     ? marked.parse(message.content)
@@ -267,16 +236,14 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
                     </div>
                 ))}
 
-                {/* "Typing..." indicator */}
                 {loading && (
                     <div className="message bot">
                         <span className="message-bubble">Digitando...</span>
                     </div>
                 )}
-                <div ref={messagesEndRef} /> {/* Scroll point */}
+                <div ref={messagesEndRef} />
             </div>
 
-            {/* Message input form */}
             <form onSubmit={handleSendMessage} className="message-input-form">
                 <input
                     type="text"
@@ -284,12 +251,12 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="Sua mensagem..."
                     className="message-input"
-                    disabled={loading} // Disables the input while the bot is responding
+                    disabled={loading}
                     autoComplete="off"
-                    title='Diigite seu texto ou sua mensagem'
+                    title='Digite seu texto ou sua mensagem'
                 />
                 <button type="submit" className="send-button" disabled={loading}>
-                    <img src={sendBtn} alt="Enviar" className="send-icon"  title='Enviar Texto ou Mensagem'/>
+                    <img src={sendBtn} alt="Enviar" className="send-icon" title='Enviar Texto ou Mensagem' />
                 </button>
             </form>
         </div>
