@@ -292,7 +292,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                 </button>
                 {isSearchingBluetooth && (<p className="connecting-message">Aguarde, a janela de seleção do navegador será aberta.</p>)}
                 <div className="form-actions">
-                  <button onClick={closeAllModals} className="cancel-button-styled" disabled={isSearchingBluetooth} type="button">Cancelar</button>
+                  <button onClick={closeAllModals} className="cancel-button-styled" disabled={isSearchingBluetooth} type="button" title='Ativar | Desativar aparelho'>Cancelar</button>
                 </div>
               </>
             )}
