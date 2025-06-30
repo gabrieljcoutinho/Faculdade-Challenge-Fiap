@@ -1,0 +1,35 @@
+.contato-info {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+.contato-info h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.6em;
+}
+
+.contato-info .info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.contato-info .info-item .icon {
+    margin-right: 10px;
+    color: #007bff;
+}
+
+.contato-info .info-item p {
+    color: #000;
+    margin: 0;
+    font-size: 1em;
+}
