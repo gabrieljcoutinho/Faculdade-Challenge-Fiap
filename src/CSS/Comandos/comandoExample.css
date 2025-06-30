@@ -1,0 +1,17 @@
+/* comandoExample.css */
+.comando-example {
+    color: #007bff;
+    font-style: italic;
+    font-size: 0.95rem;
+    display: block;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.comando-example code {
+    background-color: #e9ecef;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+    color: #d63384;
+}
