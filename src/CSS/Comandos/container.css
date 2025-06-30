@@ -1,0 +1,12 @@
+/* container.css */
+.comandos-container {
+    max-width: 800px;
+    width: 100%;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, #f9fbfd, #e0f2f7);
+    border-radius: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    color: #3f4a54;
+    line-height: 1.6;
+}
