@@ -1,0 +1,16 @@
+.back-to-login {
+    margin-top: 30px;
+    font-size: 0.9em;
+}
+
+.back-to-login a {
+    color: #4A90E2;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.back-to-login a:hover {
+    color: #8A2BE2;
+    text-decoration: underline;
+}
