@@ -1,5 +1,15 @@
 import React from 'react';
-import '../../CSS/Comandos/comandos.css';
+
+import '../../CSS/Comandos/estruturaGeral.css';
+import '../../CSS/Comandos/header.css';
+import '../../CSS/Comandos/container.css';
+import '../../CSS/Comandos/description.css';
+import '../../CSS/Comandos/comandoItem.css';
+import '../../CSS/Comandos/comandoExample.css';
+import '../../CSS/Comandos/comandoExplicacao.css';
+import '../../CSS/Comandos/subListaComandos.css';
+import '../../CSS/Comandos/ulReset.css';
+
 
 const ComandosChat = () => {
   return (
