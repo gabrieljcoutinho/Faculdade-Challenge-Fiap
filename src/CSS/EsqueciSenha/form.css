@@ -1,0 +1,30 @@
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.labelEmail {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #7F8C8D;
+    font-size: 0.9em;
+}
+
+.iputEmailt[type="email"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #DDE5ED;
+    border-radius: 10px;
+    font-size: 1em;
+    color: #2C3E50;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    box-sizing: border-box;
+}
+
+.iputEmailt[type="email"]:focus {
+    border-color: #4A90E2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
+    transform: translateY(-1px);
+    outline: none;
+}
