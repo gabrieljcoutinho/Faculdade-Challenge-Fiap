@@ -1,0 +1,30 @@
+.category {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.1);
+}
+
+.category svg {
+    width: 40px;
+    height: 40px;
+    fill: #007bff;
+    margin-bottom: 1rem;
+}
+
+.category h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.category p {
+    font-size: 0.95rem;
+}
