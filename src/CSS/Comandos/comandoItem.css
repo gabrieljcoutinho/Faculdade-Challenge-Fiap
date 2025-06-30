@@ -1,0 +1,28 @@
+/* comandoItem.css */
+.lista-comandos {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.comando-item {
+    background-color: #ffffff;
+    border-left: 8px solid #00aaff;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.comando-item:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.comando-item strong {
+    color: #0056b3;
+    font-size: 1.15rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
