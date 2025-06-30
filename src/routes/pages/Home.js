@@ -266,7 +266,7 @@ const Home = () => {
                     <h2 className='tituloPrincipalHome'>Produção Atual</h2>
                     <div className="chart-type-selector">
                         <label className='tipoGrafico'>Tipo de Gráfico:</label>
-                        <div className="chart-buttons">
+                        <div className="chart-buttons" title='Grafico'>
                             {['line', 'bar', 'pie'].map(type => (
                                 <button
                                     key={type}
@@ -330,7 +330,7 @@ const Home = () => {
                                     />
                                 )}
                             </div>
-                            <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>Dados de Produção</h3>
+                            <h3 style={{ color: '#fff', marginTop: '20px', textAlign: 'center', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }} title="Dados de Produção" >Dados de Produção</h3>
                             <div className="data-table-container">
                                 {/* Table with raw data */}
                                 <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>

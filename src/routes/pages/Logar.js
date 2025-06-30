@@ -55,6 +55,7 @@ const Logar = () => {
           <div className="input-group">
             <label htmlFor="email">E-mail</label>
             <input
+            title="Digite Seu Email"
               type="email"
               id="email"
               placeholder="Seu e-mail"
@@ -68,6 +69,7 @@ const Logar = () => {
             <div className="password-input-group">
               <input
                 type={showPass ? 'text' : 'password'}
+                title="Digite sua Senha"
                 id="password"
                 placeholder="Sua senha"
                 required
@@ -78,8 +80,10 @@ const Logar = () => {
                 type="button"
                 className="password-toggle-button"
                 onClick={() => setShowPass(!showPass)}
+                title="Mostrar / Ocultar Senha"
               >
-                {showPass ? '👁️' : '👁️‍🗨️'}
+           {showPass ? '👁️' : '🙈'}
+
               </button>
             </div>
           </div>

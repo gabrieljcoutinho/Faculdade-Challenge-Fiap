@@ -286,9 +286,10 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
                     className="message-input"
                     disabled={loading} // Disables the input while the bot is responding
                     autoComplete="off"
+                    title='Diigite seu texto ou sua mensagem'
                 />
                 <button type="submit" className="send-button" disabled={loading}>
-                    <img src={sendBtn} alt="Enviar" className="send-icon" />
+                    <img src={sendBtn} alt="Enviar" className="send-icon"  title='Enviar Texto ou Mensagem'/>
                 </button>
             </form>
         </div>

@@ -390,6 +390,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             {(editingId || modoManual) ? (
               <>
                 <input
+                title="Nome do aparelho"
                   type="text"
                   placeholder="Nome do Aparelho"
                   value={newConexion.text}
@@ -451,10 +452,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                   type="button"
                 >
                   {isSearchingBluetooth ? (
-                    'Procurando Aparelhos...'
+                    'Procurando Aparelhos Bluetooth'
                   ) : (
                     <>
-                      <img src={bluetoothIcon} alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
+                      <img src={bluetoothIcon} title="Procurar" alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
                       Procurar Aparelhos Bluetooth
                     </>
                   )}
@@ -547,11 +548,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
           <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
             <button className="close-button" onClick={() => setSelectedConexion(null)}>X</button>
-            <h2>Detalhes do Aparelho</h2>
+            <h2  title="Detalhes do Aparelho">Detalhes do Aparelho</h2>
             <div className="detalhes-content">
               <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
               <h3>{selectedConexion.text}</h3>
-              <p>Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
+              <p  title="Status">Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
               {selectedConexion.connected && (
                 <>
                   <p>Conectado desde: {formatDate(selectedConexion.connectedDate)}</p>
@@ -609,9 +610,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
       {/* QR Code modal for a specific device */}
       {visibleQRCode && (
-        <div className="modal-overlay" onClick={() => setVisibleQRCode(null)}>
+        <div className="modal-overlay" onClick={() => setVisibleQRCode(null)} title="Qrcode">
           <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
-            <h3>QR Code do aparelho: {visibleQRCode.text}</h3>
+            <h3 title="">QR Code do aparelho: {visibleQRCode.text}</h3>
             <br />
             <QRCodeCanvas
               // Generates the QR code with the correct URL for automatic connection
@@ -620,7 +621,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               level="H"
               includeMargin={true}
             />
-            <button className="close-button" onClick={() => setVisibleQRCode(null)}>X</button>
+            <button className="close-button" onClick={() => setVisibleQRCode(null)} title="Fechar QrCde">X</button>
           </div>
         </div>
       )}

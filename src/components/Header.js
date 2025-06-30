@@ -31,10 +31,10 @@ const Header = () => {
   return (
     <header>
       <div id="main">
-        <span id="menuIcon" onClick={toggleMenu} className='btnBurguer'>☰</span>
+        <span id="menuIcon" onClick={toggleMenu} className='btnBurguer' title='Abrir Menu'>☰</span>
       </div>
       <div id="menu" className={menuOpen ? 'open' : ''}>
-        <button className="close-btn" onClick={closeMenu}> x </button>
+        <button className="close-btn" onClick={closeMenu} title='Fechar Menu'> x </button>
         <Link
           to="/"
           onClick={closeMenu}
