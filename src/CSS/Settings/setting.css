@@ -42,16 +42,24 @@
 
 }
 
-/* Modificação para botões um embaixo do outro */
+
 .top-buttons {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: flex;
-    gap: 10px;
-    align-items: flex-end;
+    /* position: fixed; */
+    /* bottom: 20px; */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+    /* display: flex; */
+    /* gap: 10px; */
+    /* z-index: 10000; */
+    /* padding-left: 10rem; */
 }
+
+.top-buttons {
+    padding-left: 11rem;
+    display: flex;
+    gap: 24px;
+}
+
 
 
 /* Botões principais */
