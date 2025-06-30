@@ -1,6 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../CSS/Contato/contato.css';
+
+import '../../CSS/Contato/formulario.css';
+import '../../CSS/Contato/campoArquivo.css';
+import '../../CSS/Contato/btnFormularioEnviao.css'
+import '../../CSS/Contato/infomacaoContato.css'
+import '../../CSS/Contato/icones.css'
+
+import '../../CSS/Contato/mediaScren.css';
 import { FaInstagram, FaLinkedin, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
 
 const Contato = () => {
