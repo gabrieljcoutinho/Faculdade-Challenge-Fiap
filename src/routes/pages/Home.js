@@ -66,8 +66,19 @@ const CO2_SAVED_PER_KWH = 0.85; // kg CO2 per kWh
 const CO2_ABSORBED_PER_TREE_PER_YEAR = 22; // kg CO2 per tree per year (average)
 
 const Home = () => {
-  // Estado para tipo de gráfico na visualização principal
-  const [currentChartType, setCurrentChartType] = useState('line');
+  // --- Start of modifications for persistence ---
+  // Initialize currentChartType from localStorage or default to 'line'
+  const [currentChartType, setCurrentChartType] = useState(() => {
+    const savedChartType = localStorage.getItem('preferredChartType');
+    return savedChartType || 'line';
+  });
+
+  // Effect to save currentChartType to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('preferredChartType', currentChartType);
+  }, [currentChartType]);
+  // --- End of modifications for persistence ---
+
   // Estado para tipo de gráfico expandido
   const [expandedChartType, setExpandedChartType] = useState(null);
   // Índice do dataset escolhido aleatoriamente
