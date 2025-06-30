@@ -54,7 +54,7 @@ const categorias = [
     descricao: 'Controle o uso dos seus dados pessoais.',
     icone: (
       <svg viewBox="0 0 24 24" title="Ícone de Privacidade">
-        <path d="M12 1l8 4v6c0 5.25-3.5 10-8 12-4.5-2-8-6.75-8-12V5l8-4z" />
+        <path d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5zm0 2a3 3 0 013 3v3H9V7a3 3 0 013-3zm-1 9h2v4h-2v-4z" />
       </svg>
     ),
   },
