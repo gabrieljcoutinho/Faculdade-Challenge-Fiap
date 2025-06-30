@@ -102,11 +102,7 @@ Este projeto é uma aplicação web desenvolvida em **React.js** para monitorame
 ### Passos
 
 ```bash
-# Clone o repositório
-git clone <URL_DO_REPOSITORIO>
 
-# Entre na pasta do projeto
-cd nome-do-projeto
 
 # Instale as dependências
 npm install
