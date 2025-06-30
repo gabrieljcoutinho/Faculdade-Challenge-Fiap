@@ -1,0 +1,42 @@
+.fechar-btn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+/* Botões principais */
+.btn-container button,
+.comando-btn {
+    padding: 10px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-container button:hover,
+.comando-btn:hover {
+    opacity: 0.8;
+}
+
+/* Log In */
+.top-buttons button:nth-child(1) {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Log Out */
+.top-buttons button:nth-child(2) {
+    background-color: red;
+    color: white;
+}
+
+/* Comandos */
+.comando-btn {
+    background-color: rgba(255, 255, 255, 0.9);
+    align-self: flex-end;
+}
