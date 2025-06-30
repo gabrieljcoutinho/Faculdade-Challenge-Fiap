@@ -78,10 +78,12 @@ const Configuracoes = ({ isReading, toggleReading }) => {
           </button>
 
           {/* Botões Login/Logout */}
-          <div className="top-buttons" style={{ marginTop: '20px' }}>
-            <button title="Logar" onClick={navegarParaLogin}>Log In</button>
-            <button title="Deslogar">Log out</button>
-          </div>
+   {/* Botões Login/Logout */}
+<div className="top-buttons">
+  <button title="Logar" onClick={navegarParaLogin}>Log In</button>
+  <button title="Deslogar">Log out</button>
+</div>
+
 
         </div>
       </div>
