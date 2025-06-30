@@ -5,6 +5,7 @@ import '../../CSS/Chat/chat.css';
 import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
+import '../../CSS/Chat/mediaScreen.css';
 import sendBtn from '../../imgs/sendBtn.png';
 import comandosData from '../../data/commands.json'; // Verifique o caminho correto
 
