@@ -16,6 +16,7 @@
     /* Organiza os itens verticalmente */
     align-items: flex-start;
     /* Alinha os itens à esquerda */
+    padding-right: 7rem;
 }
 
 #menu.open {
