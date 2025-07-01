@@ -35,7 +35,6 @@ import manual from '../../imgs/manual.png';
 // Constantes
 const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
-const DEVICE_LIMIT = 5;
 
 // Ícones disponíveis
 const availableIcons = [
@@ -61,7 +60,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [isSearchingBluetooth, setIsSearchingBluetooth] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
 
@@ -86,9 +84,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       const actualBgColor = availableColors.includes(bgColor) ? bgColor : availableColors[0];
 
       if (iconSrc) {
-        if (conexions.length >= DEVICE_LIMIT) setShowLimitWarning(true);
-        else if (conexions.some(c => c.text.toLowerCase() === nome.toLowerCase())) setErrorMessage(`Já existe um aparelho chamado "${nome}".`);
-        else onConnectDevice(nome, nome, iconSrc, actualBgColor);
+        if (conexions.some(c => c.text.toLowerCase() === nome.toLowerCase())) {
+          setErrorMessage(`Já existe um aparelho chamado "${nome}".`);
+        } else {
+          onConnectDevice(nome, nome, iconSrc, actualBgColor);
+        }
       }
       window.history.replaceState({}, document.title, location.pathname);
     }
@@ -97,7 +97,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   // Centralized close function for all modals/forms
   const closeAllModals = () => {
     setShowAddForm(false); setModoManual(false); setErrorMessage(''); setIsSearchingBluetooth(false);
-    setShowConfirmDialog(false); setShowLimitWarning(false); setVisibleQRCode(null); setSelectedConexion(null);
+    setShowConfirmDialog(false); setVisibleQRCode(null); setSelectedConexion(null);
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
     setActiveIcon(null); setActiveColor(availableColors[0]);
   };
@@ -106,7 +106,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const handleAddClick = () => {
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
     setActiveIcon(null); setActiveColor(availableColors[0]); setEditingId(null); setErrorMessage('');
-    setSelectedConexion(null); setShowLimitWarning(false); setShowAddForm(true); setIsSearchingBluetooth(false); setModoManual(false);
+    setSelectedConexion(null); setShowAddForm(true); setIsSearchingBluetooth(false); setModoManual(false);
   };
 
   // Open manual add form
@@ -119,7 +119,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   // Search and connect Bluetooth devices
   const handleSearchAndConnectBluetooth = async () => {
     if (!navigator.bluetooth) { setErrorMessage('Seu navegador não suporta Web Bluetooth. Use Chrome, Edge ou Opera.'); return; }
-    if (conexions.length >= DEVICE_LIMIT) { setShowLimitWarning(true); return; }
 
     setIsSearchingBluetooth(true); setErrorMessage('');
     try {
@@ -135,7 +134,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         else if (name.includes('airfry') || name.includes('fritadeira')) guessedIcon = airfry;
         else if (name.includes('carregador') || name.includes('charger')) guessedIcon = carregador;
 
-        if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) { setErrorMessage(`Já existe um aparelho chamado "${deviceName}".`); setIsSearchingBluetooth(false); return; }
+        if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
+          setErrorMessage(`Já existe um aparelho chamado "${deviceName}".`);
+          setIsSearchingBluetooth(false);
+          return;
+        }
 
         onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
         setShowAddForm(false);
@@ -166,7 +169,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const saveManualConexion = () => {
     if (!newConexion.text.trim() || !newConexion.icon) { setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊'); return; }
     if (conexions.some(c => c.text.toLowerCase() === newConexion.text.toLowerCase())) { setErrorMessage(`Já existe um aparelho com o nome "${newConexion.text}".`); return; }
-    if (conexions.length >= DEVICE_LIMIT) { setShowLimitWarning(true); return; }
 
     onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
     closeAllModals();
@@ -191,7 +193,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     if (c.connected) {
       setNewConexion({ text: c.text, icon: c.icon, backgroundColor: c.backgroundColor || availableColors[0], connected: c.connected, connectedDate: c.connectedDate });
       setActiveIcon(c.icon); setActiveColor(c.backgroundColor || availableColors[0]); setEditingId(c.id); setErrorMessage('');
-      setSelectedConexion(null); setShowLimitWarning(false); setShowAddForm(true); setIsSearchingBluetooth(false); setModoManual(true);
+      setSelectedConexion(null); setShowAddForm(true); setIsSearchingBluetooth(false); setModoManual(true);
     }
   };
 
@@ -368,15 +370,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
               <button onClick={handleCancelRemove} className="cancel-button">Não</button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {showLimitWarning && (
-        <div className="modal-overlay" onClick={() => setShowLimitWarning(false)}>
-          <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
-            <p>Você atingiu o limite máximo de aparelhos conectados ({DEVICE_LIMIT}).</p>
-            <button onClick={() => setShowLimitWarning(false)} className="confirm-button">OK</button>
           </div>
         </div>
       )}
