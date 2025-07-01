@@ -297,7 +297,6 @@ function App() {
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />
 <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
-
         </Routes>
 
         <Footer />
