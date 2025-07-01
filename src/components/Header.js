@@ -43,7 +43,7 @@ const Header = () => {
           <p className='paragrafoListaHeader'><img src={home} alt="" className='iconesHeader' title='Home' /></p>
         </Link>
 
-        <br /><br />
+
 
         <Link
           to="/conexoes"
@@ -52,7 +52,7 @@ const Header = () => {
           <p className='paragrafoListaHeader'><img src={wifi} alt="" className='iconesHeader' title='Conexão' /></p>
         </Link>
 
-        <br /><br />
+
 
           <Link
             to="/chat" // You'll need to define a route for your chat page
@@ -60,7 +60,7 @@ const Header = () => {
             className={`linkHeader ${location.pathname === '/chat' ? 'active' : ''}`}>
             <p className='paragrafoListaHeader'> <img src={chatIcon} alt="Chat" className='iconesHeader' title='Chat' /></p>
           </Link>
-          <br /><br />
+
 
 
            <div className='contato-configuracoes'> {/* Container para contato e configurações */}
@@ -71,7 +71,10 @@ const Header = () => {
             <p className='paragrafoListaHeader'> <img src={contato} alt="" className='iconesHeader teste' title='Contato' /></p>
           </Link>
 
-<br /><br />
+
+          <Link>
+<img src={mapa} alt="" className='iconesHeader'  />
+</Link>
 
           <Link
   to="/configuracoes"
@@ -82,9 +85,6 @@ const Header = () => {
   </p>
 </Link>
 
-<Link>
-<img src={mapa} alt="" className='iconesHeader'  />
-</Link>
 
         </div>
       </div>
