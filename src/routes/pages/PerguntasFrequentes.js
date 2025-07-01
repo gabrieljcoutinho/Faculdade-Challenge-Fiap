@@ -54,12 +54,25 @@ const faqs = [
   },
 ];
 
-
-const PerguntasFrequentes = () => {
+const PerguntasFrequentes = ({ isReading }) => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
+    if (openIndex === index) {
+      // Fecha a pergunta e cancela a leitura
+      window.speechSynthesis.cancel();
+      setOpenIndex(null);
+    } else {
+      // Abre a pergunta e lê somente a resposta se leitura estiver ativada
+      setOpenIndex(index);
+
+      if (isReading) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(faqs[index].answer);
+        utterance.lang = 'pt-BR';
+        window.speechSynthesis.speak(utterance);
+      }
+    }
   };
 
   return (

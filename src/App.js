@@ -296,7 +296,8 @@ function App() {
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />
-          <Route path="/perguntas-frequentes" element={<PerguntasFrequentes />} />
+<Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
+
         </Routes>
 
         <Footer />
