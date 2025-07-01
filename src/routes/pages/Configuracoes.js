@@ -29,9 +29,10 @@ const Configuracoes = ({ isReading, toggleReading }) => {
     setTheme(prev => (prev === 'light-theme' ? 'dark-theme' : 'light-theme'));
   };
 
-  const fecharConfiguracoes = () => {
-    navigate('/');
-  };
+const fecharConfiguracoes = () => {
+  navigate(-1); // volta para página anterior, não para a home
+};
+
 
   const navegarParaLogin = () => {
     navigate('/login');
