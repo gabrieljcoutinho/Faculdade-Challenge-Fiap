@@ -1,4 +1,3 @@
-// src/components/Mapa.js
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -63,7 +62,6 @@ const limitesDoBrasil = [
   [5.3, -32.0],
 ];
 
-// Lista completa de áreas de risco (mantida como no seu original)
 const areasDeRisco = [
   { nome: 'Acre (Rio Branco)', coords: [-9.97499, -67.8243], risco: 'Risco de enchentes e deslizamentos.', tipo: 'enchente' },
   { nome: 'Alagoas (Maceió)', coords: [-9.66599, -35.7350], risco: 'Enchentes e deslizamentos.', tipo: 'enchente' },
@@ -105,55 +103,69 @@ const Mapa = () => {
   }, []);
 
   return (
-    <MapContainer
-      center={[-14.235, -51.9253]}
-      zoom={5}
-      minZoom={4}
-      maxZoom={16}
-      maxBounds={limitesDoBrasil}
-      scrollWheelZoom={true}
-      zoomControl={false}
-      className="mapa-container"
-    >
-      <TileLayer
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+    <>
+      <MapContainer
+        center={[-14.235, -51.9253]}
+        zoom={5}
+        minZoom={4}
+        maxZoom={16}
+        maxBounds={limitesDoBrasil}
+        scrollWheelZoom={true}
+        zoomControl={false}
+        className="mapa-container"
+      >
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-      {/* Marcadores das capitais com riscos */}
-      {areasDeRisco.map((area, index) => (
-        <React.Fragment key={index}>
-          <Marker
-            position={area.coords}
-            icon={getDropIconByTipo(area.tipo)}
-            title={`${area.nome} - ${area.risco}`}
-          >
-            <Popup>
-              <strong>{area.nome}</strong><br />
-              {area.risco}
-            </Popup>
+        {areasDeRisco.map((area, index) => (
+          <React.Fragment key={index}>
+            <Marker
+              position={area.coords}
+              icon={getDropIconByTipo(area.tipo)}
+              title={`${area.nome} - ${area.risco}`}
+            >
+              <Popup>
+                <strong>{area.nome}</strong><br />
+                {area.risco}
+              </Popup>
+            </Marker>
+            <Circle
+              center={area.coords}
+              radius={raioMetrosPorTipo[area.tipo] || 15000}
+              pathOptions={{
+                color: getCircleColorByTipo(area.tipo),
+                fillColor: getCircleColorByTipo(area.tipo),
+                fillOpacity: 0.15,
+                weight: 2,
+                className: 'pulsar-circle'
+              }}
+            />
+          </React.Fragment>
+        ))}
+
+        {userLocation && (
+          <Marker position={userLocation} icon={userIcon}>
+            <Popup><strong>Sua localização atual</strong></Popup>
           </Marker>
-          <Circle
-            center={area.coords}
-            radius={raioMetrosPorTipo[area.tipo] || 15000}
-            pathOptions={{
-              color: getCircleColorByTipo(area.tipo),
-              fillColor: getCircleColorByTipo(area.tipo),
-              fillOpacity: 0.15,
-              weight: 2,
-              className: 'pulsar-circle'
-            }}
-          />
-        </React.Fragment>
-      ))}
+        )}
+      </MapContainer>
 
-      {/* Sua localização atual */}
-      {userLocation && (
-        <Marker position={userLocation} icon={userIcon}>
-          <Popup><strong>Sua localização atual</strong></Popup>
-        </Marker>
-      )}
-    </MapContainer>
+      <div className="mapa-legenda">
+        <h4>Legenda</h4>
+        <ul>
+          <li><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png" alt="Enchente" /> Enchente</li>
+          <li><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png" alt="Deslizamento" /> Deslizamento</li>
+          <li><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png" alt="Queimada" /> Queimada</li>
+          <li><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png" alt="Desmatamento" /> Desmatamento</li>
+          <li><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png" alt="Seca" /> Seca</li>
+          <li><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-lightblue.png" alt="Chuva" /> Chuva</li>
+          <li><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png" alt="Chuva Forte" /> Chuva Forte</li>
+          <li><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png" alt="Você" /> Sua localização</li>
+        </ul>
+      </div>
+    </>
   );
 };
 
