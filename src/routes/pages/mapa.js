@@ -1,40 +1,39 @@
 // src/components/Mapa.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import '../../CSS/Mapa/mapa.css';
 
-// Ícones com animação de queda
+// Ícone para localização do usuário
+const userIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
+
+// Ícones de risco por tipo
 function getDropIconByTipo(tipo) {
   let iconUrl;
   switch (tipo) {
-    case 'enchente':
-      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png'; break;
-    case 'deslizamento':
-      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png'; break;
-    case 'queimada':
-      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png'; break;
-    case 'desmatamento':
-      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png'; break;
-    case 'seca':
-      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png'; break;
-    case 'chuva':
-      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-lightblue.png'; break;
-    case 'chuva_forte':
-      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png'; break;
-    default:
-      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png';
+    case 'enchente': iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png'; break;
+    case 'deslizamento': iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png'; break;
+    case 'queimada': iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png'; break;
+    case 'desmatamento': iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png'; break;
+    case 'seca': iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png'; break;
+    case 'chuva': iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-lightblue.png'; break;
+    case 'chuva_forte': iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png'; break;
+    default: iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png';
   }
 
   return L.divIcon({
     html: `<img src="${iconUrl}" class="marker-drop" style="width:25px; height:41px;" />`,
     iconSize: [25, 41],
-    className: '' // remove default marker styles
+    className: ''
   });
 }
 
-// Cor dos círculos por tipo
 function getCircleColorByTipo(tipo) {
   switch (tipo) {
     case 'enchente': return 'blue';
@@ -48,7 +47,6 @@ function getCircleColorByTipo(tipo) {
   }
 }
 
-// Raio em metros para cada tipo
 const raioMetrosPorTipo = {
   enchente: 20000,
   deslizamento: 15000,
@@ -59,13 +57,12 @@ const raioMetrosPorTipo = {
   chuva: 15000,
 };
 
-// Limites do mapa
 const limitesDoBrasil = [
   [-34.0, -74.0],
   [5.3, -32.0],
 ];
 
-// Lista das áreas de risco
+// Lista completa de áreas de risco (mantida como no seu original)
 const areasDeRisco = [
   { nome: 'Acre (Rio Branco)', coords: [-9.97499, -67.8243], risco: 'Risco de enchentes e deslizamentos.', tipo: 'enchente' },
   { nome: 'Alagoas (Maceió)', coords: [-9.66599, -35.7350], risco: 'Enchentes e deslizamentos.', tipo: 'enchente' },
@@ -97,6 +94,15 @@ const areasDeRisco = [
 ];
 
 const Mapa = () => {
+  const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
+      (err) => console.error("Erro ao obter localização do usuário:", err)
+    );
+  }, []);
+
   return (
     <MapContainer
       center={[-14.235, -51.9253]}
@@ -112,12 +118,14 @@ const Mapa = () => {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
+      {/* Marcadores das capitais com riscos */}
       {areasDeRisco.map((area, index) => (
         <React.Fragment key={index}>
           <Marker
             position={area.coords}
             icon={getDropIconByTipo(area.tipo)}
-            title={`${area.nome} - ${area.risco}`} // <-- AQUI o leitor de tela consegue ler
+            title={`${area.nome} - ${area.risco}`}
           >
             <Popup>
               <strong>{area.nome}</strong><br />
@@ -137,6 +145,13 @@ const Mapa = () => {
           />
         </React.Fragment>
       ))}
+
+      {/* Sua localização atual */}
+      {userLocation && (
+        <Marker position={userLocation} icon={userIcon}>
+          <Popup><strong>Sua localização atual</strong></Popup>
+        </Marker>
+      )}
     </MapContainer>
   );
 };
