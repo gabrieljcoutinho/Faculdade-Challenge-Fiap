@@ -175,18 +175,6 @@ const ComandosChat = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
           <li className="comando-item">
                 <strong>Áreas de riscos </strong>
                 <ul className="sub-lista-comandos">
@@ -206,6 +194,7 @@ const ComandosChat = () => {
          "➤ Desastres no brasil",
         "➤ Riscos no Brasil",
         "➤ Cidade em risco",
+
 
 
 
