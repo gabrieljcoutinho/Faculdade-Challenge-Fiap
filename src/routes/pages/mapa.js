@@ -1,69 +1,42 @@
+// src/components/Mapa.js
 import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import '../../CSS/Mapa/mapa.css';
 
-// Ícones personalizados
-const iconEnchente = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-const iconDeslizamento = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-const iconQueimada = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-const iconDesmatamento = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-const iconSeca = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-const iconChuva = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-lightblue.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-const iconChuvaForte = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-// Função para escolher o ícone
-function getIconByTipo(tipo) {
-  switch(tipo) {
-    case 'enchente': return iconEnchente;
-    case 'deslizamento': return iconDeslizamento;
-    case 'queimada': return iconQueimada;
-    case 'desmatamento': return iconDesmatamento;
-    case 'seca': return iconSeca;
-    case 'chuva': return iconChuva;
-    case 'chuva_forte': return iconChuvaForte;
-    default: return iconEnchente;
+// Ícones com animação de queda
+function getDropIconByTipo(tipo) {
+  let iconUrl;
+  switch (tipo) {
+    case 'enchente':
+      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png'; break;
+    case 'deslizamento':
+      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png'; break;
+    case 'queimada':
+      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png'; break;
+    case 'desmatamento':
+      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png'; break;
+    case 'seca':
+      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png'; break;
+    case 'chuva':
+      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-lightblue.png'; break;
+    case 'chuva_forte':
+      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png'; break;
+    default:
+      iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png';
   }
+
+  return L.divIcon({
+    html: `<img src="${iconUrl}" class="marker-drop" style="width:25px; height:41px;" />`,
+    iconSize: [25, 41],
+    className: '' // remove default marker styles
+  });
 }
 
 // Cor dos círculos por tipo
 function getCircleColorByTipo(tipo) {
-  switch(tipo) {
+  switch (tipo) {
     case 'enchente': return 'blue';
     case 'deslizamento': return 'orange';
     case 'queimada': return 'red';
@@ -115,7 +88,7 @@ const areasDeRisco = [
   { nome: 'Rio de Janeiro (Rio de Janeiro)', coords: [-22.9068, -43.1729], risco: 'Chuvas fortes e deslizamentos.', tipo: 'chuva_forte' },
   { nome: 'Rio Grande do Norte (Natal)', coords: [-5.7945, -35.2110], risco: 'Avanço do mar e secas.', tipo: 'seca' },
   { nome: 'Rio Grande do Sul (Porto Alegre)', coords: [-30.0346, -51.2177], risco: 'Enchentes', tipo: 'enchente' },
-{ nome: 'Rondônia (Porto Velho)', coords: [-11.5057, -63.5800], risco: 'Secas prolongadas.', tipo: 'seca' },
+  { nome: 'Rondônia (Porto Velho)', coords: [-11.5057, -63.5800], risco: 'Secas prolongadas.', tipo: 'seca' },
   { nome: 'Roraima (Boa Vista)', coords: [2.8236, -60.6753], risco: 'Queimadas e calor extremo.', tipo: 'queimada' },
   { nome: 'Santa Catarina (Florianópolis)', coords: [-27.5954, -48.5480], risco: 'Inundações e ciclones.', tipo: 'enchente' },
   { nome: 'São Paulo (São Paulo)', coords: [-23.5505, -46.6333], risco: 'Alagamentos e deslizamentos urbanos.', tipo: 'enchente' },
@@ -143,7 +116,7 @@ const Mapa = () => {
         <React.Fragment key={index}>
           <Marker
             position={area.coords}
-            icon={getIconByTipo(area.tipo)}
+            icon={getDropIconByTipo(area.tipo)}
           >
             <Popup>
               <strong>{area.nome}</strong><br />
