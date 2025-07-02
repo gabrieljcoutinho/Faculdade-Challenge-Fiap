@@ -117,6 +117,7 @@ const Mapa = () => {
           <Marker
             position={area.coords}
             icon={getDropIconByTipo(area.tipo)}
+            title={`${area.nome} - ${area.risco}`} // <-- AQUI o leitor de tela consegue ler
           >
             <Popup>
               <strong>{area.nome}</strong><br />
