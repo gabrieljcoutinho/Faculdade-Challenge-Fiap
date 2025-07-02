@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import '../../CSS/Mapa/mapa.css';
+import '../../CSS/Mapa/animacao.css';
 
 // Ícone para localização do usuário
 const userIcon = new L.Icon({
