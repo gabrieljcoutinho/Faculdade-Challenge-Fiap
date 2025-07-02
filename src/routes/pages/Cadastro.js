@@ -117,7 +117,7 @@ const Cadastro = () => {
           <li>⭐ Desbloqueie benefícios exclusivos.</li>
         </ul>
       </aside>
-      <br /><br /><br /><br /><br /><br />
+      <br /><br /><br />
     </main>
   );
 };
