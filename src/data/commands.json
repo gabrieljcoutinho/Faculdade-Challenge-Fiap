@@ -183,5 +183,12 @@
           ],
       "resposta": "REDIRECT:/comandosChat"
     }
+    ,
+    {
+      "triggers": [
+        "Mapa","Maps","Página Mapa", "Página mapa", "Localizações","Localizacoes","Localização","Localizacao"
+          ],
+      "resposta": "REDIRECT:/mapa"
+    }
   ]
 }

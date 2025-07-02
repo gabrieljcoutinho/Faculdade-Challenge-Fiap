@@ -8,7 +8,7 @@ import wifi from '../imgs/wifi.png';
 import contato from '../imgs/contato.png';
 import chatIcon from '../imgs/chat.png'; // Assuming you have a chat.png image
 import settingsIcon from '../imgs/engrenagem.png';
-import mapa from '../imgs/mapa.png'; // Assuming you have a map image
+import mapa from '../imgs/mapa.png'; // Assuming you have a maps.png image
 
 
 
@@ -43,7 +43,7 @@ const Header = () => {
           <p className='paragrafoListaHeader'><img src={home} alt="" className='iconesHeader' title='Home' /></p>
         </Link>
 
-
+        <br />
 
         <Link
           to="/conexoes"
@@ -52,7 +52,7 @@ const Header = () => {
           <p className='paragrafoListaHeader'><img src={wifi} alt="" className='iconesHeader' title='Conexão' /></p>
         </Link>
 
-
+        <br />
 
           <Link
             to="/chat" // You'll need to define a route for your chat page
@@ -60,7 +60,7 @@ const Header = () => {
             className={`linkHeader ${location.pathname === '/chat' ? 'active' : ''}`}>
             <p className='paragrafoListaHeader'> <img src={chatIcon} alt="Chat" className='iconesHeader' title='Chat' /></p>
           </Link>
-
+          <br />
 
 
            <div className='contato-configuracoes'> {/* Container para contato e configurações */}
@@ -72,9 +72,14 @@ const Header = () => {
           </Link>
 
 
-          <Link>
-<img src={mapa} alt="" className='iconesHeader'  />
-</Link>
+              <Link
+            to="/mapa"
+            onClick={closeMenu}
+            className={`linkHeader ${location.pathname === '/mapa' ? 'active' : ''}`}>
+            <p className='paragrafoListaHeader'> <img src={mapa} alt="" className='iconesHeader teste' title='Mapa' /></p>
+          </Link>
+
+     <br />
 
           <Link
   to="/configuracoes"
@@ -84,7 +89,6 @@ const Header = () => {
     <img src={settingsIcon} alt="Configurações" className='iconesHeader' title='Configurações' />
   </p>
 </Link>
-
 
         </div>
       </div>

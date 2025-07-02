@@ -30,6 +30,8 @@ import EsqueciSenha from './routes/pages/EsqueciSenha';
 import HelpCenter from './routes/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 
+import Mapa from './routes/pages/mapa';
+
 
 // Hook para ativar leitura em voz alta globalmente
 function useReadAloud(isReading) {
@@ -297,6 +299,7 @@ function App() {
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />
 <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
+          <Route path="/mapa" element={<Mapa />} />
         </Routes>
 
         <Footer />
