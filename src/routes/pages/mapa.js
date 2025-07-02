@@ -1,19 +1,18 @@
-// src/components/Mapa.js
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import '../../CSS/Mapa/mapa.css';
 
 // Ícones personalizados
 const iconEnchente = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png', // azul escuro
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
 });
 
 const iconDeslizamento = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png', // laranja (marrom aproximado)
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/images/marker-shadow.png',
   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
 });
@@ -48,9 +47,54 @@ const iconChuvaForte = new L.Icon({
   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
 });
 
-// Array com áreas de risco e seus tipos ajustados
+// Função para escolher o ícone
+function getIconByTipo(tipo) {
+  switch(tipo) {
+    case 'enchente': return iconEnchente;
+    case 'deslizamento': return iconDeslizamento;
+    case 'queimada': return iconQueimada;
+    case 'desmatamento': return iconDesmatamento;
+    case 'seca': return iconSeca;
+    case 'chuva': return iconChuva;
+    case 'chuva_forte': return iconChuvaForte;
+    default: return iconEnchente;
+  }
+}
+
+// Cor dos círculos por tipo
+function getCircleColorByTipo(tipo) {
+  switch(tipo) {
+    case 'enchente': return 'blue';
+    case 'deslizamento': return 'orange';
+    case 'queimada': return 'red';
+    case 'desmatamento': return 'green';
+    case 'seca': return 'grey';
+    case 'chuva_forte': return 'darkorange';
+    case 'chuva': return 'lightblue';
+    default: return 'blue';
+  }
+}
+
+// Raio em metros para cada tipo
+const raioMetrosPorTipo = {
+  enchente: 20000,
+  deslizamento: 15000,
+  queimada: 30000,
+  desmatamento: 25000,
+  seca: 18000,
+  chuva_forte: 20000,
+  chuva: 15000,
+};
+
+// Limites do mapa
+const limitesDoBrasil = [
+  [-34.0, -74.0],
+  [5.3, -32.0],
+];
+
+// Lista das áreas de risco
 const areasDeRisco = [
- { nome: 'Acre (Rio Branco)', coords: [-9.97499, -67.8243], risco: 'Risco de enchentes e deslizamentos.', tipo: 'enchente' },
+  { nome: 'Acre (Rio Branco)', coords: [-9.97499, -67.8243], risco: 'Risco de enchentes e deslizamentos.', tipo: 'enchente' },
   { nome: 'Alagoas (Maceió)', coords: [-9.66599, -35.7350], risco: 'Enchentes e deslizamentos.', tipo: 'enchente' },
   { nome: 'Amapá (Macapá)', coords: [1.4130, -51.7690], risco: 'Alagamentos durante cheias.', tipo: 'enchente' },
   { nome: 'Amazonas (Manaus)', coords: [-3.1010, -60.0250], risco: 'Cheias dos rios e alagamentos.', tipo: 'enchente' },
@@ -79,32 +123,6 @@ const areasDeRisco = [
   { nome: 'Tocantins (Palmas)', coords: [-10.1846, -48.3336], risco: 'Secas e queimadas frequentes.', tipo: 'queimada' },
 ];
 
-function getIconByTipo(tipo) {
-  switch(tipo) {
-    case 'enchente':
-      return iconEnchente;
-    case 'deslizamento':
-      return iconDeslizamento;
-    case 'queimada':
-      return iconQueimada;
-    case 'desmatamento':
-      return iconDesmatamento;
-    case 'seca':
-      return iconSeca;
-    case 'chuva':
-      return iconChuva;
-    case 'chuva_forte':
-      return iconChuvaForte;
-    default:
-      return iconEnchente;
-  }
-}
-
-const limitesDoBrasil = [
-  [-34.0, -74.0],
-  [5.3, -32.0],
-];
-
 const Mapa = () => {
   return (
     <MapContainer
@@ -114,7 +132,7 @@ const Mapa = () => {
       maxZoom={16}
       maxBounds={limitesDoBrasil}
       scrollWheelZoom={true}
-      zoomControl={false}  // Remove os botões padrão de zoom
+      zoomControl={false}
       className="mapa-container"
     >
       <TileLayer
@@ -122,16 +140,28 @@ const Mapa = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {areasDeRisco.map((area, index) => (
-        <Marker
-          key={index}
-          position={area.coords}
-          icon={getIconByTipo(area.tipo)}
-        >
-          <Popup>
-            <strong>{area.nome}</strong><br />
-            {area.risco}
-          </Popup>
-        </Marker>
+        <React.Fragment key={index}>
+          <Marker
+            position={area.coords}
+            icon={getIconByTipo(area.tipo)}
+          >
+            <Popup>
+              <strong>{area.nome}</strong><br />
+              {area.risco}
+            </Popup>
+          </Marker>
+          <Circle
+            center={area.coords}
+            radius={raioMetrosPorTipo[area.tipo] || 15000}
+            pathOptions={{
+              color: getCircleColorByTipo(area.tipo),
+              fillColor: getCircleColorByTipo(area.tipo),
+              fillOpacity: 0.15,
+              weight: 2,
+              className: 'pulsar-circle'
+            }}
+          />
+        </React.Fragment>
       ))}
     </MapContainer>
   );
