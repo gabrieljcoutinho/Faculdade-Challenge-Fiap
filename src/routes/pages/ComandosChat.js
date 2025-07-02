@@ -205,6 +205,7 @@ const ComandosChat = () => {
         "➤ Desastres no Brasil",
          "➤ Desastres no brasil",
         "➤ Riscos no Brasil",
+        "➤ Cidade em risco",
 
 
 
