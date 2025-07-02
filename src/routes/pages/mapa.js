@@ -115,7 +115,7 @@ const areasDeRisco = [
   { nome: 'Rio de Janeiro (Rio de Janeiro)', coords: [-22.9068, -43.1729], risco: 'Chuvas fortes e deslizamentos.', tipo: 'chuva_forte' },
   { nome: 'Rio Grande do Norte (Natal)', coords: [-5.7945, -35.2110], risco: 'Avanço do mar e secas.', tipo: 'seca' },
   { nome: 'Rio Grande do Sul (Porto Alegre)', coords: [-30.0346, -51.2177], risco: 'Enchentes', tipo: 'enchente' },
-  { nome: 'Rondônia (Porto Velho)', coords: [-11.5057, -63.5800], risco: 'Secas prolongadas.', tipo: 'desmatamento' },
+{ nome: 'Rondônia (Porto Velho)', coords: [-11.5057, -63.5800], risco: 'Secas prolongadas.', tipo: 'seca' },
   { nome: 'Roraima (Boa Vista)', coords: [2.8236, -60.6753], risco: 'Queimadas e calor extremo.', tipo: 'queimada' },
   { nome: 'Santa Catarina (Florianópolis)', coords: [-27.5954, -48.5480], risco: 'Inundações e ciclones.', tipo: 'enchente' },
   { nome: 'São Paulo (São Paulo)', coords: [-23.5505, -46.6333], risco: 'Alagamentos e deslizamentos urbanos.', tipo: 'enchente' },
