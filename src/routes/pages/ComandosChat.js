@@ -171,6 +171,49 @@ const ComandosChat = () => {
             </ul>
           </li>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <li className="comando-item">
+                <strong>Áreas de riscos </strong>
+                <ul className="sub-lista-comandos">
+
+              {[
+
+
+
+         "➤ Áreas de risco",
+         "➤ Áreas de risco do Brasil",
+        "➤ Áreas de risco do brasil",
+         "➤ Estados com áreas de risco",
+        "➤ Estados do Brasil com áreas de risco",
+            "➤ Estados do brasil com áreas de risco ",
+        "➤ Estados em risco",
+        "➤ Desastres no Brasil",
+         "➤ Desastres no brasil",
+        "➤ Riscos no Brasil",
+
+
+
+              ].map((command, index) => (
+                <li key={index}>{command}</li>
+              ))}
+            </ul>
+          </li>
+
         </ul>
       </div>
       <br />
