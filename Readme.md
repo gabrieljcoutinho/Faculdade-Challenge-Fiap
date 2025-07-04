@@ -1,111 +1,110 @@
-# Aplicativo de Monitoramento e Conexão - Projeto React Faculdade
+# Projeto Acadêmico GoodWe - Aplicação React para Gerenciamento de Energia Solar
 
-## Descrição Geral
+## Descrição do Projeto
 
-Este projeto é uma aplicação web desenvolvida em **React.js** para monitoramento de dados, conexão e gerenciamento de dispositivos, interação via chat inteligente e suporte ao usuário. O objetivo é oferecer uma interface moderna, responsiva e intuitiva, agregando funcionalidades inovadoras para facilitar o controle e análise em tempo real.
+Realizei um projeto acadêmico baseado em uma proposta apresentada por uma empresa durante uma visita à faculdade. O objetivo da atividade era compreender as dificuldades que a empresa vem enfrentando e, a partir disso, os alunos deveriam desenvolver soluções tecnológicas que pudessem colaborar com a melhoria de seus processos.
+
+As soluções poderiam ser projetos completos ou mais simples, utilizando linguagens como React, Python ou até mesmo o uso de inteligência artificial. A empresa escolhida para esse projeto foi a **GoodWe**, que atua no setor de energia solar.
+
+Diante do desafio, desenvolvi uma aplicação completa utilizando a tecnologia **React**. O projeto foi publicado na web, permitindo que qualquer pessoa com o link possa acessá-lo diretamente.
 
 ---
 
-## Funcionalidades
+## Proposta do Sistema
 
-### 1. Home
+A aplicação simula um aplicativo para celular voltado para o gerenciamento e automação de recursos relacionados à energia solar.
 
-- **Gráficos Interativos:**
+---
+
+## Estrutura da Aplicação
+
+A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, que direciona o usuário para diferentes seções:
+
+- **Home**
+- **Conexões de Aparelhos**
+- **Chatbot**
+- **Contato**
+- **Configurações**
+
+---
+
+### Seção Home
+
+- Exibe um gráfico que pode ser alternado entre três tipos diferentes:
   - Gráfico de linha
-  - Gráfico de barra
+  - Gráfico de barras
   - Gráfico de pizza
-  Permitem visualização dinâmica dos dados para fácil análise.
 
-- **Clima em Tempo Real:**
-  Atualização constante das condições meteorológicas, oferecendo informações relevantes diretamente na aplicação.
+- Os dados apresentados são obtidos a partir de uma API simulada (fake API), que fornece as informações necessárias para gerar as visualizações.
 
----
+- Abaixo do gráfico, há informações sobre o clima atual e a previsão do tempo.
 
-### 2. Dispositivos e Conexões
-
-- **Conexão via Bluetooth:**
-  Busca automática e conexão com dispositivos Bluetooth disponíveis.
-
-- **Conexão Manual:**
-  Permite ao usuário adicionar dispositivos informando:
-  - Nome
-  - Ícone personalizado
-  - Cor identificadora
-
-- **Gerenciamento de Dispositivos:**
-  - Remover, editar ou desconectar aparelhos
-  - Exibir QR Code para conexão rápida
-  - Visualizar detalhes como status, data e tempo conectado
+- Mais abaixo, uma área destinada a mostrar o impacto positivo do uso de placas solares, destacando os benefícios econômicos e ambientais, como a economia gerada ao adotar essa energia.
 
 ---
 
-### 3. Chat Interativo com IA
+### Seção Conexões de Aparelhos
 
-- Chat que responde perguntas gerais e comandos específicos.
-- Utiliza uma API de Inteligência Artificial para respostas contextuais e naturais, auxiliando o usuário.
+- O usuário pode adicionar dispositivos de duas formas:
+  - Por meio de conexão Bluetooth real (busca dispositivos próximos)
+  - De forma manual
 
----
+- Na forma manual, o usuário pode inserir um nome para o aparelho, escolher um ícone representativo e selecionar uma cor de fundo personalizada.
 
-### 4. Contato e Suporte
-
-- Envio de mensagens e arquivos (PDF, imagens) para suporte.
-- Acesso rápido às Perguntas Frequentes (FAQ) para esclarecimento de dúvidas comuns.
-
----
-
-### 5. Configurações
-
-- Botões principais:
-  1. **Comandos:** Lista de comandos especiais para uso no chat e outras funcionalidades.
-  2. **Suporte e Ajuda:** Canal para assistência ao usuário.
-  3. **Leitor de Tela:** Recurso de acessibilidade para leitura das páginas.
-  4. **Tema Claro/Escuro:** Alternância entre temas para melhor experiência visual.
-  5. **Login/Logout:** Autenticação de usuário para acesso seguro.
+- Após o cadastro, o aparelho aparece como conectado e oferece funcionalidades adicionais:
+  - Geração de QR Code para facilitar a conexão por outros usuários
+  - Opções para editar, excluir ou desativar o dispositivo
 
 ---
 
-## Tecnologias Utilizadas
+### Seção Chatbot
 
-- **React.js** — Construção da interface e gerenciamento do estado.
-- **Bluetooth Web API** — Conexão e comunicação via Bluetooth.
-- **QR Code** — Geração para facilitar conexões rápidas.
-- **CSS** — Estilização, incluindo suporte a temas claro e escuro.
-- **APIs REST** — Comunicação com backend para dados e IA.
-- **React Hooks** — Controle reativo do estado da aplicação.
+- Sistema de mensagens com funcionalidades básicas de um chat tradicional (envio e recebimento de mensagens).
 
----
+- Integrado a uma API personalizada de perguntas e respostas específicas e a uma API real de IA para responder outras perguntas.
 
-## APIs Integradas
-
-- **API de Inteligência Artificial:**
-  Responsável por gerar respostas inteligentes e contextuais para o chat, melhorando a interação.
+- Reconhece comandos como “conectar aparelho”, “mudar de página”, entre outros, respondendo automaticamente com instruções úteis, simulando um assistente virtual.
 
 ---
 
-## Como Usar
+### Seção Contato
 
-1. **Home:** Navegue pelos gráficos e confira o clima em tempo real.
-2. **Conexão:** Adicione dispositivos via Bluetooth ou manualmente.
-3. **Chat:** Faça perguntas ou envie comandos para respostas rápidas.
-4. **Contato:** Envie mensagens e arquivos para suporte e consulte FAQ.
-5. **Configurações:** Personalize o app, gerencie login e acessibilidade.
+- Formulário simples para que o usuário informe nome, e-mail e mensagem.
+
+- Recursos adicionais:
+  - Botão de acesso às perguntas frequentes
+  - Opção para envio de arquivos junto com a mensagem, facilitando a comunicação com a empresa
 
 ---
 
-## Instalação e Execução Local
+### Seção Configurações
 
-### Pré-requisitos
+Implementa seis funcionalidades principais:
 
-- [Node.js](https://nodejs.org/) (incluindo npm) instalado
-- Navegador moderno com suporte à Web Bluetooth (para testar conexão Bluetooth)
+1. Botão que leva o usuário para uma página com todos os comandos especiais reconhecidos pelo sistema.
+2. Central de ajuda para suporte ao usuário.
+3. Ativação de comandos de voz que permite que qualquer texto clicado na tela seja lido em voz alta, promovendo acessibilidade.
+4. Opção de modo claro/escuro para alternar o tema conforme preferência.
+5. Funcionalidade de login e logout, com suporte para autenticação via e-mail/senha, Google ou Facebook.
+6. Opção “esqueci minha senha” que redireciona para uma página de recuperação (ainda não funcional).
 
-### Passos
+---
 
-```bash
+## Detalhes Técnicos e Usabilidade
 
+- Projeto responsivo para mobile e desktop, com preferência para dispositivos móveis, facilitando o acesso quando o usuário estiver fora de casa.
 
-# Instale as dependências
-npm install
+- As APIs utilizadas são simuladas, pois não temos acesso total às informações reais da empresa.
 
-# Inicie o servidor de desenvolvimento
-npm start
+- O sistema possui pequenas animações para melhorar a experiência do usuário.
+  Por exemplo, no chat, ao digitar comandos para mudar de página (como “Home”), o usuário é redirecionado com uma animação suave de apagar e acender a página.
+
+---
+
+## Como acessar
+
+> [Link do projeto publicado] (insira aqui o link real do seu projeto)
+
+---
+
+Se precisar de ajuda para rodar localmente ou contribuir, entre em contato!
