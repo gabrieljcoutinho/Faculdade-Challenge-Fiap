@@ -220,42 +220,51 @@ const Home = () => {
 
   const getWeatherIcon = useCallback((condition) => WEATHER_ICONS[condition] || '', []);
 
-  const handleSaveChart = useCallback(() => {
-    if (chartRef.current && expandedChartType) {
-      const link = document.createElement('a');
-      link.download = `solar_production_chart_${expandedChartType}.png`;
-      link.href = chartRef.current.toBase64Image();
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  }, [expandedChartType]);
+  // Removendo handleSaveChart, pois sua lógica será incorporada diretamente no shareChart
 
   const shareChart = useCallback((platform) => {
-    if (!chartRef.current || !expandedChartType) return;
+    if (!chartRef.current || !expandedChartType) {
+      alert('Por favor, visualize o gráfico expandido antes de tentar compartilhar.');
+      return;
+    }
 
     const title = 'Gráfico de Produção Solar';
-    const summary = 'Confira o gráfico de produção de energia solar.';
+    const summary = 'Confira o gráfico de produção de energia solar gerada pelo nosso sistema. É um passo importante para um futuro mais sustentável!';
     const encodedTitle = encodeURIComponent(title);
     const encodedSummary = encodeURIComponent(summary);
 
-    const actions = {
-      'email': () => {
-        alert('Para compartilhar por e-mail, salve a imagem e anexe ao seu e-mail manualmente.');
-        window.open(`mailto:?subject=${encodedTitle}&body=${encodedSummary}`, '_blank');
-      },
-      'whatsapp': () => {
-        alert('Para compartilhar no WhatsApp, salve a imagem e depois anexe manualmente.');
-        window.open(`https://wa.me/?text=${encodedSummary}`, '_blank');
-      },
-      'instagram': () => {
-        alert('Para compartilhar no Instagram, salve a imagem e faça upload manualmente.');
-      },
-      'linkedin': () => {
-        alert('Para compartilhar no LinkedIn, salve a imagem e faça upload manualmente, ou compartilhe o link da página.');
+    // Salvar a imagem primeiro
+    const link = document.createElement('a');
+    link.download = `solar_production_chart_${expandedChartType}.png`;
+    link.href = chartRef.current.toBase64Image();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Fornecer instruções personalizadas após o download ser iniciado
+    setTimeout(() => { // Pequeno atraso para permitir que o download comece
+      switch (platform) {
+        case 'email':
+          alert('A imagem do gráfico foi baixada! Agora, abra seu aplicativo de e-mail, crie uma nova mensagem e anexe a imagem "solar_production_chart_' + expandedChartType + '.png" que você acabou de baixar. Você pode colar o seguinte texto no corpo do e-mail:\n\n' + decodeURIComponent(encodedSummary));
+          window.open(`mailto:?subject=${encodedTitle}&body=${encodedSummary}`, '_blank');
+          break;
+        case 'whatsapp':
+          alert('A imagem do gráfico foi baixada! Abra o WhatsApp, selecione o contato ou grupo com quem deseja compartilhar e anexe a imagem "solar_production_chart_' + expandedChartType + '.png". Você pode colar o seguinte texto:\n\n' + decodeURIComponent(encodedSummary));
+          window.open(`https://wa.me/?text=${encodedSummary}`, '_blank');
+          break;
+        case 'instagram':
+          alert('A imagem do gráfico foi baixada! Abra o aplicativo do Instagram, toque no botão "+" para criar uma nova postagem ou história e selecione a imagem "solar_production_chart_' + expandedChartType + '.png".');
+          // Instagram não suporta compartilhamento direto da web para upload de imagem.
+          break;
+        case 'linkedin':
+          alert('A imagem do gráfico foi baixada! Abra o LinkedIn, clique em "Iniciar uma publicação", e anexe a imagem "solar_production_chart_' + expandedChartType + '.png". Você também pode incluir o seguinte texto na sua publicação:\n\n' + decodeURIComponent(encodedSummary));
+          // LinkedIn não suporta compartilhamento direto da web para upload de imagem.
+          break;
+        default:
+          alert('A imagem do gráfico foi baixada! Por favor, compartilhe-a manualmente na plataforma de sua escolha.');
+          break;
       }
-    };
-    actions[platform]?.();
+    }, 500); // Ajuste o atraso se necessário
   }, [expandedChartType]);
 
   const getChartData = useCallback((type) => {
@@ -428,7 +437,18 @@ const Home = () => {
               </div>
             </div>
             <div className="expanded-chart-actions">
-              <button onClick={handleSaveChart}>Salvar Imagem</button>
+              {/* O botão "Salvar Imagem" agora apenas dispara o download, o compartilhamento vai na função shareChart */}
+              <button onClick={() => {
+                if (chartRef.current && expandedChartType) {
+                  const link = document.createElement('a');
+                  link.download = `solar_production_chart_${expandedChartType}.png`;
+                  link.href = chartRef.current.toBase64Image();
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  alert(`A imagem "solar_production_chart_${expandedChartType}.png" foi salva em seu dispositivo!`);
+                }
+              }}>Salvar Imagem</button>
               <div className="share-options">
                 <a href="#!" onClick={() => shareChart('email')} title="Compartilhar por Email"><img src={logoGmail} alt="Email" className="icones" /></a>
                 <a href="#!" onClick={() => shareChart('whatsapp')} title="Compartilhar no WhatsApp"><img src={logoWhatsapp} alt="WhatsApp" className="icones" /></a>
