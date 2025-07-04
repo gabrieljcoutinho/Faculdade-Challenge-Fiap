@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { marked } from 'marked';
 import '../../CSS/Chat/chat.css';
+import '../../CSS/Chat/animacaoComandoTrocaPageViaChat.css';
 import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
@@ -49,6 +50,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [firstInteraction, setFirstInteraction] = useState(true);
+  const [isFadingOut, setIsFadingOut] = useState(false); // estado para animacao fade out
 
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
@@ -113,8 +115,15 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
       if (comandoEncontrado) {
         if (comandoEncontrado.resposta.startsWith("REDIRECT:")) {
-          const path = comandoEncontrado.resposta.split(":")[1];
-          navigate(path);
+          // Inicia a animação fade out
+          setIsFadingOut(true);
+
+          // Espera 700ms para a animação completar antes de navegar
+          setTimeout(() => {
+            const path = comandoEncontrado.resposta.split(":")[1];
+            navigate(path);
+          }, 700);
+
           setLoading(false);
           return;
         }
@@ -215,7 +224,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
   };
 
   return (
-    <div className="chat-container">
+    <div className={`chat-container ${isFadingOut ? 'fade-out' : ''}`}>
       <div className="message-display-area">
         {firstInteraction && (
           <div className="movimentoDaDiv">
