@@ -50,7 +50,7 @@ ChartJS.register(
 );
 
 const BAR_PIE_CHART_COLORS = [
-  '#87CEFA', '#87CEEB', '#ADD8E6', '#1E90FF',
+  '#ADD8E6', '#87CEFA',  '#00BFFF',  '#1E90FF',
   'rgba(31, 81, 255, 0.7)', '#0000FF', '#000080',
 ];
 
