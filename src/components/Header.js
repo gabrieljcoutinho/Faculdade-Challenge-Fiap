@@ -8,7 +8,7 @@ import wifi from '../imgs/wifi.png';
 import contato from '../imgs/contato.png';
 import chatIcon from '../imgs/chat.png'; // Assuming you have a chat.png image
 import settingsIcon from '../imgs/engrenagem.png';
-import mapa from '../imgs/mapa.png'; // Assuming you have a maps.png image
+
 
 
 
