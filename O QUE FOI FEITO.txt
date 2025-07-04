@@ -1,0 +1,38 @@
+Realizei um projeto acadêmico baseado em uma proposta apresentada por uma empresa durante uma visita à faculdade.
+O objetivo da atividade era compreender as dificuldades que a empresa vem enfrentando e, a partir disso, os alunos deveriam
+desenvolver soluções tecnológicas que pudessem colaborar com a melhoria de seus processos.As soluções podiam ser projetos
+ completos ou mais simples, utilizando linguagens como React, Python ou até mesmo o uso de inteligência artificial.
+ A empresa escolhida para esse projeto foi a GoodWe, que atua no setor de energia solar. Diante do desafio, desenvolvi
+ uma aplicação completa utilizando a tecnologia React. O projeto foi publicado na web, o que permite que qualquer pessoa
+ com o link possa acessá-lo diretamente.A proposta é simular um aplicativo para celular voltado para o gerenciamento e
+ automação de recursos relacionados à energia solar. A seguir, explico detalhadamente cada parte do sistema.A aplicação
+conta com uma estrutura básica composta por um cabeçalho fixo, que direciona o usuário para diferentes seções: Home,
+Conexões de Aparelhos, Chatbot, Contato e Configurações.Na seção Home, o usuário encontra um gráfico que pode ser
+alternado entre três tipos diferentes: gráfico de linha, gráfico de barras e gráfico de pizza. Os dados apresentados nesses
+gráficos são obtidos a partir de uma API simulada (fake API), que fornece as informações necessárias para gerar as visualizações.
+Logo abaixo, a página exibe informações sobre o clima atual e a previsão do tempo. Mais ao final da Home, há uma área
+destinada a mostrar o impacto positivo do uso de placas solares, destacando principalmente os benefícios econômicos
+e ambientais, como a economia gerada ao adotar esse tipo de energia.Na parte de conexões de aparelhos, o usuário pode
+nteragir com um sistema que permite adicionar dispositivos de duas formas: por meio de conexão Bluetooth real
+(que busca dispositivos próximos) ou de forma manual.Ao escolher a forma manual, o usuário pode inserir um nome
+para o aparelho, escolher um ícone representativo e selecionar uma cor de fundo personalizada. Após o cadastro,
+o aparelho aparece como conectado e oferece funcionalidades adicionais, como a geração de um QR Code
+(que permite a outros usuários adicionarem o mesmo dispositivo de forma mais rápida ao escaneá-lo com a câmera),
+além de opções para editar, excluir ou desativar o dispositivo.A seção do chatbot foi desenvolvida para oferecer um
+sistema de mensagens com funcionalidades básicas de um chat tradicional, como envio e recebimento de mensagens.
+No entanto, foi integrada a ele uma API personalizada de perguntas e respostas específicas e a API de uma IA real que responde outas perguntas.
+Com isso, o sistema reconhece comandos como “conectar aparelho”, “mudar de página”, entre outros, e responde de forma automatizada
+com instruções úteis, simulando o funcionamento de um assistente virtual.A área de contato apresenta um formulário
+simples, no qual o usuário pode informar nome, e-mail e mensagem. Dois recursos adicionais foram implementados
+nessa seção: um botão de acesso às perguntas frequentes da página e outro que permite o envio de arquivos junto
+com a mensagem, facilitando a comunicação entre o usuário e a empresa.Por fim, na área de configurações, foram
+implementadas seis funcionalidades principais:Um botão que leva o usuário para uma página com todos os comandos
+especiais reconhecidos pelo sistema;Uma central de ajuda, para que o usuário encontre suporte em caso de
+problemas;A ativação de comandos de voz, que permite que qualquer texto clicado na tela seja lido em
+voz alta, promovendo maior acessibilidade;A opção de modo claro/escuro, permitindo ao usuário alternar
+entre os dois temas conforme sua preferência;A funcionalidade de login e logout, com suporte para autenticação
+via e-mail e senha, Google ou Facebook;A opção de “esqueci minha senha”, que redireciona para uma página de
+recuperação (ainda não funcional).O projeto foi feito para mobile e desktop, com preferência de uso em dispositivos
+móveis, visando facilitar o acesso aos dados caso o usuário esteja fora de casa ou sem acesso a um computador.
+As APIs utilizadas não são reais, pois não temos acesso total às informações da empresa. Em todo o sistem há pequenas
+ animações algumas não muito visíveis porém tem
