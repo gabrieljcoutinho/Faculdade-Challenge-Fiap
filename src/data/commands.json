@@ -178,7 +178,11 @@
         "Voltar para a home",
         "Página principal",
         "Home",
-        "Início"
+        "Início",
+        "Página home",
+         "Página Home",
+         "Pagina home",
+         "Pagina Home"
       ],
       "resposta": "REDIRECT:/"
     },
@@ -192,7 +196,15 @@
         "Ver meus dispositivos",
         "Conexões",
         "Conexao",
-            "Conexão"
+            "Conexão",
+        "Página conexão",
+         "Página Conexão",
+         "Página conexao",
+         "Página Conexao",
+           "Pagina conexão",
+         "Pagina Conexão",
+         "Pagina conexao",
+         "Pagina Conexao"
       ],
       "resposta": "REDIRECT:/conexoes"
     },
@@ -204,7 +216,11 @@
         "Abrir chat",
         "Página do chat",
         "Chat",
-        "chat"
+        "chat",
+        "Página chat",
+        "Página Chat",
+        "Pagina chat",
+         "Pagina Chat"
       ],
       "resposta": "REDIRECT:/chat"
     },
@@ -216,7 +232,15 @@
         "Abrir configurações",
         "Página de configurações",
         "Configurações",
-        "Configuracoes"
+        "Configuracoes",
+              "Página configuração",
+               "Página Configuração",
+               "Página configuracao",
+               "Página Configuracao",
+                "Pagina configuração",
+               "Pagina Configuração",
+               "Pagina configuracao",
+               "Pagina Configuracao"
       ],
       "resposta": "REDIRECT:/configuracoes"
     },
@@ -228,7 +252,11 @@
         "Abrir contato",
         "Página de contato",
         "Fale conosco",
-        "Contato"
+        "Contato",
+        "Página Contato",
+        "Página contato",
+        "Pagina Contato",
+        "Pagina contato"
       ],
       "resposta": "REDIRECT:/contato"
     },
@@ -240,7 +268,11 @@
         "Abrir ajuda",
         "Página de ajuda",
         "Central de ajuda",
-        "Ajuda"
+        "Ajuda",
+        "Página Ajuda",
+        "Página ajuda",
+        "Pagina Ajuda",
+        "Pagina ajuda"
       ],
       "resposta": "REDIRECT:/helpCenter"
     },
@@ -256,7 +288,26 @@
         "Dúvidas frequentes",
         "Duvidas frequentes",
         "Duvidas",
-        "Duvida"
+        "Duvida",
+        "Dúvidas",
+        "Dúvida",
+        "Página Dúvida",
+        "Página Dúvidas",
+        "Página dúvida",
+        "Página dúvidas",
+        "Página Duvida",
+        "Página Duvidas",
+        "Página duvida",
+        "Página duvidas",
+        "Pagina Dúvida",
+        "Pagina Dúvidas",
+        "Pagina dúvida",
+        "Pagina dúvidas",
+        "Pagina Duvida",
+        "Pagina Duvidas",
+        "Pagina duvida",
+        "Pagina duvidas"
+
       ],
       "resposta": "REDIRECT:/perguntas-frequentes"
     },
@@ -268,7 +319,15 @@
         "Abrir comandos do chat",
         "Ver comandos do chat",
         "Comandos do chat",
-      "Comandos"
+      "Comandos",
+      "Página Comando",
+      "Página comando",
+      "Página Comandos",
+      "Página comandos",
+      "Pagina Comando",
+      "Pagina comando",
+      "Pagina Comandos",
+      "Pagina comandos"
           ],
       "resposta": "REDIRECT:/comandosChat"
     },
