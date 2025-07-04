@@ -2,6 +2,49 @@
   "comandos": [
     {
       "triggers": [
+       "Você tem nome?",
+    "Você tem nome ?",
+       "Você tem nome",
+       "você tem nome?",
+        "você tem nome ?",
+       "você tem nome",
+       "Se tem nome?",
+        "Se tem nome ?",
+       "Se tem nome",
+       "se tem nome?",
+        "se tem nome ?",
+       "se tem nome",
+       "Qual o seu nome?",
+       "Qual o seu nome ?",
+       "Qual o seu nome",
+      "qual o seu nome?",
+       "qual o seu nome ?",
+       "qual o seu nome",
+         "Qual seu nome?",
+       "Qual seu nome ?",
+       "Qual seu nome",
+      "qual seu nome?",
+       "qual seu nome ?",
+       "qual seu nome",
+       "Se tem nome?",
+       "Se tem nome ?",
+       "se tem nome?",
+       "se tem nome ?",
+       "Ce tem nome?",
+       "Ce tem nome ?",
+       "ce tem nome?",
+       "ce tem nome ?",
+       "Vc tem nome ?",
+       "Vc tem nome ",
+       "vc tem nome ?",
+       "vc tem nome "
+
+
+      ],
+      "resposta": "Me chamo Solaris!"
+    },
+    {
+      "triggers": [
         "Quais dispositivos eu posso conectar",
         "Quais dispositivos eu posso conectar?",
         "Quais dispositivos eu posso conectar ?",
