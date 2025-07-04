@@ -190,21 +190,23 @@
 
     {
       "triggers": [
-        "Ir para conexões",
-        "Abrir conexões",
-        "Página de conexões",
+        "Ir para conecxões",
+        "Abrir conecxões",
+        "Página de conecxões",
         "Ver meus dispositivos",
-        "Conexões",
-        "Conexao",
-            "Conexão",
-        "Página conexão",
-         "Página Conexão",
-         "Página conexao",
-         "Página Conexao",
-           "Pagina conexão",
-         "Pagina Conexão",
-         "Pagina conexao",
-         "Pagina Conexao"
+        "Conecxões",
+        "Conecxao",
+            "Conecxão",
+        "Página conecxão",
+         "Página Conecxão",
+         "Página conecxao",
+         "Página Conecxao",
+           "Pagina conecxão",
+         "Pagina Conecxão",
+         "Pagina conecxao",
+         "Pagina Conecxao",
+         "Conecxões",
+         "Conecxoes"
       ],
       "resposta": "REDIRECT:/conexoes"
     },
