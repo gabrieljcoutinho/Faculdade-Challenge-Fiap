@@ -33,7 +33,7 @@ import bluetoothIcon from '../../imgs/bluetooth.png';
 import manual from '../../imgs/manual.png';
 
 // Constantes
-const availableColors = ['#FFEBCD', '#E0FFFF', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#00FFFF', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
+const availableColors = ['#F0F8FF', '#FFF8DC', '#FFE4E1', '#FFDAB9', '#B0E0E6', '#FAFAD2', '#EEE8AA', '#E6E6FA', '#F0F8FF'];
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
 
 // Ícones disponíveis
