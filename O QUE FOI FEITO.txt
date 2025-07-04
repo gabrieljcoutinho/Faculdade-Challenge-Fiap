@@ -36,4 +36,5 @@ recuperação (ainda não funcional).O projeto foi feito para mobile e desktop, 
 móveis, visando facilitar o acesso aos dados caso o usuário esteja fora de casa ou sem acesso a um computador.
 As APIs utilizadas não são reais, pois não temos acesso total às informações da empresa. Em todo o sistem há pequenas
  animações algumas não muito visíveis porém tem mas no chat, quando eu dou um comando de uma página tipo Home,
- o usuário é redirecionado apra essa página porem há um animaçã ode apagar e acendaer na página uma animaçã osuave
+ o usuário é redirecionado apra essa página porem há um animaçã ode apagar e acendaer na página uma animação suave
+ Ocodigo tambem está disponivel para qualquer pesso acessar
