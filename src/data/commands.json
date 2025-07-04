@@ -14,38 +14,30 @@
        "se tem nome?",
         "se tem nome ?",
        "se tem nome",
-
-
        "Qual o seu nome?",
        "Qual o seu nome ?",
        "Qual o seu nome",
       "qual o seu nome?",
        "qual o seu nome ?",
        "qual o seu nome",
-
          "Qual é o seu nome?",
        "Qual é o seu nome ?",
        "Qual é o  seu nome",
       "qual é o  seu nome?",
        "qual é o  seu nome ?",
        "qual é o seu nome",
-
-
           "Qual é seu nome?",
        "Qual é seu nome ?",
        "Qual é seu nome",
       "qual é seu nome?",
        "qual é seu nome ?",
        "qual é seu nome",
-
            "Qual seu nome?",
        "Qual seu nome ?",
        "Qual seu nome",
       "qual seu nome?",
        "qual seu nome ?",
        "qual seu nome",
-
-
        "Se tem nome?",
        "Se tem nome ?",
        "se tem nome?",
@@ -58,11 +50,11 @@
        "Vc tem nome ",
        "vc tem nome ?",
        "vc tem nome "
-
-
       ],
       "resposta": "Me chamo Solaris!"
     },
+
+
     {
       "triggers": [
         "Quais dispositivos eu posso conectar",
@@ -92,6 +84,8 @@
       ],
       "resposta": "TV, Ar-Condicionado, Lâmpada, Airfry e Carregador. Caso queira conectar algum desses dispositivos, basta dizer 'Conectar [nome do dispositivo]'."
     },
+
+
     {
       "triggers": [
         "Conectar TV", "Conectar Televisao", "Conectar Televisão",
@@ -99,6 +93,8 @@
       ],
       "resposta": "TV Conectada"
     },
+
+
     {
       "triggers": [
         "Conectar Ar-Condicionado", "Conectar Arcondiconado", "Ligar Ar-Condicionado",
@@ -107,6 +103,8 @@
       ],
       "resposta": "Ar-Condicionado Conectado"
     },
+
+
     {
       "triggers": [
         "Conectar Lâmpada", "Ligar Lâmpada", "Conectar lampada", "Ligar lampada",
@@ -114,12 +112,16 @@
       ],
       "resposta": "Lâmpada Conectada"
     },
+
+
     {
       "triggers": [
         "Conectar Airfry", "Ligar Airfry", "conectar airfry", "ligar airfry"
       ],
       "resposta": "Airfry Conectada"
     },
+
+
     {
       "triggers": [
         "Conectar Carregador", "Ligar Carregador", "Conectar carregador",
@@ -127,12 +129,16 @@
       ],
       "resposta": "Carregador Conectado"
     },
+
+
     {
       "triggers": [
         "Comandos", "Comandos ?", "Comandos?", "comandos", "comandos ?", "comandos?"
       ],
       "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Mudar para o modo escuro** / **claro**: Para trocar o tema da interface.\n- **Ir para [Página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções\n\n Ou apenas **[Página]** para o redirecionamento da página. Ex: **[Página]**\n\n **Áreas de risco**: Estados do Brasil"
     },
+
+
     {
       "triggers": [
         "Analisar gráfico", "Analisar o gráfico", "Analisar grafico",
@@ -143,6 +149,8 @@
       ],
       "resposta": "PRODUCAO_GRAFICO"
     },
+
+
     {
       "triggers": [
         "Mudar para o modo escuro", "Ativar modo escuro", "Modo escuro",
@@ -151,6 +159,8 @@
       ],
       "resposta": "TEMA_ESCURO"
     },
+
+
     {
       "triggers": [
         "Mudar para o modo claro", "Ativar modo claro", "Modo claro",
@@ -159,6 +169,8 @@
       ],
       "resposta": "TEMA_CLARO"
     },
+
+
     {
       "triggers": [
         "Ir para a página inicial",
@@ -170,6 +182,8 @@
       ],
       "resposta": "REDIRECT:/"
     },
+
+
     {
       "triggers": [
         "Ir para conexões",
@@ -182,6 +196,8 @@
       ],
       "resposta": "REDIRECT:/conexoes"
     },
+
+
     {
       "triggers": [
         "Ir para o chat",
@@ -192,6 +208,8 @@
       ],
       "resposta": "REDIRECT:/chat"
     },
+
+
     {
       "triggers": [
         "Ir para configurações",
@@ -202,6 +220,8 @@
       ],
       "resposta": "REDIRECT:/configuracoes"
     },
+
+
     {
       "triggers": [
         "Ir para contato",
@@ -212,6 +232,8 @@
       ],
       "resposta": "REDIRECT:/contato"
     },
+
+
     {
       "triggers": [
         "Ir para ajuda",
@@ -222,6 +244,8 @@
       ],
       "resposta": "REDIRECT:/helpCenter"
     },
+
+
     {
       "triggers": [
         "Ir para perguntas frequentes",
@@ -236,6 +260,8 @@
       ],
       "resposta": "REDIRECT:/perguntas-frequentes"
     },
+
+
     {
       "triggers": [
         "Ir para comandos do chat",
@@ -245,15 +271,17 @@
       "Comandos"
           ],
       "resposta": "REDIRECT:/comandosChat"
-    }
-    ,
+    },
+
+
     {
       "triggers": [
         "Mapa","Maps","Página Mapa", "Página mapa", "Localizações","Localizacoes","Localização","Localizacao"
           ],
       "resposta": "REDIRECT:/mapa"
-    }
-     ,
+    },
+
+
     {
       "triggers": [
               " Áreas de risco",
@@ -278,7 +306,6 @@
 
           ],
    "resposta": "Acre (Rio Branco) - **Riscos: Risco de enchentes e deslizamentos;**\n\n Alagoas (Maceió) - **Riscos: Enchentes e deslizamentos**\n\nAmapá (Macapá) -  **Riscos: Alagamentos durante cheias**\n\n Amazonas (Manaus) - **Riscos: Cheias dos rios e alagamentos**\n\n Bahia (Salvador) - **Riscos: Secas prolongadas no interior**\n\n Ceará (Fortaleza) - **Riscos: Secas e escassez hídrica**\n\n Distrito Federal (Brasília) - **Riscos: Baixa umidade e queimadas**\n\n Espírito Santo (Vitória) - **Riscos: Deslizamentos em áreas de morro**\n\n Goiás (Goiânia) - **Riscos: Queimadas e estiagens**\n\n Maranhão (São Luís) - **Riscos: Alagamentos em áreas ribeirinhas**\n\n Mato Grosso (Cuiabá) - **Riscos: Queimadas na região do Pantanal**\n\n Mato Grosso do Sul (Campo Grande) - **Riscos: Queimadas e enchentes sazonais**\n\n Minas Gerais (Belo Horizonte) - **Riscos: Rompimento de barragens e chuvas fortes**\n\n Pará (Belém) - **Riscos: Alagamentos e erosões**\n\n Pará (Belém) - **Riscos: Alagamentos e erosões**\n\n Paraíba (João Pessoa) - **Riscos: Secas severas no interior**\n\n Paraná (Curitiba) - **Riscos: Chuvas intensas e enchentes**\n\n Pernambuco (Recife) - **Riscos: Deslizamentos em morros urbanos**\n\n Piauí (Teresina) - **Riscos: Secas prolongadas**\n\n Rio de Janeiro (Rio de Janeiro) - **Riscos: Chuvas fortes e deslizamentos**\n\n Rio Grande do Norte (Natal) - **Riscos: Avanço do mar e secas**\n\n Rio Grande do Sul (Porto Alegre) - **Riscos: Enchentes**\n\n Rondônia (Porto Velho) - **Riscos: Secas prolongadas**\n\n Roraima (Boa Vista) -**Riscos: Queimadas e calor extremo**\n\n Santa Catarina (Florianópolis) - **Riscos: Inundações e ciclones**\n\n São Paulo (São Paulo) - **Riscos: Alagamentos e deslizamentos urbanos**\n\n Sergipe (Aracaju) - **Riscos: Enchentes em áreas costeiras**\n\n Tocantins (Palmas) - **Riscos: Secas e queimadas frequente**"
-
     }
   ]
 }
