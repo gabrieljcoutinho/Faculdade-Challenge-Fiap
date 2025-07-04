@@ -155,7 +155,7 @@
       "triggers": [
         "Mudar para o modo escuro", "Ativar modo escuro", "Modo escuro",
         "Tema escuro", "mudar para o modo escuro", "ativar modo escuro",
-        "modo escuro", "tema escuro", "modo escuro", "Modo Escuro", "Tema Escuro"
+        "modo escuro", "tema escuro", "modo escuro", "Modo Escuro", "Tema Escuro","Dark mode","Dark Mode","dark mode","dark Mode"
       ],
       "resposta": "TEMA_ESCURO"
     },
@@ -165,7 +165,7 @@
       "triggers": [
         "Mudar para o modo claro", "Ativar modo claro", "Modo claro",
         "Tema claro", "mudar para o modo claro", "ativar modo claro",
-        "modo claro", "tema claro", "modo claro", "Modo Claro", "Tema Claro"
+        "modo claro", "tema claro", "modo claro", "Modo Claro", "Tema Claro","Light mode","Light Mode","light mode","light Mode"
       ],
       "resposta": "TEMA_CLARO"
     },
