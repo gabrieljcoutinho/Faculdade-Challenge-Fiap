@@ -72,12 +72,7 @@ const Header = () => {
           </Link>
 
 
-              <Link
-            to="/mapa"
-            onClick={closeMenu}
-            className={`linkHeader ${location.pathname === '/mapa' ? 'active' : ''}`}>
-            <p className='paragrafoListaHeader'> <img src={mapa} alt="" className='iconesHeader teste' title='Mapa' /></p>
-          </Link>
+
 
      <br />
 
