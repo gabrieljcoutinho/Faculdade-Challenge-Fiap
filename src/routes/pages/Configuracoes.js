@@ -67,7 +67,7 @@ const fecharConfiguracoes = () => {
           <button
             className="comando-btn btnMudarTema"
             onClick={toggleReading}
-            title="Ativar/Desativar Leitura em voz alta"
+            title="Ativando leitor de tela"
             style={{ fontSize: '16px', padding: '10px', marginTop: '10px' }}
           >
             {isReading ? '🔈 Leitura Ativa' : '🔇 Leitura Desativada'}
