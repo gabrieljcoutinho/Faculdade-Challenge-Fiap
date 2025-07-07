@@ -4,7 +4,8 @@ const Footer = () => {
   return (
       <div className='footerDiv'>
             <footer className="footer">
-      <p>&copy; {new Date().getFullYear()} GoodWe App</p>
+      <div>Este é o meu rodapé fixo na parte inferior da página</div>
+      <p>&copy; {new Date().getFullYear()} Meu Website</p>
     </footer>
       </div>
   );
