@@ -152,20 +152,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
     setIsSearchingBluetooth(true); setErrorMessage('');
     try {
-      // Requesting any device (acceptAllDevices: true)
-      // For more specific devices, you'd use 'filters' based on services or name prefixes.
       const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
       if (device) {
         const deviceName = device.name || 'Dispositivo Bluetooth Desconhecido';
-        let guessedIcon = lampIcon; // Default icon
+        let guessedIcon = lampIcon;
+        const name = deviceName.toLowerCase();
 
-        // Attempt to guess icon based on device name
-        const nameLower = deviceName.toLowerCase();
-        if (nameLower.includes('tv') || nameLower.includes('monitor') || nameLower.includes('televisão')) guessedIcon = tvIcon;
-        else if (nameLower.includes('ar') || nameLower.includes('condicionado')) guessedIcon = airConditionerIcon;
-        else if (nameLower.includes('lamp') || nameLower.includes('lâmpada')) guessedIcon = lampIcon;
-        else if (nameLower.includes('airfry') || nameLower.includes('fritadeira')) guessedIcon = airfry;
-        else if (nameLower.includes('carregador') || nameLower.includes('charger')) guessedIcon = carregador;
+        if (name.includes('tv') || name.includes('monitor')) guessedIcon = tvIcon;
+        else if (name.includes('ar') || name.includes('condicionado')) guessedIcon = airConditionerIcon;
+        else if (name.includes('lamp') || name.includes('lâmpada')) guessedIcon = lampIcon;
+        else if (name.includes('airfry') || name.includes('fritadeira')) guessedIcon = airfry;
+        else if (name.includes('carregador') || name.includes('charger')) guessedIcon = carregador;
 
         if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
           setErrorMessage(`Já existe um aparelho chamado "${deviceName}".`);
@@ -175,31 +172,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
         onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
         setShowAddForm(false);
-
-        // --- IMPORTANT NOTE REGARDING "WHAT'S PLAYING ON TV" ---
-        // The Web Bluetooth API (navigator.bluetooth) allows you to connect to
-        // Bluetooth Low Energy (BLE) devices and interact with their GATT services/characteristics.
-        // It DOES NOT provide functionality to:
-        // 1. Detect what content (e.g., specific show, movie, channel) is currently playing on a TV.
-        // 2. Control advanced media playback features on a smart TV (like changing channels,
-        //    adjusting volume for content, or launching apps) unless the TV exposes
-        //    very specific BLE characteristics for these actions, which is highly
-        //    unlikely for standard media control.
-        // 3. Perform screen mirroring or casting. These are typically handled by
-        //    dedicated protocols (Chromecast, AirPlay, Miracast) or proprietary
-        //    smart TV APIs, not Web Bluetooth.
-        //
-        // Therefore, if a user connects to a "TV" via Web Bluetooth, your application
-        // can acknowledge the connection and potentially toggle its on/off state
-        // (if the TV supports this via BLE), but you cannot query "what's playing"
-        // or control the content.
-        //
-        // To achieve "what's playing" functionality, you would need to explore:
-        // - Specific Smart TV APIs (e.g., Samsung Tizen, LG webOS, Android TV APIs)
-        // - Google Cast SDK or other casting solutions
-        // - Home automation platforms that integrate with smart TVs.
-        // These are outside the scope of the Web Bluetooth API.
-
       } else {
         setErrorMessage('Nenhum aparelho Bluetooth selecionado.');
       }
@@ -559,18 +531,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                 <>
                   <p>Conectado desde: {formatDate(selectedConexion.connectedDate)}</p>
                   <p>Duração da Conexão: {getConnectionDuration(selectedConexion.connectedDate)}</p>
-                  {/*
-                    // IMPORTANTE: Não é possível obter a informação "o que está passando na TV"
-                    // diretamente via Web Bluetooth API.
-                    // Esta API foca em conexões de baixo nível (BLE) e não em controle de mídia complexo
-                    // ou leitura de estado de reprodução de dispositivos como TVs.
-                    // Se o ícone for de TV, você pode adicionar uma nota sobre isso,
-                    // mas não pode preencher com dados reais obtidos via Bluetooth.
-                    // Exemplo (apenas para ilustrar a limitação):
-                    // {getIconKeyBySrc(selectedConexion.icon) === 'tv' && (
-                    //   <p>Reproduzindo: N/A (informação não disponível via Bluetooth)</p>
-                    // )}
-                  */}
                 </>
               )}
               <div className="detalhes-actions">
