@@ -123,11 +123,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         clearTimeout(touchStartTimer.current);
         touchStartTimer.current = null;
     }
-    setIsDragging(false); // Garante que o estado de arrasto seja resetado
-    if (currentDragElement.current) { // Adicionado null check aqui
+    setIsDragging(false);
+    if (currentDragElement.current) {
         currentDragElement.current.classList.remove('dragging');
         currentDragElement.current = null;
     }
+    // Remove all 'drag-over' classes from elements that might still have them
+    document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
   };
 
   // Open add device form (Bluetooth mode by default)
@@ -233,9 +235,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   // Open device details modal
   const handleConexionClick = (c, e) => {
-    // Apenas abre os detalhes se não estiver arrastando
-    if (!isDragging && (e.target === e.currentTarget || (e.target.tagName === 'SPAN' && e.target.classList.contains('conexion-text-overlay')) || (e.target.tagName === 'IMG' && e.target.classList.contains('conexion-icon-overlay')))) {
-      if (c.connected) setSelectedConexion(c);
+    // Prevent click if a drag was initiated or if a touch long-press is pending
+    if (isDragging || touchStartTimer.current) {
+        return;
+    }
+    // Apenas abre os detalhes se não estiver arrastando e o clique for no elemento principal ou em seus filhos diretos de overlay
+    if (c.connected && (e.target === e.currentTarget || (e.target.tagName === 'SPAN' && e.target.classList.contains('conexion-text-overlay')) || (e.target.tagName === 'IMG' && e.target.classList.contains('conexion-icon-overlay')))) {
+      setSelectedConexion(c);
     }
   };
 
@@ -260,13 +266,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const handleDragStart = (e, index) => {
     dragItem.current = index;
     currentDragElement.current = e.currentTarget;
-    if (currentDragElement.current) { // Adicionado null check
-      setTimeout(() => { // Usar timeout para garantir que a classe seja aplicada após o início do arrasto
+    if (currentDragElement.current) {
+      setTimeout(() => {
           currentDragElement.current.classList.add('dragging');
       }, 0);
     }
-    setIsDragging(true); // Indica que o arrasto está ativo
-    // Define dados para a operação de arrasto (opcional, mas boa prática)
+    setIsDragging(true);
     e.dataTransfer.setData('text/plain', index);
     e.dataTransfer.effectAllowed = 'move';
   };
@@ -274,7 +279,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const handleDragEnter = (e, index) => {
     if (dragItem.current === null || dragItem.current === index) return;
     dragOverItem.current = index;
-    // Adiciona classe para feedback visual no item alvo
     e.currentTarget.classList.add('drag-over');
   };
 
@@ -283,20 +287,19 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   };
 
   const handleDragEnd = (e) => {
-    if (currentDragElement.current) { // Adicionado null check
+    if (currentDragElement.current) {
         currentDragElement.current.classList.remove('dragging');
         currentDragElement.current = null;
     }
-    // Remove todas as classes 'drag-over'
     document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
     dragItem.current = null;
     dragOverItem.current = null;
-    setIsDragging(false); // Reseta o estado de arrasto
+    setIsDragging(false);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    if (e.currentTarget) { // e.currentTarget deve ser um elemento válido aqui, mas mantemos por segurança
+    if (e.currentTarget) {
       e.currentTarget.classList.remove('drag-over');
     }
 
@@ -312,60 +315,56 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     newConexions.splice(droppedIndex, 0, draggedItemData);
 
     setConexions(newConexions);
-    // Reseta as referências após o drop
     dragItem.current = null;
     dragOverItem.current = null;
-    setIsDragging(false); // Reseta o estado de arrasto
+    setIsDragging(false);
   };
 
   const handleDragOver = (e) => {
-    e.preventDefault(); // Necessário para permitir o drop
+    e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   };
 
   // --- Touch Handlers (Mobile) ---
   const handleTouchStart = (e, index) => {
-    // Comentado para evitar interferência com outros eventos de toque se não for tratado cuidadosamente
-    // e.preventDefault();
-
+    e.preventDefault(); // Prevent default browser actions like scrolling or text selection
     touchStartTimer.current = setTimeout(() => {
         setIsDragging(true);
         dragItem.current = index;
         currentDragElement.current = e.currentTarget;
-        if (currentDragElement.current) { // Adicionado null check
+        if (currentDragElement.current) {
             currentDragElement.current.classList.add('dragging');
-            // Você pode adicionar um overlay temporário ou dica visual para arrastar no celular
-            // Por exemplo, uma classe que o torna ligeiramente transparente ou adiciona uma sombra
         }
-    }, 700); // Duração do toque longo (ex: 700ms)
+    }, 700); // Duration for long press to initiate drag
   };
 
   const handleTouchMove = (e) => {
+    e.preventDefault(); // Crucial to prevent scrolling while dragging
+
     if (!isDragging) {
-      clearTimeout(touchStartTimer.current);
-      touchStartTimer.current = null;
+      // If not actively dragging, clear the timer (if any) and return
+      if (touchStartTimer.current) {
+        clearTimeout(touchStartTimer.current);
+        touchStartTimer.current = null;
+      }
       return;
     }
-    e.preventDefault(); // Impede a rolagem enquanto arrasta
 
     const touch = e.touches[0];
     const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
 
-    // Encontra o parente 'retanguloAdicionado' mais próximo do elemento tocado
     const hoveredConexionElement = targetElement ? targetElement.closest('.retanguloAdicionado') : null;
 
-    // Remove 'drag-over' do elemento anteriormente sobrevoado
     document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
 
     if (hoveredConexionElement) {
-        // Garantir que hoveredConexionElement seja uma instância real de HTMLElement antes de usar parentNode.children
         const parentChildren = Array.from(hoveredConexionElement.parentNode?.children || []);
         const hoveredIndex = parentChildren.indexOf(hoveredConexionElement);
         if (hoveredIndex !== -1 && hoveredIndex !== dragItem.current) {
             dragOverItem.current = hoveredIndex;
             hoveredConexionElement.classList.add('drag-over');
         } else {
-            dragOverItem.current = null; // Limpa se estiver sobre si mesmo
+            dragOverItem.current = null;
         }
     } else {
         dragOverItem.current = null;
@@ -379,7 +378,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }
 
     if (isDragging) {
-      if (currentDragElement.current) { // Adicionado null check
+      if (currentDragElement.current) {
         currentDragElement.current.classList.remove('dragging');
         currentDragElement.current = null;
       }
@@ -482,7 +481,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
             className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
             style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
             onClick={(e) => handleConexionClick(c, e)}
-            draggable="true" // Habilita o comportamento de arrasto padrão para desktop
+            draggable="true"
             onDragStart={(e) => handleDragStart(e, index)}
             onDragEnter={(e) => handleDragEnter(e, index)}
             onDragLeave={handleDragLeave}
