@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Import useRef
 import { QRCodeCanvas } from 'qrcode.react';
 import { useLocation } from 'react-router-dom';
 
@@ -81,6 +81,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [editingId, setEditingId] = useState(null);
   const [removingId, setRemovingId] = useState(null);
   const [conexionToDelete, setConexionToDelete] = useState(null);
+
+  // Drag and Drop States
+  const dragItem = useRef(null); // Reference to the dragged item
+  const dragOverItem = useRef(null); // Reference to the item being dragged over
 
   // Helper: Get icon key by its source
   const getIconKeyBySrc = (src) => availableIcons.find(icon => icon.src === src)?.name || '';
@@ -238,6 +242,55 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     return duration.length === 0 ? 'Menos de um segundo' : duration.join(' e ');
   };
 
+  // --- Drag and Drop Handlers ---
+  const handleDragStart = (e, index) => {
+    dragItem.current = index;
+    // Optional: Add a class to the dragged item for visual feedback
+    e.currentTarget.classList.add('dragging');
+  };
+
+  const handleDragEnter = (e, index) => {
+    dragOverItem.current = index;
+    // Optional: Add a class to the item being dragged over
+    e.currentTarget.classList.add('drag-over');
+  };
+
+  const handleDragLeave = (e) => {
+    // Optional: Remove class when dragging leaves an item
+    e.currentTarget.classList.remove('drag-over');
+  };
+
+  const handleDragEnd = (e) => {
+    // Optional: Remove dragging class from the item when drag ends
+    e.currentTarget.classList.remove('dragging');
+    dragItem.current = null;
+    dragOverItem.current = null;
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault(); // Prevent default browser behavior (e.g., opening as a link)
+    e.currentTarget.classList.remove('drag-over'); // Remove drag-over class
+
+    const draggedIndex = dragItem.current;
+    const droppedIndex = dragOverItem.current;
+
+    if (draggedIndex === null || droppedIndex === null || draggedIndex === droppedIndex) {
+      return; // No valid drag/drop or dropped on itself
+    }
+
+    const newConexions = [...conexions];
+    const [draggedItemData] = newConexions.splice(draggedIndex, 1); // Remove dragged item
+    newConexions.splice(droppedIndex, 0, draggedItemData); // Insert it at the new position
+
+    setConexions(newConexions); // Update state to reorder
+    dragItem.current = null; // Reset
+    dragOverItem.current = null; // Reset
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault(); // Necessary to allow dropping
+  };
+
   return (
     <div className="conexao-container">
       <h1 className='tituloConexao'>Aparelhos Conectados</h1>
@@ -314,8 +367,20 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       )}
 
       <div className="conexions-list">
-        {conexions.map(c => (
-          <div key={c.id} className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''}`} style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }} onClick={(e) => handleConexionClick(c, e)}>
+        {conexions.map((c, index) => (
+          <div
+            key={c.id}
+            className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''}`}
+            style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+            onClick={(e) => handleConexionClick(c, e)}
+            draggable // Make the element draggable
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDragEnter={(e) => handleDragEnter(e, index)}
+            onDragLeave={handleDragLeave}
+            onDragEnd={handleDragEnd}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
             {c.connected && (
               <div className="qrcode-top-left">
                 <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); setVisibleQRCode(c); }} type="button">
