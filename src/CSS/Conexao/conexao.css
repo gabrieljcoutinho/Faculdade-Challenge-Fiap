@@ -130,3 +130,58 @@ h1 {
     align-items: flex-end;
     gap: 5px;
 }
+
+
+/* Estilos para o item que está sendo arrastado */
+.retanguloAdicionado.dragging {
+    opacity: 0.7;
+    /* Torna-o ligeiramente transparente */
+    transform: scale(1.02);
+    /* Aumenta ligeiramente para mostrar que está ativo */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /* Adiciona uma sombra */
+    cursor: grabbing;
+    /* Altera o cursor para desktop */
+    z-index: 1000;
+    /* Garante que ele permaneça no topo durante o arrasto */
+}
+
+/* Estilos para o item sobre o qual o arrasto está passando (alvo de drop) */
+.retanguloAdicionado.drag-over {
+    border: 2px dashed #007bff;
+    /* Adiciona uma borda tracejada */
+    background-color: rgba(0, 123, 255, 0.1);
+    /* Fundo azul claro */
+}
+
+/* Garante que os botões do actions-overlay não interfiram com o início do arrasto */
+.retanguloAdicionado .actions-overlay button {
+    pointer-events: auto;
+    /* Os botões devem ser clicáveis */
+}
+
+/* Ajustes para a responsividade geral do layout, se necessário */
+.conexions-list {
+    display: flex;
+    flex-wrap: wrap;
+    /* Permite que os itens quebrem em telas menores */
+    gap: 20px;
+    /* Espaço entre os itens */
+    justify-content: center;
+    /* Centraliza os itens se eles não preencherem a linha */
+    padding: 15px;
+    /* Adiciona um preenchimento ao redor da lista */
+}
+
+.retanguloAdicionado {
+    flex-shrink: 0;
+    /* Impede que os itens encolham demais */
+    min-width: 200px;
+    /* Largura mínima para cada item */
+    /* ... estilos existentes ... */
+    /* Adicione touch-action para evitar os comportamentos de toque padrão do navegador no próprio elemento,
+     embora `e.preventDefault()` em onTouchMove seja geralmente mais eficaz */
+    touch-action: none;
+    /* Considere usar `pan-y` se quiser rolagem vertical dentro do item,
+                         mas para arrastar e soltar, `none` geralmente é mais seguro. */
+}
