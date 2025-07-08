@@ -1,4 +1,4 @@
-# Projeto Acadêmico GoodWe - Aplicação React para Gerenciamento de Energia Solar
+# Projeto GoodWe - Aplicação React para Gerenciamento de Energia Solar
 
 ## Descrição do Projeto
 
