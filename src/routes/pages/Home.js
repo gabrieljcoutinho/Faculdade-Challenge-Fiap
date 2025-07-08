@@ -362,7 +362,7 @@ const Home = () => {
         </section>
 
         <section className="weather-forecast-section">
-          <h2>Clima e Tempo</h2>
+          <h2>Clima e Previsão</h2>
           <div className="weather-cards-container">
             <div className="weather-card current-weather-card">
               <h3>Agora</h3>
