@@ -18,11 +18,11 @@ nteragir com um sistema que permite adicionar dispositivos de duas formas: por m
 para o aparelho, escolher um ícone representativo e selecionar uma cor de fundo personalizada. Após o cadastro,
 o aparelho aparece como conectado e oferece funcionalidades adicionais, como a geração de um QR Code
 (que permite a outros usuários adicionarem o mesmo dispositivo de forma mais rápida ao escaneá-lo com a câmera),
-além de opções para editar, excluir ou desativar o dispositivo.A seção do chatbot foi desenvolvida para oferecer um
-sistema de mensagens com funcionalidades básicas de um chat tradicional, como envio e recebimento de mensagens.
-No entanto, foi integrada a ele uma API personalizada de perguntas e respostas específicas e a API de uma IA real que responde outas perguntas.
-Com isso, o sistema reconhece comandos como “conectar aparelho”, “mudar de página”, entre outros, e responde de forma automatizada
-com instruções úteis, simulando o funcionamento de um assistente virtual.A área de contato apresenta um formulário
+além de opções para editar, excluir ou desativar o dispositivo com a possibilidade de arrastar os aparelhos e trocar a ordem
+.A seção do chatbot foi desenvolvida para oferecer um sistema de mensagens com funcionalidades básicas de um chat tradicional,
+como envio e recebimento de mensagens. No entanto, foi integrada a ele uma API personalizada de perguntas e respostas específicas
+e a API de uma IA real que responde outas perguntas. Com isso, o sistema reconhece comandos como “conectar aparelho”, “mudar de página”,
+entre outros, e responde de forma automatizada com instruções úteis, simulando o funcionamento de um assistente virtual.A área de contato apresenta um formulário
 simples, no qual o usuário pode informar nome, e-mail e mensagem. Dois recursos adicionais foram implementados
 nessa seção: um botão de acesso às perguntas frequentes da página e outro que permite o envio de arquivos junto
 com a mensagem, facilitando a comunicação entre o usuário e a empresa.Por fim, na área de configurações, foram
