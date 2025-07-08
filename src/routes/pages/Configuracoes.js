@@ -87,7 +87,7 @@ const fecharConfiguracoes = () => {
    {/* Botões Login/Logout */}
 <div className="top-buttons">
   <button title="Logar" onClick={navegarParaLogin}>Logar</button>
-  <button title="Deslogar">Deslogar</button>
+  <button title="Deslogar" onClick={navegarParaLogin}>Deslogar</button>
 </div>
 
 
