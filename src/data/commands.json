@@ -51,8 +51,11 @@
        "vc tem nome ?",
        "vc tem nome ",
        "Seu nome",
+       "seu nome ?",
+       "seu nome?",
 
-       "seu nome ?"
+       "Seu nome?",
+       "Seu nome ?"
       ],
       "resposta": "Me chamo Solaris!"
     },
