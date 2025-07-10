@@ -6,16 +6,10 @@
     justify-content: flex-start;
     width: 100%;
     box-sizing: border-box;
-    padding: 20px;
+
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #222;
-    font-weight: 600;
-    font-size: 1.8em;
-}
+
 
 .plus-icon {
     font-size: 1em;
