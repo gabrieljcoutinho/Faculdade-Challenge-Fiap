@@ -440,6 +440,14 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       </div>
       {/* End New */}
 
+      {conexions.length === 0 && !showAddForm && (
+        <div className="placeholder-image-container">
+          <br /><br /><br />
+          <img src={placeholderImage} alt="Nenhum aparelho conectado" className="placeholder-image" />
+          <p className="placeholder-text">{nenhumAprelhoConectado}</p>
+        </div>
+      )}
+
       {showAddForm && (
         <div className="modal-overlay">
           <div className="add-form-styled">
@@ -501,17 +509,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
       {/* Render the list based on devicesToDisplay */}
       <div className="conexions-list">
-        {/* Only display this placeholder if *all* devices (connected and disconnected) are empty */}
-        {conexions.length === 0 && (
-          <div className="placeholder-image-container">
-            <br /><br /><br />
-            <img src={placeholderImage} alt="Nenhum aparelho conectado" className="placeholder-image" />
-            <p className="placeholder-text">{nenhumAprelhoConectado}</p>
-          </div>
-        )}
-
-        {/* Display specific empty list message if there are devices but the current tab is empty */}
-        {conexions.length > 0 && devicesToDisplay.length === 0 && (
+        {devicesToDisplay.length === 0 && (
           <div className="placeholder-image-container">
             <br /><br /><br />
             <img src={placeholderImage} alt="Nenhum aparelho aqui" className="placeholder-image" />
