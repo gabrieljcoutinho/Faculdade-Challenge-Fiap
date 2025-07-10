@@ -170,7 +170,7 @@
 
 
     /*-------------------------CORES NEON-------------------------------------------------*/
-    --vermelhoNeon: rgba(255, 0, 51, 0.7);
+    --vermelhoNeon: rgba(255, 0, 51, 0.9);
     --azulNeon: rgba(31, 81, 255, 0.7);
     --verdeNeon: rgba(57, 255, 20, 0.8);
     --vermelhoLaranjadoNeon: rgba(255, 49, 49, 0.9);
@@ -198,7 +198,7 @@
     --azul: linear-gradient(135deg, #2980b9, #6dd5fa);
 
 
- 
+
     --linearGradiente1: linear-gradient(135deg, #00fff7, #00d2ff);
     --linearGradiente2: linear-gradient(135deg, #ff00ff, #ff6ec4);
     --linearGradiente3: linear-gradient(135deg, #39ff14, #1eff2a);

@@ -19,6 +19,7 @@ import '../../CSS/Conexao/detalhesAparelhos.css';
 import '../../CSS/Conexao/imgNaoConectado.css';
 import '../../CSS/Conexao/mensagemRemoverAparelho.css';
 import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css';
+import '../../CSS/Conexao/btnConectadoEnaoConectado.css'
 
 // Importa imagens
 import tvIcon from '../../imgs/TV.png';
@@ -32,7 +33,7 @@ import placeholderImage from '../../imgs/semConexao.png';
 import bluetoothIcon from '../../imgs/bluetooth.png';
 import manual from '../../imgs/manual.png';
 
-import { tituloPrincipal,adicionarAparelho, nenhumAprelhoConectado, escolherIcone, escolherCorDefundo, btnBluetooth,
+import { tituloPrincipal, adicionarAparelho, nenhumAprelhoConectado, escolherIcone, escolherCorDefundo, btnBluetooth,
   procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado,
 detalhesaparelhoAmpliados, mensagemExcluirAparelho, btnEditar, btnRemover, tempoAparelhoConectado, duracaoConecxao
 } from '../../constants/Conexao/index.js';
@@ -78,6 +79,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
+  // NEW STATE: To control which list is active
+  const [activeList, setActiveList] = useState('connected'); // 'connected' or 'disconnected'
 
   // Form data states
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: '' });
@@ -404,6 +407,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     }
   };
 
+  // Filtered lists based on activeList state
+  const connectedDevices = conexions.filter(c => c.connected);
+  const disconnectedDevices = conexions.filter(c => !c.connected);
+
+  const devicesToDisplay = activeList === 'connected' ? connectedDevices : disconnectedDevices;
+
   return (
     <div className="conexao-container">
       <h1 className='tituloConexao'>{tituloPrincipal}</h1>
@@ -411,6 +420,25 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       <button className="add-button-styled" onClick={handleAddClick}>
         <span className="plus-icon">+</span> {adicionarAparelho}
       </button>
+
+      {/* New: Toggle buttons for connected/disconnected devices */}
+      <div className="list-toggle-buttons">
+       <button
+  className={`toggle-button connected-btn ${activeList === 'connected' ? 'active' : ''}`}
+  onClick={() => setActiveList('connected')}
+>
+  Conectados ({connectedDevices.length})
+</button>
+
+<button
+  className={`toggle-button disconnected-btn ${activeList === 'disconnected' ? 'active' : ''}`}
+  onClick={() => setActiveList('disconnected')}
+>
+  Desconectados ({disconnectedDevices.length})
+</button>
+
+      </div>
+      {/* End New */}
 
       {conexions.length === 0 && !showAddForm && (
         <div className="placeholder-image-container">
@@ -479,8 +507,19 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         </div>
       )}
 
+      {/* Render the list based on devicesToDisplay */}
       <div className="conexions-list">
-        {conexions.map((c, index) => (
+        {devicesToDisplay.length === 0 && (
+          <div className="placeholder-image-container">
+            <br /><br /><br />
+            <img src={placeholderImage} alt="Nenhum aparelho aqui" className="placeholder-image" />
+            <p className="placeholder-text">
+              {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
+            </p>
+          </div>
+        )}
+
+        {devicesToDisplay.map((c, index) => (
           <div
             key={c.id}
             className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
