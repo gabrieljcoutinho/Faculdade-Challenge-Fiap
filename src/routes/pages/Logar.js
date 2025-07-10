@@ -7,6 +7,10 @@ import '../../CSS/Login/separator.css';
 import '../../CSS/Login/links.css';
 import '../../CSS/Login/login-info.css';
 
+import { tituloPrincipal, Email, Senha, BotaoEntrar, BotaoEntrarcontaGoogle, BotaoEntrarContaFacebook,
+  BotaoEntrarContaLinkedin, esqueceuSenha, naoTemConta
+} from '../../constants/Logar/index.js';
+
 const Logar = () => {
   const navigate = useNavigate();
   const [showPass, setShowPass] = useState(false);
@@ -55,10 +59,10 @@ const Logar = () => {
   return (
     <main className="login-container">
       <section className="login-box">
-        <h1>Acesse sua conta</h1>
+        <h1>{tituloPrincipal}</h1>
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="input-group">
-            <label htmlFor="email">E-mail</label>
+            <label htmlFor="email">{Email}</label>
             <input
             title="Digite Seu Email"
               type="email"
@@ -70,7 +74,7 @@ const Logar = () => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="password">Senha</label>
+            <label htmlFor="password">{Senha}</label>
             <div className="password-input-group">
               <input
                 type={showPass ? 'text' : 'password'}
@@ -92,7 +96,7 @@ const Logar = () => {
               </button>
             </div>
           </div>
-          <button type="submit" className="login-button">Entrar</button>
+          <button type="submit" className="login-button">{BotaoEntrar}</button>
         </form>
 
         <div className="or-separator" style={{ margin: '1rem 0', textAlign: 'center' }}>
@@ -117,7 +121,7 @@ const Logar = () => {
             <path fill="#FBBC05" d="M119.6 324.9c-10.8-31.5-10.8-65.6 0-97.1v-70.6h-89.5c-38.3 74.4-38.3 162.4 0 236.8l89.5-69.1z" />
             <path fill="#EA4335" d="M272 107.7c39.5 0 75 13.6 103 40.4l77.3-77.3C405.3 24.3 347.3 0 272 0 164.8 0 74.4 61.4 30.1 148.4l89.5 69.1c21.4-64.4 81.5-112.3 152.4-112.3z" />
           </svg>
-          Entrar com Google
+      {BotaoEntrarcontaGoogle}
         </button>
 
         {/* Botão Facebook */}
@@ -135,7 +139,8 @@ const Logar = () => {
           >
             <path d="M22.675 0h-21.35C.6 0 0 .6 0 1.325v21.351C0 23.4.6 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.464.099 2.796.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.763v2.31h3.588l-.467 3.622h-3.12V24h6.116C23.4 24 24 23.4 24 22.676V1.325C24 .6 23.4 0 22.675 0z" />
           </svg>
-          Entrar com Facebook
+           {BotaoEntrarContaFacebook}
+
         </button>
 
         {/* Botão LinkedIn */}
@@ -153,12 +158,12 @@ const Logar = () => {
           >
             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.026-3.037-1.85-3.037-1.853 0-2.136 1.446-2.136 2.941v5.665H9.355V9h3.414v1.561h.047c.476-.9 1.637-1.85 3.367-1.85 3.602 0 4.269 2.37 4.269 5.452v6.289zM5.337 7.433a2.07 2.07 0 11-.001-4.14 2.07 2.07 0 01.001 4.14zm1.777 13.019H3.56V9h3.554v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.727v20.546C0 23.227.792 24 1.771 24h20.451c.98 0 1.778-.773 1.778-1.727V1.727C24 .774 23.206 0 22.225 0z"/>
           </svg>
-          Entrar com LinkedIn
+          {BotaoEntrarContaLinkedin}
         </button>
 
         <div className="links">
-          <Link to="/esqueciSenha">Esqueci minha senha</Link>
-          <p><Link to="/cadastro"> Não tem conta? Crie uma agora</Link></p>
+          <Link to="/esqueciSenha">{esqueceuSenha}</Link>
+          <p><Link to="/cadastro"> {naoTemConta}</Link></p>
         </div>
       </section>
 

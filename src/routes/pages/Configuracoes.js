@@ -9,6 +9,8 @@ import '../../CSS/Settings/images.css';
 
 import '../../CSS/mudarTema.css';
 
+import { logar, deslogar} from '../../constants/Configuracao/index.js'
+
 import comandosImg from '../../imgs/comandos.png';
 import atendimentoImg from '../../imgs/atendimento.png';
 
@@ -86,8 +88,8 @@ const fecharConfiguracoes = () => {
           {/* Botões Login/Logout */}
    {/* Botões Login/Logout */}
 <div className="top-buttons">
-  <button title="Logar" onClick={navegarParaLogin}>Logar</button>
-  <button title="Deslogar" onClick={navegarParaLogin}>Deslogar</button>
+  <button title="Logar" onClick={navegarParaLogin}>{logar}</button>
+  <button title="Deslogar" onClick={navegarParaLogin}>{deslogar}</button>
 </div>
 
 

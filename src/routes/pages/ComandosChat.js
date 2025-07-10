@@ -11,15 +11,17 @@ import '../../CSS/Comandos/subListaComandos.css';
 import '../../CSS/Comandos/ulReset.css';
 
 
+import { tituloPrincipal,subTitulo, exemploMensagemChat, comandoAnlisarGrafico} from '../../constants/ComandosChat/index.js'
+
 const ComandosChat = () => {
   return (
     <div className="comandos-page-wrapper"> {/* Added a wrapper for consistent padding/margin */}
     <br /><br /><br />
-      <h3 className="comando-header">📢 Comandos do Chat</h3>
+      <h3 className="comando-header">{tituloPrincipal}</h3>
 
       <div className="comandos-container">
         <p className="comandos-description">
-          Para fazer a conexão dos equipamentos via chat, utilize os seguintes comandos:
+      {subTitulo}
         </p>
 
         <ul className="lista-comandos">
@@ -28,7 +30,7 @@ const ComandosChat = () => {
              <strong>Ligar {'{nome do aparelho}'}</strong>
             <span className="comando-example">Ex: Conectar TV</span>
             <p className="comando-explanation">
-              ➤ Um aparelho com o nome <strong>TV</strong> aparecerá na seção de conexões.
+
             </p>
           </li>
 
@@ -38,12 +40,12 @@ const ComandosChat = () => {
               Ícones disponíveis: <code>Tv</code>, <code>arcondicionado</code>, <code>lâmpada</code>, <code>Airfry</code>, <code>Carregador</code>
             </span>
             <p className="comando-explanation">
-              ➤ O ícone será exibido com o nome escolhido.
+                {exemploMensagemChat}
             </p>
           </li>
 
           <li className="comando-item">
-            <strong>Análise de Gráfico: Comandos</strong>
+            <strong>{comandoAnlisarGrafico}</strong>
             <ul className="sub-lista-comandos">
               {/* Grouped common phrases for better readability */}
               {[

@@ -9,6 +9,8 @@ import '../../CSS/EsqueciSenha/messagens.css';
 import '../../CSS/EsqueciSenha/links.css';
 import '../../CSS/EsqueciSenha/mediaScreen.css';
 
+import { tituloPrincipal, paragrafoEsqueciSenha, Email, btnRecuperarSenha, voltarPaginaLogin} from '../../constants/EsqueciSenha/index.js'
+
 const EsqueciSenha = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -45,11 +47,11 @@ const EsqueciSenha = () => {
   return (
     <div className="forgot-password-container">
       <div className="forgot-password-card">
-        <h2 className='tituloEsqueciSenha'>Esqueci minha senha</h2>
-        <p className='paragrafoEsqueciSenha'>Digite o e-mail abaixo e enviaremos um link para recuperar sua senha.</p>
+        <h2 className='tituloEsqueciSenha'>{tituloPrincipal}</h2>
+        <p className='paragrafoEsqueciSenha'>{paragrafoEsqueciSenha}</p>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email" className='labelEmail'>Endereço de email</label>
+            <label htmlFor="email" className='labelEmail'>{Email}</label>
             <input
               type="email"
               id="email"
@@ -62,10 +64,10 @@ const EsqueciSenha = () => {
           </div>
           {message && <p className="success-message">{message}</p>}
           {error && <p className="error-message">{error}</p>}
-          <button type="submit" className="reset-button">Recuperar Senha</button>
+          <button type="submit" className="reset-button">{btnRecuperarSenha}</button>
         </form>
         <div className="back-to-login">
-          <a href="/login">Voltar para Login</a> {/* Adjust this path as needed */}
+          <a href="/login">{voltarPaginaLogin}</a> {/* Adjust this path as needed */}
         </div>
       </div>
     </div>

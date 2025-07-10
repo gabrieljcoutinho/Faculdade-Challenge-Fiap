@@ -32,6 +32,11 @@ import placeholderImage from '../../imgs/semConexao.png';
 import bluetoothIcon from '../../imgs/bluetooth.png';
 import manual from '../../imgs/manual.png';
 
+import { tituloPrincipal,adicionarAparelho, nenhumAprelhoConectado, escolherIcone, escolherCorDefundo, btnBluetooth,
+  procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado,
+detalhesaparelhoAmpliados, mensagemExcluirAparelho, btnEditar, btnRemover, tempoAparelhoConectado, duracaoConecxao
+} from '../../constants/Conexao/index.js';
+
 // Constantes
 const availableColors = [
   '#FFFFF0', // ivory
@@ -401,17 +406,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   return (
     <div className="conexao-container">
-      <h1 className='tituloConexao'>Aparelhos Conectados</h1>
+      <h1 className='tituloConexao'>{tituloPrincipal}</h1>
 
       <button className="add-button-styled" onClick={handleAddClick}>
-        <span className="plus-icon">+</span> Adicionar Aparelho
+        <span className="plus-icon">+</span> {adicionarAparelho}
       </button>
 
       {conexions.length === 0 && !showAddForm && (
         <div className="placeholder-image-container">
           <br /><br /><br />
           <img src={placeholderImage} alt="Nenhum aparelho conectado" className="placeholder-image" />
-          <p className="placeholder-text">Nenhum aparelho conectado...</p>
+          <p className="placeholder-text">{nenhumAprelhoConectado}</p>
         </div>
       )}
 
@@ -425,7 +430,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               <>
                 <input title="Nome do aparelho" type="text" placeholder="Nome do Aparelho" value={newConexion.text} onChange={(e) => setNewConexion({ ...newConexion, text: e.target.value })} />
                 <div className="icon-picker-styled">
-                  <label>Escolha o ícone:</label>
+                  <label>{escolherIcone}</label>
                   <div className="icons">
                     {availableIcons.map(icon => (
                       <button key={icon.name} className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`} onClick={() => { setNewConexion({ ...newConexion, icon: icon.src }); setActiveIcon(icon.src); }} type="button">
@@ -435,7 +440,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                   </div>
                 </div>
                 <div className="color-picker-styled">
-                  <label className="tipoDoFundoConexao">Escolha a cor de fundo:</label>
+                  <label className="tipoDoFundoConexao">{escolherCorDefundo}</label>
                   <div className="colors">
                     {availableColors.map(color => (
                       <button key={color} className={`color-option ${activeColor === color ? 'active' : ''}`} style={{ backgroundColor: color }} onClick={() => { setNewConexion({ ...newConexion, backgroundColor: color }); setActiveColor(color); }} type="button" />
@@ -451,20 +456,20 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
               </>
             ) : (
               <>
-                <p className='paragrafoAdiconarAparelhos'>Clique no botão abaixo para procurar e conectar aparelhos Bluetooth próximos:</p>
+                <p className='paragrafoAdiconarAparelhos'>{btnBluetooth}</p>
                 <button onClick={handleSearchAndConnectBluetooth} className="add-button-styled" disabled={isSearchingBluetooth} type="button">
                   {isSearchingBluetooth ? 'Procurando Aparelhos Bluetooth' : (
                     <>
                       <img src={bluetoothIcon} title="Procurar" alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
-                      Procurar Aparelhos Bluetooth
+                      {procurarAparelhosBluetooth}
                     </>
                   )}
                 </button>
                 <button onClick={abrirModoManual} className="add-button-styled" style={{ marginTop: '10px' }} disabled={isSearchingBluetooth} type="button">
                   <img src={manual} alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
-                  Adicionar Aparelho Manualmente
+                 {adicicionarAparelhoManualmente}
                 </button>
-                {isSearchingBluetooth && (<p className="connecting-message">Aguarde, a janela de seleção do navegador será aberta.</p>)}
+                {isSearchingBluetooth && (<p className="connecting-message">{esperaMenuBluetoothAbrir}</p>)}
                 <div className="form-actions">
                   <button onClick={closeAllModals} className="cancel-button-styled" disabled={isSearchingBluetooth} type="button" title='Ativar | Desativar aparelho'>Cancelar</button>
                 </div>
@@ -499,7 +504,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                 </button>
               </div>
             )}
-            {!c.connected && <div className="disconnected-overlay">Desativado</div>}
+            {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
             <div className="icon-text-overlay">
               <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
               <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
@@ -522,15 +527,15 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
           <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
             <button className="close-button" onClick={() => setSelectedConexion(null)}>X</button>
-            <h2 title="Detalhes do Aparelho">Detalhes do Aparelho</h2>
+            <h2 title="Detalhes do Aparelho">{detalhesaparelhoAmpliados}</h2>
             <div className="detalhes-content">
               <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
               <h3>{selectedConexion.text}</h3>
               <p title="Status">Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
               {selectedConexion.connected && (
                 <>
-                  <p>Conectado desde: {formatDate(selectedConexion.connectedDate)}</p>
-                  <p>Duração da Conexão: {getConnectionDuration(selectedConexion.connectedDate)}</p>
+                  <p>{tempoAparelhoConectado}: {formatDate(selectedConexion.connectedDate)}</p>
+                  <p>{duracaoConecxao}{getConnectionDuration(selectedConexion.connectedDate)}</p>
                 </>
               )}
               <div className="detalhes-actions">
@@ -538,10 +543,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
                   {selectedConexion.connected ? 'Desconectar' : 'Conectar'}
                 </button>
                 <button onClick={() => { handleEditClick(selectedConexion); setSelectedConexion(null); }} className="edit-button-details" disabled={!selectedConexion.connected}>
-                  Editar Aparelho
+                  {btnEditar}
                 </button>
                 <button onClick={() => { removeConexion(selectedConexion.id); setSelectedConexion(null); }} className="remove-button-details">
-                  Remover Aparelho
+                  {btnRemover}
                 </button>
               </div>
             </div>
@@ -552,7 +557,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {showConfirmDialog && (
         <div className="modal-overlay" onClick={handleCancelRemove}>
           <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
-            <p>Tem certeza que deseja remover este aparelho?</p>
+            <p>{mensagemExcluirAparelho}</p>
             <div className="confirmation-actions">
               <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
               <button onClick={handleCancelRemove} className="cancel-button">Não</button>

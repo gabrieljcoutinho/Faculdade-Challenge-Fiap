@@ -73,3 +73,11 @@ body.dark-theme .perguntasFrequentes {
 body.light-theme .perguntasFrequentes {
     color: #000;
 }
+
+body.light-theme .tituloEsqueciSenha {
+    color: black;
+}
+
+body.dark-theme .tituloEsqueciSenha {
+    color: black;
+}

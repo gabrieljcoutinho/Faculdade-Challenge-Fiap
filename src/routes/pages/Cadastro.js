@@ -6,6 +6,8 @@ import '../../CSS/Cadastro/password.css';
 import '../../CSS/Cadastro/links.css';
 import '../../CSS/Cadastro/error.css';
 
+import { mensagemLogar, subTitulo, recursos, comunidade, suporte} from '../../constants/Cadastro/index.js';
+
 const Cadastro = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ nome: '', email: '', password: '', confirmPassword: '' });
@@ -105,16 +107,16 @@ const Cadastro = () => {
         {successMessage && <div className="success-message animated">🎉 {successMessage}</div>}
 
         <div className="links">
-          <p className='temConta'><Link to="/login">Já tem uma conta?  Faça login</Link></p>
+          <p className='temConta'><Link to="/login">{mensagemLogar}</Link></p>
         </div>
       </section>
 
       <aside className="cadastro-info">
-        <h2>Comece sua jornada conosco!</h2>
+        <h2>{subTitulo}</h2>
         <ul>
-          <li>🚀 Acesse todos os nossos recursos.</li>
-          <li>🤝 Conecte-se com nossa comunidade.</li>
-          <li>⭐ Desbloqueie benefícios exclusivos.</li>
+          <li>{recursos}.</li>
+          <li>{comunidade}.</li>
+          <li>{suporte}</li>
         </ul>
       </aside>
       <br /><br /><br />

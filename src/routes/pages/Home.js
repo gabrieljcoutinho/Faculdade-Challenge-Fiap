@@ -20,6 +20,9 @@ import logoLinkedin from '../../imgs/Logolinkedin.png';
 
 import initialProductionData from '../../data/graficoHomeApi.json';
 
+import {tituloPrincipal, graficos, dados, subTitulo, impacto, economia, descricaoEconomia,
+  arvoresEquivalentes, absorcaoPorArvore, reducaoPoluicao,impactoDescricao } from '../../constants/Home/index.js'; // Importando constante de teste
+
 import {
   Chart as ChartJS,
   LineElement,
@@ -332,9 +335,9 @@ const Home = () => {
     <div className="home-container">
       <main className="main-content">
         <section className="production-section">
-          <h2 className='tituloPrincipalHome'>Produção Atual</h2>
+          <h2 className='tituloPrincipalHome'>{tituloPrincipal}</h2>
           <div className="chart-type-selector">
-            <label className='tipoGrafico'>Tipo de Gráfico:</label>
+            <label className='tipoGrafico'>{graficos}</label>
             <div className="chart-buttons" title='Grafico'>
               {['line', 'bar', 'pie'].map(type => (
                 <button
@@ -358,11 +361,11 @@ const Home = () => {
               )}
             </div>
           </div>
-          <p className='paragrafoFonteGrafico'>Fonte: Placas GoodWe</p>
+          <p className='paragrafoFonteGrafico'>{dados}</p>
         </section>
 
         <section className="weather-forecast-section">
-          <h2>Clima e Previsão</h2>
+          <h2>{subTitulo}</h2>
           <div className="weather-cards-container">
             <div className="weather-card current-weather-card">
               <h3>Agora</h3>
@@ -381,21 +384,21 @@ const Home = () => {
         </section>
 
         <section className="environmental-impact-section">
-          <h2>Impacto Ambiental</h2>
+          <h2>{impacto}</h2>
           <div className="impact-cards-container">
             <div className="impact-card">
-              <h3>Economia de CO₂</h3>
+              <h3>{economia}</h3>
               <p className="impact-value">{environmentalImpact.co2Avoided} kg</p>
-              <p className="impact-description">de CO₂ deixaram de ser emitidos</p>
+              <p className="impact-description">{descricaoEconomia}</p>
             </div>
             <div className="impact-card">
-              <h3>Árvores Equivalentes</h3>
+              <h3>{arvoresEquivalentes}</h3>
               <p className="impact-value">{environmentalImpact.equivalentTrees}</p>
-              <p className="impact-description">árvores seriam necessárias para absorver essa CO₂</p>
+              <p className="impact-description">{absorcaoPorArvore}</p>
             </div>
             <div className="impact-card">
-              <h3>Redução de Poluição</h3>
-              <p className="impact-description">A energia solar contribui para um ar mais limpo e um ambiente mais saudável, reduzindo significativamente a poluição atmosférica.</p>
+              <h3>{reducaoPoluicao}</h3>
+              <p className="impact-description">{impactoDescricao}</p>
             </div>
           </div>
         </section>

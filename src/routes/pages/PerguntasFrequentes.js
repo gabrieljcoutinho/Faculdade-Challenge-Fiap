@@ -3,54 +3,66 @@ import React, { useState } from 'react';
 import '../../CSS/PerguntasFrequentes/perguntasFrequentes.css';
 import '../../CSS/PerguntasFrequentes/btnPerguntasFrequentes.css';
 
+//Variaveis
+import {tituloPrincipal, perguntasFrequentes1, perguntasFrequentes1Resposta,
+   perguntasFrequentes2, perguntasFrequentes2Resposta, perguntasFrequentes3,
+perguntasFrequentes3Resposta, perguntasFrequentes4, perguntasFrequentes4Resposta,
+  perguntasFrequentes5, perguntasFrequentes5Resposta, perguntasFrequentes6,
+  perguntasFrequentes6Resposta, perguntasFrequentes7, perguntasFrequentes7Resposta,
+  perguntasFrequentes8, perguntasFrequentes8Resposta, perguntasFrequentes9,
+  perguntasFrequentes9Resposta, perguntasFrequentes10, perguntasFrequentes10Resposta,
+  perguntasFrequentes11, perguntasFrequentes11Resposta, perguntasFrequentes12,
+  perguntasFrequentes12Resposta
+} from '../../constants/PerguntasFrequentes/index.js';
+
 const faqs = [
   {
-    question: "Como conectar um aparelho ao sistema?",
-    answer: "Você pode conectar aparelhos via Bluetooth, QR Code ou manualmente na seção de conexões.",
+    question: perguntasFrequentes1,
+    answer: perguntasFrequentes1Resposta,
   },
   {
-    question: "Quais aparelhos são compatíveis?",
-    answer: "TV, Ar-condicionado, Lâmpadas, Fritadeira Airfry, Carregadores, e outros que suportem conexão Bluetooth.",
+    question: perguntasFrequentes2,
+    answer: perguntasFrequentes2Resposta,
   },
   {
-    question: "Como faço para remover um aparelho?",
-    answer: "Na página de conexões, você pode remover aparelhos que não usa mais clicando no ícone de lixeira.",
+    question: perguntasFrequentes3,
+    answer: perguntasFrequentes3Resposta,
   },
   {
-    question: "É possível controlar aparelhos remotamente?",
-    answer: "Sim, desde que estejam conectados ao sistema via Bluetooth ou rede Wi-Fi e estejam configurados corretamente.",
+    question: perguntasFrequentes4,
+    answer: perguntasFrequentes4Resposta,
   },
   {
-    question: "Como atualizar o sistema?",
-    answer: "As atualizações são feitas automaticamente quando seu dispositivo está conectado à internet.",
+    question: perguntasFrequentes5,
+    answer: perguntasFrequentes5Resposta,
   },
   {
-    question: "Posso usar o sistema em vários dispositivos ao mesmo tempo?",
-    answer: "Sim, o sistema permite o acesso simultâneo em diferentes aparelhos, como celular e tablet.",
+    question: perguntasFrequentes6,
+    answer: perguntasFrequentes6Resposta,
   },
   {
-    question: "É possível agendar o funcionamento de um aparelho?",
-    answer: "Sim. Acesse a aba de agendamentos, selecione o aparelho e defina o horário desejado.",
+    question: perguntasFrequentes7,
+    answer: perguntasFrequentes7Resposta,
   },
   {
-    question: "O sistema funciona offline?",
-    answer: "Algumas funções básicas funcionam offline, mas o controle remoto e as atualizações exigem conexão com a internet.",
+    question: perguntasFrequentes8,
+    answer: perguntasFrequentes8Resposta,
   },
   {
-    question: "Meus dados estão seguros?",
-    answer: "Sim, todos os dados são criptografados e protegidos conforme a LGPD. Nenhuma informação é compartilhada sem autorização.",
+    question: perguntasFrequentes9,
+    answer: perguntasFrequentes9Resposta,
   },
   {
-    question: "Como redefinir minha senha?",
-    answer: "Na tela de login, clique em 'Esqueci minha senha' e siga as instruções enviadas para seu e-mail.",
+    question: perguntasFrequentes10,
+    answer: perguntasFrequentes10Resposta,
   },
   {
-    question: "Posso personalizar os nomes dos aparelhos?",
-    answer: "Sim, ao clicar em um dispositivo na aba de conexões, você pode editar seu nome e ícone.",
+    question: perguntasFrequentes11,
+    answer: perguntasFrequentes11Resposta,
   },
   {
-    question: "Como recebo alertas ou notificações?",
-    answer: "Você será notificado por alertas visuais e sonoros no sistema, além de notificações push se estiver ativado.",
+    question: perguntasFrequentes12,
+    answer: perguntasFrequentes12Resposta,
   },
 ];
 
@@ -77,7 +89,7 @@ const PerguntasFrequentes = ({ isReading }) => {
 
   return (
     <div className="perguntas-frequentes-container">
-      <h1 className='perguntasFrequentes'>Perguntas Frequentes</h1>
+      <h1 className='perguntasFrequentes'>{tituloPrincipal}</h1>
       <div className="faq-list">
         {faqs.map((faq, index) => (
           <div
