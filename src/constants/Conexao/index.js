@@ -1,4 +1,4 @@
-export const tituloPrincipal = "Aparelhos Conectados";
+export const tituloPrincipal = "Conexões ";
 export const adicionarAparelho = 'Adicionar Aparelho'
 export const nenhumAprelhoConectado = "Nenhum aparelho conectado...";
 
