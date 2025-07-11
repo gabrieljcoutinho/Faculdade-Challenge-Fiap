@@ -24,8 +24,8 @@
 }
 
 .contato-info .info-item .icon {
-    margin-right: 10px;
     color: #007bff;
+    padding-left: 1px;
 }
 
 .contato-info .info-item p {

@@ -81,17 +81,17 @@ const handleFaqClick = () => {
 
           <div className="info-item">
             <FaMapMarkerAlt size={20} className="icon" />
-            <p className="paragrafoContato"><strong>Endereço:</strong> {rua}</p>
+            <p className=""><strong>Endereço:</strong> {rua}</p>
           </div>
 
           <div className="info-item">
             <FaEnvelope size={20} className="icon" />
-            <p className="paragrafoContato"><strong>Email:</strong> {EmailDaEmpresa}</p>
+            <p className=""><strong>Email:</strong> {EmailDaEmpresa}</p>
           </div>
 
           <div className="info-item">
             <FaPhone size={20} className="icon" />
-            <p className="paragrafoContato"><strong>Telefone:</strong> {TelefoneDaEmpresa}</p>
+            <p className=""><strong>Telefone:</strong> {TelefoneDaEmpresa}</p>
           </div>
 
           <div className="social-icons" title="IconesRedes Sociais">
