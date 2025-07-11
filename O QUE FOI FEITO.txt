@@ -7,18 +7,21 @@ desenvolver soluções tecnológicas que pudessem colaborar com a melhoria de se
  com o link possa acessá-lo diretamente.A proposta é simular um aplicativo para celular voltado para o gerenciamento e
  automação de recursos relacionados à energia solar. A seguir, explico detalhadamente cada parte do sistema.A aplicação
 conta com uma estrutura básica composta por um cabeçalho fixo, que direciona o usuário para diferentes seções: Home,
-Conexões de Aparelhos, Chatbot, Contato e Configurações.Na seção Home, o usuário encontra um gráfico que pode ser
+Conecxões de Aparelhos, Chatbot, Contato e Configurações.Na seção Home, o usuário encontra um gráfico que pode ser
 alternado entre três tipos diferentes: gráfico de linha, gráfico de barras e gráfico de pizza. Os dados apresentados nesses
 gráficos são obtidos a partir de uma API simulada (fake API), que fornece as informações necessárias para gerar as visualizações.
 Logo abaixo, a página exibe informações sobre o clima atual e a previsão do tempo. Mais ao final da Home, há uma área
 destinada a mostrar o impacto positivo do uso de placas solares, destacando principalmente os benefícios econômicos
-e ambientais, como a economia gerada ao adotar esse tipo de energia.Na parte de conexões de aparelhos, o usuário pode
-nteragir com um sistema que permite adicionar dispositivos de duas formas: por meio de conexão Bluetooth real
+e ambientais, como a economia gerada ao adotar esse tipo de energia.Na parte de conecxões de aparelhos, o usuário pode
+teragir com um sistema que permite adicionar dispositivos de duas formas: por meio de conexão Bluetooth real
 (que busca dispositivos próximos) ou de forma manual.Ao escolher a forma manual, o usuário pode inserir um nome
 para o aparelho, escolher um ícone representativo e selecionar uma cor de fundo personalizada. Após o cadastro,
 o aparelho aparece como conectado e oferece funcionalidades adicionais, como a geração de um QR Code
 (que permite a outros usuários adicionarem o mesmo dispositivo de forma mais rápida ao escaneá-lo com a câmera),
-além de opções para editar, excluir ou desativar o dispositivo com a possibilidade de arrastar os aparelhos e trocar a ordem
+além de opções para editar, excluir ou desativar o dispositivo com a possibilidade de arrastar os aparelhos e trocar a ordem,
+há uma parte tambme que separa os aprelhos que estão conectado em uso e os aprelhos desconectado para não haver
+um problema co ma interação do usuário ao mexer ou seja o usario adiona os aprelhos e o desativar ele sobre da parte que os
+aparelhos estao em uso a vai apra a prte de desconectado, onde o usuario pdoe reativalo novamente
 .A seção do chatbot foi desenvolvida para oferecer um sistema de mensagens com funcionalidades básicas de um chat tradicional,
 como envio e recebimento de mensagens. No entanto, foi integrada a ele uma API personalizada de perguntas e respostas específicas
 e a API de uma IA real que responde outas perguntas. Com isso, o sistema reconhece comandos como “conectar aparelho”, “mudar de página”,
