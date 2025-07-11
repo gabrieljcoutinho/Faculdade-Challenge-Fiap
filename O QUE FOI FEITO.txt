@@ -17,7 +17,7 @@ Conexões de Aparelhos
 O usuário pode adicionar dispositivos de duas formas: via conexão Bluetooth (simulada) ou manualmente. Na adição manual,
 é possível escolher o nome, ícone e cor de fundo do dispositivo. Após o cadastro, o aparelho aparece como conectado,
  com opções de gerar QR Code (para facilitar o compartilhamento), editar, excluir ou desativar.
-Os dispositivos conectados são organizados em duas listas: ativos e desconectados. Quando um aparelho é desativado,
+Os dispositivos conectados são organizados em duas listas: conectados e desconectados. Quando um aparelho é desativado,
  ele é automaticamente movido para a seção de desconectados, podendo ser reativado a qualquer momento. Também é possível reordenar os dispositivos arrastando-os na tela.
 
 Chatbot
