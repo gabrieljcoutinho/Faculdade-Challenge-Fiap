@@ -334,6 +334,9 @@ const Home = () => {
   return (
     <div className="home-container">
       <main className="main-content">
+
+
+
         <section className="production-section">
           <h2 className='tituloPrincipalHome'>{tituloPrincipal}</h2>
           <div className="chart-type-selector">
