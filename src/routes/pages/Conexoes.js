@@ -421,7 +421,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <span className="plus-icon">+</span> {adicionarAparelho}
       </button>
 
-      {/* New: Toggle buttons for connected/disconnected devices */}
+      {/* Aparelhoconecado e nao ocentados*/}
+
+
+
       <div className="list-toggle-buttons">
        <button
   className={`toggle-button connected-btn ${activeList === 'connected' ? 'active' : ''}`}
@@ -438,7 +441,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 </button>
 
       </div>
-      {/* End New */}
+
+
+
+      {/* Fim Aparelhoconecado e nao ocentados*/}
+
 
       {conexions.length === 0 && !showAddForm && (
         <div className="placeholder-image-container">
