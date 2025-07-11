@@ -33,7 +33,7 @@ import placeholderImage from '../../imgs/semConexao.png';
 import bluetoothIcon from '../../imgs/bluetooth.png';
 import manual from '../../imgs/manual.png';
 
-import { tituloPrincipal, adicionarAparelho, nenhumAprelhoConectado, escolherIcone, escolherCorDefundo, btnBluetooth,
+import { tituloPrincipal, adicionarAparelho, escolherIcone, escolherCorDefundo, btnBluetooth,
   procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado,
 detalhesaparelhoAmpliados, mensagemExcluirAparelho, btnEditar, btnRemover, tempoAparelhoConectado, duracaoConecxao
 } from '../../constants/Conexao/index.js';
@@ -447,13 +447,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       {/* Fim Aparelhoconecado e nao ocentados*/}
 
 
-      {conexions.length === 0 && !showAddForm && (
-        <div className="placeholder-image-container">
-          <br /><br /><br />
-          <img src={placeholderImage} alt="Nenhum aparelho conectado" className="placeholder-image" />
-          <p className="placeholder-text">{nenhumAprelhoConectado}</p>
-        </div>
-      )}
+
 
       {showAddForm && (
         <div className="modal-overlay">
