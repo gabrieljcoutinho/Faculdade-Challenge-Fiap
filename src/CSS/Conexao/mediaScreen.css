@@ -22,35 +22,25 @@
 /* Para telas maiores que 414px, você pode manter o layout anterior
    ou definir um novo comportamento se desejar. */
 @media (min-width: 415px) {
-    .conexions-list {
+    .placeholder-image-container {
+        width: 100%;
         display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        width: 95%;
-        padding: 20px;
-        gap: 20px;
-        margin-bottom: 60px;
-        box-sizing: border-box;
-    }
-
-    .retanguloAdicionado {
-        position: relative;
-        width: 255px;
-        height: 110px;
-        background-color: #e0e0e0;
-        margin: 0;
-        box-sizing: border-box;
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        color: #333;
-        font-size: 1.1em;
-        overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-        transition: transform 0.2s ease-in-out;
+        justify-content: center;
+
+        /* ajuste conforme necessário */
     }
 
+    .placeholder-image {
+        width: 150px;
+        /* ajuste o tamanho como quiser */
+        height: auto;
+    }
+
+    .placeholder-text {
+        margin-top: 20px;
+        font-size: 1.2em;
+        text-align: center;
+    }
 }
