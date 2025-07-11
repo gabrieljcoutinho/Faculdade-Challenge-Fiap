@@ -50,7 +50,7 @@ const fecharConfiguracoes = () => {
 
   return (
     <div className="configuracoes-overlay">
-      <button className="fechar-btn" onClick={fecharConfiguracoes} title="Fechar menu">✕</button>
+      <button className="fechar-btn" onClick={fecharConfiguracoes} title="Fechar configurações">✕</button>
 
       <div className="conteudo-configuracoes">
         <div className="btn-container">
