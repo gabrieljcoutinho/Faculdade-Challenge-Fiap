@@ -1,86 +1,66 @@
-/* Container for the toggle buttons */
 .list-toggle-buttons {
+    position: relative;
     display: flex;
     justify-content: center;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin: 25px 0;
     gap: 8px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 15px;
     flex-wrap: nowrap;
-    min-width: 0;
-
 }
 
-/* Base style for all toggle buttons */
+/* Barra deslizante com base em % */
+.slider-bar {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    width: 50%;
+    /* ocupa metade do container (2 botões) */
+    left: 0;
+    background-color: rgba(31, 81, 255, 1);
+    border-radius: 2px;
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+/* Posição do botão selecionado */
+.slider-bar.connected {
+    transform: translateX(0%);
+    background-color: rgba(31, 81, 255, 1);
+}
+
+.slider-bar.disconnected {
+    transform: translateX(100%);
+    background-color: rgba(255, 0, 51, 1);
+}
+
+/* Botões */
 .toggle-button {
     background: none;
     border: none;
     cursor: pointer;
     font-size: 0.9em;
     color: #555;
-    transition: color 0.3s ease, border-bottom 0.3s ease;
+    transition: color 0.3s ease;
     position: relative;
+    z-index: 2;
+    flex: 1;
+    padding: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
 
-/* Hover effect (general) */
 .toggle-button:hover {
     color: rgba(31, 81, 255, 1);
 }
 
-/* Active state for "Conectados" button */
 .toggle-button.connected-btn.active {
     color: rgba(31, 81, 255, 1);
     font-weight: bold;
 }
 
-.toggle-button.connected-btn.active::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -16px;
-    width: 100%;
-    height: 3px;
-    background-color: rgba(31, 81, 255, 1);
-    border-radius: 2px;
-}
-
-/* Active state for "Desconectados" button */
 .toggle-button.disconnected-btn.active {
     color: rgba(255, 0, 51, 1);
-    ;
     font-weight: bold;
-}
-
-.toggle-button.disconnected-btn.active::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -16px;
-    width: 100%;
-    height: 3px;
-    background-color: rgba(255, 0, 51, 1);
-    ;
-    border-radius: 2px;
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .list-toggle-buttons {
-        gap: 5px;
-        padding: 0 10px 10px 10px;
-    }
-
-    .toggle-button {
-        font-size: 0.85em;
-        padding: 5px 8px;
-    }
-
-    .toggle-button.connected-btn.active::after,
-    .toggle-button.disconnected-btn.active::after {
-        bottom: -11px;
-    }
 }
