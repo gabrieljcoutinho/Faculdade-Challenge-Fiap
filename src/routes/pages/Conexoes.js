@@ -425,22 +425,25 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
 
 
-      <div className="list-toggle-buttons">
-       <button
-  className={`toggle-button connected-btn ${activeList === 'connected' ? 'active' : ''}`}
-  onClick={() => setActiveList('connected')}
->
-  Conectados ({connectedDevices.length})
-</button>
+<div className="list-toggle-buttons">
+  <span className={`slider-bar ${activeList}`} />
 
-<button
-  className={`toggle-button disconnected-btn ${activeList === 'disconnected' ? 'active' : ''}`}
-  onClick={() => setActiveList('disconnected')}
->
-  Desconectados ({disconnectedDevices.length})
-</button>
+  <button
+    className={`toggle-button connected-btn ${activeList === 'connected' ? 'active' : ''}`}
+    onClick={() => setActiveList('connected')}
+  >
+    Conectados ({connectedDevices.length})
+  </button>
 
-      </div>
+  <button
+    className={`toggle-button disconnected-btn ${activeList === 'disconnected' ? 'active' : ''}`}
+    onClick={() => setActiveList('disconnected')}
+  >
+    Desconectados ({disconnectedDevices.length})
+  </button>
+</div>
+
+
 
 
 
