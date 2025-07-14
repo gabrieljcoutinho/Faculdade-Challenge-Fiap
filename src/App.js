@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Import CSS e imagens
 import './CSS/Reset.css';
+import '../src/CSS/mudarCorScrollBar.css'
+
 import tvIcon from './imgs/TV.png';
 import airConditionerIcon from './imgs/ar-condicionado.png';
 import airfry from './imgs/airfry.png';
