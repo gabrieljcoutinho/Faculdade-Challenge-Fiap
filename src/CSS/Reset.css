@@ -39,3 +39,27 @@ h1 {
   padding-top: 1rem;
   font-size: 25px;
 }
+
+
+/* Custom scrollbar para WebKit (desktop e alguns navegadores mobile) */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 0, 51, 0.9);
+  border-radius: 10px;
+}
+
+/* Esconde scrollbars em navegadores que não suportam WebKit scrollbar */
+* {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: rgba(255, 0, 51, 0.9) #000;
+  /* Firefox */
+}
