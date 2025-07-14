@@ -335,7 +335,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
   // --- Touch Handlers (Mobile) ---
   const handleTouchStart = (e, index) => {
-    e.preventDefault(); // Prevent default browser actions like scrolling or text selection
+    // Only prevent default if we intend to start a drag
     touchStartTimer.current = setTimeout(() => {
         setIsDragging(true);
         dragItem.current = index;
@@ -347,35 +347,34 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   };
 
   const handleTouchMove = (e) => {
-    e.preventDefault(); // Crucial to prevent scrolling while dragging
+    // Only prevent default if a drag is actively in progress
+    if (isDragging) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
 
-    if (!isDragging) {
-      // If not actively dragging, clear the timer (if any) and return
+      const hoveredConexionElement = targetElement ? targetElement.closest('.retanguloAdicionado') : null;
+
+      document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
+
+      if (hoveredConexionElement) {
+          const parentChildren = Array.from(hoveredConexionElement.parentNode?.children || []);
+          const hoveredIndex = parentChildren.indexOf(hoveredConexionElement);
+          if (hoveredIndex !== -1 && hoveredIndex !== dragItem.current) {
+              dragOverItem.current = hoveredIndex;
+              hoveredConexionElement.classList.add('drag-over');
+          } else {
+              dragOverItem.current = null;
+          }
+      } else {
+          dragOverItem.current = null;
+      }
+    } else {
+      // If not dragging, clear the timer if a long-press was in progress
       if (touchStartTimer.current) {
         clearTimeout(touchStartTimer.current);
         touchStartTimer.current = null;
       }
-      return;
-    }
-
-    const touch = e.touches[0];
-    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
-
-    const hoveredConexionElement = targetElement ? targetElement.closest('.retanguloAdicionado') : null;
-
-    document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
-
-    if (hoveredConexionElement) {
-        const parentChildren = Array.from(hoveredConexionElement.parentNode?.children || []);
-        const hoveredIndex = parentChildren.indexOf(hoveredConexionElement);
-        if (hoveredIndex !== -1 && hoveredIndex !== dragItem.current) {
-            dragOverItem.current = hoveredIndex;
-            hoveredConexionElement.classList.add('drag-over');
-        } else {
-            dragOverItem.current = null;
-        }
-    } else {
-        dragOverItem.current = null;
     }
   };
 
@@ -421,36 +420,24 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <span className="plus-icon">+</span> {adicionarAparelho}
       </button>
 
-      {/* Aparelhoconecado e nao ocentados*/}
+      {/* Toggle buttons for connected/disconnected devices */}
+      <div className="list-toggle-buttons">
+        <span className={`slider-bar ${activeList}`} />
 
+        <button
+          className={`toggle-button connected-btn ${activeList === 'connected' ? 'active' : ''}`}
+          onClick={() => setActiveList('connected')}
+        >
+          Conectados ({connectedDevices.length})
+        </button>
 
-
-<div className="list-toggle-buttons">
-  <span className={`slider-bar ${activeList}`} />
-
-  <button
-    className={`toggle-button connected-btn ${activeList === 'connected' ? 'active' : ''}`}
-    onClick={() => setActiveList('connected')}
-  >
-    Conectados ({connectedDevices.length})
-  </button>
-
-  <button
-    className={`toggle-button disconnected-btn ${activeList === 'disconnected' ? 'active' : ''}`}
-    onClick={() => setActiveList('disconnected')}
-  >
-    Desconectados ({disconnectedDevices.length})
-  </button>
-</div>
-
-
-
-
-
-      {/* Fim Aparelhoconecado e nao ocentados*/}
-
-
-
+        <button
+          className={`toggle-button disconnected-btn ${activeList === 'disconnected' ? 'active' : ''}`}
+          onClick={() => setActiveList('disconnected')}
+        >
+          Desconectados ({disconnectedDevices.length})
+        </button>
+      </div>
 
       {showAddForm && (
         <div className="modal-overlay">
