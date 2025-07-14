@@ -34,7 +34,6 @@ import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 
 
 
-
 // Hook para ativar leitura em voz alta globalmente
 function useReadAloud(isReading) {
   useEffect(() => {
