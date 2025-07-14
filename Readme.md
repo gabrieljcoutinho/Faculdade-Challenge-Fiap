@@ -99,12 +99,4 @@ Implementa seis funcionalidades principais:
 - O sistema possui pequenas animações para melhorar a experiência do usuário.
   Por exemplo, no chat, ao digitar comandos para mudar de página (como “Home”), o usuário é redirecionado com uma animação suave de apagar e acender a página.
 
----
 
-## Como acessar
-
-> [Link do projeto publicado] (insira aqui o link real do seu projeto)
-
----
-
-Se precisar de ajuda para rodar localmente ou contribuir, entre em contato!
