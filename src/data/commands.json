@@ -187,7 +187,8 @@
         "Página home",
          "Página Home",
          "Pagina home",
-         "Pagina Home"
+         "Pagina Home",
+         "Inicio"
       ],
       "resposta": "REDIRECT:/"
     },
