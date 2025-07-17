@@ -22,16 +22,19 @@ import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css';
 import '../../CSS/Conexao/btnConectadoEnaoConectado.css'
 
 // Importa imagens
-import tvIcon from '../../imgs/TV.png';
+import tvConexao from '../../imgs/TV.png';
 import airConditionerIcon from '../../imgs/ar-condicionado.png';
 import airfry from '../../imgs/airfry.png';
 import lampIcon from '../../imgs/lampada.png';
 import carregador from '../../imgs/carregador.png';
-import editIcon from '../../imgs/pencil.png';
-import imgQrcode from '../../imgs/qrCode.png';
-import placeholderImage from '../../imgs/semConexao.png';
-import bluetoothIcon from '../../imgs/bluetooth.png';
-import manual from '../../imgs/manual.png';
+
+
+
+import editIcon from '../../imgs/imgConexao/pencil.png';
+import imgQrcode from '../../imgs/imgConexao/qrCode.png';
+import placeholderImage from '../../imgs/imgConexao/semConexao.png';
+import bluetoothIcon from '../../imgs/imgConexao/bluetooth.png';
+import manual from '../../imgs/imgConexao/manual.png';
 
 import { tituloPrincipal, adicionarAparelho, escolherIcone, escolherCorDefundo, btnBluetooth,
   procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado,
@@ -55,7 +58,7 @@ const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
 
 // Ícones disponíveis
 const availableIcons = [
-  { name: 'tv', src: tvIcon },
+  { name: 'tv', src: tvConexao },
   { name: 'arcondicionado', src: airConditionerIcon },
   { name: 'lampada', src: lampIcon },
   { name: 'airfry', src: airfry },
@@ -166,7 +169,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         let guessedIcon = lampIcon;
         const name = deviceName.toLowerCase();
 
-        if (name.includes('tv') || name.includes('monitor')) guessedIcon = tvIcon;
+        if (name.includes('tv') || name.includes('monitor')) guessedIcon = tvConexao;
         else if (name.includes('ar') || name.includes('condicionado')) guessedIcon = airConditionerIcon;
         else if (name.includes('lamp') || name.includes('lâmpada')) guessedIcon = lampIcon;
         else if (name.includes('airfry') || name.includes('fritadeira')) guessedIcon = airfry;
