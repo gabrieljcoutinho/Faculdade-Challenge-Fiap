@@ -5,11 +5,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './CSS/Reset.css';
 import '../src/CSS/mudarCorScrollBar.css'
 
-import tvIcon from './imgs/TV.png';
-import airConditionerIcon from './imgs/ar-condicionado.png';
-import airfry from './imgs/airfry.png';
-import lampIcon from './imgs/lampada.png';
-import carregador from './imgs/carregador.png';
+import tvIcon from './imgs/imgConexao/TV.png';
+import airConditionerIcon from '../src/imgs/imgConexao/ar-condicionado.png';
+import airfry from '../src/imgs/imgConexao/airfry.png';
+import lampIcon from '../src/imgs/imgConexao/lampada.png';
+import carregador from '../src/imgs/imgConexao/carregador.png';
 
 // Dados iniciais do gráfico
 import initialProductionData from './data/graficoHomeApi.json';
