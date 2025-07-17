@@ -3,11 +3,11 @@ import { Link, useLocation } from 'react-router-dom';
 import '../CSS/Header/header.css';
 import '../CSS/Header/menu.css';
 
-import home from '../imgs/home.png';
-import wifi from '../imgs/wifi.png';
-import contato from '../imgs/contato.png';
-import chatIcon from '../imgs/chat.png';
-import settingsIcon from '../imgs/engrenagem.png';
+import home from '../imgs/imgHeader/home.png';
+import wifi from '../imgs/imgHeader/wifi.png';
+import contato from '../imgs/imgHeader/contato.png';
+import chatIcon from '../imgs/imgHeader/chat.png';
+import settingsIcon from '../imgs/imgHeader/engrenagem.png';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
