@@ -13,10 +13,10 @@ import '../../CSS/Home/impactoAmbiental.css';
 import '../../CSS/Home/mediaScreen.css';
 
 import { Line, Pie, Bar } from 'react-chartjs-2';
-import logoGmail from '../../imgs/Logogmail.png';
-import logoWhatsapp from '../../imgs/Logowhatsapp.png';
-import logoInstagram from '../../imgs/Logoinstagram.png';
-import logoLinkedin from '../../imgs/Logolinkedin.png';
+import logoGmail from '../../imgs/imgHome/Logogmail.png'
+import logoWhatsapp from '../../imgs/imgHome/Logowhatsapp.png';
+import logoInstagram from '../../imgs/imgHome/Logoinstagram.png';
+import logoLinkedin from '../../imgs/imgHome/Logolinkedin.png';
 
 import initialProductionData from '../../data/graficoHomeApi.json';
 
