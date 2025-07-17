@@ -170,7 +170,8 @@
 
     {
       "triggers": [
-        "Analisar gráfico", "Analisar o gráfico", "Analisar grafico",
+        "Analisar gráfico",
+         "Analisar o gráfico", "Analisar grafico",
         "Análise do Grafico", "Dados do grafico", "Producao de energia",
         "Produção de energia do Gráfico", "Analise o grafico", "Análise o Gráfico",
         "Relatório de produção", "Dados do gráfico", "Meus dados de energia do Grafico",
