@@ -102,9 +102,15 @@
 
     {
       "triggers": [
-        "Conectar Ar-Condicionado", "Conectar Arcondiconado", "Ligar Ar-Condicionado",
-        "Conectar ar condicionado", "Ligar ar condicionado", "conectar ar-condicionado",
-        "ligar ar-condicionado", "conectar ar condicionado", "ligar ar condicionado"
+        "Conectar Ar-Condicionado",
+        "Conectar Arcondiconado",
+        "Ligar Ar-Condicionado",
+        "Conectar ar condicionado",
+        "Ligar ar condicionado",
+        "conectar ar-condicionado",
+        "ligar ar-condicionado",
+        "conectar ar condicionado",
+        "ligar ar condicionado"
       ],
       "resposta": "Ar-Condicionado Conectado"
     },
@@ -112,8 +118,14 @@
 
     {
       "triggers": [
-        "Conectar Lâmpada", "Ligar Lâmpada", "Conectar lampada", "Ligar lampada",
-        "conectar lâmpada", "ligar lâmpada", "conectar lampada", "ligar lampada"
+        "Conectar Lâmpada",
+        "Ligar Lâmpada",
+        "Conectar lampada",
+         "Ligar lampada",
+        "conectar lâmpada",
+        "ligar lâmpada",
+         "conectar lampada",
+         "ligar lampada"
       ],
       "resposta": "Lâmpada Conectada"
     },
@@ -121,7 +133,10 @@
 
     {
       "triggers": [
-        "Conectar Airfry", "Ligar Airfry", "conectar airfry", "ligar airfry"
+        "Conectar Airfry",
+        "Ligar Airfry",
+        "conectar airfry",
+        "ligar airfry"
       ],
       "resposta": "Airfry Conectada"
     },
@@ -129,8 +144,12 @@
 
     {
       "triggers": [
-        "Conectar Carregador", "Ligar Carregador", "Conectar carregador",
-        "Ligar carregador", "conectar carregador", "ligar carregador"
+        "Conectar Carregador",
+        "Ligar Carregador",
+        "Conectar carregador",
+        "Ligar carregador",
+        "conectar carregador",
+         "ligar carregador"
       ],
       "resposta": "Carregador Conectado"
     },
@@ -138,7 +157,12 @@
 
     {
       "triggers": [
-        "Comandos", "Comandos ?", "Comandos?", "comandos", "comandos ?", "comandos?"
+        "Comandos",
+         "Comandos ?",
+          "Comandos?",
+           "comandos",
+            "comandos ?",
+             "comandos?"
       ],
       "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Mudar para o modo escuro** / **claro**: Para trocar o tema da interface.\n- **Ir para [Página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções\n\n  "
     },
@@ -160,7 +184,8 @@
       "triggers": [
         "Mudar para o modo escuro", "Ativar modo escuro", "Modo escuro",
         "Tema escuro", "mudar para o modo escuro", "ativar modo escuro",
-        "modo escuro", "tema escuro", "modo escuro", "Modo Escuro", "Tema Escuro","Dark mode","Dark Mode","dark mode","dark Mode"
+        "modo escuro", "tema escuro", "modo escuro", "Modo Escuro", "Tema Escuro",
+        "Dark mode","Dark Mode","dark mode","dark Mode"
       ],
       "resposta": "TEMA_ESCURO"
     },
@@ -170,7 +195,8 @@
       "triggers": [
         "Mudar para o modo claro", "Ativar modo claro", "Modo claro",
         "Tema claro", "mudar para o modo claro", "ativar modo claro",
-        "modo claro", "tema claro", "modo claro", "Modo Claro", "Tema Claro","Light mode","Light Mode","light mode","light Mode"
+        "modo claro", "tema claro", "modo claro", "Modo Claro",
+        "Tema Claro","Light mode","Light Mode","light mode","light Mode"
       ],
       "resposta": "TEMA_CLARO"
     },
