@@ -7,11 +7,7 @@ import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import '../../CSS/Chat/mediaScreen.css';
-
-
-import sendBtn from '../../imgs/imgChat/sendBtn.png';
-
-
+import sendBtn from '../../imgs/sendBtn.png';
 import comandosData from '../../data/commands.json'; // Verifique o caminho correto
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
