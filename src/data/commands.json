@@ -179,7 +179,8 @@
         "Produção de energia do Gráfico",
          "Analise o grafico", "Análise o Gráfico",
         "Relatório de produção",
-         "Dados do gráfico", "Meus dados de energia do Grafico",
+         "Dados do gráfico",
+         "Meus dados de energia do Grafico",
         "Como está a energia", "Informações do gráfico", "Analise do grafico", "Análise do gráfico"
       ],
       "resposta": "PRODUCAO_GRAFICO"
