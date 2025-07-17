@@ -11,8 +11,8 @@ import '../../CSS/mudarTema.css';
 
 import { logar, deslogar} from '../../constants/Configuracao/index.js'
 
-import comandosImg from '../../imgs/comandos.png';
-import atendimentoImg from '../../imgs/atendimento.png';
+import comandosImg from '../../imgs/imgConfiguracao/comandos.png';
+import atendimentoImg from '../../imgs/imgConfiguracao/atendimento.png';
 
 const Configuracoes = ({ isReading, toggleReading }) => {
   const navigate = useNavigate();
