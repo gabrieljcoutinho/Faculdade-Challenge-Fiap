@@ -29,7 +29,7 @@ import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
 import ComandosChat from './routes/pages/ComandosChat';
 import EsqueciSenha from './routes/pages/EsqueciSenha';
-import HelpCenter from './routes/HelpCenter';
+import HelpCenter from './routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 
 
