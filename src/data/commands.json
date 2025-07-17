@@ -181,7 +181,8 @@
         "Relatório de produção",
          "Dados do gráfico",
          "Meus dados de energia do Grafico",
-        "Como está a energia", "Informações do gráfico", "Analise do grafico", "Análise do gráfico"
+        "Como está a energia",
+        "Informações do gráfico", "Analise do grafico", "Análise do gráfico"
       ],
       "resposta": "PRODUCAO_GRAFICO"
     },
