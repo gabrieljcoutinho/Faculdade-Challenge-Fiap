@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Import CSS e imagens
-import './CSS/Reset.css';
+import '../src/CSS/Reset.css';
 import '../src/CSS/mudarCorScrollBar.css'
 
 import tvIcon from './imgs/imgConexao/TV.png';
@@ -29,7 +29,7 @@ import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
 import ComandosChat from './routes/pages/ComandosChat';
 import EsqueciSenha from './routes/pages/EsqueciSenha';
-import HelpCenter from './routes/pages/HelpCenter';
+import HelpCenter from '../src/routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 
 
