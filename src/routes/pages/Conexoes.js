@@ -22,16 +22,16 @@ import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css';
 import '../../CSS/Conexao/btnConectadoEnaoConectado.css'
 
 // Importa imagens
-import tvIcon from '../../imgs/TV.png';
-import airConditionerIcon from '../../imgs/ar-condicionado.png';
-import airfry from '../../imgs/airfry.png';
-import lampIcon from '../../imgs/lampada.png';
-import carregador from '../../imgs/carregador.png';
-import editIcon from '../../imgs/pencil.png';
-import imgQrcode from '../../imgs/qrCode.png';
-import placeholderImage from '../../imgs/semConexao.png';
-import bluetoothIcon from '../../imgs/bluetooth.png';
-import manual from '../../imgs/manual.png';
+import tvIcon from '../../imgs/imgConexao/TV.png';
+import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
+import airfry from '../../imgs/imgConexao/airfry.png';
+import lampIcon from '../../imgs/imgConexao/lampada.png';
+import carregador from '../../imgs/imgConexao/carregador.png';
+import editIcon from '../../imgs/imgConexao/pencil.png'
+import imgQrcode from '../../imgs/imgConexao/qrCode.png';
+import semConexao from '../../imgs/imgConexao/semConexao.png';
+import bluetoothIcon from '../../imgs/imgConexao/bluetooth.png';
+import manual from '../../imgs/imgConexao/manual.png';
 
 import { tituloPrincipal, adicionarAparelho, escolherIcone, escolherCorDefundo, btnBluetooth,
   procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado,
@@ -503,7 +503,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         {devicesToDisplay.length === 0 && (
           <div className="placeholder-image-container">
             <br /><br /><br />
-            <img src={placeholderImage} alt="Nenhum aparelho aqui" className="placeholder-image" />
+            <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
             <p className="placeholder-text">
               {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
             </p>
