@@ -198,7 +198,8 @@
         "Tema escuro",
         "mudar para o modo escuro",
          "ativar modo escuro",
-        "modo escuro", "tema escuro", "modo escuro", "Modo Escuro", "Tema Escuro",
+        "modo escuro",
+         "tema escuro", "modo escuro", "Modo Escuro", "Tema Escuro",
         "Dark mode","Dark Mode","dark mode","dark Mode"
       ],
       "resposta": "TEMA_ESCURO"
