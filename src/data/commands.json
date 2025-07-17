@@ -222,7 +222,8 @@
          "ativar modo claro",
         "modo claro",
          "tema claro",
-          "modo claro", "Modo Claro",
+          "modo claro",
+           "Modo Claro",
         "Tema Claro","Light mode","Light Mode","light mode","light Mode"
       ],
       "resposta": "TEMA_CLARO"
