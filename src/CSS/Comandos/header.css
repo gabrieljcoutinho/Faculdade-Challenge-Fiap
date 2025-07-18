@@ -1,13 +1,18 @@
-/* header.css */
+:root {
+    --cor-primaria: #007bff;
+    --cor-branca: #ffffff;
+    --sombra-preta: rgba(0, 0, 0, 0.2);
+}
+
 .comando-header {
     padding: 1rem 2rem;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--cor-primaria);
+    color: var(--cor-branca);
     border-radius: 12px;
     text-align: center;
     font-size: 2rem;
     margin-bottom: 2.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px var(--sombra-preta);
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.05em;
 }
