@@ -1,18 +1,28 @@
-/* --- Environmental Impact Section --- */
+:root {
+    --cinza1: #2e2e2e;
+    --cinza2: #3b3b3b;
+    --cinza3: #b0b0b0;
+    --branco: #e0e0e0;
+    --azul1: #1E90FF;
+    --azul2: #87CEFA;
+    --azul3: #1E90FF;
+}
+
+
 .environmental-impact-section {
-    background-color: #2e2e2e;
+    background-color: var(--cinza1);
     /* Slightly lighter dark background */
     border-radius: 12px;
     padding: 30px;
     margin-top: 30px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    color: #e0e0e0;
+    color: var(--branco);
     /* Light grey text for contrast */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .environmental-impact-section h2 {
-    color: #1E90FF;
+    color: var(--azul1);
     /* Dodger Blue for the title, matching chart accents */
     text-align: center;
     margin-bottom: 25px;
@@ -29,7 +39,7 @@
 }
 
 .impact-card {
-    background-color: #3b3b3b;
+    background-color: var(--cinza2);
     /* Darker background for individual cards */
     border-radius: 10px;
     padding: 25px;
@@ -50,15 +60,14 @@
 }
 
 .impact-card h3 {
-    color: #87CEFA;
-    /* Light blue for card titles */
+    color: var(--azul2);
     font-size: 1.4em;
     margin-bottom: 15px;
     font-weight: 500;
 }
 
 .impact-value {
-    color: #1E90FF;
+    color: var(--azul3);
     /* Dodger Blue for the main values */
     font-size: 2.5em;
     font-weight: 700;
@@ -68,8 +77,7 @@
 }
 
 .impact-description {
-    color: #b0b0b0;
-    /* Slightly darker grey for descriptions */
+    color: var(--cinza3);
     font-size: 1em;
     line-height: 1.5;
 }
