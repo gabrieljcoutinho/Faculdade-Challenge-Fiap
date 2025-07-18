@@ -1,8 +1,16 @@
+:root {
+    --cor-fundo-contato-info: #fff;
+    --cor-titulo-contato-info: #333;
+    --cor-icone-contato-info: #007bff;
+    --cor-texto-contato-info: #000;
+    --sombra-contato-info: rgba(0, 0, 0, 0.1);
+}
+
 .contato-info {
-    background-color: #fff;
+    background-color: var(--cor-fundo-contato-info);
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--sombra-contato-info);
     width: 100%;
     max-width: 400px;
     display: flex;
@@ -12,7 +20,7 @@
 }
 
 .contato-info h2 {
-    color: #333;
+    color: var(--cor-titulo-contato-info);
     margin-bottom: 20px;
     font-size: 1.6em;
 }
@@ -24,12 +32,12 @@
 }
 
 .contato-info .info-item .icon {
-    color: #007bff;
+    color: var(--cor-icone-contato-info);
     padding-left: 1px;
 }
 
 .contato-info .info-item p {
-    color: #000;
+    color: var(--cor-texto-contato-info);
     margin: 0;
     font-size: 1em;
 }
