@@ -1,9 +1,17 @@
+:root {
+    --vermelho: #ff0000;
+    --branco: #fff;
+    --azul: #007bff;
+}
+
+
+
 .fechar-btn {
     align-self: flex-end;
     background: none;
     border: none;
     font-size: 32px;
-    color: white;
+    color: var(--branco);
     cursor: pointer;
     margin-bottom: 20px;
 }
@@ -25,14 +33,14 @@
 
 /* Log In */
 .top-buttons button:nth-child(1) {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--azul);
+    color: var(--branco);
 }
 
 /* Log Out */
 .top-buttons button:nth-child(2) {
-    background-color: red;
-    color: white;
+    background-color: var(--vermelho);
+    color: var(--branco);
 }
 
 /* Comandos */
