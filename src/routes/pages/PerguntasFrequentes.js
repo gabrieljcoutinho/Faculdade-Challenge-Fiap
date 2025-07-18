@@ -3,81 +3,33 @@ import React, { useState } from 'react';
 import '../../CSS/PerguntasFrequentes/perguntasFrequentes.css';
 import '../../CSS/PerguntasFrequentes/btnPerguntasFrequentes.css';
 
-//Variaveis
-import {tituloPrincipal, perguntasFrequentes1, perguntasFrequentes1Resposta,
-   perguntasFrequentes2, perguntasFrequentes2Resposta, perguntasFrequentes3,
-perguntasFrequentes3Resposta, perguntasFrequentes4, perguntasFrequentes4Resposta,
-  perguntasFrequentes5, perguntasFrequentes5Resposta, perguntasFrequentes6,
-  perguntasFrequentes6Resposta, perguntasFrequentes7, perguntasFrequentes7Resposta,
-  perguntasFrequentes8, perguntasFrequentes8Resposta, perguntasFrequentes9,
-  perguntasFrequentes9Resposta, perguntasFrequentes10, perguntasFrequentes10Resposta,
-  perguntasFrequentes11, perguntasFrequentes11Resposta, perguntasFrequentes12,
-  perguntasFrequentes12Resposta
-} from '../../constants/PerguntasFrequentes/index.js';
-
-const faqs = [
-  {
-    question: perguntasFrequentes1,
-    answer: perguntasFrequentes1Resposta,
-  },
-  {
-    question: perguntasFrequentes2,
-    answer: perguntasFrequentes2Resposta,
-  },
-  {
-    question: perguntasFrequentes3,
-    answer: perguntasFrequentes3Resposta,
-  },
-  {
-    question: perguntasFrequentes4,
-    answer: perguntasFrequentes4Resposta,
-  },
-  {
-    question: perguntasFrequentes5,
-    answer: perguntasFrequentes5Resposta,
-  },
-  {
-    question: perguntasFrequentes6,
-    answer: perguntasFrequentes6Resposta,
-  },
-  {
-    question: perguntasFrequentes7,
-    answer: perguntasFrequentes7Resposta,
-  },
-  {
-    question: perguntasFrequentes8,
-    answer: perguntasFrequentes8Resposta,
-  },
-  {
-    question: perguntasFrequentes9,
-    answer: perguntasFrequentes9Resposta,
-  },
-  {
-    question: perguntasFrequentes10,
-    answer: perguntasFrequentes10Resposta,
-  },
-  {
-    question: perguntasFrequentes11,
-    answer: perguntasFrequentes11Resposta,
-  },
-  {
-    question: perguntasFrequentes12,
-    answer: perguntasFrequentes12Resposta,
-  },
-];
-
 const PerguntasFrequentes = ({ isReading }) => {
   const [openIndex, setOpenIndex] = useState(null);
 
+  // Directly define FAQ data within the component
+  const faqs = [
+    { question: "Qual é o horário de funcionamento?", answer: "Atendemos de segunda a sexta, das 9h às 18h." },
+    { question: "Vocês fazem entregas?", answer: "Sim, realizamos entregas em todo o território nacional." },
+    { question: "Quais formas de pagamento são aceitas?", answer: "Aceitamos cartões de crédito, débito, boleto bancário e PIX." },
+    { question: "Como faço para trocar um produto?", answer: "Você pode solicitar a troca em até 30 dias após o recebimento, seguindo nossa política de trocas." },
+    { question: "Existe garantia para os produtos?", answer: "Todos os nossos produtos possuem garantia de 90 dias contra defeitos de fabricação." },
+    { question: "Como posso entrar em contato com o suporte?", answer: "Você pode nos contatar por telefone, e-mail ou chat online, disponíveis em nosso site." },
+    { question: "É possível rastrear meu pedido?", answer: "Sim, após o envio, você receberá um código de rastreamento por e-mail." },
+    { question: "Vocês oferecem descontos para compras em grande volume?", answer: "Sim, entre em contato para mais informações sobre nossos preços especiais para atacado." },
+    { question: "Posso retirar o produto na loja física?", answer: "No momento, operamos apenas online, sem loja física para retirada." },
+    { question: "Como funciona a política de privacidade?", answer: "Nossa política de privacidade detalha como coletamos, usamos e protegemos seus dados. Você pode consultá-la em nosso site." },
+    { question: "Vocês vendem para empresas?", answer: "Sim, emitimos nota fiscal para empresas e oferecemos condições especiais." },
+    { question: "Como faço para cancelar um pedido?", answer: "O cancelamento pode ser solicitado antes do envio. Após o envio, siga a política de devolução." }
+  ];
+
+  const tituloPrincipal = "Perguntas Frequentes"; // Define the title directly
+
   const toggleFAQ = (index) => {
     if (openIndex === index) {
-      // Fecha a pergunta e cancela a leitura
       window.speechSynthesis.cancel();
       setOpenIndex(null);
     } else {
-      // Abre a pergunta e lê somente a resposta se leitura estiver ativada
       setOpenIndex(index);
-
       if (isReading) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(faqs[index].answer);
