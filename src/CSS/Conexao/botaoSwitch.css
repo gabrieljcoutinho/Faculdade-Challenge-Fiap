@@ -1,3 +1,10 @@
+:root {
+    --color-off-bg: red;
+    --color-on-bg: blue;
+    --color-thumb: white;
+    --color-focus-shadow: red;
+}
+
 .switch {
     position: relative;
     display: inline-block;
@@ -18,7 +25,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: red;
+    background-color: var(--color-off-bg);
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -30,17 +37,17 @@
     width: 14px;
     left: 3px;
     bottom: 3px;
-    background-color: white;
+    background-color: var(--color-thumb);
     -webkit-transition: .4s;
     transition: .4s;
 }
 
 input:checked+.slider {
-    background-color: blue;
+    background-color: var(--color-on-bg);
 }
 
 input:focus+.slider {
-    box-shadow: 0 0 1px red;
+    box-shadow: 0 0 1px var(--color-focus-shadow);
 }
 
 input:checked+.slider:before {
