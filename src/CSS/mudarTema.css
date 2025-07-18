@@ -86,3 +86,11 @@ body.dark-theme .toggle-button.connected-btn.active {
     color: rgba(15, 240, 252);
     opacity: 1;
 }
+
+
+body.dark-theme * {
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: rgba(31, 81, 255, 0.7) #000;
+    /* Firefox */
+}
