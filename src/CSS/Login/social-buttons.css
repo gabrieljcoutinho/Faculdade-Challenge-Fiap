@@ -1,3 +1,7 @@
+:root {
+    --branco: #fff
+}
+
 .social-login-buttons button {
     margin-bottom: 0.5rem;
     display: flex;
@@ -11,5 +15,5 @@
     cursor: pointer;
     width: 100%;
     font-weight: bold;
-    color: white;
+    color: var(--branco);
 }
