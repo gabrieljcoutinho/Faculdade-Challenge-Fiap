@@ -1,8 +1,15 @@
+:root {
+    --color-header-bg: #252525;
+    --color-header-text: #ddd;
+    --color-header-text-hover: #f1f1f1;
+    --color-header-shadow: rgba(0, 0, 0, 0.1);
+}
+
 header {
     position: fixed;
     width: 100%;
-    background-color: #f8f8f8;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-header-bg);
+    box-shadow: 0 2px 4px var(--color-header-shadow);
     z-index: 200;
     /* Garante que o header fique acima do menu */
     display: flex;
@@ -10,9 +17,7 @@ header {
     align-items: center;
     /* Alinha verticalmente ao centro */
     cursor: pointer;
-    background-color: #252525;
 }
-
 
 .close-btn {
     /* Estilos para o botão de fechar */
@@ -24,41 +29,33 @@ header {
     cursor: pointer;
     background: none;
     border: none;
-    color: #ddd;
+    color: var(--color-header-text);
     padding: 0;
     line-height: 1;
-    cursor: pointer;
 }
 
 .close-btn:hover {
-    color: #f1f1f1;
-    cursor: pointer;
+    color: var(--color-header-text-hover);
 }
 
-/*IMG*/
 .imgHeader {
     width: 35px;
     padding-top: 0;
-    cursor: pointer;
     padding-left: 20px;
     cursor: pointer;
 }
-
 
 .settings {
     padding: 10px;
     cursor: pointer;
     margin-bottom: 15px;
     margin-top: -50px;
-    cursor: pointer;
 }
-
 
 .settings:hover {
     opacity: 0.8;
     /* Feedback visual ao passar o mouse */
 }
-
 
 #main:hover {
     cursor: pointer;
