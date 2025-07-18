@@ -1,3 +1,7 @@
+:root {
+    --branco: #f0f0f0
+}
+
 .forecast-list {
     list-style: none;
     padding: 0;
@@ -18,5 +22,5 @@
 .forecast-card .temp-range {
     font-size: 1.2em;
     margin-top: 10px;
-    color: #f0f0f0;
+    color: var(--branco);
 }
