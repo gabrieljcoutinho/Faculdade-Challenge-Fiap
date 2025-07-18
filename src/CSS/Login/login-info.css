@@ -1,7 +1,11 @@
+:root {
+    --branco: #fff
+}
+
 .login-info {
     flex: 1;
     background: linear-gradient(to bottom right, #6a11cb, #2575fc);
-    color: white;
+    color: var(--branco);
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
