@@ -1,3 +1,9 @@
+:root {
+    --color-save-bg: #28a745;
+    --color-cancel-bg: #FF0000;
+    --color-button-text: white;
+}
+
 .save-button-styled,
 .cancel-button-styled {
     padding: 12px 20px;
@@ -7,16 +13,15 @@
     font-weight: bold;
     transition: opacity 0.3s ease;
     font-size: 1em;
+    color: var(--color-button-text);
 }
 
 .save-button-styled {
-    background-color: #28a745;
-    color: white;
+    background-color: var(--color-save-bg);
 }
 
 .cancel-button-styled {
-    background-color: #FF0000;
-    color: white;
+    background-color: var(--color-cancel-bg);
 }
 
 .save-button-styled:hover,
