@@ -1,6 +1,10 @@
+:root {
+    --cor-primaria: #007bff;
+}
+
 h4 {
     text-align: center;
     margin-bottom: 1.5rem;
-    color: #007bff;
+    color: var(--cor-primaria);
     font-size: 1.8rem;
 }
