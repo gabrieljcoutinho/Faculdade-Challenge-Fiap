@@ -8,14 +8,12 @@ import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/modoResposta.css';
 import '../../CSS/Chat/mediaScreen.css';
 import sendBtn from '../../imgs/imgChat/sendBtn.png';
-import comandosData from '../../data/commands.json'; // Verifique o caminho correto
+import comandosData from '../../data/commands.json';
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
-// Função para normalizar texto
 const normalizeText = (text) => text.trim().toLowerCase();
 
-// Função para formatar a produção do gráfico baseado nos dados do formato que você passou
 const formatProductionSummary = (productionData) => {
   if (
     !productionData ||
@@ -26,9 +24,9 @@ const formatProductionSummary = (productionData) => {
     return "Dados de produção solar não disponíveis.";
   }
 
-  const labels = productionData.labels; // ex: ["6:00", "8:00", "10:00", ...]
-  const firstDataset = productionData.datasetsOptions[0]; // pega a primeira opção
-  const data = firstDataset.data.slice(0, labels.length); // só os dados que correspondem às labels
+  const labels = productionData.labels;
+  const firstDataset = productionData.datasetsOptions[0];
+  const data = firstDataset.data.slice(0, labels.length);
 
   let total = 0;
   let table = "Produção solar (Opção 1):\n\n| Hora | Produção (kWh) |\n|-------|---------------|\n";
@@ -50,11 +48,18 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [firstInteraction, setFirstInteraction] = useState(true);
-  const [isFadingOut, setIsFadingOut] = useState(false); // estado para animacao fade out
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
   const navigate = useNavigate();
 
+  // Foco automático ao carregar componente
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  // Scroll para o final ao adicionar mensagens
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -70,11 +75,11 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     setMessages(prev => [...prev, { role: 'user', content: texto }]);
     setNewMessage('');
     setLoading(true);
+    inputRef.current?.focus(); // Foco após envio
 
     let handledByLocalCommand = false;
     let botResponseContent = '';
 
-    // Comandos para conexão de dispositivos
     const connectionCommands = [
       { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão', 'oconectar tv', 'oconectar televisão'] },
       { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado', 'oconectar ar-condicionado', 'oconectar ar condicionado'] },
@@ -115,20 +120,16 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
       if (comandoEncontrado) {
         if (comandoEncontrado.resposta.startsWith("REDIRECT:")) {
-          // Inicia a animação fade out
           setIsFadingOut(true);
-
-          // Espera 700ms para a animação completar antes de navegar
           setTimeout(() => {
             const path = comandoEncontrado.resposta.split(":")[1];
             navigate(path);
           }, 700);
-
           setLoading(false);
+          inputRef.current?.focus(); // Foco após redirect
           return;
         }
 
-        // Aqui é a alteração: quando resposta for PRODUCAO_GRAFICO, chamamos formatProductionSummary
         if (comandoEncontrado.resposta === 'PRODUCAO_GRAFICO') {
           botResponseContent = formatProductionSummary(productionData);
         } else if (comandoEncontrado.resposta === 'TEMA_ESCURO') {
@@ -155,6 +156,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       setTimeout(() => {
         setMessages(prev => [...prev, { role: 'assistant', content: botResponseContent }]);
         setLoading(false);
+        inputRef.current?.focus(); // Foco após comando local
       }, 500);
       return;
     }
@@ -162,6 +164,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     if (!GEMINI_API_KEY) {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
       setLoading(false);
+      inputRef.current?.focus(); // Foco mesmo com erro
       return;
     }
 
@@ -196,7 +199,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
           ...prev,
           { role: 'assistant', content: `Erro na API Gemini: ${data.error?.message || 'Problema desconhecido'} (Código: ${response.status})` }
         ]);
-        setLoading(false);
         return;
       }
 
@@ -220,6 +222,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       setMessages(prev => [...prev, { role: 'assistant', content: `Erro: ${error.message}` }]);
     } finally {
       setLoading(false);
+      inputRef.current?.focus(); // Foco garantido no final
     }
   };
 
@@ -259,6 +262,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
       <form onSubmit={handleSendMessage} className="message-input-form">
         <input
+          ref={inputRef}
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
