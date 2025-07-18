@@ -1,8 +1,16 @@
-.error-border {
-    border: 2px solid red !important;
-    /* Use !important para garantir a prioridade */
+:root {
+    --color-error-border: #ff0000;
+    /* vermelho */
+    --color-overlay-text: #ffffff;
+    /* branco */
+    --color-overlay-bg: rgba(0, 0, 0, 0.5);
+    /* fundo semi-transparente opcional */
 }
 
+.error-border {
+    border: 2px solid var(--color-error-border) !important;
+    /* Use !important para garantir a prioridade */
+}
 
 .disconnected-overlay {
     position: absolute;
@@ -10,11 +18,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    /* background-color: rgba(0, 0, 0, 0.5); Opcional: fundo semi-transparente */
+    /* background-color: var(--color-overlay-bg); Opcional: fundo semi-transparente */
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
+    color: var(--color-overlay-text);
     font-weight: bold;
     font-size: 1.2em;
     z-index: 10;
