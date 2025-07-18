@@ -1,4 +1,11 @@
-/* comandoItem.css */
+:root {
+    --cor-fundo-item: #ffffff;
+    --cor-borda-esquerda: #00aaff;
+    --cor-sombra-normal: rgba(0, 0, 0, 0.08);
+    --cor-sombra-hover: rgba(0, 0, 0, 0.15);
+    --cor-texto-strong: #0056b3;
+}
+
 .lista-comandos {
     list-style-type: none;
     padding: 0;
@@ -6,22 +13,22 @@
 }
 
 .comando-item {
-    background-color: #ffffff;
-    border-left: 8px solid #00aaff;
+    background-color: var(--cor-fundo-item);
+    border-left: 8px solid var(--cor-borda-esquerda);
     padding: 1.5rem 2rem;
     margin-bottom: 1.5rem;
     border-radius: 12px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px var(--cor-sombra-normal);
 }
 
 .comando-item:hover {
     transform: translateY(-5px) scale(1.01);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 20px var(--cor-sombra-hover);
 }
 
 .comando-item strong {
-    color: #0056b3;
+    color: var(--cor-texto-strong);
     font-size: 1.15rem;
     display: block;
     margin-bottom: 0.5rem;
