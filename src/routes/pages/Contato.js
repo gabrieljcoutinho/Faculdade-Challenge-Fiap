@@ -1,27 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../CSS/Contato/contato.css';
-
 import '../../CSS/Contato/formulario.css';
 import '../../CSS/Contato/campoArquivo.css';
-import '../../CSS/Contato/btnFormularioEnviao.css'
-import '../../CSS/Contato/infomacaoContato.css'
-import '../../CSS/Contato/icones.css'
-
+import '../../CSS/Contato/btnFormularioEnviao.css';
+import '../../CSS/Contato/infomacaoContato.css';
+import '../../CSS/Contato/icones.css';
 import '../../CSS/Contato/mediaScren.css';
+
 import { FaInstagram, FaLinkedin, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
 
-import { tituloPrincipal, nome, Email, telefone, assunto, mensagem, anexarArquivo, dowloadArquivo, Enviarmensagem,
+import {
+  tituloPrincipal, nome, Email, telefone, assunto, mensagem,
+  anexarArquivo, dowloadArquivo, Enviarmensagem,
   btnPerguntasFrequentes, formasDecontato, rua, EmailDaEmpresa, TelefoneDaEmpresa
-} from '../../constants/Contato/index.js'
+} from '../../constants/Contato/index.js';
 
 const Contato = () => {
   const navigate = useNavigate();
 
-const handleFaqClick = () => {
-  navigate('/perguntas-frequentes');
-};
-
+  const handleFaqClick = () => navigate('/perguntas-frequentes');
 
   return (
     <div className="contato-container">
@@ -41,7 +39,7 @@ const handleFaqClick = () => {
 
           <div className="form-group">
             <label htmlFor="telefone">{telefone}</label>
-            <input type="tel" id="telefone" name="telefone" title="Digite seu Telefone"  placeholder="Telefone" />
+            <input type="tel" id="telefone" name="telefone" title="Digite seu Telefone" placeholder="Telefone" />
           </div>
 
           <div className="form-group">
@@ -55,25 +53,18 @@ const handleFaqClick = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="arquivo" title=" Anexar Arquivos">{anexarArquivo}</label>
-            <input
-              type="file"
-              id="arquivo"
-              name="arquivo"
-              accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-            />
+            <label htmlFor="arquivo" title="Anexar Arquivos">{anexarArquivo}</label>
+            <input type="file" id="arquivo" name="arquivo" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" />
             <small className="info-upload">{dowloadArquivo}</small>
           </div>
 
           <button type="submit" className="submit-button">{Enviarmensagem}</button>
         </form>
 
-        {/* Botão de Perguntas Frequentes */}
         <div className="faq-button-container">
-        <button onClick={handleFaqClick} className="faq-button">
-  <span role="img" aria-label="Clipboard">📋</span> {btnPerguntasFrequentes}
-</button>
-
+          <button onClick={handleFaqClick} className="faq-button" title="Perguntas Frequentes">
+            <span role="img" aria-label="Clipboard">📋</span> {btnPerguntasFrequentes}
+          </button>
         </div>
 
         <div className="contato-info">
@@ -81,17 +72,17 @@ const handleFaqClick = () => {
 
           <div className="info-item">
             <FaMapMarkerAlt size={20} className="icon" />
-            <p className=""><strong>Endereço:</strong> {rua}</p>
+            <p><strong>Endereço:</strong> {rua}</p>
           </div>
 
           <div className="info-item">
             <FaEnvelope size={20} className="icon" />
-            <p className=""><strong>Email:</strong> {EmailDaEmpresa}</p>
+            <p><strong>Email:</strong> {EmailDaEmpresa}</p>
           </div>
 
           <div className="info-item">
             <FaPhone size={20} className="icon" />
-            <p className=""><strong>Telefone:</strong> {TelefoneDaEmpresa}</p>
+            <p><strong>Telefone:</strong> {TelefoneDaEmpresa}</p>
           </div>
 
           <div className="social-icons" title="IconesRedes Sociais">
