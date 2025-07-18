@@ -1,3 +1,8 @@
+:root {
+    --cinza: #ccc;
+    --branco: #fff;
+}
+
 @media (max-width: 420px) {
     .home-container {
         padding: 40px;
@@ -19,7 +24,7 @@
         margin-bottom: 15px;
         padding: 15px;
         width: 100%;
-        border: 2px solid #ccc;
+        border: 2px solid var(-cinza);
         /* retângulo oco */
         background-color: transparent;
         /* ou white se quiser branco */
@@ -116,7 +121,7 @@
 
     .weather-section {
         padding: 20px;
-        border: 2px solid #ccc;
+        border: 2px solid var(--cinza);
         background-color: transparent;
         border-radius: 10px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
