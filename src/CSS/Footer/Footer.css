@@ -1,9 +1,14 @@
+:root {
+    --footer-bg-color: #252525;
+    --footer-text-color: white;
+}
+
 .footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #252525;
-    color: white;
+    background-color: var(--footer-bg-color);
+    color: var(--footer-text-color);
     text-align: center;
     padding: 10px 0;
     /* Para animação suave */
