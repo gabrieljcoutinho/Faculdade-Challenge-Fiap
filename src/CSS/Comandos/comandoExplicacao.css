@@ -1,6 +1,9 @@
-/* comandoExplanation.css */
+:root {
+    --text-color-secondary: #6c757d;
+}
+
 .comando-explanation {
-    color: #6c757d;
+    color: var(--text-color-secondary);
     font-size: 0.95rem;
     margin-top: 0.75rem;
 }
