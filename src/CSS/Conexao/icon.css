@@ -1,4 +1,9 @@
-/* Estilos para a seleção de ícones */
+:root {
+    --color-text-label: #555;
+    --color-border-active: #007bff;
+    --color-box-shadow-hover: rgba(0, 0, 0, 0.1);
+}
+
 .icon-picker-styled {
     display: flex;
     flex-direction: column;
@@ -7,7 +12,7 @@
 
 .icon-picker-styled label {
     font-weight: bold;
-    color: #555;
+    color: var(--color-text-label);
 }
 
 .icon-picker-styled .icons {
@@ -30,11 +35,11 @@
 .icon-option:hover {
     opacity: 1;
     transform: scale(1.1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px var(--color-box-shadow-hover);
 }
 
 .icon-option.active {
-    border: 2px solid #007bff;
+    border: 2px solid var(--color-border-active);
     opacity: 1;
     transform: scale(1.1);
 }
