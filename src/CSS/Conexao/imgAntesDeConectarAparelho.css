@@ -1,3 +1,8 @@
+:root {
+    --color-bg-light-transparent: rgba(255, 255, 255, 0.1);
+    --color-text-light: rgba(255, 0, 51, 0.3);
+}
+
 .no-devices-container {
     display: flex;
     flex-direction: column;
@@ -8,7 +13,7 @@
     padding-top: 1rem;
 
     /* Fundo clarinho e transparente */
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--color-bg-light-transparent);
     border-radius: 12px;
     padding: 2rem;
 }
@@ -29,7 +34,7 @@
     font-size: 24px;
 
     /* Cinza bem claro, quase branco */
-    color: rgba(255, 0, 51, 0.3);
+    color: var(--color-text-light);
 
     margin-bottom: 20px;
 }
