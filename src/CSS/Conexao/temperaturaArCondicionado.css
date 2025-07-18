@@ -1,32 +1,45 @@
-/* Estilos para o controle de temperatura */
+:root {
+    --color-bg-control: #f9f9f9;
+    --color-border-control: #ddd;
+
+    --color-text-primary: #333;
+    --color-text-secondary: #555;
+    --color-text-accent: #007bff;
+    --color-text-accent-dark: #4a6a8a;
+
+    --color-range-bg: #d3d3d3;
+    --color-range-thumb-bg: #007bff;
+    --color-range-thumb-shadow: rgba(0, 123, 255, 0.5);
+
+    --color-temp-display-bg: #e6f0fa;
+    --color-temp-display-border: #cce0f5;
+    --color-temp-display-shadow: rgba(0, 0, 0, 0.08);
+}
+
 .temperature-control {
     margin-top: 15px;
     padding: 10px;
     border-radius: 8px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    background-color: var(--color-bg-control);
+    border: 1px solid var(--color-border-control);
 }
 
 .temperature-control h4 {
     margin-bottom: 10px;
-    color: #333;
+    color: var(--color-text-primary);
     font-size: 1.1em;
-
 }
 
 .temperature-control input[type="range"] {
     width: 90%;
     -webkit-appearance: none;
-    /* Remove o estilo padrão do navegador */
     appearance: none;
     height: 10px;
     border-radius: 5px;
-    background: #d3d3d3;
-    /* Cor do fundo do slider */
+    background: var(--color-range-bg);
     outline: none;
     opacity: 0.7;
-    transition: opacity .2s;
-
+    transition: opacity 0.2s;
 }
 
 .temperature-control input[type="range"]:hover {
@@ -39,76 +52,49 @@
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #007bff;
-    /* Cor do "pino" do slider */
+    background: var(--color-range-thumb-bg);
     cursor: grab;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-
+    box-shadow: 0 0 5px var(--color-range-thumb-shadow);
 }
 
 .temperature-control input[type="range"]::-moz-range-thumb {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #007bff;
+    background: var(--color-range-thumb-bg);
     cursor: grab;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-
+    box-shadow: 0 0 5px var(--color-range-thumb-shadow);
 }
 
 .temperature-control span {
     display: block;
-    /* Para que a temperatura fique abaixo do slider */
     font-size: 1.4em;
     font-weight: bold;
     margin-top: 10px;
-    color: #555;
-
+    color: var(--color-text-secondary);
 }
 
-/* --- Estilo para a exibição da temperatura na lista de aparelhos --- */
 .temperature-display {
-    /* Layout */
     display: inline-flex;
-    /* Permite alinhamento de itens internos */
     align-items: center;
-    /* Centraliza verticalmente o texto e o valor */
     margin-left: 10px;
-    /* Um pouco mais de espaço à esquerda */
     padding: 2px 8px;
-    /* Espaçamento interno para um visual de "tag" */
     border-radius: 5px;
-    /* Cantos levemente arredondados */
-
-    /* Tipografia e Cores */
     font-size: 0.8em;
-    /* Tamanho da fonte um pouco menor para compactar */
-    color: #4a6a8a;
-    /* Uma cor azulada que remete ao ar-condicionado */
-    background-color: #e6f0fa;
-    /* Um fundo suave para o "tag" de temperatura */
-    border: 1px solid #cce0f5;
-    /* Borda sutil */
+    color: var(--color-text-accent-dark);
+    background-color: var(--color-temp-display-bg);
+    border: 1px solid var(--color-temp-display-border);
     font-weight: 600;
-    /* Seminegrito para legibilidade */
     white-space: nowrap;
-    /* Impede que o texto quebre em várias linhas */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    /* Sombra sutil para destaque */
-
+    box-shadow: 0 1px 3px var(--color-temp-display-shadow);
 }
 
 .temperature-display .temperature-value {
     font-weight: 700;
-    /* Apenas o valor da temperatura mais forte */
-    color: #007bff;
-    /* Cor mais vibrante para o valor em si */
+    color: var(--color-text-accent);
     margin-left: 4px;
-    /* Espaço entre "Temp:" e o valor */
-
 }
 
-/* Opcional: Ajuste para telas menores se o espaço for um problema */
 @media (max-width: 768px) {
     .temperature-display {
         margin-left: 5px;
