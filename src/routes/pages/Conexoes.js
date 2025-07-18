@@ -121,19 +121,32 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const abrirModoManual = () => { resetFormState(); updateUiState({ modoManual: true, showAddForm: true, isSearchingBluetooth: false, selectedConexion: null }); };
 
   const handleSearchAndConnectBluetooth = async () => {
-    if (!navigator.bluetooth) { updateUiState({ errorMessage: 'Seu navegador não suporta Web Bluetooth. Use Chrome, Edge ou Opera.' }); return; }
+    if (!navigator.bluetooth) {
+      updateUiState({ errorMessage: 'Seu navegador não suporta Web Bluetooth. Use Chrome, Edge ou Opera.' });
+      return;
+    }
     updateUiState({ isSearchingBluetooth: true, errorMessage: '' });
     try {
       const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
       if (device) {
         const deviceName = device.name || 'Dispositivo Bluetooth Desconhecido';
-        let guessedIcon = lampIcon;
-        const name = deviceName.toLowerCase();
-        if (name.includes('tv') || name.includes('monitor')) guessedIcon = tvIcon;
-        else if (name.includes('ar') || name.includes('condicionado')) guessedIcon = airConditionerIcon;
-        else if (name.includes('lamp') || name.includes('lâmpada')) guessedIcon = lampIcon;
-        else if (name.includes('airfry') || name.includes('fritadeira')) guessedIcon = airfry;
-        else if (name.includes('carregador') || name.includes('charger')) guessedIcon = carregador;
+        const name = (deviceName || '').toLowerCase();
+
+        let guessedIcon = lampIcon; // padrão
+
+        if (name.includes('tv') || name.includes('television') || name.includes('monitor')) {
+          guessedIcon = tvIcon;
+        } else if (name.includes('ar') || name.includes('condicionado')) {
+          guessedIcon = airConditionerIcon;
+        } else if (name.includes('lamp') || name.includes('lâmpada')) {
+          guessedIcon = lampIcon;
+        } else if (name.includes('airfry') || name.includes('fritadeira')) {
+          guessedIcon = airfry;
+        } else if (name.includes('carregador') || name.includes('charger')) {
+          guessedIcon = carregador;
+        }
+
+        console.log('Dispositivo Bluetooth:', deviceName, '| Ícone escolhido:', guessedIcon);
 
         if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
           updateUiState({ errorMessage: `Já existe um aparelho chamado "${deviceName}".`, isSearchingBluetooth: false });
@@ -141,14 +154,20 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         }
         onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
         closeAllModals();
-      } else updateUiState({ errorMessage: 'Nenhum aparelho Bluetooth selecionado.' });
+      } else {
+        updateUiState({ errorMessage: 'Nenhum aparelho Bluetooth selecionado.' });
+      }
     } catch (error) {
       console.error('Erro ao conectar via Bluetooth:', error);
-      updateUiState({ errorMessage: error.name === 'NotFoundError' ? 'Nenhum aparelho Bluetooth encontrado ou selecionado.' :
-        error.name === 'NotAllowedError' ? 'Permissão de Bluetooth negada.' :
-        error.message.includes('User cancelled') ? 'Seleção de aparelho Bluetooth cancelada.' :
-        'Falha na conexão Bluetooth. Tente novamente.' });
-    } finally { updateUiState({ isSearchingBluetooth: false }); }
+      updateUiState({
+        errorMessage: error.name === 'NotFoundError' ? 'Nenhum aparelho Bluetooth encontrado ou selecionado.' :
+          error.name === 'NotAllowedError' ? 'Permissão de Bluetooth negada.' :
+            error.message.includes('User cancelled') ? 'Seleção de aparelho Bluetooth cancelada.' :
+              'Falha na conexão Bluetooth. Tente novamente.'
+      });
+    } finally {
+      updateUiState({ isSearchingBluetooth: false });
+    }
   };
 
   const saveConexion = (isEditing) => {
@@ -302,57 +321,60 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
       {showAddForm && (
         <div className="modal-overlay">
-          <div className="add-form-styled">
-            <h2>{editingId ? 'Editar Aparelho' : modoManual ? 'Adicionar Novo Aparelho Manualmente' : 'Adicionar Novo Aparelho'}</h2>
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-            {(editingId || modoManual) ? (
+          <div className="modal-content conexao-modal">
+            <h2>{modoManual ? adicicionarAparelhoManualmente : procurarAparelhosBluetooth}</h2>
+            {modoManual ? (
               <>
-                <input title="Nome do aparelho" type="text" placeholder="Nome do Aparelho" value={newConexion.text} onChange={(e) => updateUiState({ newConexion: { ...newConexion, text: e.target.value } })} />
-                <div className="icon-picker-styled">
-                  <label>{escolherIcone}</label>
-                  <div className="icons">
-                    {availableIcons.map(icon => (
-                      <button key={icon.name} className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`} onClick={() => updateUiState({ newConexion: { ...newConexion, icon: icon.src }, activeIcon: icon.src })} type="button">
-                        <img src={icon.src} alt={icon.name} style={{ width: 30, height: 30 }} />
-                      </button>
-                    ))}
-                  </div>
+                <input
+                  type="text"
+                  value={newConexion.text}
+                  onChange={e => updateUiState({ newConexion: { ...newConexion, text: e.target.value }, errorMessage: '' })}
+                  placeholder="Nome do aparelho"
+                  maxLength={30}
+                  className="input-text"
+                />
+
+                <div className="icon-picker">
+                  {availableIcons.map((icon) => (
+                    <img
+                      key={icon.name}
+                      src={icon.src}
+                      alt={icon.name}
+                      className={`icon-select ${activeIcon === icon.src ? 'selected' : ''}`}
+                      onClick={() => updateUiState({ activeIcon: icon.src, newConexion: { ...newConexion, icon: icon.src }, errorMessage: '' })}
+                    />
+                  ))}
                 </div>
-                <div className="color-picker-styled">
-                  <label className="tipoDoFundoConexao">{escolherCorDefundo}</label>
-                  <div className="colors">
-                    {availableColors.map(color => (
-                      <button key={color} className={`color-option ${activeColor === color ? 'active' : ''}`} style={{ backgroundColor: color }} onClick={() => updateUiState({ newConexion: { ...newConexion, backgroundColor: color }, activeColor: color })} type="button" />
-                    ))}
-                  </div>
+
+                <div className="color-picker">
+                  {availableColors.map(color => (
+                    <div
+                      key={color}
+                      className={`color-swatch ${activeColor === color ? 'selected' : ''}`}
+                      style={{ backgroundColor: color }}
+                      onClick={() => updateUiState({ activeColor: color, newConexion: { ...newConexion, backgroundColor: color }, errorMessage: '' })}
+                    />
+                  ))}
                 </div>
-                <div className="form-actions">
-                  <button onClick={() => saveConexion(!!editingId)} className="save-button-styled" type="button">
-                    {editingId ? 'Salvar Edição' : 'Adicionar Aparelho'}
-                  </button>
-                  <button onClick={closeAllModals} className="cancel-button-styled" type="button">Cancelar</button>
+
+                <div className="button-row">
+                  <button onClick={() => saveConexion(editingId !== null)}>{editingId !== null ? 'Salvar' : 'Adicionar'}</button>
+                  <button onClick={closeAllModals}>Cancelar</button>
                 </div>
+
+                {errorMessage && <div className="error-message">{errorMessage}</div>}
               </>
             ) : (
               <>
-                <p className='paragrafoAdiconarAparelhos'>{btnBluetooth}</p>
-                <button onClick={handleSearchAndConnectBluetooth} className="add-button-styled" disabled={isSearchingBluetooth} type="button">
-                  {isSearchingBluetooth ? 'Procurando Aparelhos Bluetooth' : (
-                    <>
-                      <img src={bluetoothIcon} title="Procurar" alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
-                      {procurarAparelhosBluetooth}
-                    </>
-                  )}
+                <button onClick={handleSearchAndConnectBluetooth} disabled={isSearchingBluetooth}>
+                  {isSearchingBluetooth ? 'Procurando...' : btnBluetooth}
                 </button>
-                <button onClick={abrirModoManual} className="add-button-styled" style={{ marginTop: '10px' }} disabled={isSearchingBluetooth} type="button">
-                  <img src={manual} alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
-                  {adicicionarAparelhoManualmente}
-                </button>
-                {isSearchingBluetooth && (<p className="connecting-message">{esperaMenuBluetoothAbrir}</p>)}
-                <div className="form-actions">
-                  <button onClick={closeAllModals} className="cancel-button-styled" disabled={isSearchingBluetooth} type="button" title='Ativar | Desativar aparelho'>Cancelar</button>
-                </div>
+
+                <button onClick={abrirModoManual}>{adicicionarAparelhoManualmente}</button>
+
+                {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+                <button className="close-btn" onClick={closeAllModals}>Fechar</button>
               </>
             )}
           </div>
@@ -360,107 +382,75 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       )}
 
       <div className="conexions-list">
-        {devicesToDisplay.length === 0 ? (
-          <div className="placeholder-image-container">
-            <br /><br /><br />
-            <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
-            <p className="placeholder-text">
-              {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
-            </p>
+        {devicesToDisplay.length === 0 && (
+          <div className="no-devices-message">
+            {activeList === 'connected' ? 'Nenhum aparelho conectado.' : 'Nenhum aparelho desconectado.'}
           </div>
-        ) : (
-          devicesToDisplay.map((c, index) => (
-            <div
-              key={c.id}
-              className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
-              style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-              onClick={(e) => handleConexionClick(c, e)}
-              draggable="true"
-              onDragStart={(e) => handleDragStart(e, index)} onDragEnter={(e) => handleDragEnter(e, index)}
-              onDragLeave={handleDragLeave} onDragEnd={handleDragEnd} onDrop={handleDrop} onDragOver={handleDragOver}
-              onTouchStart={(e) => handleTouchStart(e, index)} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}
-            >
-              {c.connected && (
-                <div className="qrcode-top-left">
-                  <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); updateUiState({ visibleQRCode: c }); }} type="button">
-                    <img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" />
-                  </button>
-                </div>
-              )}
-              {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
-              <div className="icon-text-overlay">
-                <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-                <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
-              </div>
-              <div className="actions-overlay">
-                <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button>
-                <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.connected}>
-                  <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
-                </button>
-                <label className="switch">
-                  <input type="checkbox" checked={c.connected} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
-                  <span className="slider round"></span>
-                </label>
-              </div>
-            </div>
-          ))
         )}
+        {devicesToDisplay.map((c, index) => (
+          <div
+            key={c.id}
+            className={`retanguloAdicionado ${editingId === c.id ? 'editing' : ''} ${removingId === c.id ? 'removing' : ''}`}
+            draggable
+            onDragStart={e => handleDragStart(e, index)}
+            onDragEnter={e => handleDragEnter(e, index)}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDragEnd={handleDragEnd}
+            onDrop={handleDrop}
+            onTouchStart={e => handleTouchStart(e, index)}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onClick={e => handleConexionClick(c, e)}
+            style={{ backgroundColor: c.backgroundColor }}
+            title={`Clique para ver detalhes`}
+          >
+            <img src={c.icon || lampIcon} alt="Ícone aparelho" className="icon-conexao" />
+            <span className="conexion-text-overlay">{c.text}</span>
+
+            <button className="btn-editar" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }}>
+              <img src={editIcon} alt="Editar" />
+            </button>
+
+            <button className="btn-remover" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }}>
+              X
+            </button>
+
+            <button className="btn-toggle-connection" onClick={(e) => { e.stopPropagation(); toggleConnection(c.id, !c.connected); }}>
+              {c.connected ? 'Desconectar' : 'Conectar'}
+            </button>
+          </div>
+        ))}
       </div>
 
-      {selectedConexion && (
-        <div className="modal-overlay" onClick={() => updateUiState({ selectedConexion: null })}>
-          <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
-            <button className="close-button" onClick={() => updateUiState({ selectedConexion: null })}>X</button>
-            <h2 title="Detalhes do Aparelho">{detalhesaparelhoAmpliados}</h2>
-            <div className="detalhes-content">
-              <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
-              <h3>{selectedConexion.text}</h3>
-              <p title="Status">Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
-              {selectedConexion.connected && (
-                <>
-                  <p>{tempoAparelhoConectado}: {formatDate(selectedConexion.connectedDate)}</p>
-                  <p>{duracaoConecxao}{getConnectionDuration(selectedConexion.connectedDate)}</p>
-                </>
-              )}
-              <div className="detalhes-actions">
-                <button onClick={() => toggleConnection(selectedConexion.id, !selectedConexion.connected)} className={`toggle-connection-button ${selectedConexion.connected ? 'disconnect' : 'connect'}`}>
-                  {selectedConexion.connected ? 'Desconectar' : 'Conectar'}
-                </button>
-                <button onClick={() => { handleEditClick(selectedConexion); updateUiState({ selectedConexion: null }); }} className="edit-button-details" disabled={!selectedConexion.connected}>
-                  {btnEditar}
-                </button>
-                <button onClick={() => { removeConexion(selectedConexion.id); updateUiState({ selectedConexion: null }); }} className="remove-button-details">
-                  {btnRemover}
-                </button>
-              </div>
-            </div>
-          </div>
+      {showConfirmDialog && (
+        <div className="confirm-dialog">
+          <p>{mensagemExcluirAparelho}</p>
+          <button onClick={handleConfirmRemove}>Sim</button>
+          <button onClick={handleCancelRemove}>Não</button>
         </div>
       )}
 
-      {showConfirmDialog && (
-        <div className="modal-overlay" onClick={handleCancelRemove}>
-          <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
-            <p>{mensagemExcluirAparelho}</p>
-            <div className="confirmation-actions">
-              <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
-              <button onClick={handleCancelRemove} className="cancel-button">Não</button>
-            </div>
-          </div>
+      {selectedConexion && (
+        <div className="detalhes-aparelho">
+          <h3>{detalhesaparelhoAmpliados}</h3>
+          <p><b>Nome:</b> {selectedConexion.text}</p>
+          <p><b>Status:</b> {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
+          <p><b>Conectado desde:</b> {formatDate(selectedConexion.connectedDate)}</p>
+          <p><b>Duração da conexão:</b> {getConnectionDuration(selectedConexion.connectedDate)}</p>
+          <button onClick={() => updateUiState({ selectedConexion: null })}>Fechar</button>
         </div>
       )}
 
       {visibleQRCode && (
-        <div className="modal-overlay" onClick={() => updateUiState({ visibleQRCode: null })} title="Qrcode">
-          <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
-            <h3 title="">QR Code do aparelho: {visibleQRCode.text}</h3>
-            <br />
-            <QRCodeCanvas
-              value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
-              size={256} level="H" includeMargin={true}
-            />
-            <button className="close-button" onClick={() => updateUiState({ visibleQRCode: null })} title="Fechar QrCde">X</button>
-          </div>
+        <div className="qr-code-modal">
+          <QRCodeCanvas
+            value={`${siteBaseURL}?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${visibleQRCode.backgroundColor}`}
+            size={220}
+            level="H"
+            includeMargin={true}
+          />
+          <button onClick={() => updateUiState({ visibleQRCode: null })}>Fechar</button>
         </div>
       )}
     </div>
