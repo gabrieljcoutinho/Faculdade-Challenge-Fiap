@@ -1,15 +1,21 @@
+:root {
+    --color-primary: #007bff;
+    --opacity-default: 0.8;
+    --opacity-hover: 1;
+}
+
 .edit-button {
     background: none;
     border: none;
-    color: #007bff;
+    color: var(--color-primary);
     font-size: 0.9em;
     cursor: pointer;
     padding: 6px;
     border-radius: 6px;
-    opacity: 0.8;
+    opacity: var(--opacity-default);
     transition: opacity 0.3s ease;
 }
 
 .edit-button:hover {
-    opacity: 1;
+    opacity: var(--opacity-hover);
 }
