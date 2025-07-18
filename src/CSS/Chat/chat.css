@@ -1,18 +1,25 @@
+:root {
+    --cor-borda: #ddd;
+    --cor-sombra: rgba(0, 0, 0, 0.12);
+    --cor-fundo: #fff;
+    --cor-fonte: #333;
+    /* Se quiser usar para textos */
+}
+
 /* Estilos gerais para o chat-container */
 .chat-container {
-    border: 1px solid #ddd;
+    border: 1px solid var(--cor-borda);
     border-radius: 12px;
     /* max-width: 630px; */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px var(--cor-sombra);
     display: flex;
     flex-direction: column;
     height: 65px;
     /* Altura padrão para telas maiores ou outras */
-    background: #fff;
+    background: var(--cor-fundo);
     overflow: hidden;
     padding: 16px;
     padding-top: 2rem;
     padding-bottom: 10rem;
 }
-
