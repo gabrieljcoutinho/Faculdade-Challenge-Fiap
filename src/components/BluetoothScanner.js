@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-// Se este componente fosse usado, ele precisaria de uma prop:
-// Ex: const BluetoothScanner = ({ onDeviceConnected }) => {
-const BluetoothScanner = ({ onDeviceConnected }) => { // <--- Adicionando a prop
+
+const BluetoothScanner = ({ onDeviceConnected }) => { 
 
     const [status, setStatus] = useState('');
     const [deviceName, setDeviceName] = useState('');
