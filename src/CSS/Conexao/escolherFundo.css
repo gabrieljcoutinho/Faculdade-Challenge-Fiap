@@ -1,6 +1,17 @@
-/* Em conexao.css ou um novo arquivo color-picker.css */
+/* color-picker.css */
+
+/* Definição das variáveis de cores no :root */
+:root {
+    --color-border-default: #ccc;
+    --color-border-active: #007bff;
+    --color-picker-margin-top: 15px;
+    --color-picker-gap: 10px;
+    --color-option-size: 30px;
+}
+
+/* Estilos do color picker */
 .color-picker-styled {
-    margin-top: 15px;
+    margin-top: var(--color-picker-margin-top);
 }
 
 .color-picker-styled label {
@@ -11,19 +22,19 @@
 
 .color-picker-styled .colors {
     display: flex;
-    gap: 10px;
+    gap: var(--color-picker-gap);
 }
 
 .color-picker-styled .color-option {
-    width: 30px;
-    height: 30px;
+    width: var(--color-option-size);
+    height: var(--color-option-size);
     border-radius: 50%;
-    border: 2px solid #ccc;
+    border: 2px solid var(--color-border-default);
     cursor: pointer;
     outline: none;
 }
 
 .color-picker-styled .color-option.active {
-    border-color: #007bff;
+    border-color: var(--color-border-active);
     /* Cor de destaque para a cor selecionada */
 }
