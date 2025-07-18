@@ -1,4 +1,3 @@
-// EsqueciSenha.jsx
 import React, { useState } from 'react';
 import '../../CSS/EsqueciSenha/resetJs.css';
 import '../../CSS/EsqueciSenha/layout.css';
@@ -9,38 +8,26 @@ import '../../CSS/EsqueciSenha/messagens.css';
 import '../../CSS/EsqueciSenha/links.css';
 import '../../CSS/EsqueciSenha/mediaScreen.css';
 
-import { tituloPrincipal, paragrafoEsqueciSenha, Email, btnRecuperarSenha, voltarPaginaLogin} from '../../constants/EsqueciSenha/index.js'
+import { tituloPrincipal, paragrafoEsqueciSenha, Email, btnRecuperarSenha, voltarPaginaLogin } from '../../constants/EsqueciSenha/index.js'
 
 const EsqueciSenha = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     setMessage('');
     setError('');
+    if (!email) return setError('Por favor, insira seu endereço de e-mail.');
 
-    if (!email) {
-      setError('Por favor, insira seu endereço de e-mail.');
-      return;
-    }
-
-    // In a real application, you'd send a request to your backend here.
-    // For this example, we'll just simulate a success or failure.
     console.log(`Enviando solicitação de redefinição de senha para: ${email}`);
 
-    // Simulate API call
     setTimeout(() => {
-      if (email === 'test@exemplo.com') { // Simulate a known email for success
-        setMessage('Se existir uma conta com esse e-mail, enviamos um link para redefinição de senha.!');
-        setEmail('');
-      } else {
-        // Even if the email doesn't exist, it's good practice not to reveal that
-        // for security reasons. So, we give a generic success message.
-        setMessage('Sua senha foi enviada para esse email');
-        setEmail('');
-      }
+      setMessage(email === 'test@exemplo.com'
+        ? 'Se existir uma conta com esse e-mail, enviamos um link para redefinição de senha.!'
+        : 'Sua senha foi enviada para esse email');
+      setEmail('');
     }, 1500);
   };
 
@@ -56,7 +43,7 @@ const EsqueciSenha = () => {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               placeholder="SeuEmail@gmail.com"
               required
               className='iputEmail'
@@ -67,7 +54,7 @@ const EsqueciSenha = () => {
           <button type="submit" className="reset-button">{btnRecuperarSenha}</button>
         </form>
         <div className="back-to-login">
-          <a href="/login">{voltarPaginaLogin}</a> {/* Adjust this path as needed */}
+          <a href="/login">{voltarPaginaLogin}</a>
         </div>
       </div>
     </div>
