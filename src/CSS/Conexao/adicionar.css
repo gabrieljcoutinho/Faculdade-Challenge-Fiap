@@ -1,8 +1,18 @@
+:root {
+    --color-bg-form: #fff;
+    --color-text: #333;
+    --color-border: #ccc;
+    --color-button-bg: #007bff;
+    --color-button-bg-hover: #0056b3;
+    --color-button-text: #fff;
+    --box-shadow-form: rgba(0, 0, 0, 0.2);
+}
+
 .add-form-styled {
-    background-color: #fff;
+    background-color: var(--color-bg-form);
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px var(--box-shadow-form);
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -13,22 +23,21 @@
 
 .add-form-styled h2 {
     text-align: center;
-    color: #333;
+    color: var(--color-text);
     margin-bottom: 15px;
 }
 
 .add-form-styled input[type="text"] {
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     font-size: 1em;
 }
 
-
 /* Estilo para o botão de adicionar */
 .add-button-styled {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--color-button-bg);
+    color: var(--color-button-text);
     border: none;
     padding: 12px 20px;
     border-radius: 8px;
@@ -42,5 +51,5 @@
 }
 
 .add-button-styled:hover {
-    background-color: #0056b3;
+    background-color: var(--color-button-bg-hover);
 }
