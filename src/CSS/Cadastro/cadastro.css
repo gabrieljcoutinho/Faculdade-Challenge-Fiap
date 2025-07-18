@@ -1,133 +1,174 @@
-/* CSS/Cadastro/cadastro.css */
+/* Cadastro.css com variáveis de cor no :root */
 
+:root {
+    /* Cores Gerais */
+    --cor-fundo-claro: #f0f2f5;
+    --cor-fundo-container: #f4f4f4;
+    --cor-branco: #ffffff;
+    --cor-preto-escuro: #333333;
+    --cor-preto-claro: #555555;
+    --cor-cinza-claro: #ddd;
+    --cor-cinza-medio: #888888;
+    --cor-cinza-suave: #e9ecef;
+    --cor-cinza-info: #e2f0fb;
+
+    /* Cores Botões */
+    --cor-btn-primaria: #28a745;
+    --cor-btn-primaria-hover: #218838;
+    --cor-btn-secundaria: #007bff;
+    --cor-btn-secundaria-hover: #0056b3;
+    --cor-btn-disabled: #cccccc;
+
+    /* Cores textos */
+    --cor-texto-normal: var(--cor-preto-escuro);
+    --cor-texto-secundario: var(--cor-preto-claro);
+    --cor-texto-link: var(--cor-btn-secundaria);
+
+    /* Cores sucesso, alerta, erro */
+    --cor-sucesso-fundo: #d4edda;
+    --cor-sucesso-texto: #155724;
+    --cor-sucesso-borda: #c3e6cb;
+
+    --cor-forca-senha-fraca: #dc3545;
+    /* vermelho */
+    --cor-forca-senha-media: #ffc107;
+    /* amarelo */
+    --cor-forca-senha-forte: #28a745;
+    /* verde */
+
+    /* Sombra */
+    --sombra-leve: rgba(0, 0, 0, 0.05);
+    --sombra-media: rgba(0, 0, 0, 0.08);
+    --sombra-forte: rgba(0, 0, 0, 0.1);
+    --sombra-muito-forte: rgba(0, 0, 0, 0.15);
+}
+
+/* Container principal */
 .cadastro-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 70vh;
-    background-color: #f4f4f4;
-    padding: 10px;
+    min-height: 100vh;
+    background-color: var(--cor-fundo-claro);
+    padding: 20px;
+    box-sizing: border-box;
 }
 
+/* Caixa principal */
 .cadastro-box {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
-}
-
-.cadastro-box h1 {
+    background-color: var(--cor-branco);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px var(--sombra-forte);
+    width: 100%;
+    max-width: 450px;
     text-align: center;
-    color: #333;
-    margin-bottom: 20px;
 }
 
+/* Título */
+.cadastro-box h1 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    color: var(--cor-texto-normal);
+}
+
+/* Formulário */
 .cadastro-form {
     display: flex;
     flex-direction: column;
 }
 
-
-
-
-.cadastro-button {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
+/* Grupo de input */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
 }
 
-.cadastro-button:hover {
-    background-color: #0056b3;
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--cor-texto-secundario);
 }
 
-.cadastro-info {
-    background-color: #e9ecef;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-    width: 300px;
-    margin-left: 30px;
-    color: #555;
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--cor-cinza-claro);
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
-.cadastro-info h2 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.cadastro-info ul {
-    list-style: none;
-    padding: 0;
-}
-
-.cadastro-info li {
-    margin-bottom: 10px;
+/* Grupo input senha com ícone */
+.password-input-group {
+    position: relative;
     display: flex;
     align-items: center;
 }
 
-.cadastro-info li span {
-    margin-right: 10px;
-    font-size: 1.2em;
+.password-input-group input {
+    padding-right: 40px;
+    /* espaço para ícone */
 }
 
-
-@media (max-width: 768px) {
-    .cadastro-container {
-        flex-direction: column;
-        align-items: center;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    .cadastro-box {
-        width: 95%;
-        margin-bottom: 15px;
-    }
-
-    .cadastro-info {
-        width: 95%;
-        margin-left: 0;
-    }
+.password-toggle-icon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: var(--cor-cinza-medio);
 }
 
-.password {
-    padding-right: 22rem;
-}
-
-.passwordConfirm {
-    padding-right: 18rem;
-}
-
-
+/* Força da senha */
 .password-strength {
-    font-size: 0.8rem;
-    margin-top: 4px;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    text-align: right;
 }
 
 .password-strength.fraca {
-    color: red;
+    color: var(--cor-forca-senha-fraca);
 }
 
-.password-strength.média {
-    color: orange;
+.password-strength.media {
+    color: var(--cor-forca-senha-media);
 }
 
 .password-strength.forte {
-    color: green;
+    color: var(--cor-forca-senha-forte);
 }
 
+/* Botão de cadastro */
+.cadastro-button {
+    background-color: var(--cor-btn-primaria);
+    color: var(--cor-branco);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.cadastro-button:hover:not(:disabled) {
+    background-color: var(--cor-btn-primaria-hover);
+}
+
+.cadastro-button:disabled {
+    background-color: var(--cor-btn-disabled);
+    cursor: not-allowed;
+}
+
+/* Mensagem de sucesso */
 .success-message {
-    margin-top: 1rem;
-    color: green;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: var(--cor-sucesso-fundo);
+    color: var(--cor-sucesso-texto);
+    border: 1px solid var(--cor-sucesso-borda);
+    border-radius: 5px;
     font-weight: bold;
     text-align: center;
     opacity: 0;
@@ -140,168 +181,12 @@
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*MODO DARK*/
-
-/* Estilos padrão (modo claro) */
-.cadastro-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f2f5;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.cadastro-box {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 450px;
-    text-align: center;
-}
-
-.cadastro-box h1 {
-    font-size: 2rem;
-    margin-bottom: 25px;
-    color: #333;
-}
-
-.cadastro-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.input-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-
-.password-input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-input-group input {
-    padding-right: 40px;
-    /* Espaço para o ícone do olho */
-}
-
-.password-toggle-icon {
-    position: absolute;
-    right: 10px;
-    cursor: pointer;
-    color: #888;
-}
-
-.password-strength {
-    font-size: 0.85rem;
-    margin-top: 5px;
-    text-align: right;
-}
-
-.password-strength.fraca {
-    color: #dc3545;
-}
-
-.password-strength.media {
-    color: #ffc107;
-}
-
-.password-strength.forte {
-    color: #28a745;
-}
-
-.cadastro-button {
-    background-color: #28a745;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-top: 15px;
-    transition: background-color 0.3s ease;
-}
-
-.cadastro-button:hover:not(:disabled) {
-    background-color: #218838;
-}
-
-.cadastro-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
-.success-message {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-/* Links no cadastro */
-.links {
-    margin-top: 20px;
-    font-size: 0.95rem;
-}
-
-.links p {
-    color: #555;
-}
-
-.links a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.links a:hover {
-    text-decoration: underline;
-}
-
 /* Seção de informações lateral */
 .cadastro-info {
-    background-color: #e2f0fb;
+    background-color: var(--cor-cinza-info);
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px var(--sombra-media);
     width: 100%;
     max-width: 400px;
     margin-left: 20px;
@@ -310,7 +195,7 @@
 
 .cadastro-info h2 {
     font-size: 1.8rem;
-    color: #007bff;
+    color: var(--cor-btn-secundaria);
     margin-bottom: 20px;
 }
 
@@ -322,109 +207,29 @@
 .cadastro-info li {
     margin-bottom: 15px;
     font-size: 1.1rem;
-    color: #444;
+    color: var(--cor-texto-normal);
 }
 
-/* --------------------------------------------------------------------- */
-/* Estilos para o Modo Escuro */
-body.dark .cadastro-container {
-    background-color: #121212;
-    /* Fundo mais escuro para o container principal */
+/* Links no cadastro */
+.links {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    text-align: center;
 }
 
-body.dark .cadastro-box {
-    background-color: #1e1e1e;
-    /* Fundo da caixa de cadastro */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+.links p {
+    color: var(--cor-texto-secundario);
 }
 
-body.dark .cadastro-box h1,
-body.dark .input-group label {
-    color: #f0f0f0;
-    /* Cor do texto para títulos e labels */
+.links a {
+    color: var(--cor-btn-secundaria);
+    text-decoration: none;
+    font-weight: bold;
 }
 
-body.dark .input-group input {
-    background-color: #2a2a2a;
-    /* Fundo dos inputs */
-    color: #f0f0f0;
-    /* Cor do texto digitado nos inputs */
-    border: 1px solid #444;
+.links a:hover {
+    text-decoration: underline;
 }
-
-body.dark .input-group input::placeholder {
-    color: #b0b0b0;
-    /* Cor do placeholder */
-}
-
-body.dark .password-toggle-icon {
-    color: #f0f0f0;
-    /* Cor do ícone de mostrar/esconder senha */
-}
-
-body.dark .password-strength.fraca {
-    color: #ff6b6b;
-}
-
-/* Vermelho mais suave no dark mode */
-body.dark .password-strength.media {
-    color: #ffd700;
-}
-
-/* Amarelo no dark mode */
-body.dark .password-strength.forte {
-    color: #fff;
-}
-
-/* Verde mais suave no dark mode */
-
-body.dark .cadastro-button {
-    background-color: #fff;
-    /* Cor do botão de cadastro no modo escuro */
-    color: #ffffff;
-}
-
-body.dark .cadastro-button:hover:not(:disabled) {
-    background-color: #fff;
-}
-
-body.dark .cadastro-button:disabled {
-    background-color: #444444;
-    color: #aaaaaa;
-}
-
-body.dark .success-message {
-    background-color: #fff;
-    color: #252525;
-    border: 1px solid #fff;
-}
-
-body.dark .links p {
-    color: #252525;
-    /* Cor do texto "Já tem uma conta?" */
-}
-
-body.dark .links a {
-    color: #80c0ff;
-    /* Cor dos links no modo escuro */
-}
-
-body.dark .cadastro-info {
-    background-color: #2a2a2a;
-    /* Fundo da seção de informações */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-body.dark .cadastro-info h2 {
-    color: #80c0ff;
-    /* Cor do título da seção de informações */
-}
-
-body.dark .cadastro-info li {
-    color: #e0e0e0;
-    /* Cor do texto da lista de informações */
-}
-
 
 /* Responsividade */
 @media (max-width: 768px) {
