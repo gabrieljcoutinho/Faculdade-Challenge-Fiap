@@ -1,7 +1,14 @@
+:root {
+    --branco: #fff;
+    --preto: #000
+}
+
+
+
 body.light-theme,
 .tipoGrafico {
-    background-color: #fff;
-    color: #000;
+    background-color: var(--branco);
+    color: var(--preto);
 }
 
 
@@ -20,7 +27,7 @@ body.dark,
 body.dark,
 .placeholder-text,
 .tituloHelpCenter {
-    color: #fff;
+    color: var(--branco);
 
 }
 
@@ -28,7 +35,7 @@ body.dark,
 .paragrafoContatoTitulo,
 .paragrafoAdiconarAparelhos,
 .connecting-message {
-    color: #000;
+    color: var(--preto);
 }
 
 
@@ -38,40 +45,40 @@ body.light-theme .tituloConexao {
 
 body.dark-theme .tituloConexao,
 .placeholder-texte {
-    color: white;
+    color: var(--branco);
 }
 
 
 body.dark-theme .chat-container {
-    background-color: #000;
-    border: #000;
+    background-color: var(--preto);
+    border: var(--preto);
 }
 
 body.dark-theme .messagemInicial {
-    color: #000;
+    color: var(--preto);
 }
 
 
 body.dark-theme .contato-container {
-    background-color: #000;
+    background-color: var(--preto);
 }
 
 
 body.dark-theme .tituloHelpCenter {
-    color: #fff;
+    color: var(--branco);
 }
 
 body.light-theme .tituloHelpCenter {
-    color: #000;
+    color: var(--preto);
 }
 
 
 body.dark-theme .perguntasFrequentes {
-    color: #fff;
+    color: var(--branco);
 }
 
 body.light-theme .perguntasFrequentes {
-    color: #000;
+    color: var(--preto);
 }
 
 body.light-theme .tituloEsqueciSenha {
@@ -91,6 +98,107 @@ body.dark-theme .toggle-button.connected-btn.active {
 body.dark-theme * {
     scrollbar-width: thin;
     /* Firefox */
-    scrollbar-color: rgba(31, 81, 255, 0.7) #000;
+    scrollbar-color: rgba(31, 81, 255, 0.7) var(--preto);
     /* Firefox */
+}
+
+/*----------------------------CADASTRO------------------------*/
+/* --------------------------------------------------------------------- */
+/* Estilos para o Modo Escuro */
+body.dark .cadastro-container {
+    background-color: #121212;
+    /* Fundo mais escuro para o container principal */
+}
+
+body.dark .cadastro-box {
+    background-color: #1e1e1e;
+    /* Fundo da caixa de cadastro */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .cadastro-box h1,
+body.dark .input-group label {
+    color: #f0f0f0;
+    /* Cor do texto para títulos e labels */
+}
+
+body.dark .input-group input {
+    background-color: #2a2a2a;
+    /* Fundo dos inputs */
+    color: #f0f0f0;
+    /* Cor do texto digitado nos inputs */
+    border: 1px solid #444;
+}
+
+body.dark .input-group input::placeholder {
+    color: #b0b0b0;
+    /* Cor do placeholder */
+}
+
+body.dark .password-toggle-icon {
+    color: #f0f0f0;
+    /* Cor do ícone de mostrar/esconder senha */
+}
+
+body.dark .password-strength.fraca {
+    color: #ff6b6b;
+}
+
+/* Vermelho mais suave no dark mode */
+body.dark .password-strength.media {
+    color: #ffd700;
+}
+
+/* Amarelo no dark mode */
+body.dark .password-strength.forte {
+    color: #fff;
+}
+
+/* Verde mais suave no dark mode */
+
+body.dark .cadastro-button {
+    background-color: #fff;
+    /* Cor do botão de cadastro no modo escuro */
+    color: #ffffff;
+}
+
+body.dark .cadastro-button:hover:not(:disabled) {
+    background-color: #fff;
+}
+
+body.dark .cadastro-button:disabled {
+    background-color: #444444;
+    color: #aaaaaa;
+}
+
+body.dark .success-message {
+    background-color: #fff;
+    color: #252525;
+    border: 1px solid #fff;
+}
+
+body.dark .links p {
+    color: #252525;
+    /* Cor do texto "Já tem uma conta?" */
+}
+
+body.dark .links a {
+    color: #80c0ff;
+    /* Cor dos links no modo escuro */
+}
+
+body.dark .cadastro-info {
+    background-color: #2a2a2a;
+    /* Fundo da seção de informações */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .cadastro-info h2 {
+    color: #80c0ff;
+    /* Cor do título da seção de informações */
+}
+
+body.dark .cadastro-info li {
+    color: #e0e0e0;
+    /* Cor do texto da lista de informações */
 }
