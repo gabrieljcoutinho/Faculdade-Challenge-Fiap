@@ -54,7 +54,7 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
 - Após o cadastro, o aparelho aparece como conectado e oferece funcionalidades adicionais:
   - Geração de QR Code para facilitar a conexão por outros usuários
   - Opções para editar, excluir ou desativar o dispositivo
-
+  - Opções de Ativar e Desativar os aprelhos conectados
 ---
 
 ### Seção Chatbot
@@ -98,5 +98,3 @@ Implementa seis funcionalidades principais:
 
 - O sistema possui pequenas animações para melhorar a experiência do usuário.
   Por exemplo, no chat, ao digitar comandos para mudar de página (como “Home”), o usuário é redirecionado com uma animação suave de apagar e acender a página.
-
-
