@@ -1,3 +1,14 @@
+:root {
+    --color-bg-menu: #333;
+    --color-text-menu: #ddd;
+    --color-text-menu-hover: #f1f1f1;
+    --color-bg-header: #252525;
+    --color-text-header: #fff;
+    --color-close-btn: #ddd;
+    --color-close-btn-hover: #f1f1f1;
+    --color-box-shadow-header: rgba(0, 0, 0, 0.1);
+}
+
 #menu {
     height: 100%;
     width: 0;
@@ -9,13 +20,11 @@
     transition: 0.5s;
     padding-top: 60px;
     padding-bottom: 60px;
-    background-color: #333;
-    color: white;
+    background-color: var(--color-bg-menu);
+    color: var(--color-text-menu);
     display: flex;
     flex-direction: column;
-    /* Organiza os itens verticalmente */
     align-items: flex-start;
-    /* Alinha os itens à esquerda */
 }
 
 #menu.open {
@@ -26,33 +35,32 @@
     padding: 8px;
     text-decoration: none;
     font-size: 20px;
-    color: #ddd;
+    color: var(--color-text-menu);
     display: block;
     transition: 0.3s;
     margin-left: 15px;
-    /* Adiciona um pouco de espaço à esquerda dos links */
 }
 
 #menu a:hover {
-    color: #f1f1f1;
+    color: var(--color-text-menu-hover);
     text-decoration: underline;
 }
 
 header {
     position: fixed;
     width: 100%;
-    background-color: #f8f8f8;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-bg-header);
+    box-shadow: 0 2px 4px var(--color-box-shadow-header);
     z-index: 200;
     display: flex;
     align-items: center;
-    background-color: #252525;
+    color: var(--color-text-header);
 }
 
 #main {
     padding: 10px;
     font-size: 20px;
-    color: #fff;
+    color: var(--color-text-header);
 }
 
 .close-btn {
@@ -64,23 +72,22 @@ header {
     cursor: pointer;
     background: none;
     border: none;
-    color: #ddd;
+    color: var(--color-close-btn);
     padding: 0;
     line-height: 1;
 }
 
 .close-btn:hover {
-    color: #f1f1f1;
+    color: var(--color-close-btn-hover);
 }
 
-/*IMG*/
+/* IMG */
 .iconesHeader {
     width: 35px;
     padding-top: 0;
     cursor: pointer;
     padding-left: 2rem;
 }
-
 
 .settings {
     padding-left: 50px;
@@ -92,33 +99,15 @@ header {
 
 .imgHeader {
     padding-top: 3.5rem;
-    /* Exemplo de valor menor */
     padding-left: 3.5rem;
-    /* Exemplo de valor menor */
 }
 
 @media screen and (max-width: 414px) and (max-height: 896px) {
     .sua-classe {
         position: absolute;
-        /* Ou position: fixed; dependendo do seu layout */
         bottom: 0;
         left: 0;
         width: 100%;
-        /* Para ocupar toda a largura da tela */
-        /* Adicione outros estilos conforme necessário */
-        padding-top: 25rem;
-    }
-}
-
-@media screen and (max-width: 414px) and (max-height: 896px) {
-    .sua-classe {
-        position: absolute;
-        /* Ou position: fixed; dependendo do seu layout */
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        /* Para ocupar toda a largura da tela */
-        /* Adicione outros estilos conforme necessário */
         padding-top: 25rem;
     }
 }
@@ -126,27 +115,21 @@ header {
 @media screen and (width: 360px) and (height: 720px) {
     .imgHeader {
         padding-top: 15rem;
-        /* Ajuste este valor para mover a imagem para cima */
     }
 }
 
 @media screen and (width: 360px) and (height: 740px) {
     .imgHeader {
         padding-top: 15rem;
-        /* Ajuste este valor para mover a imagem ainda mais para cima */
     }
 }
-
 
 @media (max-width: 400px) {
     .sua-classe {
         position: absolute;
-        /* Ou position: fixed; dependendo do seu layout */
         bottom: 0;
         left: 0;
         width: 100%;
-        /* Para ocupar toda a largura da tela */
-        /* Adicione outros estilos conforme necessário */
         padding-top: 25rem;
     }
 }
