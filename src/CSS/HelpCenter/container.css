@@ -1,9 +1,13 @@
+:root {
+    --text-color: #333;
+}
+
 .container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 2rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
+    color: var(--text-color);
     padding-top: 5rem;
     padding-bottom: 10rem;
 }
