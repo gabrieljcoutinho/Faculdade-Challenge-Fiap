@@ -43,3 +43,12 @@ O sistema foi desenvolvido para funcionar tanto em dispositivos móveis quanto e
 As APIs utilizadas são fictícias, pois não há acesso direto aos dados reais da empresa.
 O projeto também conta com animações suaves, especialmente visíveis nas transições de página, como um efeito de "apagando e acendendo" ao navegar entre seções,
  contribuindo para uma experiência mais fluida e agradável. O código-fonte está disponível publicamente para consulta.
+
+
+
+ NOTAS ENTREGUE POR IA:
+ Chat gpt: 94/100
+ Geminie 95/100
+ BlackBoxai: 91/100
+ DeepSeak: 100/100
+ Quem: 97/100
