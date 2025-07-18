@@ -1,9 +1,18 @@
+:root {
+    --preto: #222;
+    --azul: #2980b9;
+    --branco: #fff;
+    --brancoAcinzentado: #ddd;
+    --cinza: #555;
+}
+
+
 .perguntas-frequentes-container {
     height: 1250px;
 
     padding: 0 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #222;
+    color: var(--preto);
 }
 
 h1 {
@@ -15,15 +24,15 @@ h1 {
 }
 
 .faq-list {
-    border-top: 2px solid #2980b9;
+    border-top: 2px solid var(--azul);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color: var(--branco);
 }
 
 .faq-item {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--brancoAcinzentado);
     padding: 18px 20px;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -34,7 +43,7 @@ h1 {
 
 .faq-item:hover {
     background-color: #f6f9fc;
-    box-shadow: inset 4px 0 0 #2980b9;
+    box-shadow: inset 4px 0 0 var(--azul);
 }
 
 .faq-question {
@@ -50,7 +59,7 @@ h1 {
 .faq-icon {
     font-weight: 700;
     font-size: 1.8rem;
-    color: #2980b9;
+    color: var(--azul);
     transition: transform 0.3s ease;
     user-select: none;
     margin-left: 12px;
@@ -62,7 +71,7 @@ h1 {
 
 .faq-answer {
     margin-top: 12px;
-    color: #555;
+    color: var(cinza);
     font-size: 1rem;
     line-height: 1.6;
     max-width: 100%;
