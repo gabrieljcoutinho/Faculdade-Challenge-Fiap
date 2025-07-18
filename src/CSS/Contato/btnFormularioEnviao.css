@@ -1,6 +1,12 @@
+:root {
+    --color-primary: #007bff;
+    --color-primary-hover: #0056b3;
+    --color-white: #ffffff;
+}
+
 .contato-form .submit-button {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
     padding: 14px 25px;
     border: none;
     border-radius: 6px;
@@ -11,5 +17,5 @@
 }
 
 .contato-form .submit-button:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary-hover);
 }
