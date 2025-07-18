@@ -1,8 +1,17 @@
+:root {
+    --cor-fundo-form: #fff;
+    --cor-texto-titulo: #333;
+    --cor-texto-label: #555;
+    --cor-borda-input: #ddd;
+    --cor-foco-borda: #007bff;
+    --cor-sombra: rgba(0, 0, 0, 0.1);
+}
+
 .contato-form {
-    background-color: #fff;
+    background-color: var(--cor-fundo-form);
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--cor-sombra);
     width: 100%;
     max-width: 550px;
     box-sizing: border-box;
@@ -10,7 +19,7 @@
 }
 
 .contato-form h2 {
-    color: #333;
+    color: var(--cor-texto-titulo);
     margin-bottom: 25px;
     font-size: 1.8em;
     text-align: center;
@@ -24,7 +33,7 @@
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #555;
+    color: var(--cor-texto-label);
     font-size: 1em;
 }
 
@@ -35,7 +44,7 @@
 .form-group textarea {
     width: calc(100% - 20px);
     padding: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--cor-borda-input);
     border-radius: 6px;
     box-sizing: border-box;
     font-size: 16px;
@@ -47,7 +56,7 @@
 .form-group input[type="tel"]:focus,
 .form-group input[type="password"]:focus,
 .form-group textarea:focus {
-    border-color: #007bff;
+    border-color: var(--cor-foco-borda);
     outline: none;
 }
 
