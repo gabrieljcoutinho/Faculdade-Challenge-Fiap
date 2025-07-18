@@ -1,3 +1,13 @@
+:root {
+    --branco: #fff;
+    --branco2: #ddd;
+    --azulMeioEscuro: #0056b3;
+    --azulEscuro: #007bff;
+    --cinza: #555;
+    --cinza2: #333;
+}
+
+
 .login-box {
     flex: 1;
     padding: 2.5rem;
@@ -9,7 +19,7 @@
 }
 
 .login-box h1 {
-    color: #333;
+    color: var(--cinza2);
     margin-bottom: 1.5rem;
     font-size: 2rem;
 }
@@ -27,7 +37,7 @@
 .input-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #555;
+    color: var(--cinza);
     font-weight: bold;
 }
 
@@ -35,7 +45,7 @@
 .input-group input[type="password"] {
     width: calc(100% - 20px);
     padding: 0.8rem 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--branco2);
     border-radius: 5px;
     font-size: 1rem;
 }
@@ -59,8 +69,8 @@
 .login-button {
     width: 100%;
     padding: 0.9rem;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--azulEscuro);
+    color: var(--branco);
     border: none;
     border-radius: 5px;
     font-size: 1.1rem;
@@ -71,5 +81,5 @@
 }
 
 .login-button:hover {
-    background-color: #0056b3;
+    background-color: var(--azulMeioEscuro);
 }
