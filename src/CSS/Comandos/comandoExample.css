@@ -1,6 +1,12 @@
-/* comandoExample.css */
+:root {
+    --cor-texto-principal: #007bff;
+    --cor-code-bg: #e9ecef;
+    --cor-code-texto: #d63384;
+    --fonte-monospace: 'Fira Code', monospace;
+}
+
 .comando-example {
-    color: #007bff;
+    color: var(--cor-texto-principal);
     font-style: italic;
     font-size: 0.95rem;
     display: block;
@@ -9,9 +15,9 @@
 }
 
 .comando-example code {
-    background-color: #e9ecef;
+    background-color: var(--cor-code-bg);
     padding: 0.2em 0.4em;
     border-radius: 4px;
-    font-family: 'Fira Code', monospace;
-    color: #d63384;
+    font-family: var(--fonte-monospace);
+    color: var(--cor-code-texto);
 }
