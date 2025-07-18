@@ -1,9 +1,17 @@
+:root {
+    --cor-fundo-contato: #f9f9f9;
+    --cor-texto-titulo: #333333;
+    --cor-texto-subtitulo: #666666;
+    --cor-subtitulo-destaque: #000000;
+    /* Pode ajustar para a cor que preferir */
+}
+
 .contato-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 40px;
-    background-color: #f9f9f9;
+    background-color: var(--cor-fundo-contato);
     margin-bottom: 50px;
 }
 
@@ -13,13 +21,13 @@
 }
 
 .contato-header h1 {
-    color: #333;
+    color: var(--cor-texto-titulo);
     font-size: 2.5em;
     margin-bottom: 10px;
 }
 
 .contato-header .subtitulo {
-    color: #666;
+    color: var(--cor-texto-subtitulo);
     font-size: 1em;
 }
 
@@ -28,4 +36,5 @@
     font-weight: bold;
     font-size: 22px;
     text-align: center;
+    color: var(--cor-subtitulo-destaque);
 }
