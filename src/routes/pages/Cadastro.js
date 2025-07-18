@@ -5,42 +5,27 @@ import '../../CSS/Cadastro/input.css';
 import '../../CSS/Cadastro/password.css';
 import '../../CSS/Cadastro/links.css';
 import '../../CSS/Cadastro/error.css';
-
-import { mensagemLogar, subTitulo, recursos, comunidade, suporte} from '../../constants/Cadastro/index.js';
+import { mensagemLogar, subTitulo, recursos, comunidade, suporte } from '../../constants/Cadastro/index.js';
 
 const Cadastro = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ nome: '', email: '', password: '', confirmPassword: '' });
-  const [errors, setErrors] = useState({ password: '', email: '' });
+  const [errors, setErrors] = useState({});
   const [showPasswords, setShowPasswords] = useState([false, false]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  const handleChange = (e) => setForm({ ...form, [e.target.id]: e.target.value });
+  const validateEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  const getPasswordStrength = p =>
+    !p ? '' : p.length < 6 ? 'Fraca' : /[A-Z]/.test(p) && /[0-9]/.test(p) && /[^A-Za-z0-9]/.test(p) ? 'Forte' : 'Média';
 
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const handleChange = e => setForm(s => ({ ...s, [e.target.id]: e.target.value }));
 
-  const getPasswordStrength = (pwd) => {
-    if (!pwd) return '';
-    if (pwd.length < 6) return 'Fraca';
-    if (/[A-Z]/.test(pwd) && /[0-9]/.test(pwd) && /[^A-Za-z0-9]/.test(pwd)) return 'Forte';
-    return 'Média';
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    setErrors({ password: '', email: '' });
-
-    if (!validateEmail(form.email)) {
-      setErrors({ ...errors, email: 'E-mail inválido.' });
-      return;
-    }
-
-    if (form.password !== form.confirmPassword) {
-      setErrors({ ...errors, password: 'As senhas não conferem.' });
-      return;
-    }
-
+    setErrors({});
+    if (!validateEmail(form.email)) return setErrors({ email: 'E-mail inválido.' });
+    if (form.password !== form.confirmPassword) return setErrors({ password: 'As senhas não conferem.' });
     setIsSubmitting(true);
     setTimeout(() => {
       setSuccessMessage('Cadastro realizado com sucesso!');
@@ -49,7 +34,16 @@ const Cadastro = () => {
   };
 
   const EyeIcon = ({ onClick, visible }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" className="password-toggle-icon" onClick={onClick} style={{ cursor: 'pointer' }}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      fill="currentColor"
+      className="password-toggle-icon"
+      onClick={onClick}
+      style={{ cursor: 'pointer' }}
+    >
       {visible ? (
         <path d="M1.39 4.22l2.26 2.26C2.57 7.74 1 9.72 1 12c0 2 2.06 3.94 4.34 5.59l1.41-1.41C5.11 15.11 4 13.62 4 12c0-1.17.52-2.24 1.36-3.01l1.54 1.54A3.5 3.5 0 0 0 12 15a3.5 3.5 0 0 0 3.47-4.14l3.27 3.27C21.6 12.47 23 10.42 23 8c0-2-2.06-3.94-4.34-5.59L18.24 4C20.74 6.47 22 8.4 22 10s-.94 3.53-3.34 6l1.41 1.41c2.4-2.47 3.34-4.4 3.34-6 0-2.28-1.57-4.26-3.66-5.52l2.27-2.26-1.42-1.42L2.81 2.81 1.39 4.22zM12 6a9.48 9.48 0 0 0-6.34 2.41L5.66 9.41C8.06 6.94 10 6 12 6c1.06 0 2.09.27 3.03.77L12 9.88V6z" />
       ) : (
@@ -63,35 +57,35 @@ const Cadastro = () => {
       <section className="cadastro-box">
         <h1>Crie sua conta</h1>
         <form className="cadastro-form" onSubmit={handleSubmit}>
-          {['nome', 'email'].map((field) => (
-            <div key={field} className="input-group">
-              <label htmlFor={field}>{field === 'nome' ? 'Nome' : 'E-mail'}</label>
+          {['nome', 'email'].map(f => (
+            <div key={f} className="input-group">
+              <label htmlFor={f}>{f === 'nome' ? 'Nome' : 'E-mail'}</label>
               <input
-                type={field === 'email' ? 'email' : 'text'}
-                id={field}
-                placeholder={field === 'nome' ? 'Seu nome completo' : 'Seu e-mail'}
+                type={f === 'email' ? 'email' : 'text'}
+                id={f}
+                placeholder={f === 'nome' ? 'Seu nome completo' : 'Seu e-mail'}
                 required
-                value={form[field]}
+                value={form[f]}
                 onChange={handleChange}
-                className={errors[field] ? 'error' : ''}
+                className={errors[f] ? 'error' : ''}
               />
-              {errors[field] && <p className="error-message">{errors[field]}</p>}
+              {errors[f] && <p className="error-message">{errors[f]}</p>}
             </div>
           ))}
-          {['password', 'confirmPassword'].map((field, i) => (
-            <div key={field} className="input-group password-input-group">
-              <label htmlFor={field}>{field === 'password' ? 'Senha' : 'Confirmar Senha'}</label>
+          {['password', 'confirmPassword'].map((f, i) => (
+            <div key={f} className="input-group password-input-group">
+              <label htmlFor={f}>{f === 'password' ? 'Senha' : 'Confirmar Senha'}</label>
               <input
                 type={showPasswords[i] ? 'text' : 'password'}
-                id={field}
-                placeholder={field === 'password' ? 'Crie uma senha' : 'Confirme sua senha'}
+                id={f}
+                placeholder={f === 'password' ? 'Crie uma senha' : 'Confirme sua senha'}
                 required
-                value={form[field]}
+                value={form[f]}
                 onChange={handleChange}
                 className={errors.password ? 'error' : ''}
               />
-              <EyeIcon onClick={() => setShowPasswords(showPasswords.map((v, j) => j === i ? !v : v))} visible={showPasswords[i]} />
-              {field === 'password' && (
+              <EyeIcon onClick={() => setShowPasswords(s => s.map((v, j) => (j === i ? !v : v)))} visible={showPasswords[i]} />
+              {f === 'password' && (
                 <small className={`password-strength ${getPasswordStrength(form.password).toLowerCase()}`}>
                   Força: {getPasswordStrength(form.password)}
                 </small>
@@ -103,14 +97,13 @@ const Cadastro = () => {
             {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
           </button>
         </form>
-
         {successMessage && <div className="success-message animated">🎉 {successMessage}</div>}
-
         <div className="links">
-          <p className='temConta'><Link to="/login">{mensagemLogar}</Link></p>
+          <p className="temConta">
+            <Link to="/login">{mensagemLogar}</Link>
+          </p>
         </div>
       </section>
-
       <aside className="cadastro-info">
         <h2>{subTitulo}</h2>
         <ul>
@@ -119,7 +112,9 @@ const Cadastro = () => {
           <li>{suporte}</li>
         </ul>
       </aside>
-      <br /><br /><br />
+      <br />
+      <br />
+      <br />
     </main>
   );
 };
