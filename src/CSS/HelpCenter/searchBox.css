@@ -1,3 +1,8 @@
+:root {
+    --search-border-color: #ccc;
+    --search-focus-color: #007bff;
+}
+
 .search-box {
     display: flex;
     justify-content: center;
@@ -9,12 +14,12 @@
     max-width: 600px;
     padding: 0.8rem 1rem;
     font-size: 1rem;
-    border: 2px solid #ccc;
+    border: 2px solid var(--search-border-color);
     border-radius: 8px;
     transition: border-color 0.3s ease;
 }
 
 .search-box input:focus {
-    border-color: #007bff;
+    border-color: var(--search-focus-color);
     outline: none;
 }
