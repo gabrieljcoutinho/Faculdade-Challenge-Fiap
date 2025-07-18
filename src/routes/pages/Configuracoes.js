@@ -6,10 +6,9 @@ import '../../CSS/Settings/buttons.css';
 import '../../CSS/Settings/layout.css';
 import '../../CSS/Settings/images.css';
 
-
 import '../../CSS/mudarTema.css';
 
-import { logar, deslogar} from '../../constants/Configuracao/index.js'
+import { logar, deslogar } from '../../constants/Configuracao/index.js';
 
 import comandosImg from '../../imgs/imgConfiguracao/comandos.png';
 import atendimentoImg from '../../imgs/imgConfiguracao/atendimento.png';
@@ -17,9 +16,7 @@ import atendimentoImg from '../../imgs/imgConfiguracao/atendimento.png';
 const Configuracoes = ({ isReading, toggleReading }) => {
   const navigate = useNavigate();
 
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light-theme';
-  });
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light-theme');
 
   useEffect(() => {
     document.body.classList.remove('light-theme', 'dark-theme');
@@ -27,45 +24,23 @@ const Configuracoes = ({ isReading, toggleReading }) => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'light-theme' ? 'dark-theme' : 'light-theme'));
-  };
-
-const fecharConfiguracoes = () => {
-  navigate(-1); // volta para página anterior, não para a home
-};
-
-
-  const navegarParaLogin = () => {
-    navigate('/login');
-  };
-
-  const comandosChat = () => {
-    navigate('/comandosChat');
-  };
-
-  const helpCenter = () => {
-    navigate('/helpCenter');
-  };
+  const toggleTheme = () => setTheme(prev => (prev === 'light-theme' ? 'dark-theme' : 'light-theme'));
 
   return (
     <div className="configuracoes-overlay">
-      <button className="fechar-btn" onClick={fecharConfiguracoes} title="Fechar configurações">✕</button>
+      <button className="fechar-btn" onClick={() => navigate(-1)} title="Fechar configurações">✕</button>
 
       <div className="conteudo-configuracoes">
         <div className="btn-container">
 
-          {/* Comandos do Chat */}
-          <button className="comando-btn" title="Comandos" onClick={comandosChat}>
+          <button className="comando-btn" title="Comandos" onClick={() => navigate('/comandosChat')}>
             <img src={comandosImg} alt="Comandos" className="imgComando" />
           </button>
 
-          {/* Central de Ajuda */}
-          <button className="comando-btn" title="Central de Ajuda" onClick={helpCenter}>
+          <button className="comando-btn" title="Central de Ajuda" onClick={() => navigate('/helpCenter')}>
             <img src={atendimentoImg} alt="Atendimento" className="imgComando" />
           </button>
 
-          {/* Ativar/Desativar Leitura em voz alta */}
           <button
             className="comando-btn btnMudarTema"
             onClick={toggleReading}
@@ -75,7 +50,6 @@ const fecharConfiguracoes = () => {
             {isReading ? '🔈 Leitura Ativa' : '🔇 Leitura Desativada'}
           </button>
 
-          {/* Mudar Tema */}
           <button
             className="comando-btn btnMudarTema"
             onClick={toggleTheme}
@@ -85,13 +59,10 @@ const fecharConfiguracoes = () => {
             {theme === 'light-theme' ? '🌙 Modo Escuro' : '☀️ Modo Claro'}
           </button>
 
-          {/* Botões Login/Logout */}
-   {/* Botões Login/Logout */}
-<div className="top-buttons">
-  <button title="Logar" onClick={navegarParaLogin}>{logar}</button>
-  <button title="Deslogar" onClick={navegarParaLogin}>{deslogar}</button>
-</div>
-
+          <div className="top-buttons" style={{ marginTop: '10px' }}>
+            <button title="Logar" onClick={() => navigate('/login')}>{logar}</button>
+            <button title="Deslogar" onClick={() => navigate('/login')}>{deslogar}</button>
+          </div>
 
         </div>
       </div>
