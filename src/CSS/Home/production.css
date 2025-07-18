@@ -1,5 +1,11 @@
+:root {
+    --branco: #fff;
+    --azul: #007bff
+}
+
+
 .production-section {
-    background-color: white;
+    background-color: var(--branco);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
@@ -9,6 +15,6 @@
 
 
 .production-section h2 {
-    color: #007bff;
+    color: var(--azul);
     margin-bottom: 15px;
 }
