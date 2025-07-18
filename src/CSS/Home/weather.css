@@ -1,8 +1,14 @@
-/* weather-forecast.css */
+:root {
+    --branco: #fff;
+    --preto: #252525;
+    --azulMeioAMeio: #00bcd4;
+    --cinza1: #333;
+    --cinza2: #444;
+}
 
 .weather-forecast-section {
-    background-color: #252525;
-    color: #fff;
+    background-color: var(--preto);
+    color: var(--branco);
     border-radius: 8px;
     padding: 20px;
     margin-top: 30px;
@@ -12,7 +18,7 @@
 .weather-forecast-section h2 {
     text-align: center;
     margin-bottom: 25px;
-    color: #00bcd4;
+    color: var(--azulMeioAMeio);
     font-size: 1.8em;
 }
 
@@ -24,7 +30,7 @@
 }
 
 .weather-card {
-    background-color: #333;
+    background-color: var(--cinza1);
     border-radius: 10px;
     padding: 20px;
     /* Default padding for mobile/smaller screens */
@@ -38,12 +44,12 @@
 
 .weather-card:hover {
     transform: translateY(-5px);
-    background-color: #444;
+    background-color: var(--cinza2);
 }
 
 .weather-card h3 {
     margin-top: 0;
-    color: #fff;
+    color: var(--branco);
     font-size: 1.4em;
     margin-bottom: 15px;
 }
