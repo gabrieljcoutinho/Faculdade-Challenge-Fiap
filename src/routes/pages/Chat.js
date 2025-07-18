@@ -11,75 +11,34 @@ import sendBtn from '../../imgs/imgChat/sendBtn.png';
 import comandosData from '../../data/commands.json';
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-
-const normalizeText = (text) => text.trim().toLowerCase();
-
-const formatProductionSummary = (productionData) => {
-  if (
-    !productionData ||
-    !Array.isArray(productionData.labels) ||
-    !Array.isArray(productionData.datasetsOptions) ||
-    productionData.datasetsOptions.length === 0
-  ) {
-    return "Dados de produção solar não disponíveis.";
-  }
-
-  const labels = productionData.labels;
-  const firstDataset = productionData.datasetsOptions[0];
-  const data = firstDataset.data.slice(0, labels.length);
-
-  let total = 0;
-  let table = "Produção solar (Opção 1):\n\n| Hora | Produção (kWh) |\n|-------|---------------|\n";
-
-  for (let i = 0; i < labels.length; i++) {
-    const hour = labels[i];
-    const value = data[i] || 0;
-    total += value;
-    table += `| ${hour} | ${value} |\n`;
-  }
-
-  table += `\nProdução total: ${total} kWh`;
-
-  return table;
-};
+const normalizeText = t => t.trim().toLowerCase();
+const formatProductionSummary = d => !d || !Array.isArray(d.labels) || !Array.isArray(d.datasetsOptions) || !d.datasetsOptions.length
+  ? "Dados de produção solar não disponíveis."
+  : (() => {
+    const { labels } = d, data = d.datasetsOptions[0].data.slice(0, labels.length);
+    let total = 0, table = "Produção solar (Opção 1):\n\n| Hora | Produção (kWh) |\n|-------|---------------|\n";
+    labels.forEach((h, i) => { const v = data[i] || 0; total += v; table += `| ${h} | ${v} |\n`; });
+    return table + `\nProdução total: ${total} kWh`;
+  })();
 
 const Chat = ({ onConnectDevice, productionData, setTheme }) => {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [firstInteraction, setFirstInteraction] = useState(true);
-  const [isFadingOut, setIsFadingOut] = useState(false);
+  const [messages, setMessages] = useState([]), [newMessage, setNewMessage] = useState(''), [loading, setLoading] = useState(false), [firstInteraction, setFirstInteraction] = useState(true), [isFadingOut, setIsFadingOut] = useState(false);
+  const messagesEndRef = useRef(null), inputRef = useRef(null), navigate = useNavigate();
 
-  const messagesEndRef = useRef(null);
-  const inputRef = useRef(null);
-  const navigate = useNavigate();
+  useEffect(() => inputRef.current?.focus(), []);
+  useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
 
-  // Foco automático ao carregar componente
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  // Scroll para o final ao adicionar mensagens
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = async e => {
     e.preventDefault();
     const texto = newMessage.trim();
     if (!texto) return;
-
     if (firstInteraction) setFirstInteraction(false);
-
-    const textoNormalizado = normalizeText(texto);
-    setMessages(prev => [...prev, { role: 'user', content: texto }]);
+    setMessages(m => [...m, { role: 'user', content: texto }]);
     setNewMessage('');
     setLoading(true);
-    inputRef.current?.focus(); // Foco após envio
+    inputRef.current?.focus();
 
-    let handledByLocalCommand = false;
-    let botResponseContent = '';
-
+    const textoNormalizado = normalizeText(texto);
     const connectionCommands = [
       { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão', 'oconectar tv', 'oconectar televisão'] },
       { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado', 'oconectar ar-condicionado', 'oconectar ar condicionado'] },
@@ -88,141 +47,87 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador', 'oconectar carregador'] }
     ];
 
-    let identifiedDeviceType = null;
-    let fullDeviceNameForConnection = null;
+    let handledByLocalCommand = false, botResponseContent = '';
 
     for (const cmd of connectionCommands) {
-      for (const trigger of cmd.triggers) {
-        const normalizedTrigger = normalizeText(trigger);
-        if (textoNormalizado.startsWith(normalizedTrigger)) {
-          identifiedDeviceType = cmd.type;
-          let remainingText = texto.substring(trigger.length).trim();
-          fullDeviceNameForConnection = remainingText
-            ? `${cmd.type} ${remainingText.charAt(0).toUpperCase() + remainingText.slice(1)}`
-            : cmd.type;
-
-          if (typeof onConnectDevice === 'function') {
-            onConnectDevice(identifiedDeviceType, fullDeviceNameForConnection);
-          }
-
-          botResponseContent = `${fullDeviceNameForConnection} conectado!`;
-          handledByLocalCommand = true;
-          break;
-        }
+      if (cmd.triggers.some(t => textoNormalizado.startsWith(normalizeText(t)))) {
+        const trigger = cmd.triggers.find(t => textoNormalizado.startsWith(normalizeText(t)));
+        const remaining = texto.substring(trigger.length).trim();
+        const fullName = remaining ? `${cmd.type} ${remaining.charAt(0).toUpperCase() + remaining.slice(1)}` : cmd.type;
+        onConnectDevice?.(cmd.type, fullName);
+        botResponseContent = `${fullName} conectado!`;
+        handledByLocalCommand = true;
+        break;
       }
-      if (handledByLocalCommand) break;
     }
 
     if (!handledByLocalCommand) {
-      const comandoEncontrado = comandosData.comandos.find(cmd =>
-        Array.isArray(cmd.triggers) && cmd.triggers.some(trigger => normalizeText(trigger) === textoNormalizado)
-      );
-
-      if (comandoEncontrado) {
-        if (comandoEncontrado.resposta.startsWith("REDIRECT:")) {
+      const foundCmd = comandosData.comandos.find(c => c.triggers?.some(t => normalizeText(t) === textoNormalizado));
+      if (foundCmd) {
+        if (foundCmd.resposta.startsWith("REDIRECT:")) {
           setIsFadingOut(true);
-          setTimeout(() => {
-            const path = comandoEncontrado.resposta.split(":")[1];
-            navigate(path);
-          }, 700);
+          setTimeout(() => navigate(foundCmd.resposta.split(":")[1]), 700);
           setLoading(false);
-          inputRef.current?.focus(); // Foco após redirect
+          inputRef.current?.focus();
           return;
         }
-
-        if (comandoEncontrado.resposta === 'PRODUCAO_GRAFICO') {
-          botResponseContent = formatProductionSummary(productionData);
-        } else if (comandoEncontrado.resposta === 'TEMA_ESCURO') {
-          document.body.classList.remove('light-theme');
-          document.body.classList.add('dark-theme');
-          localStorage.setItem('theme', 'dark-theme');
-          if (setTheme) setTheme('dark-theme');
-          botResponseContent = "Tema escuro ativado! 🌙";
-        } else if (comandoEncontrado.resposta === 'TEMA_CLARO') {
-          document.body.classList.remove('dark-theme');
-          document.body.classList.add('light-theme');
-          localStorage.setItem('theme', 'light-theme');
-          if (setTheme) setTheme('light-theme');
-          botResponseContent = "Tema claro ativado! ☀️";
-        } else {
-          botResponseContent = comandoEncontrado.resposta;
+        switch (foundCmd.resposta) {
+          case 'PRODUCAO_GRAFICO': botResponseContent = formatProductionSummary(productionData); break;
+          case 'TEMA_ESCURO':
+            document.body.classList.replace('light-theme', 'dark-theme');
+            localStorage.setItem('theme', 'dark-theme');
+            setTheme?.('dark-theme');
+            botResponseContent = "Tema escuro ativado! 🌙";
+            break;
+          case 'TEMA_CLARO':
+            document.body.classList.replace('dark-theme', 'light-theme');
+            localStorage.setItem('theme', 'light-theme');
+            setTheme?.('light-theme');
+            botResponseContent = "Tema claro ativado! ☀️";
+            break;
+          default: botResponseContent = foundCmd.resposta;
         }
-
         handledByLocalCommand = true;
       }
     }
 
     if (handledByLocalCommand) {
       setTimeout(() => {
-        setMessages(prev => [...prev, { role: 'assistant', content: botResponseContent }]);
+        setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
         setLoading(false);
-        inputRef.current?.focus(); // Foco após comando local
+        inputRef.current?.focus();
       }, 500);
       return;
     }
 
     if (!GEMINI_API_KEY) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
+      setMessages(m => [...m, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
       setLoading(false);
-      inputRef.current?.focus(); // Foco mesmo com erro
+      inputRef.current?.focus();
       return;
     }
 
     try {
       const geminiMessages = [
         { role: 'model', parts: [{ text: "Ok, entendi. Como posso ajudar?" }] },
-        ...messages.map(msg => ({
-          role: msg.role === 'user' ? 'user' : 'model',
-          parts: [{ text: msg.content }]
-        })),
+        ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] })),
         { role: 'user', parts: [{ text: texto }] }
       ];
-
-      const payload = {
-        contents: geminiMessages,
-        generationConfig: { temperature: 0.9, topP: 0.8, maxOutputTokens: 1000 }
-      };
-
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessages(prev => [
-          ...prev,
-          { role: 'assistant', content: `Erro na API Gemini: ${data.error?.message || 'Problema desconhecido'} (Código: ${response.status})` }
-        ]);
-        return;
-      }
-
-      if (data.candidates?.[0]?.content?.parts) {
-        setMessages(prev => [
-          ...prev,
-          { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }
-        ]);
-      } else if (data.promptFeedback?.blockReason) {
-        setMessages(prev => [
-          ...prev,
-          { role: 'assistant', content: `Sua mensagem foi bloqueada: ${data.promptFeedback.blockReason}` }
-        ]);
-      } else {
-        setMessages(prev => [
-          ...prev,
-          { role: 'assistant', content: 'Resposta inválida da API Gemini' }
-        ]);
-      }
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: geminiMessages, generationConfig: { temperature: 0.9, topP: 0.8, maxOutputTokens: 1000 } })
+      });
+      const data = await res.json();
+      if (!res.ok) setMessages(m => [...m, { role: 'assistant', content: `Erro na API Gemini: ${data.error?.message || 'Problema desconhecido'} (Código: ${res.status})` }]);
+      else if (data.candidates?.[0]?.content?.parts) setMessages(m => [...m, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
+      else if (data.promptFeedback?.blockReason) setMessages(m => [...m, { role: 'assistant', content: `Sua mensagem foi bloqueada: ${data.promptFeedback.blockReason}` }]);
+      else setMessages(m => [...m, { role: 'assistant', content: 'Resposta inválida da API Gemini' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `Erro: ${error.message}` }]);
+      setMessages(m => [...m, { role: 'assistant', content: `Erro: ${error.message}` }]);
     } finally {
       setLoading(false);
-      inputRef.current?.focus(); // Foco garantido no final
+      inputRef.current?.focus();
     }
   };
 
@@ -238,42 +143,28 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
             </div>
           </div>
         )}
-
-        {messages.filter(msg => msg.role !== 'system').map((message, index) => (
-          <div key={index} className={`message ${message.role === 'user' ? 'user' : 'bot'}`}>
-            <span
-              className="message-bubble"
-              dangerouslySetInnerHTML={{
-                __html: message.role === 'assistant'
-                  ? marked.parse(message.content)
-                  : message.content
-              }}
-            />
+        {messages.filter(m => m.role !== 'system').map((m, i) => (
+          <div key={i} className={`message ${m.role === 'user' ? 'user' : 'bot'}`}>
+            <span className="message-bubble" dangerouslySetInnerHTML={{ __html: m.role === 'assistant' ? marked.parse(m.content) : m.content }} />
           </div>
         ))}
-
-        {loading && (
-          <div className="message bot">
-            <span className="message-bubble">Digitando...</span>
-          </div>
-        )}
+        {loading && <div className="message bot"><span className="message-bubble">Digitando...</span></div>}
         <div ref={messagesEndRef} />
       </div>
-
       <form onSubmit={handleSendMessage} className="message-input-form">
         <input
           ref={inputRef}
           type="text"
           value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
+          onChange={e => setNewMessage(e.target.value)}
           placeholder="Sua mensagem..."
           className="message-input"
           disabled={loading}
           autoComplete="off"
-          title='Digite seu texto ou sua mensagem'
+          title="Digite seu texto ou sua mensagem"
         />
         <button type="submit" className="send-button" disabled={loading}>
-          <img src={sendBtn} alt="Enviar" className="send-icon" title='Enviar Texto ou Mensagem' />
+          <img src={sendBtn} alt="Enviar" className="send-icon" title="Enviar Texto ou Mensagem" />
         </button>
       </form>
     </div>
