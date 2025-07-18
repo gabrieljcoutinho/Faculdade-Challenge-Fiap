@@ -1,3 +1,11 @@
+:root {
+    --card-background: #ffffff;
+    /* cor original do fundo do cartão (você pode ajustar) */
+    --background-gradient-start: #F0F2F5;
+    --background-gradient-end: #E0E6EB;
+    --text-paragraph-color: #5F7C8F;
+}
+
 .forgot-password-card {
     background-color: var(--card-background);
     padding: 10px;
@@ -14,7 +22,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #F0F2F5 0%, #E0E6EB 100%);
+    background: linear-gradient(135deg, var(--background-gradient-start) 0%, var(--background-gradient-end) 100%);
     height: 700px;
     padding-bottom: 10rem;
 }
@@ -27,7 +35,7 @@
 }
 
 .paragrafoEsqueciSenha {
-    color: #5F7C8F;
+    color: var(--text-paragraph-color);
     margin-bottom: 30px;
     line-height: 1.7;
     font-size: 1em;
