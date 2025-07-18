@@ -1,23 +1,45 @@
-/* Fundo semi-transparente cobrindo toda a tela */
+:root {
+    /* Gradiente e blur do modal */
+    --modal-bg-gradient: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+    --modal-blur: blur(4px);
+
+    /* Cores base */
+    --color-white: #fff;
+    --color-black-87: #222;
+
+    /* Dialog */
+    --dialog-bg: var(--color-white);
+    --dialog-text-color: var(--color-black-87);
+
+    /* Botão Confirmar */
+    --color-confirm-bg: #0069ff;
+    --color-confirm-bg-hover: #004bb5;
+    --color-confirm-shadow: rgba(0, 105, 255, 0.4);
+    --color-confirm-shadow-hover: rgba(0, 75, 181, 0.6);
+
+    /* Botão Cancelar */
+    --color-cancel-bg: #e55353;
+    --color-cancel-bg-hover: #b03434;
+    --color-cancel-shadow: rgba(229, 83, 83, 0.4);
+    --color-cancel-shadow-hover: rgba(176, 52, 52, 0.6);
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.4),
-            rgba(0, 0, 0, 0.6));
+    background: var(--modal-bg-gradient);
+    backdrop-filter: var(--modal-blur);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    backdrop-filter: blur(4px);
-    /* efeito blur no fundo atrás do modal */
 }
 
-/* Caixa do diálogo */
 .confirmation-dialog {
-    background-color: #fff;
+    background-color: var(--dialog-bg);
     padding: 30px 35px;
     border-radius: 12px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
@@ -29,7 +51,6 @@
     animation: fadeInScale 0.3s ease forwards;
 }
 
-/* Animação suave de aparecimento */
 @keyframes fadeInScale {
     from {
         opacity: 0;
@@ -42,59 +63,55 @@
     }
 }
 
-/* Texto da mensagem */
 .confirmation-dialog p {
     font-size: 1.2rem;
     margin-bottom: 28px;
-    color: #222;
+    color: var(--dialog-text-color);
     font-weight: 500;
 }
 
-/* Container dos botões */
 .confirmation-actions {
     display: flex;
     justify-content: center;
     gap: 24px;
 }
 
-/* Estilo botão Sim */
 .confirm-button {
-    background-color: #0069ff;
-    color: white;
+    background-color: var(--color-confirm-bg);
+    color: var(--color-white);
     border: none;
     padding: 12px 30px;
     border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0, 105, 255, 0.4);
+    box-shadow: 0 6px 12px var(--color-confirm-shadow);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     user-select: none;
 }
 
 .confirm-button:hover,
 .confirm-button:focus {
-    background-color: #004bb5;
-    box-shadow: 0 8px 16px rgba(0, 75, 181, 0.6);
+    background-color: var(--color-confirm-bg-hover);
+    box-shadow: 0 8px 16px var(--color-confirm-shadow-hover);
     outline: none;
 }
 
-/* Estilo botão Não */
 .cancel-button {
-    background-color: #e55353;
-    color: #fff;
+    background-color: var(--color-cancel-bg);
+    color: var(--color-white);
     border: none;
     padding: 12px 30px;
     border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 6px 12px rgba(229, 83, 83, 0.4);
+    box-shadow: 0 6px 12px var(--color-cancel-shadow);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     user-select: none;
 }
 
 .cancel-button:hover,
 .cancel-button:focus {
-    background-color: #b03434;
-    box-shadow: 0 8px 16px rgba(176, 52, 52, 0.6);
+    background-color: var(--color-cancel-bg-hover);
+    box-shadow: 0 8px 16px var(--color-cancel-shadow-hover);
     outline: none;
 }
