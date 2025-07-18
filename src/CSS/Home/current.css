@@ -1,26 +1,39 @@
+:root {
+    --color-primary: #00bcd4;
+    --color-secondary: #ccc;
+    --color-forecast-text: #f0f0f0;
+    --bg-color-card: #ffffff;
+    /* caso você queira definir fundo depois */
+}
+
+/* Temperatura atual */
 .current-weather-card .temperature {
     font-size: 3em;
     font-weight: bold;
-    color: #00bcd4;
+    color: var(--color-primary);
     margin-bottom: 10px;
 }
 
+/* Condição principal (ícone, por exemplo) */
 .condition {
     font-size: 2em;
     margin-bottom: 10px;
 }
 
+/* Texto descritivo da condição */
 .condition-text {
     font-size: 1.1em;
-    color: #ccc;
+    color: var(--color-secondary);
 }
 
+/* Intervalo de temperatura na previsão */
 .forecast-card .temp-range {
     font-size: 1.2em;
     margin-top: 10px;
-    color: #f0f0f0;
+    color: var(--color-forecast-text);
 }
 
+/* Responsividade para telas menores */
 @media (max-width: 768px) {
     .weather-cards-container {
         flex-direction: column;
@@ -29,95 +42,61 @@
 
     .weather-card {
         max-width: 90%;
-        /* No specific min-height here, allowing it to adapt more on mobile */
+        /* Altura mínima adaptável em dispositivos móveis */
     }
 }
 
-
+/* Layout para telas grandes */
 @media (min-width: 992px) {
-
-    /* Adjust breakpoint as needed for "desktop" */
     .main-content {
         display: flex;
         gap: 30px;
-        /* Space between the two main sections */
         align-items: flex-start;
-        /* Aligns items to the top if they have different heights */
     }
 
     .production-section,
     .weather-forecast-section {
         flex: 1;
-        /* Allows both sections to grow and take equal available space */
         min-width: 0;
-        /* Prevents overflow issues with flex items */
     }
 
-    /* Adjustments for weather cards within the desktop layout */
     .weather-cards-container {
         flex-direction: row;
-        /* Keep cards in a row */
         justify-content: center;
-        /* Center cards */
         flex-wrap: wrap;
-        /* Allow cards to wrap */
         gap: 15px;
-        /* Slightly less gap for a denser layout */
     }
 
     .weather-card {
         max-width: 48%;
-        /* Allows two cards per row in the weather section */
-        min-width: unset;
-        /* Remove min-width constraint to let flex:1 manage sizing */
-
-        /* --- START: HEIGHT ADJUSTMENTS FOR DESKTOP ONLY --- */
         padding: 30px;
-        /* Increased padding for more internal height on desktop */
         min-height: 220px;
-        /* Set a minimum height for consistency on desktop */
         display: flex;
-        /* Use flexbox to center content vertically within the card */
         flex-direction: column;
-        /* Stack content vertically */
         justify-content: center;
-        /* Vertically center content */
         align-items: center;
-        /* Horizontally center content */
-        /* --- END: HEIGHT ADJUSTMENTS FOR DESKTOP ONLY --- */
     }
 
-    /* Specific height adjustment for the 'Now' card if you want it slightly different */
     .current-weather-card {
         max-width: 100%;
-        /* Take full width if there's only one row for it */
-        /* You can set a specific min-height for this one too if needed */
-        /* min-height: 250px; */
+        /* Ex: min-height: 250px; */
     }
 
-    /* Adjust font sizes and margins inside cards for better vertical distribution
-       on desktop, if they need to fill the increased height. */
     .current-weather-card .temperature {
         font-size: 3.5em;
-        /* Larger current temp */
     }
 
     .forecast-card .condition {
         font-size: 2.8em;
-        /* Larger icon for forecast */
         margin-bottom: 18px;
-        /* More space below icon */
     }
 
     .forecast-card .temp-range {
         font-size: 1.4em;
-        /* Larger temp range text */
         margin-top: 15px;
-        /* More space above temp range */
     }
 
     .forecast-card .condition-text {
         font-size: 1.25em;
-        /* Larger condition text */
     }
 }
