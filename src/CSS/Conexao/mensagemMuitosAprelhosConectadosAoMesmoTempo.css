@@ -1,10 +1,36 @@
+:root {
+    /* Cores principais */
+    --color-overlay-bg: rgba(0, 0, 0, 0.5);
+
+    --color-warning-bg-start: #fff;
+    --color-warning-bg-end: #fefefe;
+
+    --color-warning-text: #3a3a3a;
+    --color-warning-icon: #ffb74d;
+    /* laranja suave */
+    --color-warning-icon-shadow: rgba(255, 183, 77, 0.6);
+    --color-warning-icon-shadow-light: rgba(255, 183, 77, 0.4);
+
+    --color-warning-paragraph: #666666;
+
+    --color-button-bg-start: #ffb74d;
+    --color-button-bg-end: #ff9800;
+    --color-button-bg-hover-start: #ffa726;
+    --color-button-bg-hover-end: #fb8c00;
+    --color-button-shadow: rgba(255, 152, 0, 0.5);
+    --color-button-shadow-hover: rgba(251, 140, 0, 0.7);
+    --color-button-shadow-active: rgba(251, 140, 0, 0.5);
+
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 /* Overlay com fundo escurecido + blur suave */
 .modal-overlay.active {
     opacity: 1;
     visibility: visible;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--color-overlay-bg);
     /* backdrop-filter: blur(6px); */
     display: flex;
     justify-content: center;
@@ -15,8 +41,8 @@
 
 /* Modal centralizado com sombra mais suave e fundo com leve gradiente */
 .warning-dialog {
-    background: linear-gradient(135deg, #fff, #fefefe);
-    color: #3a3a3a;
+    background: linear-gradient(135deg, var(--color-warning-bg-start), var(--color-warning-bg-end));
+    color: var(--color-warning-text);
     padding: 48px 36px;
     border-radius: 16px;
     box-shadow:
@@ -29,7 +55,7 @@
     opacity: 0;
     animation: slideInFromTop 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     position: relative;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-family);
 }
 
 /* Ícone maior com sombra e animação mais suave */
@@ -38,10 +64,9 @@
     font-size: 4em;
     display: block;
     margin-bottom: 22px;
-    color: #ffb74d;
-    /* Laranja suave */
+    color: var(--color-warning-icon);
     text-shadow:
-        0 2px 6px rgba(255, 183, 77, 0.6);
+        0 2px 6px var(--color-warning-icon-shadow);
     animation: bounceIn 0.9s ease-out;
 }
 
@@ -50,9 +75,9 @@
     margin-top: 0;
     margin-bottom: 20px;
     font-size: 2.2em;
-    color: #ffb74d;
+    color: var(--color-warning-icon);
     font-weight: 700;
-    text-shadow: 0 1px 2px rgba(255, 183, 77, 0.4);
+    text-shadow: 0 1px 2px var(--color-warning-icon-shadow-light);
 }
 
 /* Parágrafo com espaçamento e cor mais leve */
@@ -60,13 +85,13 @@
     font-size: 1.2em;
     line-height: 1.8;
     margin-bottom: 35px;
-    color: #666666;
+    color: var(--color-warning-paragraph);
     letter-spacing: 0.02em;
 }
 
 /* Botão com efeito gradiente, sombra e hover animado */
 .warning-dialog button.close-button-styled {
-    background: linear-gradient(135deg, #ffb74d, #ff9800);
+    background: linear-gradient(135deg, var(--color-button-bg-start), var(--color-button-bg-end));
     color: #fff;
     border: none;
     padding: 16px 36px;
@@ -75,21 +100,21 @@
     font-size: 1.15em;
     font-weight: 700;
     box-shadow:
-        0 6px 15px rgba(255, 152, 0, 0.5);
-
+        0 6px 15px var(--color-button-shadow);
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .warning-dialog button.close-button-styled:hover {
-    background: linear-gradient(135deg, #ffa726, #fb8c00);
+    background: linear-gradient(135deg, var(--color-button-bg-hover-start), var(--color-button-bg-hover-end));
     transform: translateY(-4px);
     box-shadow:
-        0 10px 20px rgba(251, 140, 0, 0.7);
+        0 10px 20px var(--color-button-shadow-hover);
 }
 
 .warning-dialog button.close-button-styled:active {
     transform: translateY(0);
     box-shadow:
-        0 4px 10px rgba(251, 140, 0, 0.5);
+        0 4px 10px var(--color-button-shadow-active);
 }
 
 /* Animação entrada modal */
