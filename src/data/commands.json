@@ -254,23 +254,20 @@
 
     {
       "triggers": [
-        "Ir para conecxões",
-        "Abrir conecxões",
-        "Página de conecxões",
-        "Ver meus dispositivos",
-        "Conecxões",
-        "Conecxao",
-            "Conecxão",
-        "Página conecxão",
-         "Página Conecxão",
-         "Página conecxao",
-         "Página Conecxao",
-           "Pagina conecxão",
-         "Pagina Conecxão",
-         "Pagina conecxao",
-         "Pagina Conecxao",
-         "Conecxões",
-         "Conecxoes"
+      "Ir para conexões",
+  "Abrir conexões",
+  "Página de conexões",
+  "Ver meus dispositivos",
+  "Conexões",
+  "Conexão",
+  "Página conexão",
+  "Página Conexão",
+  "Página conexao",
+  "Página Conexao",
+  "Pagina conexão",
+  "Pagina Conexão",
+  "Pagina conexao",
+  "Pagina Conexao"
       ],
       "resposta": "REDIRECT:/conexoes"
     },
@@ -395,7 +392,49 @@
       "Pagina comandos"
           ],
       "resposta": "REDIRECT:/comandosChat"
+    },
+
+
+    {
+      "triggers": [
+            "Logar",
+            "Logir",
+            "Acessar conta",
+            "Fazer login",
+            "Fazer Login"
+          ],
+      "resposta": "REDIRECT:/login"
+    },
+
+
+
+
+    {
+      "triggers": [
+            "Cadastro",
+            "Fazer Cadastro",
+            "Fazer cadastro",
+            "Cadastrar"
+          ],
+      "resposta": "REDIRECT:/cadastro"
+    },
+
+
+    {
+            "triggers": [
+           "Configurações",
+           "Configuração",
+           "Configuracao",
+           "Configuraçao",
+           "Configurar",
+           "Setting",
+           "Settings"
+          ],
+      "resposta": "REDIRECT:/configuracoes"
     }
+
+
+
 
   ]
 
