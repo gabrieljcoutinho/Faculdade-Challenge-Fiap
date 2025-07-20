@@ -267,7 +267,12 @@
   "Pagina conexão",
   "Pagina Conexão",
   "Pagina conexao",
-  "Pagina Conexao"
+  "Pagina Conexao",
+  "Conexao",
+  "Página de Conexão",
+   "Página de Conexao",
+    "Pagina de Conexão",
+   "Pagina de Conexao"
       ],
       "resposta": "REDIRECT:/conexoes"
     },
