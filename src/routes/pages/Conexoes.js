@@ -310,57 +310,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
 
 
-// Function to determine the cost bar color and fictitious cost
-const getCostData = (connectedDate, accumulatedSeconds = 0) => {
-  // Se não estiver conectado, o custo é baseado apenas no tempo acumulado
-  if (!connectedDate) {
-    let color = 'green';
-    let fictitiousCost = 0;
-    const totalSeconds = accumulatedSeconds;
-
-    if (totalSeconds <= 30) {
-      color = '#4CAF50'; // Verde
-      fictitiousCost = totalSeconds * 0.1;
-    } else if (totalSeconds <= 60) {
-      color = '#FFD700'; // Amarelo
-      fictitiousCost = 30 * 0.1 + (totalSeconds - 30) * 0.5;
-    } else {
-      color = '#FF0000'; // Vermelho
-      fictitiousCost = 30 * 0.1 + 30 * 0.5 + (totalSeconds - 60) * 1.5;
-    }
-
-    return {
-      color,
-      cost: `R$ ${fictitiousCost.toFixed(2)}`
-    };
-  }
-
-  // Se estiver conectado, calcular o tempo desde connectedDate e somar ao acumulado
-  const now = new Date().getTime();
-  const connectedStartTime = new Date(connectedDate).getTime();
-  const currentSessionSeconds = (now - connectedStartTime) / 1000;
-  const totalSeconds = (accumulatedSeconds || 0) + currentSessionSeconds;
-
-  let color = 'green';
-  let fictitiousCost = 0;
-
-  if (totalSeconds <= 30) {
-    color = '#4CAF50'; // Verde
-    fictitiousCost = totalSeconds * 0.1;
-  } else if (totalSeconds <= 60) {
-    color = '#FFD700'; // Amarelo
-    fictitiousCost = 30 * 0.1 + (totalSeconds - 30) * 0.5;
-  } else {
-    color = '#FF0000'; // Vermelho
-    fictitiousCost = 30 * 0.1 + 30 * 0.5 + (totalSeconds - 60) * 1.5;
-  }
-
-  return {
-    color,
-    cost: `R$ ${fictitiousCost.toFixed(2)}`
-  };
-};
-
 
 
 
@@ -576,66 +525,75 @@ const getCostData = (connectedDate, accumulatedSeconds = 0) => {
         </div>
       )}
       {/* Render the list based on devicesToDisplay */}
-      <div className="conexions-list">
-        {devicesToDisplay.length === 0 && (
-          <div className="placeholder-image-container">
-            <br /><br /><br />
-            <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
-            <p className="placeholder-text">
-              {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
-            </p>
+
+
+
+     <div className="conexions-list">
+  {devicesToDisplay.length === 0 && (
+    <div className="placeholder-image-container">
+      <br /><br /><br />
+      <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
+      <p className="placeholder-text">
+        {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
+      </p>
+    </div>
+  )}
+  {devicesToDisplay.map((c, index) => {
+    return (
+      <div
+        key={c.id}
+        className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
+        style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+        onClick={(e) => handleConexionClick(c, e)}
+        draggable="true"
+        onDragStart={(e) => handleDragStart(e, index)}
+        onDragEnter={(e) => handleDragEnter(e, index)}
+        onDragLeave={handleDragLeave}
+        onDragEnd={handleDragEnd}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onTouchStart={(e) => handleTouchStart(e, index)}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {c.connected && (
+          <div className="qrcode-top-left">
+            <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); setVisibleQRCode(c); }} type="button">
+              <img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" />
+            </button>
           </div>
         )}
-        {devicesToDisplay.map((c, index) => {
-          const { color: costBarColor, cost: fictitiousCost } = getCostData(c.connectedDate, c.accumulatedSeconds);
-          return (
-            <div
-              key={c.id}
-              className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
-              style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-              onClick={(e) => handleConexionClick(c, e)}
-              draggable="true"
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragEnter={(e) => handleDragEnter(e, index)}
-              onDragLeave={handleDragLeave}
-              onDragEnd={handleDragEnd}
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onTouchStart={(e) => handleTouchStart(e, index)}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              {c.connected && (
-                <div className="qrcode-top-left">
-                  <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); setVisibleQRCode(c); }} type="button">
-                    <img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" />
-                  </button>
-                </div>
-              )}
-              {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
-              <div className="icon-text-overlay">
-                <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-                <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
-              </div>
-              {c.connected && (
-                <div className="cost-bar" style={{ backgroundColor: costBarColor }}>
-                  <span>{fictitiousCost}</span>
-                </div>
-              )}
-              <div className="actions-overlay">
-                <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button>
-                <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.connected}>
-                  <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
-                </button>
-                <label className="switch">
-                  <input type="checkbox" checked={c.connected} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
-                  <span className="slider round"></span>
-                </label>
-              </div>
-            </div>
-          );
-        })}
+        {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
+        <div className="icon-text-overlay">
+          <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
+          <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
+        </div>
+        {/* Removi a barra de custo */}
+        <div className="actions-overlay">
+          <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button>
+          <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.connected}>
+            <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
+          </button>
+          <label className="switch">
+            <input type="checkbox" checked={c.connected} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
+            <span className="slider round"></span>
+          </label>
+        </div>
       </div>
+    );
+  })}
+</div>
+
+
+
+
+
+
+
+
+
+
+
       {selectedConexion && (
         <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
           <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
