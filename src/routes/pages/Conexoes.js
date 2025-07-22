@@ -303,27 +303,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // --- Drag and Drop Handlers (Desktop) ---
   const handleDragStart = (e, index) => {
     dragItem.current = index;
