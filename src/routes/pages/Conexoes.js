@@ -301,16 +301,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     let color = 'green';
     let fictitiousCost = 0;
 
-    if (diffSeconds < 5) {
-      color = '#4CAF50'; // Green
-      fictitiousCost = diffSeconds * 0.1; // Example: 10 cents per second
-    } else if (diffSeconds < 10) {
-      color = '#FFD700'; // Yellow
-      fictitiousCost = 5 * 0.1 + (diffSeconds - 5) * 0.5; // Higher cost after 5 seconds
-    } else {
-      color = '#FF0000'; // Red
-      fictitiousCost = 5 * 0.1 + 5 * 0.5 + (diffSeconds - 10) * 1.5; // Even higher cost after 10 seconds
-    }
+if (diffSeconds <= 10) {
+  color = '#4CAF50'; // Verde
+  fictitiousCost = diffSeconds * 0.1; // 10 centavos por segundo
+} else if (diffSeconds <= 30) {
+  color = '#FFD700'; // Amarelo
+  fictitiousCost = 10 * 0.1 + (diffSeconds - 10) * 0.5; // Custo maior após 10 segundos
+} else {
+  color = '#FF0000'; // Vermelho
+  fictitiousCost = 10 * 0.1 + 20 * 0.5 + (diffSeconds - 30) * 1.5; // Custo ainda maior após 30 segundos
+}
+
 
     return {
       color,
