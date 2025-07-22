@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useLocation } from 'react-router-dom';
-
 // Importa todos os arquivos CSS (considerando que são essenciais para o estilo)
 import '../../CSS/Conexao/conexao.css';
 import '../../CSS/Conexao/mediaScreen.css';
@@ -15,13 +14,12 @@ import '../../CSS/Conexao/error.css';
 import '../../CSS/Conexao/escolherFundo.css';
 import '../../CSS/Conexao/botaoSwitch.css';
 import '../../CSS/Conexao/qrCode.css';
-import '../../CSS/Conexao/detalhesAparelhos.css';
+import '../../CSS/Conexao/detalhesAparelhos.css'
 import '../../CSS/Conexao/imgNaoConectado.css';
 import '../../CSS/Conexao/mensagemRemoverAparelho.css';
 import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css';
 import '../../CSS/Conexao/btnConectadoEnaoConectado.css'
 import '../../CSS/Conexao/marcadorDeConsumo.css'
-
 // Importa imagens
 import tvIcon from '../../imgs/imgConexao/TV.png';
 import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
@@ -33,12 +31,10 @@ import imgQrcode from '../../imgs/imgConexao/qrCode.png';
 import semConexao from '../../imgs/imgConexao/semConexao.png';
 import bluetoothIcon from '../../imgs/imgConexao/bluetooth.png';
 import manual from '../../imgs/imgConexao/manual.png';
-
 import { tituloPrincipal, adicionarAparelho, escolherIcone, escolherCorDefundo, btnBluetooth,
   procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado,
 detalhesaparelhoAmpliados, mensagemExcluirAparelho, btnEditar, btnRemover, tempoAparelhoConectado, duracaoConecxao
 } from '../../constants/Conexao/index.js';
-
 // Constantes
 const availableColors = [
   '#FFFFF0', // ivory
@@ -51,9 +47,7 @@ const availableColors = [
   '#FFFAF0', // floralWhite
   '#F8F8FF'  // ghostWhite
 ];
-
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
-
 // Ícones disponíveis
 const availableIcons = [
   { name: 'tv', src: tvIcon },
@@ -62,16 +56,13 @@ const availableIcons = [
   { name: 'airfry', src: airfry },
   { name: 'carregador', src: carregador }
 ];
-
 // Mapa de ícones para acesso rápido
 const iconMap = availableIcons.reduce((acc, icon) => {
   acc[icon.name] = icon.src;
   return acc;
 }, {});
-
 const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, onToggleConnection }) => {
   const location = useLocation();
-
   // UI States
   const [showAddForm, setShowAddForm] = useState(false);
   const [modoManual, setModoManual] = useState(false);
@@ -82,7 +73,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [selectedConexion, setSelectedConexion] = useState(null);
   // NEW STATE: To control which list is active
   const [activeList, setActiveList] = useState('connected'); // 'connected' or 'disconnected'
-
   // Form data states
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: '' });
   const [activeIcon, setActiveIcon] = useState(null);
@@ -90,29 +80,23 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [editingId, setEditingId] = useState(null);
   const [removingId, setRemovingId] = useState(null);
   const [conexionToDelete, setConexionToDelete] = useState(null);
-
   // Drag and Drop States
   const dragItem = useRef(null); // Referência ao índice do item arrastado
   const dragOverItem = useRef(null); // Referência ao índice do item sendo arrastado sobre
   const touchStartTimer = useRef(null); // Timer para detecção de toque longo
   const [isDragging, setIsDragging] = useState(false); // Para indicar se o arrasto está ativo
   const currentDragElement = useRef(null); // Referência ao elemento DOM sendo arrastado atualmente
-
   // New state for connection timers
   const [connectionTimers, setConnectionTimers] = useState({});
-
   // Helper: Get icon key by its source
   const getIconKeyBySrc = (src) => availableIcons.find(icon => icon.src === src)?.name || '';
-
   // EFFECT HOOK: Handles URL parameters for automatic device connection via QR code scan
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const [nome, iconKey, bgColor] = [params.get('add'), params.get('icon'), params.get('bgColor')];
-
     if (nome && iconKey) {
       const iconSrc = iconMap[iconKey];
       const actualBgColor = availableColors.includes(bgColor) ? bgColor : availableColors[0];
-
       if (iconSrc) {
         if (conexions.some(c => c.text.toLowerCase() === nome.toLowerCase())) {
           setErrorMessage(`Já existe um aparelho chamado "${nome}".`);
@@ -123,7 +107,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       window.history.replaceState({}, document.title, location.pathname);
     }
   }, [location.search, onConnectDevice, conexions]);
-
   // EFFECT HOOK: Manage connection timers for visual feedback
   useEffect(() => {
     const timers = {};
@@ -138,13 +121,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         }, 1000); // Update every second
       }
     });
-
     return () => {
       // Clear all intervals when component unmounts or conexions change
       Object.values(timers).forEach(clearInterval);
     };
   }, [conexions]);
-
   // Centralized close function for all modals/forms
   const closeAllModals = () => {
     setShowAddForm(false); setModoManual(false); setErrorMessage(''); setIsSearchingBluetooth(false);
@@ -163,25 +144,21 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     // Remove all 'drag-over' classes from elements that might still have them
     document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
   };
-
   // Open add device form (Bluetooth mode by default)
   const handleAddClick = () => {
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
     setActiveIcon(null); setActiveColor(availableColors[0]); setEditingId(null); setErrorMessage('');
     setSelectedConexion(null); setShowAddForm(true); setIsSearchingBluetooth(false); setModoManual(false);
   };
-
   // Open manual add form
   const abrirModoManual = () => {
     setModoManual(true);
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
     setActiveIcon(null); setActiveColor(availableColors[0]); setErrorMessage(''); setEditingId(null); setIsSearchingBluetooth(false);
   };
-
   // Search and connect Bluetooth devices
   const handleSearchAndConnectBluetooth = async () => {
     if (!navigator.bluetooth) { setErrorMessage('Seu navegador não suporta Web Bluetooth. Use Chrome, Edge ou Opera.'); return; }
-
     setIsSearchingBluetooth(true); setErrorMessage('');
     try {
       const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
@@ -189,19 +166,16 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         const deviceName = device.name || 'Dispositivo Bluetooth Desconhecido';
         let guessedIcon = lampIcon;
         const name = deviceName.toLowerCase();
-
         if (name.includes('tv') || name.includes('monitor')) guessedIcon = tvIcon;
         else if (name.includes('ar') || name.includes('condicionado')) guessedIcon = airConditionerIcon;
         else if (name.includes('lamp') || name.includes('lâmpada')) guessedIcon = lampIcon;
         else if (name.includes('airfry') || name.includes('fritadeira')) guessedIcon = airfry;
         else if (name.includes('carregador') || name.includes('charger')) guessedIcon = carregador;
-
         if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
           setErrorMessage(`Já existe um aparelho chamado "${deviceName}".`);
           setIsSearchingBluetooth(false);
           return;
         }
-
         onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
         setShowAddForm(false);
       } else {
@@ -217,28 +191,22 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setIsSearchingBluetooth(false);
     }
   };
-
   // Save edited device
   const saveEditedConexion = () => {
     if (!newConexion.text.trim() || !newConexion.icon) { setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊'); return; }
     if (conexions.some(c => c.text.toLowerCase() === newConexion.text.toLowerCase() && c.id !== editingId)) { setErrorMessage(`Já existe um aparelho com o nome "${newConexion.text}".`); return; }
-
-    setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate } : c));
+    setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate, accumulatedSeconds: c.accumulatedSeconds } : c));
     closeAllModals();
   };
-
   // Save new device manually
   const saveManualConexion = () => {
     if (!newConexion.text.trim() || !newConexion.icon) { setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊'); return; }
     if (conexions.some(c => c.text.toLowerCase() === newConexion.text.toLowerCase())) { setErrorMessage(`Já existe um aparelho com o nome "${newConexion.text}".`); return; }
-
     onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
     closeAllModals();
   };
-
   // Request device removal (opens confirmation dialog)
   const removeConexion = (id) => { setConexionToDelete(id); setShowConfirmDialog(true); };
-
   // Confirm device removal
   const handleConfirmRemove = () => {
     if (conexionToDelete) {
@@ -246,10 +214,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setTimeout(() => { onRemoveDevice(conexionToDelete); setRemovingId(null); closeAllModals(); }, 300);
     }
   };
-
   // Cancel removal
   const handleCancelRemove = () => closeAllModals();
-
   // Open device edit form
   const handleEditClick = (c) => {
     if (c.connected) {
@@ -258,13 +224,43 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setSelectedConexion(null); setShowAddForm(true); setIsSearchingBluetooth(false); setModoManual(true);
     }
   };
-
   // Toggle connection status (on/off)
   const toggleConnection = (id, newDesiredState) => {
-    onToggleConnection(id, newDesiredState);
+    // Atualiza o estado de conexão e acumula tempo ao desconectar
+    setConexions(prevConexions =>
+      prevConexions.map(c => {
+        if (c.id === id) {
+          let updatedConexion = { ...c };
+
+          if (c.connected && !newDesiredState) {
+            // Estava conectado e vai ser desconectado
+            if (c.connectedDate) {
+              // Calcular o tempo decorrido desde a última conexão
+              const now = new Date().getTime();
+              const connectedStartTime = new Date(c.connectedDate).getTime();
+              const secondsElapsed = (now - connectedStartTime) / 1000;
+              // Adicionar ao tempo acumulado
+              updatedConexion.accumulatedSeconds = (c.accumulatedSeconds || 0) + secondsElapsed;
+              // Limpar a data de conexão, pois não está mais conectado
+              updatedConexion.connectedDate = null;
+            }
+            updatedConexion.connected = false;
+          } else if (!c.connected && newDesiredState) {
+            // Estava desconectado e vai ser conectado
+            // Definir uma nova data de conexão para calcular o tempo futuro
+            updatedConexion.connectedDate = new Date().toISOString();
+            updatedConexion.connected = true;
+            // accumulatedSeconds permanece o mesmo até ser desconectado novamente
+          }
+          // Se o estado desejado for o mesmo que o atual, não faz nada além de retornar o objeto
+          return updatedConexion;
+        }
+        return c;
+      })
+    );
+
     if (selectedConexion && selectedConexion.id === id && !newDesiredState) setSelectedConexion(null);
   };
-
   // Open device details modal
   const handleConexionClick = (c, e) => {
     // Prevent click if a drag was initiated or if a touch long-press is pending
@@ -276,15 +272,27 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setSelectedConexion(c);
     }
   };
-
   // Date formatting
   const formatDate = (d) => d ? new Date(d).toLocaleString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A';
-
   // Calculate connection duration
-  const getConnectionDuration = (connectedDateString) => {
-    if (!connectedDateString) return 'N/A';
-    const diff = new Date() - new Date(connectedDateString);
-    const [seconds, minutes, hours, days] = [Math.floor(diff / 1000), Math.floor(diff / (1000 * 60)), Math.floor(diff / (1000 * 60 * 60)), Math.floor(diff / (1000 * 60 * 60 * 24))];
+  const getConnectionDuration = (connectedDateString, accumulatedSeconds = 0) => {
+    // Se estiver conectado, calcular o tempo desde connectedDate e somar ao acumulado
+    let totalSeconds = accumulatedSeconds || 0;
+    if (connectedDateString) {
+      const now = new Date().getTime();
+      const connectedStartTime = new Date(connectedDateString).getTime();
+      const currentSessionSeconds = (now - connectedStartTime) / 1000;
+      totalSeconds += currentSessionSeconds;
+    }
+
+    if (totalSeconds <= 0) return 'Menos de um segundo';
+
+    const [seconds, minutes, hours, days] = [
+      Math.floor(totalSeconds),
+      Math.floor(totalSeconds / 60),
+      Math.floor(totalSeconds / (60 * 60)),
+      Math.floor(totalSeconds / (60 * 60 * 24))
+    ];
 
     let duration = [];
     if (days > 0) duration.push(`${days} dia(s)`);
@@ -295,31 +303,55 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   };
 
   // Function to determine the cost bar color and fictitious cost
-  const getCostData = (connectedDate) => {
-    if (!connectedDate) return { color: 'transparent', cost: 'R$ 0.00' };
+  const getCostData = (connectedDate, accumulatedSeconds = 0) => {
+    // Se não estiver conectado, o custo é baseado apenas no tempo acumulado
+    if (!connectedDate) {
+      // Usar accumulatedSeconds diretamente
+      let color = 'green';
+      let fictitiousCost = 0;
+      const totalSeconds = accumulatedSeconds; // Tempo total em segundos
 
-    const diffSeconds = (new Date().getTime() - new Date(connectedDate).getTime()) / 1000;
+      if (totalSeconds <= 10) {
+        color = '#4CAF50'; // Verde
+        fictitiousCost = totalSeconds * 0.1;
+      } else if (totalSeconds <= 30) {
+        color = '#FFD700'; // Amarelo
+        fictitiousCost = 10 * 0.1 + (totalSeconds - 10) * 0.5;
+      } else {
+        color = '#FF0000'; // Vermelho
+        fictitiousCost = 10 * 0.1 + 20 * 0.5 + (totalSeconds - 30) * 1.5;
+      }
+      return {
+        color,
+        cost: `R$ ${fictitiousCost.toFixed(2)}`
+      };
+    }
+
+    // Se estiver conectado, calcular o tempo desde connectedDate e somar ao acumulado
+    const now = new Date().getTime();
+    const connectedStartTime = new Date(connectedDate).getTime();
+    const currentSessionSeconds = (now - connectedStartTime) / 1000;
+    const totalSeconds = (accumulatedSeconds || 0) + currentSessionSeconds;
+
     let color = 'green';
     let fictitiousCost = 0;
 
-if (diffSeconds <= 10) {
-  color = '#4CAF50'; // Verde
-  fictitiousCost = diffSeconds * 0.1; // 10 centavos por segundo
-} else if (diffSeconds <= 30) {
-  color = '#FFD700'; // Amarelo
-  fictitiousCost = 10 * 0.1 + (diffSeconds - 10) * 0.5; // Custo maior após 10 segundos
-} else {
-  color = '#FF0000'; // Vermelho
-  fictitiousCost = 10 * 0.1 + 20 * 0.5 + (diffSeconds - 30) * 1.5; // Custo ainda maior após 30 segundos
-}
-
+    if (totalSeconds <= 10) {
+      color = '#4CAF50'; // Verde
+      fictitiousCost = totalSeconds * 0.1;
+    } else if (totalSeconds <= 30) {
+      color = '#FFD700'; // Amarelo
+      fictitiousCost = 10 * 0.1 + (totalSeconds - 10) * 0.5;
+    } else {
+      color = '#FF0000'; // Vermelho
+      fictitiousCost = 10 * 0.1 + 20 * 0.5 + (totalSeconds - 30) * 1.5;
+    }
 
     return {
       color,
       cost: `R$ ${fictitiousCost.toFixed(2)}`
     };
   };
-
   // --- Drag and Drop Handlers (Desktop) ---
   const handleDragStart = (e, index) => {
     dragItem.current = index;
@@ -333,17 +365,14 @@ if (diffSeconds <= 10) {
     e.dataTransfer.setData('text/plain', index);
     e.dataTransfer.effectAllowed = 'move';
   };
-
   const handleDragEnter = (e, index) => {
     if (dragItem.current === null || dragItem.current === index) return;
     dragOverItem.current = index;
     e.currentTarget.classList.add('drag-over');
   };
-
   const handleDragLeave = (e) => {
     e.currentTarget.classList.remove('drag-over');
   };
-
   const handleDragEnd = (e) => {
     if (currentDragElement.current) {
         currentDragElement.current.classList.remove('dragging');
@@ -354,35 +383,28 @@ if (diffSeconds <= 10) {
     dragOverItem.current = null;
     setIsDragging(false);
   };
-
   const handleDrop = (e) => {
     e.preventDefault();
     if (e.currentTarget) {
       e.currentTarget.classList.remove('drag-over');
     }
-
     const draggedIndex = dragItem.current;
     const droppedIndex = dragOverItem.current;
-
     if (draggedIndex === null || droppedIndex === null || draggedIndex === droppedIndex) {
       return;
     }
-
     const newConexions = [...conexions];
     const [draggedItemData] = newConexions.splice(draggedIndex, 1);
     newConexions.splice(droppedIndex, 0, draggedItemData);
-
     setConexions(newConexions);
     dragItem.current = null;
     dragOverItem.current = null;
     setIsDragging(false);
   };
-
   const handleDragOver = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   };
-
   // --- Touch Handlers (Mobile) ---
   const handleTouchStart = (e, index) => {
     // Only prevent default if we intend to start a drag
@@ -395,18 +417,14 @@ if (diffSeconds <= 10) {
         }
     }, 700); // Duration for long press to initiate drag
   };
-
   const handleTouchMove = (e) => {
     // Only prevent default if a drag is actively in progress
     if (isDragging) {
       e.preventDefault();
       const touch = e.touches[0];
       const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
-
       const hoveredConexionElement = targetElement ? targetElement.closest('.retanguloAdicionado') : null;
-
       document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
-
       if (hoveredConexionElement) {
           const parentChildren = Array.from(hoveredConexionElement.parentNode?.children || []);
           const hoveredIndex = parentChildren.indexOf(hoveredConexionElement);
@@ -427,23 +445,19 @@ if (diffSeconds <= 10) {
       }
     }
   };
-
   const handleTouchEnd = (e) => {
     if (touchStartTimer.current) {
         clearTimeout(touchStartTimer.current);
         touchStartTimer.current = null;
     }
-
     if (isDragging) {
       if (currentDragElement.current) {
         currentDragElement.current.classList.remove('dragging');
         currentDragElement.current = null;
       }
       document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
-
       const draggedIndex = dragItem.current;
       const droppedIndex = dragOverItem.current;
-
       if (draggedIndex !== null && droppedIndex !== null && draggedIndex !== droppedIndex) {
         const newConexions = [...conexions];
         const [draggedItemData] = newConexions.splice(draggedIndex, 1);
@@ -455,32 +469,25 @@ if (diffSeconds <= 10) {
       setIsDragging(false);
     }
   };
-
   // Filtered lists based on activeList state
   const connectedDevices = conexions.filter(c => c.connected);
   const disconnectedDevices = conexions.filter(c => !c.connected);
-
   const devicesToDisplay = activeList === 'connected' ? connectedDevices : disconnectedDevices;
-
   return (
     <div className="conexao-container">
       <h1 className='tituloConexao'>{tituloPrincipal}</h1>
-
       <button className="add-button-styled" onClick={handleAddClick}>
         <span className="plus-icon">+</span> {adicionarAparelho}
       </button>
-
       {/* Toggle buttons for connected/disconnected devices */}
       <div className="list-toggle-buttons">
         <span className={`slider-bar ${activeList}`} />
-
         <button
           className={`toggle-button connected-btn ${activeList === 'connected' ? 'active' : ''}`}
           onClick={() => setActiveList('connected')}
         >
           Conectados ({connectedDevices.length})
         </button>
-
         <button
           className={`toggle-button disconnected-btn ${activeList === 'disconnected' ? 'active' : ''}`}
           onClick={() => setActiveList('disconnected')}
@@ -488,13 +495,11 @@ if (diffSeconds <= 10) {
           Desconectados ({disconnectedDevices.length})
         </button>
       </div>
-
       {showAddForm && (
         <div className="modal-overlay">
           <div className="add-form-styled">
             <h2>{editingId ? 'Editar Aparelho' : modoManual ? 'Adicionar Novo Aparelho Manualmente' : 'Adicionar Novo Aparelho'}</h2>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-
             {(editingId || modoManual) ? (
               <>
                 <input title="Nome do aparelho" type="text" placeholder="Nome do Aparelho" value={newConexion.text} onChange={(e) => setNewConexion({ ...newConexion, text: e.target.value })} />
@@ -547,7 +552,6 @@ if (diffSeconds <= 10) {
           </div>
         </div>
       )}
-
       {/* Render the list based on devicesToDisplay */}
       <div className="conexions-list">
         {devicesToDisplay.length === 0 && (
@@ -559,9 +563,8 @@ if (diffSeconds <= 10) {
             </p>
           </div>
         )}
-
         {devicesToDisplay.map((c, index) => {
-          const { color: costBarColor, cost: fictitiousCost } = getCostData(c.connectedDate);
+          const { color: costBarColor, cost: fictitiousCost } = getCostData(c.connectedDate, c.accumulatedSeconds);
           return (
             <div
               key={c.id}
@@ -610,7 +613,6 @@ if (diffSeconds <= 10) {
           );
         })}
       </div>
-
       {selectedConexion && (
         <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
           <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
@@ -623,7 +625,7 @@ if (diffSeconds <= 10) {
               {selectedConexion.connected && (
                 <>
                   <p>{tempoAparelhoConectado}: {formatDate(selectedConexion.connectedDate)}</p>
-                  <p>{duracaoConecxao}{getConnectionDuration(selectedConexion.connectedDate)}</p>
+                  <p>{duracaoConecxao}{getConnectionDuration(selectedConexion.connectedDate, selectedConexion.accumulatedSeconds)}</p>
                 </>
               )}
               <div className="detalhes-actions">
@@ -641,7 +643,6 @@ if (diffSeconds <= 10) {
           </div>
         </div>
       )}
-
       {showConfirmDialog && (
         <div className="modal-overlay" onClick={handleCancelRemove}>
           <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
@@ -653,7 +654,6 @@ if (diffSeconds <= 10) {
           </div>
         </div>
       )}
-
       {visibleQRCode && (
         <div className="modal-overlay" onClick={() => setVisibleQRCode(null)} title="Qrcode">
           <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
@@ -670,5 +670,4 @@ if (diffSeconds <= 10) {
     </div>
   );
 };
-
 export default Conexoes;
