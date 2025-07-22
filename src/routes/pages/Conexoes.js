@@ -302,56 +302,79 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     return duration.length === 0 ? 'Menos de um segundo' : duration.join(' e ');
   };
 
-  // Function to determine the cost bar color and fictitious cost
-  const getCostData = (connectedDate, accumulatedSeconds = 0) => {
-    // Se não estiver conectado, o custo é baseado apenas no tempo acumulado
-    if (!connectedDate) {
-      // Usar accumulatedSeconds diretamente
-      let color = 'green';
-      let fictitiousCost = 0;
-      const totalSeconds = accumulatedSeconds; // Tempo total em segundos
 
-      if (totalSeconds <= 10) {
-        color = '#4CAF50'; // Verde
-        fictitiousCost = totalSeconds * 0.1;
-      } else if (totalSeconds <= 30) {
-        color = '#FFD700'; // Amarelo
-        fictitiousCost = 10 * 0.1 + (totalSeconds - 10) * 0.5;
-      } else {
-        color = '#FF0000'; // Vermelho
-        fictitiousCost = 10 * 0.1 + 20 * 0.5 + (totalSeconds - 30) * 1.5;
-      }
-      return {
-        color,
-        cost: `R$ ${fictitiousCost.toFixed(2)}`
-      };
-    }
 
-    // Se estiver conectado, calcular o tempo desde connectedDate e somar ao acumulado
-    const now = new Date().getTime();
-    const connectedStartTime = new Date(connectedDate).getTime();
-    const currentSessionSeconds = (now - connectedStartTime) / 1000;
-    const totalSeconds = (accumulatedSeconds || 0) + currentSessionSeconds;
 
+
+
+
+
+
+// Function to determine the cost bar color and fictitious cost
+const getCostData = (connectedDate, accumulatedSeconds = 0) => {
+  // Se não estiver conectado, o custo é baseado apenas no tempo acumulado
+  if (!connectedDate) {
     let color = 'green';
     let fictitiousCost = 0;
+    const totalSeconds = accumulatedSeconds;
 
-    if (totalSeconds <= 10) {
+    if (totalSeconds <= 30) {
       color = '#4CAF50'; // Verde
       fictitiousCost = totalSeconds * 0.1;
-    } else if (totalSeconds <= 30) {
+    } else if (totalSeconds <= 60) {
       color = '#FFD700'; // Amarelo
-      fictitiousCost = 10 * 0.1 + (totalSeconds - 10) * 0.5;
+      fictitiousCost = 30 * 0.1 + (totalSeconds - 30) * 0.5;
     } else {
       color = '#FF0000'; // Vermelho
-      fictitiousCost = 10 * 0.1 + 20 * 0.5 + (totalSeconds - 30) * 1.5;
+      fictitiousCost = 30 * 0.1 + 30 * 0.5 + (totalSeconds - 60) * 1.5;
     }
 
     return {
       color,
       cost: `R$ ${fictitiousCost.toFixed(2)}`
     };
+  }
+
+  // Se estiver conectado, calcular o tempo desde connectedDate e somar ao acumulado
+  const now = new Date().getTime();
+  const connectedStartTime = new Date(connectedDate).getTime();
+  const currentSessionSeconds = (now - connectedStartTime) / 1000;
+  const totalSeconds = (accumulatedSeconds || 0) + currentSessionSeconds;
+
+  let color = 'green';
+  let fictitiousCost = 0;
+
+  if (totalSeconds <= 30) {
+    color = '#4CAF50'; // Verde
+    fictitiousCost = totalSeconds * 0.1;
+  } else if (totalSeconds <= 60) {
+    color = '#FFD700'; // Amarelo
+    fictitiousCost = 30 * 0.1 + (totalSeconds - 30) * 0.5;
+  } else {
+    color = '#FF0000'; // Vermelho
+    fictitiousCost = 30 * 0.1 + 30 * 0.5 + (totalSeconds - 60) * 1.5;
+  }
+
+  return {
+    color,
+    cost: `R$ ${fictitiousCost.toFixed(2)}`
   };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // --- Drag and Drop Handlers (Desktop) ---
   const handleDragStart = (e, index) => {
     dragItem.current = index;
