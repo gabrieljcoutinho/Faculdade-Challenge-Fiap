@@ -20,6 +20,7 @@ import '../../CSS/Conexao/imgNaoConectado.css';
 import '../../CSS/Conexao/mensagemRemoverAparelho.css';
 import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css';
 import '../../CSS/Conexao/btnConectadoEnaoConectado.css'
+import '../../CSS/Conexao/marcadorDeConsumo.css'
 
 // Importa imagens
 import tvIcon from '../../imgs/imgConexao/TV.png';
