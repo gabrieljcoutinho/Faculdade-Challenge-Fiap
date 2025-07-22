@@ -43,7 +43,7 @@
 .retanguloAdicionado {
     position: relative;
     width: 255px;
-    height: 120px;
+    height: 100px;
     background: var(--color-bg-retangulo);
     border-radius: 10px;
     display: flex;
