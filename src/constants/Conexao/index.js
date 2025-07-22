@@ -24,7 +24,7 @@ export const mensagemAparelhoDesativado = 'Desativado'
 
 export const detalhesaparelhoAmpliados = 'Detalhes do Aparelho';
 
-export const mensagemExcluirAparelho = "Tem certeza que deseja remover este aparelho ?";
+export const mensagemExcluirAparelho = "Remover este aparelho ?";
 
 
 
