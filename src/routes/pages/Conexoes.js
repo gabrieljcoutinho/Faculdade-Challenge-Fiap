@@ -97,6 +97,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [isDragging, setIsDragging] = useState(false); // Para indicar se o arrasto está ativo
   const currentDragElement = useRef(null); // Referência ao elemento DOM sendo arrastado atualmente
 
+  // New state for connection timers
+  const [connectionTimers, setConnectionTimers] = useState({});
 
   // Helper: Get icon key by its source
   const getIconKeyBySrc = (src) => availableIcons.find(icon => icon.src === src)?.name || '';
@@ -120,6 +122,27 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       window.history.replaceState({}, document.title, location.pathname);
     }
   }, [location.search, onConnectDevice, conexions]);
+
+  // EFFECT HOOK: Manage connection timers for visual feedback
+  useEffect(() => {
+    const timers = {};
+    conexions.forEach(c => {
+      if (c.connected && c.connectedDate) {
+        const startTime = new Date(c.connectedDate).getTime();
+        timers[c.id] = setInterval(() => {
+          const now = new Date().getTime();
+          const durationInSeconds = (now - startTime) / 1000;
+          // Update a dummy state to trigger re-render, could be a more specific state
+          setConnectionTimers(prev => ({ ...prev, [c.id]: durationInSeconds }));
+        }, 1000); // Update every second
+      }
+    });
+
+    return () => {
+      // Clear all intervals when component unmounts or conexions change
+      Object.values(timers).forEach(clearInterval);
+    };
+  }, [conexions]);
 
   // Centralized close function for all modals/forms
   const closeAllModals = () => {
@@ -268,6 +291,31 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     if (minutes % 60 > 0 && days === 0) duration.push(`${minutes % 60} minuto(s)`);
     if (seconds % 60 > 0 && hours === 0 && days === 0) duration.push(`${seconds % 60} segundo(s)`);
     return duration.length === 0 ? 'Menos de um segundo' : duration.join(' e ');
+  };
+
+  // Function to determine the cost bar color and fictitious cost
+  const getCostData = (connectedDate) => {
+    if (!connectedDate) return { color: 'transparent', cost: 'R$ 0.00' };
+
+    const diffSeconds = (new Date().getTime() - new Date(connectedDate).getTime()) / 1000;
+    let color = 'green';
+    let fictitiousCost = 0;
+
+    if (diffSeconds < 5) {
+      color = '#4CAF50'; // Green
+      fictitiousCost = diffSeconds * 0.1; // Example: 10 cents per second
+    } else if (diffSeconds < 10) {
+      color = '#FFD700'; // Yellow
+      fictitiousCost = 5 * 0.1 + (diffSeconds - 5) * 0.5; // Higher cost after 5 seconds
+    } else {
+      color = '#FF0000'; // Red
+      fictitiousCost = 5 * 0.1 + 5 * 0.5 + (diffSeconds - 10) * 1.5; // Even higher cost after 10 seconds
+    }
+
+    return {
+      color,
+      cost: `R$ ${fictitiousCost.toFixed(2)}`
+    };
   };
 
   // --- Drag and Drop Handlers (Desktop) ---
@@ -510,47 +558,55 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           </div>
         )}
 
-        {devicesToDisplay.map((c, index) => (
-          <div
-            key={c.id}
-            className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
-            style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-            onClick={(e) => handleConexionClick(c, e)}
-            draggable="true"
-            onDragStart={(e) => handleDragStart(e, index)}
-            onDragEnter={(e) => handleDragEnter(e, index)}
-            onDragLeave={handleDragLeave}
-            onDragEnd={handleDragEnd}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onTouchStart={(e) => handleTouchStart(e, index)}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            {c.connected && (
-              <div className="qrcode-top-left">
-                <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); setVisibleQRCode(c); }} type="button">
-                  <img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" />
-                </button>
+        {devicesToDisplay.map((c, index) => {
+          const { color: costBarColor, cost: fictitiousCost } = getCostData(c.connectedDate);
+          return (
+            <div
+              key={c.id}
+              className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
+              style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+              onClick={(e) => handleConexionClick(c, e)}
+              draggable="true"
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnter={(e) => handleDragEnter(e, index)}
+              onDragLeave={handleDragLeave}
+              onDragEnd={handleDragEnd}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onTouchStart={(e) => handleTouchStart(e, index)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {c.connected && (
+                <div className="qrcode-top-left">
+                  <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); setVisibleQRCode(c); }} type="button">
+                    <img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" />
+                  </button>
+                </div>
+              )}
+              {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
+              <div className="icon-text-overlay">
+                <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
+                <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
               </div>
-            )}
-            {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
-            <div className="icon-text-overlay">
-              <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-              <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
+              {c.connected && (
+                <div className="cost-bar" style={{ backgroundColor: costBarColor }}>
+                  <span>{fictitiousCost}</span>
+                </div>
+              )}
+              <div className="actions-overlay">
+                <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button>
+                <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.connected}>
+                  <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
+                </button>
+                <label className="switch">
+                  <input type="checkbox" checked={c.connected} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
+                  <span className="slider round"></span>
+                </label>
+              </div>
             </div>
-            <div className="actions-overlay">
-              <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button>
-              <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.connected}>
-                <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
-              </button>
-              <label className="switch">
-                <input type="checkbox" checked={c.connected} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
-                <span className="slider round"></span>
-              </label>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {selectedConexion && (
