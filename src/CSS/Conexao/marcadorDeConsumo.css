@@ -1,3 +1,13 @@
+:root {
+    --branco: #fff;
+    --preto1: rgba(0, 0, 0, 0.6);
+    --preto2: rgba(0, 0, 0, 0.2);
+    --preto3: rgba(0, 0, 0, 0.1);
+    --preto4: rgba(0, 0, 0, 0.15);
+}
+
+
+
 .cost-bar {
     position: absolute;
     bottom: 0;
@@ -9,11 +19,11 @@
     justify-content: center;
     font-size: 0.9em;
     font-weight: 600;
-    color: var(--text-on-dark-background, #ffffff);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    color: var(--branco);
+    text-shadow: 1px 1px 3px var(--preto1);
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 2px 5px var(--preto2);
     transition: background-color 10s ease-in-out, height 0.3s ease-in-out;
     padding: 0 10px;
     box-sizing: border-box;
@@ -24,14 +34,14 @@
     position: relative;
     overflow: hidden;
     padding-bottom: 45px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px var(--preto3);
     border-radius: 10px;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .retanguloAdicionado:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 15px var(--preto4)
 }
 
 .conexion-icon-overlay,
