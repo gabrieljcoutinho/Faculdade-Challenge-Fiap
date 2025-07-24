@@ -93,8 +93,14 @@
 
     {
       "triggers": [
-        "Conectar TV", "Conectar Televisao", "Conectar Televisão",
-        "Ligar tv", "conectar tv", "conectar televisao", "conectar televisão", "ligar tv"
+        "Conectar TV",
+        "Conectar Televisao",
+        "Conectar Televisão",
+        "Ligar tv",
+         "conectar tv",
+         "conectar televisao",
+          "conectar televisão",
+           "ligar tv"
       ],
       "resposta": "TV Conectada"
     },
