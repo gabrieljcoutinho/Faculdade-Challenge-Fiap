@@ -21,6 +21,7 @@ import '../../CSS/Home/current.css';
 import '../../CSS/Home/production.css';
 import '../../CSS/Home/impactoAmbiental.css';
 import '../../CSS/Home/mediaScreen.css';
+import '../../CSS/Home/weatherAnimations.css'; // New CSS file for animations
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
@@ -100,7 +101,18 @@ const Home = () => {
     return baseOpts;
   },[commonChartOptions]);
 
-  const getWeatherIcon=useCallback(c=>WEATHER_ICONS[c]||'',[]);
+  const getWeatherIcon=useCallback(c=>{
+    let icon = WEATHER_ICONS[c] || '';
+    let className = '';
+    if (c === 'Limpo') {
+      className = 'weather-icon moon-animation';
+    } else if (c === 'Parcialmente Nublado') {
+      className = 'weather-icon sun-cloud-animation';
+    } else if (c === 'Chuvoso') {
+      className = 'weather-icon rain-cloud-animation';
+    }
+    return <span className={className}>{icon}</span>;
+  },[]);
 
   const shareChart=useCallback(platform=>{
     if(!chartRef.current||!expandedChartType) return alert('Por favor, visualize o gráfico expandido antes de tentar compartilhar.');
