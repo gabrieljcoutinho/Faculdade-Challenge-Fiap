@@ -502,7 +502,9 @@
            "Configuraçao",
            "Configurar",
            "Setting",
-           "Settings"
+           "Settings",
+           "Configuracao",
+           "Configuracoes"
           ],
       "resposta": "REDIRECT:/configuracoes"
     }
