@@ -100,7 +100,21 @@
          "conectar tv",
          "conectar televisao",
           "conectar televisão",
-           "ligar tv"
+           "ligar tv",
+
+
+ "Conectar a TV",
+        "Conectar a Televisao",
+        "Conectar a Televisão",
+        "Ligar a tv",
+         "conectar a tv",
+         "conectar a televisao",
+          "conectar a televisão",
+           "ligar a tv"
+
+
+
+
       ],
       "resposta": "TV Conectada"
     },
