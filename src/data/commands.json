@@ -189,8 +189,9 @@
            "Relatorio do gráfico",
             "Relatório do grafico",
              "Relatorio do grafico",
-             "Faça uma nálise do gráfico",
-                "Faça uma nálise do grafico",
+             "Faça uma análise do gráfico",
+                "Faça uma análise do grafico",
+                   "Faça uma análise do gráfico",
       ],
       "resposta": "PRODUCAO_GRAFICO"
     },
