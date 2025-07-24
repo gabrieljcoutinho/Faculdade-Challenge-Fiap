@@ -4,7 +4,7 @@
     --preto2: #1a1a1a;
     --vermelho: rgba(255, 0, 51, 0.9);
     --branco: #fff;
-    --branco2
+    --branco2: #f0f0f0;
 }
 
 
@@ -52,7 +52,7 @@
     box-shadow:
         0 10px 15px rgba(0, 0, 0, 0.4),
         0 20px 40px rgba(0, 0, 0, 0.7);
-    color: #f0f0f0;
+    color: var(--branco2);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 1.05rem;
     line-height: 2.2rem;
