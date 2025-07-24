@@ -190,7 +190,14 @@
         "Conectar carregador",
         "Ligar carregador",
         "conectar carregador",
-         "ligar carregador"
+         "ligar carregador",
+
+               "Conectar o Carregador",
+        "Ligar o Carregador",
+        "Conectar o carregador",
+        "Ligar o carregador",
+        "conectar o carregador",
+         "ligar o carregador"
       ],
       "resposta": "Carregador Conectado"
     },
