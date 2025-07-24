@@ -1,7 +1,14 @@
+:root {
+    --corFundo: rgba(10, 10, 10, 0.85);
+}
+
+
+
+
 .report-modal {
     position: fixed;
     inset: 0;
-    background: rgba(10, 10, 10, 0.85);
+    background: var(--corFundo);
     /* fundo mais escuro com leve transparência */
     backdrop-filter: blur(12px);
     /* mais blur para suavizar fundo */
