@@ -39,3 +39,14 @@ h1 {
   padding-top: 1rem;
   font-size: 25px;
 }
+
+
+
+
+
+.jarvis-mode {
+  border: 8px solid #00BFFF;
+  border-radius: 12px;
+  box-sizing: border-box;
+  transition: border 0.3s ease;
+}
