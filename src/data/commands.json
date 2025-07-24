@@ -155,11 +155,6 @@
         "ligar lâmpada",
          "conectar lampada",
          "ligar lampada",
-
-
-
-
-
           "Conectar a Lâmpada",
         "Ligar a Lâmpada",
         "Conectar a lampada",
@@ -178,7 +173,11 @@
         "Conectar Airfry",
         "Ligar Airfry",
         "conectar airfry",
-        "ligar airfry"
+        "ligar airfry",
+         "Conectar a Airfry",
+        "Ligar a Airfry",
+        "conectar a airfry",
+        "ligar a airfry"
       ],
       "resposta": "Airfry Conectada"
     },
