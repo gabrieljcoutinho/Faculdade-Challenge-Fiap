@@ -220,7 +220,7 @@ const Home = () => {
 
     return `Relatório Diário:\n
 Produção total: ${total} kWh.
-Maio produção: ${maxHour} com ${maxValue} kWh.
+Maior produção: ${maxHour} com ${maxValue} kWh.
 Menor produção: ${minHour} com ${minValue} kWh.
 `;
   }, [productionData]);
@@ -303,7 +303,7 @@ Menor produção: ${minHour} com ${minValue} kWh.
       {showReport && (
         <div className="report-modal" onClick={() => setShowReport(false)}>
           <div className="report-content" onClick={e => e.stopPropagation()}>
-            <button className="close-btn" onClick={() => setShowReport(false)} title="Fechar">X</button>
+            <button className="closeBtn" onClick={() => setShowReport(false)} title="Fechar">X</button>
             <pre style={{whiteSpace: 'pre-wrap', color:'#fff', fontFamily:"'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", fontSize:'16px'}}>
               {reportText}
             </pre>
