@@ -24,12 +24,12 @@ const Logar = () => {
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="email">{Email}</label>
-            <input title="Digite Seu Email" type="email" id="email" placeholder="Seu e-mail" required value={email} onChange={e => setEmail(e.target.value)} />
+            <input title="Digite Seu Email" className='inputEmail' type="email" id="email" placeholder="Seu e-mail" required value={email} onChange={e => setEmail(e.target.value)} />
           </div>
           <div className="input-group">
-            <label htmlFor="password">{Senha}</label>
+            <label htmlFor="password" >{Senha}</label>
             <div className="password-input-group">
-              <input type={showPass ? 'text' : 'password'} title="Digite sua Senha" id="password" placeholder="Sua senha" required value={password} onChange={e => setPassword(e.target.value)} />
+              <input type={showPass ? 'text' : 'password'} title="Digite sua Senha" placeholder="Sua senha" required value={password} onChange={e => setPassword(e.target.value)} />
               <button type="button" className="password-toggle-button" onClick={() => setShowPass(!showPass)} title="Mostrar / Ocultar Senha">{showPass ? '👁️' : '🙈'}</button>
             </div>
           </div>
