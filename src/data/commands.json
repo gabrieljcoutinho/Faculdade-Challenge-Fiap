@@ -184,7 +184,11 @@
         "Como está a energia",
         "Informações do gráfico",
          "Analise do grafico",
-          "Análise do gráfico"
+          "Análise do gráfico",
+          "Relatório do gráfico",
+           "Relatorio do gráfico",
+            "Relatório do grafico",
+             "Relatorio do grafico"
       ],
       "resposta": "PRODUCAO_GRAFICO"
     },
