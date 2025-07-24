@@ -54,15 +54,14 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador', 'oconectar carregador'] }
     ];
 
-    let handledByLocalCommand = false;
-    let botResponseContent = '';
-
     for (const cmd of connectionCommands) {
       const trigger = cmd.triggers.find(t => textoNormalizado.startsWith(normalizeText(t)));
       if (trigger) {
         const remaining = texto.substring(trigger.length).trim();
 
+        // Detecta agendamento em minutos "daqui 5 minutos"
         const matchMinutos = remaining.match(/daqui\s+(\d+)\s+minuto/);
+        // Detecta agendamento em hora fixa "às 20:30" ou "às 20h30"
         const matchHoras = remaining.match(/às\s+(\d{1,2})(h|:)?(\d{0,2})?/i);
 
         let agendarEmMs = null;
@@ -89,53 +88,55 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
             onConnectDevice?.(cmd.type, fullName);
             setMessages(m => [...m, { role: 'assistant', content: `✅ ${fullName} conectado automaticamente!` }]);
           }, agendarEmMs);
+
         } else {
           onConnectDevice?.(cmd.type, fullName);
-          botResponseContent = `${fullName} conectado!`;
-          setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
+          setMessages(m => [...m, { role: 'assistant', content: `${fullName} conectado!` }]);
         }
 
-        handledByLocalCommand = true;
-        break;
+        setLoading(false);
+        inputRef.current?.focus();
+        return; // <-- evita continuar para a API Gemini e mandar segunda resposta
       }
     }
 
-    if (!handledByLocalCommand) {
-      const foundCmd = comandosData.comandos.find(c => c.triggers?.some(t => normalizeText(t) === textoNormalizado));
-      if (foundCmd) {
-        if (foundCmd.resposta.startsWith("REDIRECT:")) {
-          setIsFadingOut(true);
-          setTimeout(() => navigate(foundCmd.resposta.split(":")[1]), 700);
-          setLoading(false);
-          inputRef.current?.focus();
-          return;
-        }
-        switch (foundCmd.resposta) {
-          case 'PRODUCAO_GRAFICO':
-            botResponseContent = formatProductionSummary(productionData);
-            break;
-          case 'TEMA_ESCURO':
-            document.body.classList.replace('light-theme', 'dark-theme');
-            localStorage.setItem('theme', 'dark-theme');
-            setTheme?.('dark-theme');
-            botResponseContent = "Tema escuro ativado! 🌙";
-            break;
-          case 'TEMA_CLARO':
-            document.body.classList.replace('dark-theme', 'light-theme');
-            localStorage.setItem('theme', 'light-theme');
-            setTheme?.('light-theme');
-            botResponseContent = "Tema claro ativado! ☀️";
-            break;
-          default:
-            botResponseContent = foundCmd.resposta;
-        }
-        setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
+    const foundCmd = comandosData.comandos.find(c => c.triggers?.some(t => normalizeText(t) === textoNormalizado));
+    if (foundCmd) {
+      if (foundCmd.resposta.startsWith("REDIRECT:")) {
+        setIsFadingOut(true);
+        setTimeout(() => navigate(foundCmd.resposta.split(":")[1]), 700);
         setLoading(false);
         inputRef.current?.focus();
         return;
       }
+      let botResponseContent = '';
+
+      switch (foundCmd.resposta) {
+        case 'PRODUCAO_GRAFICO':
+          botResponseContent = formatProductionSummary(productionData);
+          break;
+        case 'TEMA_ESCURO':
+          document.body.classList.replace('light-theme', 'dark-theme');
+          localStorage.setItem('theme', 'dark-theme');
+          setTheme?.('dark-theme');
+          botResponseContent = "Tema escuro ativado! 🌙";
+          break;
+        case 'TEMA_CLARO':
+          document.body.classList.replace('dark-theme', 'light-theme');
+          localStorage.setItem('theme', 'light-theme');
+          setTheme?.('light-theme');
+          botResponseContent = "Tema claro ativado! ☀️";
+          break;
+        default:
+          botResponseContent = foundCmd.resposta;
+      }
+      setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
+      setLoading(false);
+      inputRef.current?.focus();
+      return; // <-- evita a chamada da API Gemini
     }
 
+    // Se não foi comando local, chama a API Gemini
     if (!GEMINI_API_KEY) {
       setMessages(m => [...m, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
       setLoading(false);
