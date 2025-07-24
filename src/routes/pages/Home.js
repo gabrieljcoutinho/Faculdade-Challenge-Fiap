@@ -220,8 +220,8 @@ const Home = () => {
 
     return `Relatório Diário:\n
 Produção total: ${total} kWh.
-Hora de maior produção: ${maxHour} com ${maxValue} kWh.
-Hora de menor produção: ${minHour} com ${minValue} kWh.
+Maio produção: ${maxHour} com ${maxValue} kWh.
+Menor produção: ${minHour} com ${minValue} kWh.
 `;
   }, [productionData]);
 
@@ -251,7 +251,7 @@ Hora de menor produção: ${minHour} com ${minValue} kWh.
 
           {/* Botão para mostrar relatório diário */}
           <section className="daily-report-section" style={{marginTop:'20px'}}>
-            <button onClick={() => setShowReport(true)} style={{padding:'10px 20px', cursor:'pointer', borderRadius:'5px', border:'none', backgroundColor:'#1E90FF', color:'#fff', fontWeight:'bold'}}>
+            <button onClick={() => setShowReport(true)} style={{padding:'10px 20px', cursor:'pointer', borderRadius:'5px', border:'none', backgroundColor:'#252525', color:'#fff', fontWeight:'bold'}}>
                Relatório Diário
             </button>
           </section>
