@@ -564,6 +564,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 </div>
 
 
+
       {selectedConexion && (
         <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
           <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
