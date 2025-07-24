@@ -185,15 +185,15 @@
         "Informações do gráfico",
          "Analise do grafico",
           "Análise do gráfico",
-          "Relatório do gráfico",
-           "Relatorio do gráfico",
-            "Relatório do grafico",
-             "Relatorio do grafico",
-             "Faça uma análise do gráfico",
-                "Faça uma análise do grafico",
-                   "Faça uma anáaise do grafico",
-                      "Faca uma analise do grafico",
-                      "Dado do grafico"
+         "Relatório do gráfico",
+          "Relatorio do gráfico",
+         "Relatório do grafico",
+          "Relatorio do grafico",
+          "Faça uma análise do gráfico",
+         "Faça uma análise do grafico",
+          "Faça uma anáaise do grafico",
+         "Faca uma analise do grafico",
+         "Dado do grafico"
       ],
       "resposta": "PRODUCAO_GRAFICO"
     },
@@ -215,7 +215,10 @@
         "Dark mode",
         "Dark Mode",
         "dark mode",
-        "dark Mode"
+        "dark Mode",
+        "Modo noite",
+        "Modo Noite",
+        "modo noite"
       ],
       "resposta": "TEMA_ESCURO"
     },
@@ -237,7 +240,10 @@
         "Light mode",
         "Light Mode",
         "light mode",
-        "light Mode"
+        "light Mode",
+        "modo dia",
+        "Modo dia",
+        "Modo Dia"
       ],
       "resposta": "TEMA_CLARO"
     },
