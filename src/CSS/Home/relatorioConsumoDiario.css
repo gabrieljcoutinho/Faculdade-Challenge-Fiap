@@ -2,7 +2,9 @@
     --corFundo: rgba(10, 10, 10, 0.85);
     --cinza1: #666;
     --preto2: #1a1a1a;
-    --vermelho: rgba(255, 0, 51, 0.9)
+    --vermelho: rgba(255, 0, 51, 0.9);
+    --branco: #fff;
+    --branco2
 }
 
 
@@ -84,10 +86,10 @@
 
 .closeBtn:hover,
 .closeBtn:focus {
-    color: #fff;
+    color: var(--branco);
     transform: scale(1.25);
     outline: none;
-    filter: drop-shadow(0 0 6px #fff);
+    filter: drop-shadow(0 0 6px var--branco);
 }
 
 /* Scrollbar estilizado para modal */
