@@ -154,7 +154,20 @@
         "conectar lâmpada",
         "ligar lâmpada",
          "conectar lampada",
-         "ligar lampada"
+         "ligar lampada",
+
+
+
+
+
+          "Conectar a Lâmpada",
+        "Ligar a Lâmpada",
+        "Conectar a lampada",
+         "Ligar a lampada",
+        "conectar a lâmpada",
+        "ligar a lâmpada",
+         "conectar a lampada",
+         "ligar a lampada"
       ],
       "resposta": "Lâmpada Conectada"
     },
