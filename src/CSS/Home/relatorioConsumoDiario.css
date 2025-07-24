@@ -1,7 +1,8 @@
 :root {
     --corFundo: rgba(10, 10, 10, 0.85);
     --cinza1: #666;
-    --preto2: 1a1a1a;
+    --preto2: #1a1a1a;
+    --vermelho: rgba(255, 0, 51, 0.9)
 }
 
 
@@ -78,7 +79,7 @@
     cursor: pointer;
     transition: color 0.25s ease, transform 0.2s ease;
     user-select: none;
-    filter: drop-shadow(0 0 2px rgba(255, 0, 51, 0.9); );
+    filter: drop-shadow(0 0 2px var(--vermelho));
 }
 
 .closeBtn:hover,
