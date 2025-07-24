@@ -1,6 +1,7 @@
 :root {
     --corFundo: rgba(10, 10, 10, 0.85);
     --cinza1: #666;
+    --preto2: 1a1a1a;
 }
 
 
@@ -111,7 +112,7 @@
 /* Scrollbar para Firefox */
 .report-content {
     scrollbar-width: thin;
-    scrollbar-color: var(--cinza1) #1a1a1a;
+    scrollbar-color: var(--cinza1) var(--preto2);
 }
 
 /* Responsividade para telas pequenas */
