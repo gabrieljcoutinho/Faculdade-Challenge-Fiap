@@ -79,16 +79,6 @@ const comandos = [
       '➤ Ir para perguntas frequentes',
       '➤ Ir para comandos do chat'
     ]
-  },
-
-
-
-    {
-    title: 'Agendar conexão',
-    subcommands: [
-      '➤ Conectar [nome aprelho] as [hora ou minutos]',
-
-    ]
   }
 ];
 
