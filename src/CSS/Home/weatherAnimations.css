@@ -1,0 +1,78 @@
+/* weatherAnimations.css */
+
+/* Base style for weather icons */
+.weather-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+    font-size: 1.5em;
+    /* Adjust as needed */
+}
+
+/* Moon animation for 'Limpo' (Clear) */
+@keyframes moon-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.moon-animation {
+    animation: moon-pulse 2s infinite alternate;
+}
+
+/* Sun and Cloud animation for 'Parcialmente Nublado' (Partly Cloudy) */
+@keyframes sun-cloud-drift {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.sun-cloud-animation {
+    animation: sun-cloud-drift 3s infinite ease-in-out;
+}
+
+/* Rain Cloud animation for 'Chuvoso' (Rainy) */
+@keyframes rain-fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(3px) rotate(2deg);
+    }
+
+    50% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    75% {
+        transform: translateY(3px) rotate(-2deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+.rain-cloud-animation {
+    animation: rain-fall 1.5s infinite ease-in-out;
+}
