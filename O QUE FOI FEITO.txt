@@ -9,7 +9,8 @@ Estrutura do Sistema
 A aplicação conta com um cabeçalho fixo que direciona o usuário para as seguintes seções: Home, Conexões de Aparelhos, Chatbot, Contato e Configurações.
 
 Home
-Nesta seção, o usuário pode alternar entre três tipos de gráficos (linha, barras e pizza), gerados com base em dados de uma API simulada.
+Nesta seção, o usuário pode alternar entre três tipos de gráficos (linha, barras e pizza) onde há um botao que mostra a produção do gráfico
+sem ser pelo chat ta,bem, gerados com base em dados de uma API simulada.
 Abaixo dos gráficos, são exibidas informações do clima atual e previsão do tempo. Ao final da página, há uma área dedicada a destacar os
  impactos positivos do uso de energia solar, com foco nos benefícios econômicos e ambientais.
 
