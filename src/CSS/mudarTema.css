@@ -1,34 +1,60 @@
 :root {
+    /* Cores básicas */
     --branco: #fff;
-    --preto: #000
+    --preto: #000;
+
+    /* Cores para dark theme */
+    --dark-bg: #121212;
+    --dark-bg-box: #1e1e1e;
+    --dark-bg-input: #2a2a2a;
+    --dark-bg-info: #2a2a2a;
+
+    --dark-text-primary: hsl(0, 0%, 93%);
+    --dark-text-secondary: #f0f0f0;
+    --dark-text-placeholder: #b0b0b0;
+    --dark-text-muted: #252525;
+    --dark-border-input: #444;
+    --dark-border-success: var(--branco);
+
+    /* Cores para estados e destaques */
+    --color-password-fraca: #ff6b6b;
+    --color-password-media: #ffd700;
+    --color-password-forte: #fff;
+    --color-link-dark: #80c0ff;
+    --color-toggle-active: rgba(15, 240, 252);
+
+    /* Cores para light theme */
+    --light-text-primary: var(--preto);
+    --light-text-secondary: black;
+
+    /* Scrollbar */
+    --scrollbar-thumb: rgba(31, 81, 255, 0.7);
 }
 
-
+/* -------- Temas -------- */
 
 body.light-theme,
 .tipoGrafico {
     background-color: var(--branco);
-    color: var(--preto);
+    color: var(--light-text-primary);
 }
-
-
 
 body.dark-theme {
-    background-color: #121212;
-    color: hsl(0, 0%, 93%);
+    background-color: var(--dark-bg);
+    color: var(--dark-text-primary);
 }
 
+/* Textos específicos com dark */
 body.dark,
 .paragrafoFonteGrafico,
 .tipoDoFundoConexao {
-    color: #121212;
+    color: var(--dark-bg);
 }
 
 body.dark,
 .placeholder-text,
 .tituloHelpCenter {
     color: var(--branco);
-
 }
 
 body.dark,
@@ -38,9 +64,9 @@ body.dark,
     color: var(--preto);
 }
 
-
+/* Títulos conexão */
 body.light-theme .tituloConexao {
-    color: black;
+    color: var(--light-text-secondary);
 }
 
 body.dark-theme .tituloConexao,
@@ -48,157 +74,127 @@ body.dark-theme .tituloConexao,
     color: var(--branco);
 }
 
-
-body.dark-theme .chat-container {
+/* Containers com dark */
+body.dark-theme .chat-container,
+body.dark-theme .contato-container {
     background-color: var(--preto);
-    border: var(--preto);
+    border-color: var(--preto);
 }
 
+/* Mensagem inicial no dark */
 body.dark-theme .messagemInicial {
     color: var(--preto);
 }
 
-
-body.dark-theme .contato-container {
-    background-color: var(--preto);
-}
-
-
-body.dark-theme .tituloHelpCenter {
-    color: var(--branco);
-}
-
-body.light-theme .tituloHelpCenter {
-    color: var(--preto);
-}
-
-
+/* Títulos e perguntas */
+body.dark-theme .tituloHelpCenter,
 body.dark-theme .perguntasFrequentes {
     color: var(--branco);
 }
 
+body.light-theme .tituloHelpCenter,
 body.light-theme .perguntasFrequentes {
-    color: var(--preto);
+    color: var(--light-text-primary);
 }
 
-body.light-theme .tituloEsqueciSenha {
-    color: black;
-}
-
+/* Esqueci senha */
+body.light-theme .tituloEsqueciSenha,
 body.dark-theme .tituloEsqueciSenha {
     color: black;
 }
 
+/* Botão toggle no dark */
 body.dark-theme .toggle-button.connected-btn.active {
-    color: rgba(15, 240, 252);
+    color: var(--color-toggle-active);
     opacity: 1;
 }
 
-
+/* Scrollbar dark */
 body.dark-theme * {
     scrollbar-width: thin;
     /* Firefox */
-    scrollbar-color: rgba(31, 81, 255, 0.7) var(--preto);
-    /* Firefox */
+    scrollbar-color: var(--scrollbar-thumb) var(--preto);
 }
 
-/*----------------------------CADASTRO------------------------*/
-/* --------------------------------------------------------------------- */
-/* Estilos para o Modo Escuro */
+/* ----------------- Cadastro ------------------ */
+
 body.dark .cadastro-container {
-    background-color: #121212;
-    /* Fundo mais escuro para o container principal */
+    background-color: var(--dark-bg);
 }
 
 body.dark .cadastro-box {
-    background-color: #1e1e1e;
-    /* Fundo da caixa de cadastro */
+    background-color: var(--dark-bg-box);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 body.dark .cadastro-box h1,
 body.dark .input-group label {
-    color: #f0f0f0;
-    /* Cor do texto para títulos e labels */
+    color: var(--dark-text-secondary);
 }
 
 body.dark .input-group input {
-    background-color: #2a2a2a;
-    /* Fundo dos inputs */
-    color: #f0f0f0;
-    /* Cor do texto digitado nos inputs */
-    border: 1px solid #444;
+    background-color: var(--dark-bg-input);
+    color: var(--dark-text-secondary);
+    border: 1px solid var(--dark-border-input);
 }
 
 body.dark .input-group input::placeholder {
-    color: #b0b0b0;
-    /* Cor do placeholder */
+    color: var(--dark-text-placeholder);
 }
 
 body.dark .password-toggle-icon {
-    color: #f0f0f0;
-    /* Cor do ícone de mostrar/esconder senha */
+    color: var(--dark-text-secondary);
 }
 
 body.dark .password-strength.fraca {
-    color: #ff6b6b;
+    color: var(--color-password-fraca);
 }
 
-/* Vermelho mais suave no dark mode */
 body.dark .password-strength.media {
-    color: #ffd700;
+    color: var(--color-password-media);
 }
 
-/* Amarelo no dark mode */
 body.dark .password-strength.forte {
-    color: #fff;
+    color: var(--color-password-forte);
 }
-
-/* Verde mais suave no dark mode */
 
 body.dark .cadastro-button {
-    background-color: #fff;
-    /* Cor do botão de cadastro no modo escuro */
-    color: #ffffff;
+    background-color: var(--branco);
+    color: var(--branco);
 }
 
 body.dark .cadastro-button:hover:not(:disabled) {
-    background-color: #fff;
+    background-color: var(--branco);
 }
 
 body.dark .cadastro-button:disabled {
-    background-color: #444444;
+    background-color: var(--dark-border-input);
     color: #aaaaaa;
 }
 
 body.dark .success-message {
-    background-color: #fff;
-    color: #252525;
-    border: 1px solid #fff;
+    background-color: var(--branco);
+    color: var(--dark-text-muted);
+    border: 1px solid var(--dark-border-success);
 }
 
 body.dark .links p {
-    color: #252525;
-    /* Cor do texto "Já tem uma conta?" */
+    color: var(--dark-text-muted);
 }
 
 body.dark .links a {
-    color: #80c0ff;
-    /* Cor dos links no modo escuro */
+    color: var(--color-link-dark);
 }
 
 body.dark .cadastro-info {
-    background-color: #2a2a2a;
-    /* Fundo da seção de informações */
+    background-color: var(--dark-bg-info);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 body.dark .cadastro-info h2 {
-    color: #80c0ff;
-    /* Cor do título da seção de informações */
+    color: var(--color-link-dark);
 }
 
 body.dark .cadastro-info li {
     color: #e0e0e0;
-    /* Cor do texto da lista de informações */
 }
