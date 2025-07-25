@@ -7,7 +7,7 @@
     --sombra: rgba(0, 0, 0, 0.4);
 }
 
-.envImpact-sectionWeather {
+.environmental-impact-section {
     background-color: var(--fundo-principal);
     color: var(--texto-principal);
     border-radius: 10px;
@@ -16,22 +16,21 @@
     box-shadow: 0 6px 12px var(--sombra);
 }
 
-.envImpact-sectionWeather h2 {
+.environmental-impact-section h2 {
     text-align: center;
     margin-bottom: 25px;
     color: var(--destaque);
     font-size: 26px;
-    /* diminuído de 30px */
 }
 
-.envImpact-card-container {
+.impact-cards-container {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
     gap: 20px;
 }
 
-.envImpact-card {
+.impact-card {
     background-color: var(--card-normal);
     border-radius: 12px;
     padding: 20px;
@@ -43,32 +42,26 @@
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.envImpact-card:hover {
+.impact-card:hover {
     transform: translateY(-6px);
     background-color: var(--card-hover);
 }
 
-.envImpact-card h3 {
+.impact-card h3 {
     margin-top: 0;
     font-size: 1.3rem;
-    /* diminuído de 1.5rem */
     color: var(--texto-principal);
     margin-bottom: 12px;
 }
 
-.envImpact-temp {
+.impact-value {
     font-size: 1.8rem;
-    /* diminuído de 2.2rem */
     font-weight: bold;
     margin: 10px 0;
 }
 
-.envImpact-condition,
-.envImpact-condition-text,
-.envImpact-range,
-.envImpact-icon {
+.impact-description {
     font-size: 0.9rem;
-    /* diminuído de 1rem */
     margin: 5px 0;
     color: var(--texto-principal);
 }
