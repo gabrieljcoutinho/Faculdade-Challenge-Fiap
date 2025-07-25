@@ -569,11 +569,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
           <div className="detalhes-aparelho-modal" onClick={e => e.stopPropagation()}>
             <button className="close-button" onClick={() => setSelectedConexion(null)}>X</button>
-            <h2 title="Detalhes do Aparelho">{detalhesaparelhoAmpliados}</h2>
+            <h2 title="Detalhes do Aparelho" alt=" Detalhes do Aprelho">{detalhesaparelhoAmpliados}</h2>
             <div className="detalhes-content">
-              <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
+              <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon"  />
               <h3>{selectedConexion.text}</h3>
-              <p title="Status">Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
+              <p title="Status" alt="Status Aparelho">Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
               {selectedConexion.connected && (
                 <>
                   <p>{tempoAparelhoConectado}: {formatDate(selectedConexion.connectedDate)}</p>
