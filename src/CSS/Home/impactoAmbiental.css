@@ -1,127 +1,74 @@
 :root {
-    --cinza1: #2e2e2e;
-    --cinza2: #3b3b3b;
-    --cinza3: #b0b0b0;
-    --branco: #e0e0e0;
-    --azul1: #1E90FF;
-    --azul2: #87CEFA;
-    --azul3: #1E90FF;
+    --fundo-principal: #333;
+    --texto-principal: #f0f0f5;
+    --destaque: #00c8ff;
+    --card-normal: #252525;
+    --card-hover: #000;
+    --sombra: rgba(0, 0, 0, 0.4);
 }
 
-
-.environmental-impact-section {
-    background-color: var(--cinza1);
-    /* Slightly lighter dark background */
-    border-radius: 12px;
-    padding: 30px;
+.envImpact-sectionWeather {
+    background-color: var(--fundo-principal);
+    color: var(--texto-principal);
+    border-radius: 10px;
+    padding: 24px;
     margin-top: 30px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    color: var(--branco);
-    /* Light grey text for contrast */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 6px 12px var(--sombra);
 }
 
-.environmental-impact-section h2 {
-    color: var(--azul1);
-    /* Dodger Blue for the title, matching chart accents */
+.envImpact-sectionWeather h2 {
     text-align: center;
     margin-bottom: 25px;
-    font-size: 1.8em;
-    font-weight: 600;
+    color: var(--destaque);
+    font-size: 26px;
+    /* diminuído de 30px */
 }
 
-.impact-cards-container {
+.envImpact-card-container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-around;
+    flex-wrap: wrap;
     gap: 20px;
-    /* Space between cards */
 }
 
-.impact-card {
-    background-color: var(--cinza2);
-    /* Darker background for individual cards */
-    border-radius: 10px;
-    padding: 25px;
-    flex: 1;
-    /* Allows cards to grow and shrink */
-    min-width: 280px;
-    /* Minimum width before wrapping */
-    max-width: 350px;
-    /* Maximum width to prevent cards from getting too wide */
+.envImpact-card {
+    background-color: var(--card-normal);
+    border-radius: 12px;
+    padding: 20px;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    flex: 1;
+    min-width: 240px;
+    max-width: 30%;
+    box-shadow: 0 4px 10px var(--sombra);
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.impact-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+.envImpact-card:hover {
+    transform: translateY(-6px);
+    background-color: var(--card-hover);
 }
 
-.impact-card h3 {
-    color: var(--azul2);
-    font-size: 1.4em;
-    margin-bottom: 15px;
-    font-weight: 500;
+.envImpact-card h3 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    /* diminuído de 1.5rem */
+    color: var(--texto-principal);
+    margin-bottom: 12px;
 }
 
-.impact-value {
-    color: var(--azul3);
-    /* Dodger Blue for the main values */
-    font-size: 2.5em;
-    font-weight: 700;
-    margin-bottom: 10px;
-    line-height: 1;
-    /* Tighter line height for numbers */
+.envImpact-temp {
+    font-size: 1.8rem;
+    /* diminuído de 2.2rem */
+    font-weight: bold;
+    margin: 10px 0;
 }
 
-.impact-description {
-    color: var(--cinza3);
-    font-size: 1em;
-    line-height: 1.5;
-}
-
-/* --- Media Queries for Responsiveness --- */
-@media (max-width: 768px) {
-    .impact-cards-container {
-        flex-direction: column;
-        /* Stack cards vertically on smaller screens */
-        align-items: center;
-    }
-
-    .impact-card {
-        max-width: 90%;
-        /* Adjust max-width for better mobile fit */
-        min-width: unset;
-        /* Remove min-width constraint */
-    }
-
-    .environmental-impact-section {
-        padding: 20px;
-        margin-top: 20px;
-    }
-
-    .environmental-impact-section h2 {
-        font-size: 1.5em;
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .impact-card {
-        padding: 20px;
-    }
-
-    .impact-card h3 {
-        font-size: 1.2em;
-    }
-
-    .impact-value {
-        font-size: 2em;
-    }
-
-    .impact-description {
-        font-size: 0.9em;
-    }
+.envImpact-condition,
+.envImpact-condition-text,
+.envImpact-range,
+.envImpact-icon {
+    font-size: 0.9rem;
+    /* diminuído de 1rem */
+    margin: 5px 0;
+    color: var(--texto-principal);
 }
