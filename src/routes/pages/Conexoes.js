@@ -35,6 +35,7 @@ import { tituloPrincipal, adicionarAparelho, escolherIcone, escolherCorDefundo, 
   procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado,
 detalhesaparelhoAmpliados, mensagemExcluirAparelho, btnEditar, btnRemover, tempoAparelhoConectado, duracaoConecxao
 } from '../../constants/Conexao/index.js';
+
 // Constantes
 const availableColors = [
   '#FFFFF0', // ivory
@@ -48,6 +49,7 @@ const availableColors = [
   '#F8F8FF'  // ghostWhite
 ];
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
+
 // Ícones disponíveis
 const availableIcons = [
   { name: 'tv', src: tvIcon },
@@ -61,8 +63,10 @@ const iconMap = availableIcons.reduce((acc, icon) => {
   acc[icon.name] = icon.src;
   return acc;
 }, {});
+
 const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, onToggleConnection }) => {
   const location = useLocation();
+
   // UI States
   const [showAddForm, setShowAddForm] = useState(false);
   const [modoManual, setModoManual] = useState(false);
@@ -71,8 +75,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [visibleQRCode, setVisibleQRCode] = useState(null);
   const [selectedConexion, setSelectedConexion] = useState(null);
+
   // NEW STATE: To control which list is active
   const [activeList, setActiveList] = useState('connected'); // 'connected' or 'disconnected'
+
   // Form data states
   const [newConexion, setNewConexion] = useState({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: '' });
   const [activeIcon, setActiveIcon] = useState(null);
@@ -80,16 +86,20 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
   const [editingId, setEditingId] = useState(null);
   const [removingId, setRemovingId] = useState(null);
   const [conexionToDelete, setConexionToDelete] = useState(null);
+
   // Drag and Drop States
   const dragItem = useRef(null); // Referência ao índice do item arrastado
   const dragOverItem = useRef(null); // Referência ao índice do item sendo arrastado sobre
   const touchStartTimer = useRef(null); // Timer para detecção de toque longo
   const [isDragging, setIsDragging] = useState(false); // Para indicar se o arrasto está ativo
   const currentDragElement = useRef(null); // Referência ao elemento DOM sendo arrastado atualmente
+
   // New state for connection timers
   const [connectionTimers, setConnectionTimers] = useState({});
+
   // Helper: Get icon key by its source
   const getIconKeyBySrc = (src) => availableIcons.find(icon => icon.src === src)?.name || '';
+
   // EFFECT HOOK: Handles URL parameters for automatic device connection via QR code scan
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -107,6 +117,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       window.history.replaceState({}, document.title, location.pathname);
     }
   }, [location.search, onConnectDevice, conexions]);
+
   // EFFECT HOOK: Manage connection timers for visual feedback
   useEffect(() => {
     const timers = {};
@@ -121,17 +132,28 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         }, 1000); // Update every second
       }
     });
+
     return () => {
       // Clear all intervals when component unmounts or conexions change
       Object.values(timers).forEach(clearInterval);
     };
   }, [conexions]);
+
   // Centralized close function for all modals/forms
   const closeAllModals = () => {
-    setShowAddForm(false); setModoManual(false); setErrorMessage(''); setIsSearchingBluetooth(false);
-    setShowConfirmDialog(false); setVisibleQRCode(null); setSelectedConexion(null);
+    setShowAddForm(false);
+    setModoManual(false);
+    setErrorMessage('');
+    setIsSearchingBluetooth(false);
+    setShowConfirmDialog(false);
+    setVisibleQRCode(null);
+    setSelectedConexion(null);
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
-    setActiveIcon(null); setActiveColor(availableColors[0]);
+    setActiveIcon(null);
+    setActiveColor(availableColors[0]);
+    setEditingId(null); // Ensure editingId is reset when closing all modals
+    setConexionToDelete(null); // Ensure conexionToDelete is reset
+
     if (touchStartTimer.current) {
         clearTimeout(touchStartTimer.current);
         touchStartTimer.current = null;
@@ -144,22 +166,39 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     // Remove all 'drag-over' classes from elements that might still have them
     document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
   };
+
   // Open add device form (Bluetooth mode by default)
   const handleAddClick = () => {
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
-    setActiveIcon(null); setActiveColor(availableColors[0]); setEditingId(null); setErrorMessage('');
-    setSelectedConexion(null); setShowAddForm(true); setIsSearchingBluetooth(false); setModoManual(false);
+    setActiveIcon(null);
+    setActiveColor(availableColors[0]);
+    setEditingId(null);
+    setErrorMessage('');
+    setSelectedConexion(null);
+    setShowAddForm(true);
+    setIsSearchingBluetooth(false);
+    setModoManual(false);
   };
+
   // Open manual add form
   const abrirModoManual = () => {
     setModoManual(true);
     setNewConexion({ text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() });
-    setActiveIcon(null); setActiveColor(availableColors[0]); setErrorMessage(''); setEditingId(null); setIsSearchingBluetooth(false);
+    setActiveIcon(null);
+    setActiveColor(availableColors[0]);
+    setErrorMessage('');
+    setEditingId(null);
+    setIsSearchingBluetooth(false);
   };
+
   // Search and connect Bluetooth devices
   const handleSearchAndConnectBluetooth = async () => {
-    if (!navigator.bluetooth) { setErrorMessage('Seu navegador não suporta Web Bluetooth. Use Chrome, Edge ou Opera.'); return; }
-    setIsSearchingBluetooth(true); setErrorMessage('');
+    if (!navigator.bluetooth) {
+      setErrorMessage('Seu navegador não suporta Web Bluetooth. Use Chrome, Edge ou Opera.');
+      return;
+    }
+    setIsSearchingBluetooth(true);
+    setErrorMessage('');
     try {
       const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
       if (device) {
@@ -171,11 +210,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
         else if (name.includes('lamp') || name.includes('lâmpada')) guessedIcon = lampIcon;
         else if (name.includes('airfry') || name.includes('fritadeira')) guessedIcon = airfry;
         else if (name.includes('carregador') || name.includes('charger')) guessedIcon = carregador;
+
         if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
           setErrorMessage(`Já existe um aparelho chamado "${deviceName}".`);
           setIsSearchingBluetooth(false);
           return;
         }
+
         onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
         setShowAddForm(false);
       } else {
@@ -191,6 +232,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setIsSearchingBluetooth(false);
     }
   };
+
   // Save edited device
   const saveEditedConexion = () => {
     if (!newConexion.text.trim() || !newConexion.icon) { setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊'); return; }
@@ -198,6 +240,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate, accumulatedSeconds: c.accumulatedSeconds } : c));
     closeAllModals();
   };
+
   // Save new device manually
   const saveManualConexion = () => {
     if (!newConexion.text.trim() || !newConexion.icon) { setErrorMessage('Dê um nome e selecione um ícone para o aparelho 😊'); return; }
@@ -205,54 +248,68 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
     closeAllModals();
   };
+
   // Request device removal (opens confirmation dialog)
-  const removeConexion = (id) => { setConexionToDelete(id); setShowConfirmDialog(true); };
+  const removeConexion = (id) => {
+    // Only proceed if a dialog isn't already open
+    if (!showConfirmDialog) {
+      setConexionToDelete(id);
+      setShowConfirmDialog(true);
+    }
+  };
+
   // Confirm device removal
   const handleConfirmRemove = () => {
     if (conexionToDelete) {
       setRemovingId(conexionToDelete);
-      setTimeout(() => { onRemoveDevice(conexionToDelete); setRemovingId(null); closeAllModals(); }, 300);
+      // Removed the setTimeout here for immediate action,
+      // the animation will be handled by the CSS `exiting` class
+      onRemoveDevice(conexionToDelete);
+      setRemovingId(null);
+      closeAllModals(); // Close all modals immediately after initiating removal
     }
   };
+
   // Cancel removal
   const handleCancelRemove = () => closeAllModals();
+
   // Open device edit form
   const handleEditClick = (c) => {
     if (c.connected) {
       setNewConexion({ text: c.text, icon: c.icon, backgroundColor: c.backgroundColor || availableColors[0], connected: c.connected, connectedDate: c.connectedDate });
-      setActiveIcon(c.icon); setActiveColor(c.backgroundColor || availableColors[0]); setEditingId(c.id); setErrorMessage('');
-      setSelectedConexion(null); setShowAddForm(true); setIsSearchingBluetooth(false); setModoManual(true);
+      setActiveIcon(c.icon);
+      setActiveColor(c.backgroundColor || availableColors[0]);
+      setEditingId(c.id);
+      setErrorMessage('');
+      setSelectedConexion(null);
+      setShowAddForm(true);
+      setIsSearchingBluetooth(false);
+      setModoManual(true);
     }
   };
+
   // Toggle connection status (on/off)
   const toggleConnection = (id, newDesiredState) => {
-    // Atualiza o estado de conexão e acumula tempo ao desconectar
     setConexions(prevConexions =>
       prevConexions.map(c => {
         if (c.id === id) {
           let updatedConexion = { ...c };
 
           if (c.connected && !newDesiredState) {
-            // Estava conectado e vai ser desconectado
+            // Was connected and will be disconnected
             if (c.connectedDate) {
-              // Calcular o tempo decorrido desde a última conexão
               const now = new Date().getTime();
               const connectedStartTime = new Date(c.connectedDate).getTime();
               const secondsElapsed = (now - connectedStartTime) / 1000;
-              // Adicionar ao tempo acumulado
               updatedConexion.accumulatedSeconds = (c.accumulatedSeconds || 0) + secondsElapsed;
-              // Limpar a data de conexão, pois não está mais conectado
               updatedConexion.connectedDate = null;
             }
             updatedConexion.connected = false;
           } else if (!c.connected && newDesiredState) {
-            // Estava desconectado e vai ser conectado
-            // Definir uma nova data de conexão para calcular o tempo futuro
+            // Was disconnected and will be connected
             updatedConexion.connectedDate = new Date().toISOString();
             updatedConexion.connected = true;
-            // accumulatedSeconds permanece o mesmo até ser desconectado novamente
           }
-          // Se o estado desejado for o mesmo que o atual, não faz nada além de retornar o objeto
           return updatedConexion;
         }
         return c;
@@ -261,6 +318,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
 
     if (selectedConexion && selectedConexion.id === id && !newDesiredState) setSelectedConexion(null);
   };
+
   // Open device details modal
   const handleConexionClick = (c, e) => {
     // Prevent click if a drag was initiated or if a touch long-press is pending
@@ -272,11 +330,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setSelectedConexion(c);
     }
   };
+
   // Date formatting
   const formatDate = (d) => d ? new Date(d).toLocaleString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A';
+
   // Calculate connection duration
   const getConnectionDuration = (connectedDateString, accumulatedSeconds = 0) => {
-    // Se estiver conectado, calcular o tempo desde connectedDate e somar ao acumulado
     let totalSeconds = accumulatedSeconds || 0;
     if (connectedDateString) {
       const now = new Date().getTime();
@@ -420,16 +479,19 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
       setIsDragging(false);
     }
   };
+
   // Filtered lists based on activeList state
   const connectedDevices = conexions.filter(c => c.connected);
   const disconnectedDevices = conexions.filter(c => !c.connected);
   const devicesToDisplay = activeList === 'connected' ? connectedDevices : disconnectedDevices;
+
   return (
     <div className="conexao-container">
       <h1 className='tituloConexao'>{tituloPrincipal}</h1>
       <button className="add-button-styled" onClick={handleAddClick}>
         <span className="plus-icon">+</span> {adicionarAparelho}
       </button>
+
       {/* Toggle buttons for connected/disconnected devices */}
       <div className="list-toggle-buttons">
         <span className={`slider-bar ${activeList}`} />
@@ -446,6 +508,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           Desconectados ({disconnectedDevices.length})
         </button>
       </div>
+
       {showAddForm && (
         <div className="modal-overlay">
           <div className="add-form-styled">
@@ -503,67 +566,63 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           </div>
         </div>
       )}
+
       {/* Render the list based on devicesToDisplay */}
-
-
-
      <div className="conexions-list">
-  {devicesToDisplay.length === 0 && (
-    <div className="placeholder-image-container">
-      <br /><br /><br />
-      <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
-      <p className="placeholder-text">
-        {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
-      </p>
-    </div>
-  )}
-  {devicesToDisplay.map((c, index) => {
-    return (
-      <div
-        key={c.id}
-        className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
-        style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
-        onClick={(e) => handleConexionClick(c, e)}
-        draggable="true"
-        onDragStart={(e) => handleDragStart(e, index)}
-        onDragEnter={(e) => handleDragEnter(e, index)}
-        onDragLeave={handleDragLeave}
-        onDragEnd={handleDragEnd}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onTouchStart={(e) => handleTouchStart(e, index)}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {c.connected && (
-          <div className="qrcode-top-left">
-            <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); setVisibleQRCode(c); }} type="button">
-              <img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" />
-            </button>
+        {devicesToDisplay.length === 0 && (
+          <div className="placeholder-image-container">
+            <br /><br /><br />
+            <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
+            <p className="placeholder-text">
+              {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
+            </p>
           </div>
         )}
-        {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
-        <div className="icon-text-overlay">
-          <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-          <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
-        </div>
-        {/* Removi a barra de custo */}
-        <div className="actions-overlay">
-          <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button>
-          <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.connected}>
-            <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
-          </button>
-          <label className="switch">
-            <input type="checkbox" checked={c.connected} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
-            <span className="slider round"></span>
-          </label>
-        </div>
+        {devicesToDisplay.map((c, index) => {
+          return (
+            <div
+              key={c.id}
+              className={`retanguloAdicionado ${removingId === c.id ? 'exiting' : ''} ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
+              style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+              onClick={(e) => handleConexionClick(c, e)}
+              draggable="true"
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnter={(e) => handleDragEnter(e, index)}
+              onDragLeave={handleDragLeave}
+              onDragEnd={handleDragEnd}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onTouchStart={(e) => handleTouchStart(e, index)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {c.connected && (
+                <div className="qrcode-top-left">
+                  <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); setVisibleQRCode(c); }} type="button">
+                    <img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" />
+                  </button>
+                </div>
+              )}
+              {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
+              <div className="icon-text-overlay">
+                <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
+                <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
+              </div>
+              {/* Removi a barra de custo */}
+              <div className="actions-overlay">
+                <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button>
+                <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.connected}>
+                  <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
+                </button>
+                <label className="switch">
+                  <input type="checkbox" checked={c.connected} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
+                  <span className="slider round"></span>
+                </label>
+              </div>
+            </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
-
-
 
       {selectedConexion && (
         <div className="modal-overlay" onClick={() => setSelectedConexion(null)}>
@@ -595,6 +654,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           </div>
         </div>
       )}
+
       {showConfirmDialog && (
         <div className="modal-overlay" onClick={handleCancelRemove}>
           <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
@@ -606,6 +666,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
           </div>
         </div>
       )}
+
       {visibleQRCode && (
         <div className="modal-overlay" onClick={() => setVisibleQRCode(null)} title="Qrcode">
           <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
@@ -622,4 +683,5 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice, on
     </div>
   );
 };
+
 export default Conexoes;
