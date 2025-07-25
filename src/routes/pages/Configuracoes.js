@@ -5,6 +5,7 @@ import '../../CSS/Settings/overlay.css';
 import '../../CSS/Settings/buttons.css';
 import '../../CSS/Settings/layout.css';
 import '../../CSS/Settings/images.css';
+import '../../CSS/Settings/confirmarDeslogar.css';
 
 import '../../CSS/mudarTema.css';
 
@@ -18,6 +19,9 @@ const Configuracoes = ({ isReading, toggleReading }) => {
 
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light-theme');
 
+  // Estado para mostrar/ocultar confirmação de logout
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
   useEffect(() => {
     document.body.classList.remove('light-theme', 'dark-theme');
     document.body.classList.add(theme);
@@ -25,6 +29,13 @@ const Configuracoes = ({ isReading, toggleReading }) => {
   }, [theme]);
 
   const toggleTheme = () => setTheme(prev => (prev === 'light-theme' ? 'dark-theme' : 'light-theme'));
+
+  // Função para confirmar logout e redirecionar
+  const handleLogoutConfirm = () => {
+    setShowLogoutConfirm(false);
+    // Aqui você pode limpar tokens, sessão, etc.
+    navigate('/login');
+  };
 
   return (
     <div className="configuracoes-overlay">
@@ -61,11 +72,28 @@ const Configuracoes = ({ isReading, toggleReading }) => {
 
           <div className="top-buttons" style={{ marginTop: '10px' }}>
             <button title="Logar" onClick={() => navigate('/login')}>{logar}</button>
-            <button title="Deslogar" onClick={() => navigate('/login')}>{deslogar}</button>
+
+            {/* Botão de deslogar abre confirmação */}
+            <button title="Deslogar" onClick={() => setShowLogoutConfirm(true)}>
+              {deslogar}
+            </button>
           </div>
 
         </div>
       </div>
+
+      {/* Modal de confirmação logout */}
+      {showLogoutConfirm && (
+        <div className="modal-logout-overlay">
+          <div className="modal-logout-content">
+            <p>Você quer deslogar?</p>
+            <div>
+              <button onClick={handleLogoutConfirm} className="btn-sim">Sim</button>
+              <button onClick={() => setShowLogoutConfirm(false)} className="btn-nao">Não</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
