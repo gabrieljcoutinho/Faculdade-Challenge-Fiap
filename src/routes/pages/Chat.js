@@ -11,14 +11,17 @@ import comandosData from '../../data/commands.json';
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const normalizeText = t => t.trim().toLowerCase();
-const formatProductionSummary = d => !d || !Array.isArray(d.labels) || !Array.isArray(d.datasetsOptions) || !d.datasetsOptions.length
+
+// MODIFICATION START: Changed 'datasetsOptions' to 'datasets'
+const formatProductionSummary = d => !d || !Array.isArray(d.labels) || !Array.isArray(d.datasets) || !d.datasets.length
   ? "Dados de produção solar não disponíveis."
   : (() => {
-    const { labels } = d, data = d.datasetsOptions[0].data.slice(0, labels.length);
+    const { labels } = d, data = d.datasets[0].data.slice(0, labels.length); // Changed 'datasetsOptions' to 'datasets'
     let total = 0, table = "Produção solar (Opção 1):\n\n| Hora | Produção (kWh) |\n|-------|---------------|\n";
     labels.forEach((h, i) => { const v = data[i] || 0; total += v; table += `| ${h} | ${v} |\n`; });
     return table + `\nProdução total: ${total} kWh`;
   })();
+// MODIFICATION END
 
 const Chat = ({ onConnectDevice, productionData, setTheme }) => {
   const [messages, setMessages] = useState([]), [newMessage, setNewMessage] = useState(''), [loading, setLoading] = useState(false), [firstInteraction, setFirstInteraction] = useState(true), [isFadingOut, setIsFadingOut] = useState(false);

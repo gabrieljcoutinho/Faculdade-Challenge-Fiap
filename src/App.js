@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// CSS & Images (all kept as requested)
+// CSS & Images
 import '../src/CSS/Reset.css';
 import '../src/CSS/mudarCorScrollBar.css';
 import tvIcon from './imgs/imgConexao/TV.png';
@@ -13,7 +13,7 @@ import carregador from '../src/imgs/imgConexao/carregador.png';
 // Data
 import initialProductionData from './data/graficoHomeApi.json';
 
-// Components & Pages (all kept as requested)
+// Components & Pages
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
@@ -29,7 +29,7 @@ import EsqueciSenha from './routes/pages/EsqueciSenha';
 import HelpCenter from '../src/routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 
-// Global Read Aloud Hook - Made more concise
+// Global Read Aloud Hook
 const useReadAloud = (isReading) => {
   useEffect(() => {
     if (!isReading) return window.speechSynthesis.cancel();
@@ -51,25 +51,55 @@ const useReadAloud = (isReading) => {
 };
 
 function App() {
-  // State for connections, theme, production data, and read-aloud
+  // State for connections, theme, and read-aloud
   const [conexions, setConexions] = useState(() => {
     try {
       const saved = localStorage.getItem('conexions');
       return saved ? JSON.parse(saved).map(c => ({ ...c, id: c.id || window.crypto.randomUUID(), connectedDate: c.connectedDate || new Date().toISOString(), bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object' ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name } : null })) : [];
     } catch (e) {
-      console.error("Error loading connections:", e);
+      console.error("Erro ao carregar conexões:", e);
       return [];
     }
   });
-  const [productionData, setProductionData] = useState(initialProductionData);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark-theme');
   const [isReading, setIsReading] = useState(() => localStorage.getItem('isReading') === 'true');
+
+  // NOVO ESTADO: O índice do dataset escolhido, para que o App.js saiba qual dataset formatar.
+  // Home.js precisará de uma forma de notificar o App.js sobre a mudança desse índice.
+  const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
+
+  // Efeito para escolher um dataset inicial aleatoriamente na montagem
+  useEffect(() => {
+    if (initialProductionData.datasetsOptions && initialProductionData.datasetsOptions.length > 0) {
+      setChosenDatasetIndex(Math.floor(Math.random() * initialProductionData.datasetsOptions.length));
+    }
+  }, []);
+
+  // NOVO: `productionData` agora é calculado no App.js usando `useMemo`
+  // Ele usa `initialProductionData` e `chosenDatasetIndex` para criar o formato esperado.
+  const formattedProductionData = useMemo(() => {
+    if (!initialProductionData.datasetsOptions || initialProductionData.datasetsOptions.length === 0) {
+      return { labels: [], datasets: [] };
+    }
+    const chosen = initialProductionData.datasetsOptions[chosenDatasetIndex] || initialProductionData.datasetsOptions[0];
+    return {
+      labels: initialProductionData.labels,
+      datasets: [{
+        label: chosen.label,
+        data: chosen.data,
+        borderColor: "#0FF0FC",
+        backgroundColor: "rgba(15,240,252,0.3)",
+        fill: true,
+        tension: 0.3
+      }]
+    };
+  }, [chosenDatasetIndex]); // Recalcula quando chosenDatasetIndex muda
 
   // Effects for persistence and theme class
   useEffect(() => {
     try {
       localStorage.setItem('conexions', JSON.stringify(conexions.map(c => ({ ...c, bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object' ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name } : null }))));
-    } catch (e) { console.error("Error saving connections:", e); }
+    } catch (e) { console.error("Erro ao salvar conexões:", e); }
   }, [conexions]);
   useEffect(() => { localStorage.setItem('isReading', isReading); }, [isReading]);
   useEffect(() => { document.body.className = theme; }, [theme]);
@@ -77,9 +107,7 @@ function App() {
   // Activate global read-aloud hook
   useReadAloud(isReading);
 
-  // Connection handlers - All original logic kept, just more concise syntax
-  const handleUpdateProductionData = useCallback((newData) => setProductionData(newData), []);
-
+  // Connection handlers
   const handleConnectDevice = useCallback((deviceName, uniqueId, icon = null, backgroundColor = null, bluetoothDeviceInfo = null) => {
     setConexions(prev => {
       const existingIdx = prev.findIndex(c => c.id === uniqueId || (c.bluetoothDeviceInfo && bluetoothDeviceInfo && c.bluetoothDeviceInfo.id === bluetoothDeviceInfo.id));
@@ -120,13 +148,24 @@ function App() {
         <Header><ReadAloudToggle /></Header>
         <ThemeToggle setTheme={setTheme} />
         <Routes>
-          <Route path="/" element={<Home productionData={productionData} onUpdateProductionData={handleUpdateProductionData} />} />
+          {/* Home agora recebe o productionData formatado do App.js e uma função para mudar o dataset */}
+          <Route
+            path="/"
+            element={
+              <Home
+                productionData={formattedProductionData} // Passa o productionData já formatado
+                initialProductionData={initialProductionData} // Passa os dados brutos para Home escolher qual dataset
+                onDatasetChange={setChosenDatasetIndex} // Home pode notificar App.js qual dataset escolheu
+              />
+            }
+          />
           <Route path="/conexoes" element={<Conexoes conexions={conexions} setConexions={setConexions} onConnectDevice={handleConnectDevice} onRemoveDevice={handleRemoveDevice} onToggleConnection={handleToggleConnection} />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/configuracoes" element={<Configuracoes isReading={isReading} toggleReading={toggleReading} />} />
           <Route path="/login" element={<Logar />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/chat" element={<Chat onConnectDevice={handleConnectDevice} productionData={productionData} setTheme={setTheme} />} />
+          {/* Chat agora recebe o productionData formatado do App.js */}
+          <Route path="/chat" element={<Chat onConnectDevice={handleConnectDevice} productionData={formattedProductionData} setTheme={setTheme} />} />
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />
