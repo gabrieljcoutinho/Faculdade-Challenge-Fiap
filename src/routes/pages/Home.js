@@ -259,19 +259,22 @@ Menor produção: ${minHour} com ${minValue} kWh.
 
 
 
+
+
+
+
+
+
 <section className="wf-section">
   <h2>{subTitulo}</h2>
   <div className="wf-card-container">
-    <div className="wf-card wf-current">
+    <div className="wf-card">
       <h3>Agora</h3>
       <p className="wf-temp">{currentWeather.temperature}°C</p>
-      <p className="wf-condition">
-        {getWeatherIcon(currentWeather.condition)} {currentWeather.condition}
-      </p>
+      <p className="wf-condition">{getWeatherIcon(currentWeather.condition)} {currentWeather.condition}</p>
     </div>
-
     {forecast.map((item, i) => (
-      <div key={i} className="wf-card wf-forecast">
+      <div key={i} className="wf-card">
         <h3>{item.day}</h3>
         <p className="wf-icon">{getWeatherIcon(item.condition)}</p>
         <p className="wf-range">Min: {item.low}°C | Max: {item.high}°C</p>
@@ -287,26 +290,55 @@ Menor produção: ${minHour} com ${minValue} kWh.
 
 
 
-<section className="envImpact-sectionWeather">
-  <h2>{impacto}</h2>
-  <br />
-  <div className="envImpact-card-container">
-    <div className="envImpact-card">
-      <h3>{economia}</h3>
-      <p className="envImpact-temp">{environmentalImpact.co2Avoided} kg</p>
-      <p className="envImpact-condition">{descricaoEconomia}</p>
-    </div>
-    <div className="envImpact-card">
-      <h3>{arvoresEquivalentes}</h3>
-      <p className="envImpact-temp">{environmentalImpact.equivalentTrees}</p>
-      <p className="envImpact-condition">{absorcaoPorArvore}</p>
-    </div>
-    <div className="envImpact-card">
-      <h3>{reducaoPoluicao}</h3>
-      <p className="envImpact-condition">{impactoDescricao}</p>
-    </div>
-  </div>
-</section>
+
+
+
+
+
+
+
+
+
+
+
+        <section className="environmental-impact-section">
+          <h2>{impacto}</h2>
+          <div className="impact-cards-container">
+            <div className="impact-card">
+              <h3>{economia}</h3>
+              <p className="impact-value">{environmentalImpact.co2Avoided} kg</p>
+              <p className="impact-description">{descricaoEconomia}</p>
+            </div>
+            <div className="impact-card">
+              <h3>{arvoresEquivalentes}</h3>
+              <p className="impact-value">{environmentalImpact.equivalentTrees}</p>
+              <p className="impact-description">{absorcaoPorArvore}</p>
+            </div>
+            <div className="impact-card">
+              <h3>{reducaoPoluicao}</h3>
+              <p className="impact-description">{impactoDescricao}</p>
+            </div>
+          </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
