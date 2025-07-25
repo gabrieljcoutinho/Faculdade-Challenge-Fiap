@@ -2,10 +2,18 @@
     --preto: #222;
     --azul: #2980b9;
     --branco: #fff;
-    --brancoAcinzentado: #ddd;
+    --branco-acinzentado: #ddd;
     --cinza: #555;
+
+    /* Variáveis para cores usadas diretamente */
+    --h1-cor: #2c3e50;
+    --faq-item-hover-bg: #f6f9fc;
+    --faq-item-hover-border: #2980b9;
+    /* já tem var(--azul) */
+    --faq-question-cor: #34495e;
 }
 
+/* Atualizando seu CSS com as variáveis */
 
 .perguntas-frequentes-container {
     height: 1250px;
@@ -20,7 +28,7 @@ h1 {
     margin-bottom: 40px;
     font-weight: 700;
     font-size: 2.5rem;
-    color: #2c3e50;
+    color: var(--h1-cor);
 }
 
 .faq-list {
@@ -32,7 +40,7 @@ h1 {
 }
 
 .faq-item {
-    border-bottom: 1px solid var(--brancoAcinzentado);
+    border-bottom: 1px solid var(--branco-acinzentado);
     padding: 18px 20px;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -42,7 +50,7 @@ h1 {
 }
 
 .faq-item:hover {
-    background-color: #f6f9fc;
+    background-color: var(--faq-item-hover-bg);
     box-shadow: inset 4px 0 0 var(--azul);
 }
 
@@ -53,7 +61,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #34495e;
+    color: var(--faq-question-cor);
 }
 
 .faq-icon {
@@ -71,7 +79,7 @@ h1 {
 
 .faq-answer {
     margin-top: 12px;
-    color: var(cinza);
+    color: var(--cinza);
     font-size: 1rem;
     line-height: 1.6;
     max-width: 100%;
