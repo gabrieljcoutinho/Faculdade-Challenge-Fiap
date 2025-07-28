@@ -1,0 +1,57 @@
+/* No seu arquivo CSS, por exemplo, conexao.css */
+
+.image-wrapper {
+    position: relative;
+    /* Essencial para posicionar a luz em relação à imagem */
+    display: inline-block;
+    /* Garante que o wrapper se ajuste ao tamanho da imagem */
+    overflow: hidden;
+    /* Garante que a luz não saia do container */
+}
+
+.light-effect {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    /* Começa a luz fora da tela, à esquerda */
+    width: 50%;
+    /* Largura da "faixa de luz" */
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+    /* Um gradiente para criar um efeito de brilho suave */
+    animation: passLight 2.5s infinite linear;
+    /* Animação: nome, duração, repetição e tipo de velocidade */
+}
+
+@keyframes passLight {
+    0% {
+        left: -100%;
+        /* Inicia fora da tela */
+    }
+
+    100% {
+        left: 150%;
+        /* Termina bem fora da tela, à direita, para um fluxo suave */
+    }
+}
+
+/* Opcional: Se a imagem placeholder tiver um tamanho fixo, você pode precisar ajustar o image-wrapper */
+.placeholder-image-container {
+    /* ... seu estilo existente ... */
+    display: flex;
+    /* ou block, dependendo do seu layout */
+    flex-direction: column;
+    /* Se for flex, para alinhar a imagem e o texto */
+    align-items: center;
+    /* Centraliza horizontalmente se for flex */
+    justify-content: center;
+    /* Centraliza verticalmente se for flex */
+}
+
+.placeholder-image {
+    /* ... seu estilo existente ... */
+    max-width: 100%;
+    /* Garante que a imagem não ultrapasse o container */
+    height: auto;
+    /* Mantém a proporção */
+}
