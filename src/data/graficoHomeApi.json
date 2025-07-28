@@ -3,25 +3,11 @@
     "6:00", "8:00", "10:00", "12:00", "14:00", "16:00", "18:00"
   ],
   "datasetsOptions": [
-    { "label": "Produção (kWh) - Opção 1",  "data": [12, 8, 15, 20, 18, 3, 5] },
-    { "label": "Produção (kWh) - Opção 2",  "data": [14, 10, 13, 25, 22, 5, 7] },
-    { "label": "Produção (kWh) - Opção 3",  "data": [22, 5, 10, 12, 15, 9, 8] },
-    { "label": "Produção (kWh) - Opção 4",  "data": [4, 3, 8, 2, 22, 8, 5] },
-    { "label": "Produção (kWh) - Opção 5",  "data": [15, 9, 18, 22, 20, 6, 7] },
-    { "label": "Produção (kWh) - Opção 6",  "data": [20, 15, 25, 30, 28, 10, 13] },
-    { "label": "Produção (kWh) - Opção 7",  "data": [10, 7, 12, 18, 17, 4, 5] },
-    { "label": "Produção (kWh) - Opção 8",  "data": [25, 20, 30, 35, 33, 15, 17] },
-    { "label": "Produção (kWh) - Opção 9",  "data": [8, 6, 10, 15, 13, 3, 4] },
-    { "label": "Produção (kWh) - Opção 10", "data": [30, 25, 35, 40, 38, 18, 20] },
-    { "label": "Produção (kWh) - Opção 11", "data": [7, 5, 9, 13, 12, 2, 3] },
-    { "label": "Produção (kWh) - Opção 12", "data": [28, 22, 33, 37, 35, 16, 18] },
-    { "label": "Produção (kWh) - Opção 13", "data": [13, 9, 16, 21, 19, 7, 8] },
-    { "label": "Produção (kWh) - Opção 14", "data": [18, 14, 22, 27, 25, 12, 14] },
-    { "label": "Produção (kWh) - Opção 15", "data": [11, 8, 14, 19, 17, 5, 6] },
-    { "label": "Produção (kWh) - Opção 16", "data": [23, 18, 28, 33, 31, 14, 16] },
-    { "label": "Produção (kWh) - Opção 17", "data": [9, 7, 11, 16, 14, 4, 5] },
-    { "label": "Produção (kWh) - Opção 18", "data": [26, 21, 31, 36, 34, 17, 19] },
-    { "label": "Produção (kWh) - Opção 19", "data": [6, 4, 8, 12, 11, 2, 3] },
-    { "label": "Produção (kWh) - Opção 20", "data": [32, 27, 38, 43, 40, 20, 22] }
+
+  { "label": "Produção (kWh)", "data": [6, 4, 22, 11, 19, 18, 39] },
+{ "label": "Produção (kWh)", "data": [18, 5, 24, 9, 21, 20, 38] },
+  { "label": "Produção (kWh)", "data": [27, 3, 25, 10, 22, 18, 41] },
+{ "label": "Produção (kWh)", "data": [16, 2, 21, 12, 19, 17, 37] },
+  { "label": "Produção (kWh)", "data": [37, 4, 23, 11, 20, 19, 40] }
   ]
 }
