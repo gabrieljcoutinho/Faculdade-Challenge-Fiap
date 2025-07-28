@@ -258,13 +258,6 @@ Menor produção: ${minHour} com ${minValue} kWh.
         </section>
 
 
-
-
-
-
-
-
-
 <section className="wf-section">
   <h2>{subTitulo}</h2>
   <div className="wf-card-container">
@@ -283,22 +276,6 @@ Menor produção: ${minHour} com ${minValue} kWh.
     ))}
   </div>
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <section className="environmental-impact-section">
