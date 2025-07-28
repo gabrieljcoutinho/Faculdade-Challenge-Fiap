@@ -361,7 +361,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
         {devicesToDisplay.length === 0 ? (
           <div className="placeholder-image-container">
             <br /><br /><br />
-            <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
+            {/* INÍCIO DA ALTERAÇÃO */}
+            <div className="image-wrapper">
+              <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
+              <div className="light-effect"></div> {/* Novo elemento para o efeito de luz */}
+            </div>
+            {/* FIM DA ALTERAÇÃO */}
             <p className="placeholder-text">
               {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
             </p>
