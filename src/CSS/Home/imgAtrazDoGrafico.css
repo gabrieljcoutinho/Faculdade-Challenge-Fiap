@@ -1,0 +1,45 @@
+.production-section {
+    margin-top: -130px;
+    z-index: 10000;
+
+}
+
+
+/* Imagem de fundo no topo, com opacidade */
+.teste {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 250px;
+    /* altura da imagem de fundo */
+    z-index: 0;
+    pointer-events: none;
+    /* evita que a imagem interfira em cliques */
+    overflow: hidden;
+}
+
+.teste::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('../../imgs/imgHome/placasSolaresResidencial.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    z-index: 0;
+}
+
+/* Garante que o conteúdo fique acima da imagem */
+.main-content {
+    padding-top: 7rem;
+    position: relative;
+    z-index: 1;
+}
+
+.teste h1 {
+    position: relative;
+
+    /* garante que o texto fique acima da imagem */
+}

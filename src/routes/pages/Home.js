@@ -22,6 +22,7 @@ import '../../CSS/Home/impactoAmbiental.css';
 import '../../CSS/Home/mediaScreen.css';
 import '../../CSS/Home/weatherAnimations.css';
 import '../../CSS/Home/relatorioConsumoDiario.css';
+import'../../CSS/Home/imgAtrazDoGrafico.css'
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
@@ -160,6 +161,11 @@ const Home = () => {
 
     return (
         <div className="home-container">
+
+<div className='teste'>
+    <h1 className='teste1'></h1>
+</div>
+
             <main className="main-content">
                 <section className="production-section">
                     <h2 className='tituloPrincipalHome'>{tituloPrincipal}</h2>

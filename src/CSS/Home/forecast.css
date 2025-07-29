@@ -21,6 +21,6 @@
 
 .forecast-card .temp-range {
     font-size: 1.2em;
-    margin-top: 10px;
+    /* margin-top: 10px; */
     color: var(--branco);
 }
