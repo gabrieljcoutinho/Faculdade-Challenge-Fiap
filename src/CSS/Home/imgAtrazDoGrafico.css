@@ -1,9 +1,7 @@
 .production-section {
     margin-top: -130px;
     z-index: 10000;
-
 }
-
 
 /* Imagem de fundo no topo, com opacidade */
 .teste {
@@ -23,13 +21,19 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url('../../imgs/imgHome/placasSolaresResidencial.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-image: url('../../imgs/imgHome/placasSolaresResidencial.jpg');
     opacity: 0.9;
+    filter: brightness(0.7);
     z-index: 0;
+
+    /* Máscara para apagar a parte de baixo da imagem */
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
+
 
 /* Garante que o conteúdo fique acima da imagem */
 .main-content {
@@ -40,6 +44,5 @@
 
 .teste h1 {
     position: relative;
-
     /* garante que o texto fique acima da imagem */
 }
