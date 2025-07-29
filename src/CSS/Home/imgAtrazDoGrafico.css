@@ -4,7 +4,7 @@
 }
 
 /* Imagem de fundo no topo, com opacidade */
-.teste {
+.fundoComimgAntesDografico {
     position: absolute;
     top: 0;
     left: 0;
@@ -17,7 +17,7 @@
     overflow: hidden;
 }
 
-.teste::before {
+.fundoComimgAntesDografico::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -42,7 +42,7 @@
     z-index: 1;
 }
 
-.teste h1 {
+.fundoComimgAntesDografico h1 {
     position: relative;
     /* garante que o texto fique acima da imagem */
 }

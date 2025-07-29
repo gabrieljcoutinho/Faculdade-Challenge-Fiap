@@ -162,8 +162,8 @@ const Home = () => {
     return (
         <div className="home-container">
 
-<div className='teste'>
-    <h1 className='teste1'></h1>
+<div className='fundoComimgAntesDografico'>
+    {/* <h1 className='teste1'></h1> */}
 </div>
 
             <main className="main-content">
