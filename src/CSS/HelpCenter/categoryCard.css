@@ -7,8 +7,10 @@
     /* caso queira definir texto padrão */
 }
 
+
 .category {
-    background-color: var(--bg-category);
+    background-color: transparent;
+    /* ← fundo transparente */
     border: 1px solid var(--border-category);
     border-radius: 12px;
     padding: 1.5rem;
@@ -16,6 +18,16 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
 }
+
+/* .category {
+    background-color: var(--bg-category);
+    border: 1px solid var(--border-category);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+} */
 
 .category:hover {
     transform: translateY(-5px);
