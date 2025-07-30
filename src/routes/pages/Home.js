@@ -36,6 +36,7 @@ const Home = () => {
     const [expandedChartType, setExpandedChartType] = useState(null);
     const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
     const [showReport, setShowReport] = useState(false);
+    const [backgroundClass, setBackgroundClass] = useState(''); // New state for background class
 
     const chartRef = useRef(null);
 
@@ -45,6 +46,28 @@ const Home = () => {
     }, []);
 
     useEffect(() => localStorage.setItem('preferredChartType', currentChartType), [currentChartType]);
+
+    // Effect to set background image based on time
+    useEffect(() => {
+        const updateBackground = () => {
+            const now = new Date();
+            const hour = now.getHours();
+
+            if (hour >= 6 && hour < 12) {
+                setBackgroundClass('morning-bg');
+            } else if (hour >= 12 && hour < 18) {
+                setBackgroundClass('afternoon-bg');
+            } else {
+                setBackgroundClass('night-bg');
+            }
+
+        };
+
+        updateBackground(); // Set initial background
+        const intervalId = setInterval(updateBackground, 60 * 60 * 1000); // Update every hour
+
+        return () => clearInterval(intervalId); // Clear interval on unmount
+    }, []);
 
     const productionData = useMemo(() => {
         if (!initialProductionData.datasetsOptions) return { labels: [], datasets: [] };
@@ -162,9 +185,9 @@ const Home = () => {
     return (
         <div className="home-container">
 
-<div className='fundoComimgAntesDografico'>
-    {/* <h1 className='teste1'></h1> */}
-</div>
+            <div className={`fundoComimgAntesDografico ${backgroundClass}`}>
+                {/* <h1 className='teste1'></h1> */}
+            </div>
 
             <main className="main-content">
                 <section className="production-section">
