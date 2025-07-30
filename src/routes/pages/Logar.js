@@ -33,7 +33,7 @@ const Logar = () => {
             <label htmlFor="password" >{Senha}</label>
             <div className="inputSenha">
               <input type={showPass ? 'text' : 'password'} title="Digite sua Senha" placeholder="Sua senha" required value={password} onChange={e => setPassword(e.target.value)} />
-              <button type="button" className="password-toggle-button" onClick={() => setShowPass(!showPass)} title="Mostrar / Ocultar Senha">{showPass ? '👁️' : '🙈'}</button>
+              <button type="button" className="password-toggle-button" onClick={() => setShowPass(!showPass)} title="Mostrar / Ocultar Senha">{showPass ? '🔓' : '🔒'}</button>
             </div>
           </div>
           <button type="submit" className="login-button">{BotaoEntrar}</button>
