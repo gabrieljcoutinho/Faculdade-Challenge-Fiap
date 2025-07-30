@@ -56,9 +56,11 @@
     width: 310px;
 }
 
-/* Input senha ocupa 100% do container com padding-right para o botão */
+/* Input senha ocupa 100% do container com padding-right para o botão e largura fixa */
 .inputSenha input {
     width: 100%;
+    min-width: 310px;
+    max-width: 310px;
     padding: 0.8rem 40px 0.8rem 10px;
     /* espaço à direita para o botão */
     border: 1px solid var(--branco2);
