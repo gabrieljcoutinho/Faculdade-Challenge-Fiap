@@ -62,7 +62,6 @@ const Home = () => {
             }
 
 
-
         };
 
         updateBackground(); // Set initial background
