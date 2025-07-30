@@ -28,8 +28,9 @@ import ComandosChat from './routes/pages/ComandosChat';
 import EsqueciSenha from './routes/pages/EsqueciSenha';
 import HelpCenter from '../src/routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
+import NotFound from './routes/pages/NotFound'; // Página de erro 404
 
-// Global Read Aloud Hook (sem alteração)
+// Global Read Aloud Hook
 const useReadAloud = (isReading) => {
   useEffect(() => {
     if (!isReading) return window.speechSynthesis.cancel();
@@ -58,7 +59,10 @@ function App() {
         ...c,
         id: c.id || window.crypto.randomUUID(),
         connectedDate: c.connectedDate || new Date().toISOString(),
-        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object' ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name } : null
+        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object' ? {
+          id: c.bluetoothDeviceInfo.id,
+          name: c.bluetoothDeviceInfo.name
+        } : null
       })) : [];
     } catch (e) {
       console.error("Erro ao carregar conexões:", e);
@@ -71,16 +75,13 @@ function App() {
   const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
 
   useEffect(() => {
-    if (initialProductionData.datasetsOptions && initialProductionData.datasetsOptions.length > 0) {
+    if (initialProductionData.datasetsOptions?.length > 0) {
       setChosenDatasetIndex(Math.floor(Math.random() * initialProductionData.datasetsOptions.length));
     }
   }, []);
 
   const formattedProductionData = useMemo(() => {
-    if (!initialProductionData.datasetsOptions || initialProductionData.datasetsOptions.length === 0) {
-      return { labels: [], datasets: [] };
-    }
-    const chosen = initialProductionData.datasetsOptions[chosenDatasetIndex] || initialProductionData.datasetsOptions[0];
+    const chosen = initialProductionData.datasetsOptions?.[chosenDatasetIndex] || { label: '', data: [] };
     return {
       labels: initialProductionData.labels,
       datasets: [{
@@ -98,11 +99,14 @@ function App() {
     try {
       localStorage.setItem('conexions', JSON.stringify(conexions.map(c => ({
         ...c,
-        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object'
-          ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name }
-          : null
+        bluetoothDeviceInfo: c.bluetoothDeviceInfo ? {
+          id: c.bluetoothDeviceInfo.id,
+          name: c.bluetoothDeviceInfo.name
+        } : null
       }))));
-    } catch (e) { console.error("Erro ao salvar conexões:", e); }
+    } catch (e) {
+      console.error("Erro ao salvar conexões:", e);
+    }
   }, [conexions]);
 
   useEffect(() => { localStorage.setItem('isReading', isReading); }, [isReading]);
@@ -110,7 +114,6 @@ function App() {
 
   useReadAloud(isReading);
 
-  // Função para pegar o ícone e cor padrão baseado no tipo
   const getIconAndColorByType = (deviceType) => {
     switch (deviceType.toLowerCase()) {
       case 'tv':
@@ -132,18 +135,15 @@ function App() {
       case 'charger':
         return [carregador, '#FFE4E1'];
       default:
-        return [lampIcon, '#CCCCCC']; // Ícone e cor padrão
+        return [lampIcon, '#CCCCCC'];
     }
   };
 
-  // Atualizei para receber tipo e nome completo (nome personalizado)
   const handleConnectDevice = useCallback((tipo, nomeCompleto) => {
     const [icon, backgroundColor] = getIconAndColorByType(tipo);
-
     setConexions(prev => {
-      // Checa se já existe dispositivo com mesmo nome (para evitar duplicidade)
       const exists = prev.some(c => c.text === nomeCompleto);
-      if (exists) return prev; // Não adiciona duplicado
+      if (exists) return prev;
       return [...prev, {
         id: window.crypto.randomUUID(),
         text: nomeCompleto,
@@ -212,6 +212,7 @@ function App() {
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />
           <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
+          <Route path="*" element={<NotFound />} /> {/* Rota 404 */}
         </Routes>
         <Footer />
       </BrowserRouter>
