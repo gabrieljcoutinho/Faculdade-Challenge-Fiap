@@ -28,7 +28,7 @@ const HelpCenter = () => (
         <div className="category" key={index}>
           {cat.icone}
           <h4>{cat.titulo}</h4>
-          <p>{cat.descricao}</p>
+          <p className='pDescricaoHelpCenter'>{cat.descricao}</p>
         </div>
       ))}
     </div>
