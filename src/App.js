@@ -29,7 +29,7 @@ import EsqueciSenha from './routes/pages/EsqueciSenha';
 import HelpCenter from '../src/routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 
-// Global Read Aloud Hook
+// Global Read Aloud Hook (sem alteração)
 const useReadAloud = (isReading) => {
   useEffect(() => {
     if (!isReading) return window.speechSynthesis.cancel();
@@ -51,32 +51,31 @@ const useReadAloud = (isReading) => {
 };
 
 function App() {
-  // State for connections, theme, and read-aloud
   const [conexions, setConexions] = useState(() => {
     try {
       const saved = localStorage.getItem('conexions');
-      return saved ? JSON.parse(saved).map(c => ({ ...c, id: c.id || window.crypto.randomUUID(), connectedDate: c.connectedDate || new Date().toISOString(), bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object' ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name } : null })) : [];
+      return saved ? JSON.parse(saved).map(c => ({
+        ...c,
+        id: c.id || window.crypto.randomUUID(),
+        connectedDate: c.connectedDate || new Date().toISOString(),
+        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object' ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name } : null
+      })) : [];
     } catch (e) {
       console.error("Erro ao carregar conexões:", e);
       return [];
     }
   });
+
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark-theme');
   const [isReading, setIsReading] = useState(() => localStorage.getItem('isReading') === 'true');
-
-  // NOVO ESTADO: O índice do dataset escolhido, para que o App.js saiba qual dataset formatar.
-  // Home.js precisará de uma forma de notificar o App.js sobre a mudança desse índice.
   const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
 
-  // Efeito para escolher um dataset inicial aleatoriamente na montagem
   useEffect(() => {
     if (initialProductionData.datasetsOptions && initialProductionData.datasetsOptions.length > 0) {
       setChosenDatasetIndex(Math.floor(Math.random() * initialProductionData.datasetsOptions.length));
     }
   }, []);
 
-  // NOVO: `productionData` agora é calculado no App.js usando `useMemo`
-  // Ele usa `initialProductionData` e `chosenDatasetIndex` para criar o formato esperado.
   const formattedProductionData = useMemo(() => {
     if (!initialProductionData.datasetsOptions || initialProductionData.datasetsOptions.length === 0) {
       return { labels: [], datasets: [] };
@@ -93,48 +92,82 @@ function App() {
         tension: 0.3
       }]
     };
-  }, [chosenDatasetIndex]); // Recalcula quando chosenDatasetIndex muda
+  }, [chosenDatasetIndex]);
 
-  // Effects for persistence and theme class
   useEffect(() => {
     try {
-      localStorage.setItem('conexions', JSON.stringify(conexions.map(c => ({ ...c, bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object' ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name } : null }))));
+      localStorage.setItem('conexions', JSON.stringify(conexions.map(c => ({
+        ...c,
+        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object'
+          ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name }
+          : null
+      }))));
     } catch (e) { console.error("Erro ao salvar conexões:", e); }
   }, [conexions]);
+
   useEffect(() => { localStorage.setItem('isReading', isReading); }, [isReading]);
   useEffect(() => { document.body.className = theme; }, [theme]);
 
-  // Activate global read-aloud hook
   useReadAloud(isReading);
 
-  // Connection handlers
-  const handleConnectDevice = useCallback((deviceName, uniqueId, icon = null, backgroundColor = null, bluetoothDeviceInfo = null) => {
+  // Função para pegar o ícone e cor padrão baseado no tipo
+  const getIconAndColorByType = (deviceType) => {
+    switch (deviceType.toLowerCase()) {
+      case 'tv':
+      case 'televisão':
+      case 'smart tv':
+        return [tvIcon, '#B0E0E6'];
+      case 'ar-condicionado':
+      case 'ar':
+      case 'ac':
+        return [airConditionerIcon, '#E0FFFF'];
+      case 'lâmpada':
+      case 'lampada':
+      case 'lamp':
+        return [lampIcon, '#FFEBCD'];
+      case 'airfry':
+      case 'fritadeira':
+        return [airfry, '#FFDAB9'];
+      case 'carregador':
+      case 'charger':
+        return [carregador, '#FFE4E1'];
+      default:
+        return [lampIcon, '#CCCCCC']; // Ícone e cor padrão
+    }
+  };
+
+  // Atualizei para receber tipo e nome completo (nome personalizado)
+  const handleConnectDevice = useCallback((tipo, nomeCompleto) => {
+    const [icon, backgroundColor] = getIconAndColorByType(tipo);
+
     setConexions(prev => {
-      const existingIdx = prev.findIndex(c => c.id === uniqueId || (c.bluetoothDeviceInfo && bluetoothDeviceInfo && c.bluetoothDeviceInfo.id === bluetoothDeviceInfo.id));
-      let [defIcon, defColor] = [icon, backgroundColor];
-      if (!icon || !backgroundColor) {
-        switch (deviceName.toLowerCase()) {
-          case 'tv': case 'televisão': case 'smart tv': [defIcon, defColor] = [tvIcon, '#B0E0E6']; break;
-          case 'ar-condicionado': case 'ar': case 'ac': [defIcon, defColor] = [airConditionerIcon, '#E0FFFF']; break;
-          case 'lâmpada': case 'lampada': case 'lamp': [defIcon, defColor] = [lampIcon, '#FFEBCD']; break;
-          case 'airfry': case 'fritadeira': [defIcon, defColor] = [airfry, '#FFDAB9']; break;
-          case 'carregador': case 'charger': [defIcon, defColor] = [carregador, '#FFE4E1']; break;
-          default: [defIcon, defColor] = [icon || lampIcon, backgroundColor || '#CCCCCC']; break;
-        }
-      }
-      return existingIdx !== -1
-        ? prev.map((c, i) => i === existingIdx ? { ...c, connected: true, icon: defIcon, backgroundColor: defColor, connectedDate: c.connected ? c.connectedDate : new Date().toISOString(), bluetoothDeviceInfo } : c)
-        : [...prev, { id: uniqueId, text: deviceName, icon: defIcon, backgroundColor: defColor, connected: true, connectedDate: new Date().toISOString(), bluetoothDeviceInfo }];
+      // Checa se já existe dispositivo com mesmo nome (para evitar duplicidade)
+      const exists = prev.some(c => c.text === nomeCompleto);
+      if (exists) return prev; // Não adiciona duplicado
+      return [...prev, {
+        id: window.crypto.randomUUID(),
+        text: nomeCompleto,
+        icon,
+        backgroundColor,
+        connected: true,
+        connectedDate: new Date().toISOString(),
+        bluetoothDeviceInfo: null
+      }];
     });
   }, []);
 
-  const handleRemoveDevice = useCallback((id) => setConexions(prev => prev.filter(c => c.id !== id)), []);
-
-  const handleToggleConnection = useCallback((id, newDesiredState) => {
-    setConexions(prev => prev.map(c => c.id === id ? { ...c, connected: newDesiredState, connectedDate: newDesiredState ? new Date().toISOString() : c.connectedDate } : c));
+  const handleRemoveDevice = useCallback((id) => {
+    setConexions(prev => prev.filter(c => c.id !== id));
   }, []);
 
-  // Toggle for Read Aloud
+  const handleToggleConnection = useCallback((id, newDesiredState) => {
+    setConexions(prev => prev.map(c =>
+      c.id === id
+        ? { ...c, connected: newDesiredState, connectedDate: newDesiredState ? new Date().toISOString() : c.connectedDate }
+        : c
+    ));
+  }, []);
+
   const toggleReading = useCallback(() => setIsReading(prev => !prev), []);
   const ReadAloudToggle = () => (
     <button onClick={toggleReading} style={{ fontSize: '16px', padding: '8px', marginLeft: '10px' }} title="Ativar/Desativar leitura em voz alta">
@@ -148,23 +181,32 @@ function App() {
         <Header><ReadAloudToggle /></Header>
         <ThemeToggle setTheme={setTheme} />
         <Routes>
-          {/* Home agora recebe o productionData formatado do App.js e uma função para mudar o dataset */}
           <Route
             path="/"
             element={
               <Home
-                productionData={formattedProductionData} // Passa o productionData já formatado
-                initialProductionData={initialProductionData} // Passa os dados brutos para Home escolher qual dataset
-                onDatasetChange={setChosenDatasetIndex} // Home pode notificar App.js qual dataset escolheu
+                productionData={formattedProductionData}
+                initialProductionData={initialProductionData}
+                onDatasetChange={setChosenDatasetIndex}
               />
             }
           />
-          <Route path="/conexoes" element={<Conexoes conexions={conexions} setConexions={setConexions} onConnectDevice={handleConnectDevice} onRemoveDevice={handleRemoveDevice} onToggleConnection={handleToggleConnection} />} />
+          <Route
+            path="/conexoes"
+            element={
+              <Conexoes
+                conexions={conexions}
+                setConexions={setConexions}
+                onConnectDevice={handleConnectDevice}
+                onRemoveDevice={handleRemoveDevice}
+                onToggleConnection={handleToggleConnection}
+              />
+            }
+          />
           <Route path="/contato" element={<Contato />} />
           <Route path="/configuracoes" element={<Configuracoes isReading={isReading} toggleReading={toggleReading} />} />
           <Route path="/login" element={<Logar />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          {/* Chat agora recebe o productionData formatado do App.js */}
           <Route path="/chat" element={<Chat onConnectDevice={handleConnectDevice} productionData={formattedProductionData} setTheme={setTheme} />} />
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />

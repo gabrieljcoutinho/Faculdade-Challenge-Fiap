@@ -12,59 +12,96 @@ import comandosData from '../../data/commands.json';
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const normalizeText = t => t.trim().toLowerCase();
 
-// MODIFICATION START: Changed 'datasetsOptions' to 'datasets'
 const formatProductionSummary = d => !d || !Array.isArray(d.labels) || !Array.isArray(d.datasets) || !d.datasets.length
   ? "Dados de produção solar não disponíveis."
   : (() => {
-    const { labels } = d, data = d.datasets[0].data.slice(0, labels.length); // Changed 'datasetsOptions' to 'datasets'
+    const { labels } = d, data = d.datasets[0].data.slice(0, labels.length);
     let total = 0, table = "Produção solar (Opção 1):\n\n| Hora | Produção (kWh) |\n|-------|---------------|\n";
     labels.forEach((h, i) => { const v = data[i] || 0; total += v; table += `| ${h} | ${v} |\n`; });
     return table + `\nProdução total: ${total} kWh`;
   })();
-// MODIFICATION END
 
 const Chat = ({ onConnectDevice, productionData, setTheme }) => {
-  const [messages, setMessages] = useState([]), [newMessage, setNewMessage] = useState(''), [loading, setLoading] = useState(false), [firstInteraction, setFirstInteraction] = useState(true), [isFadingOut, setIsFadingOut] = useState(false);
-  const messagesEndRef = useRef(null), inputRef = useRef(null), navigate = useNavigate();
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [firstInteraction, setFirstInteraction] = useState(true);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+
+  const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => inputRef.current?.focus(), []);
   useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
+
+  const connectionCommands = [
+    { type: 'TV', keywords: ['tv', 'televisao', 'televisão'] },
+    { type: 'Ar-Condicionado', keywords: ['ar-condicionado', 'ar condicionado'] },
+    { type: 'Lâmpada', keywords: ['lampada', 'lâmpada'] },
+    { type: 'Airfry', keywords: ['airfry'] },
+    { type: 'Carregador', keywords: ['carregador'] }
+  ];
 
   const handleSendMessage = async e => {
     e.preventDefault();
     const texto = newMessage.trim();
     if (!texto) return;
     if (firstInteraction) setFirstInteraction(false);
+
     setMessages(m => [...m, { role: 'user', content: texto }]);
     setNewMessage('');
     setLoading(true);
     inputRef.current?.focus();
 
     const textoNormalizado = normalizeText(texto);
-    const connectionCommands = [
-      { type: 'TV', triggers: ['conectar tv', 'ligar tv', 'conectar televisão', 'oconectar tv', 'oconectar televisão'] },
-      { type: 'Ar-Condicionado', triggers: ['conectar ar-condicionado', 'ligar ar-condicionado', 'conectar ar condicionado', 'ligar ar condicionado', 'oconectar ar-condicionado', 'oconectar ar condicionado'] },
-      { type: 'Lâmpada', triggers: ['conectar lâmpada', 'ligar lâmpada', 'conectar lampada', 'ligar lampada', 'oconectar lâmpada', 'oconectar lampada'] },
-      { type: 'Airfry', triggers: ['conectar airfry', 'ligar airfry', 'oconectar airfry'] },
-      { type: 'Carregador', triggers: ['conectar carregador', 'ligar carregador', 'oconectar carregador'] }
-    ];
 
-    let handledByLocalCommand = false, botResponseContent = '';
+    let handledByLocalCommand = false;
+    let botResponseContent = '';
 
-    for (const cmd of connectionCommands) {
-      if (cmd.triggers.some(t => textoNormalizado.startsWith(normalizeText(t)))) {
-        const trigger = cmd.triggers.find(t => textoNormalizado.startsWith(normalizeText(t)));
-        const remaining = texto.substring(trigger.length).trim();
-        const fullName = remaining ? `${cmd.type} ${remaining.charAt(0).toUpperCase() + remaining.slice(1)}` : cmd.type;
-        onConnectDevice?.(cmd.type, fullName);
-        botResponseContent = `${fullName} conectado!`;
-        handledByLocalCommand = true;
-        break;
+    // Detecta comando "conectar [a] <tipo> [nome personalizado]"
+    if (textoNormalizado.startsWith('conectar')) {
+      let afterConectar = textoNormalizado.slice('conectar'.length).trim();
+
+      // Remove 'a ' se existir ("conectar a tv sala" -> "tv sala")
+      if (afterConectar.startsWith('a ')) {
+        afterConectar = afterConectar.slice(2).trim();
+      }
+
+      const partes = afterConectar.split(' ');
+
+      if (partes.length >= 1) {
+        let tipoEncontrado = null;
+
+        for (const cmd of connectionCommands) {
+          if (cmd.keywords.includes(partes[0])) {
+            tipoEncontrado = cmd.type;
+            break;
+          }
+        }
+
+        if (tipoEncontrado) {
+          const nomePersonalizadoRaw = partes.slice(1).join(' ');
+          const nomePersonalizado = nomePersonalizadoRaw
+            ? nomePersonalizadoRaw.charAt(0).toUpperCase() + nomePersonalizadoRaw.slice(1)
+            : '';
+          const nomeCompleto = nomePersonalizado ? `${tipoEncontrado} ${nomePersonalizado}` : tipoEncontrado;
+
+          // Chama a função passada por props para conectar dispositivo
+          onConnectDevice?.(tipoEncontrado, nomeCompleto);
+
+          botResponseContent = `${nomeCompleto} conectado!`;
+          handledByLocalCommand = true;
+        }
       }
     }
 
+    // Se não foi comando local de conexão, tenta comandos estáticos
     if (!handledByLocalCommand) {
-      const foundCmd = comandosData.comandos.find(c => c.triggers?.some(t => normalizeText(t) === textoNormalizado));
+      const foundCmd = comandosData.comandos.find(c =>
+        c.triggers?.some(t => normalizeText(t) === textoNormalizado)
+      );
+
       if (foundCmd) {
         if (foundCmd.resposta.startsWith("REDIRECT:")) {
           setIsFadingOut(true);
@@ -73,8 +110,11 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
           inputRef.current?.focus();
           return;
         }
+
         switch (foundCmd.resposta) {
-          case 'PRODUCAO_GRAFICO': botResponseContent = formatProductionSummary(productionData); break;
+          case 'PRODUCAO_GRAFICO':
+            botResponseContent = formatProductionSummary(productionData);
+            break;
           case 'TEMA_ESCURO':
             document.body.classList.replace('light-theme', 'dark-theme');
             localStorage.setItem('theme', 'dark-theme');
@@ -87,7 +127,8 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
             setTheme?.('light-theme');
             botResponseContent = "Tema claro ativado! ☀️";
             break;
-          default: botResponseContent = foundCmd.resposta;
+          default:
+            botResponseContent = foundCmd.resposta;
         }
         handledByLocalCommand = true;
       }
@@ -109,6 +150,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       return;
     }
 
+    // Chamada API Gemini para respostas mais gerais
     try {
       const geminiMessages = [
         { role: 'model', parts: [{ text: "Ok, entendi. Como posso ajudar?" }] },
@@ -147,10 +189,17 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         )}
         {messages.filter(m => m.role !== 'system').map((m, i) => (
           <div key={i} className={`message ${m.role === 'user' ? 'user' : 'bot'}`}>
-            <span className="message-bubble" dangerouslySetInnerHTML={{ __html: m.role === 'assistant' ? marked.parse(m.content) : m.content }} />
+            <span
+              className="message-bubble"
+              dangerouslySetInnerHTML={{ __html: m.role === 'assistant' ? marked.parse(m.content) : m.content }}
+            />
           </div>
         ))}
-        {loading && <div className="message bot"><span className="message-bubble">Digitando...</span></div>}
+        {loading && (
+          <div className="message bot">
+            <span className="message-bubble">Digitando...</span>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSendMessage} className="message-input-form">
