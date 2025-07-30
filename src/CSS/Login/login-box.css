@@ -50,8 +50,9 @@
     font-size: 1rem;
 }
 
-.password-input-group {
+.inputSenha {
     position: relative;
+    width: 310px;
 }
 
 .password-toggle-button {
