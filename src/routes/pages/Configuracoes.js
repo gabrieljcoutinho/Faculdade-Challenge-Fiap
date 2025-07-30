@@ -17,16 +17,57 @@ import atendimentoImg from '../../imgs/imgConfiguracao/atendimento.png';
 const Configuracoes = ({ isReading, toggleReading }) => {
   const navigate = useNavigate();
 
+  // Estado do tema
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light-theme');
 
   // Estado para mostrar/ocultar confirmação de logout
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+  // Estado para o ícone do topo esquerdo
+  const [iconTopo, setIconTopo] = useState(null);
+
   useEffect(() => {
+    // Aplica o tema no body e salva no localStorage
     document.body.classList.remove('light-theme', 'dark-theme');
     document.body.classList.add(theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // Função para definir o ícone conforme horário
+  const atualizarIconeTopo = () => {
+    const now = new Date();
+    const hora = now.getHours();
+
+    if (hora >= 6 && hora < 17) {
+      setIconTopo('sol');
+    } else if (hora === 17) {
+      setIconTopo('por-do-sol');
+    } else {
+      setIconTopo('lua');
+    }
+  };
+
+  useEffect(() => {
+    atualizarIconeTopo();
+
+    // Atualiza o ícone a cada 1 minuto para manter sincronizado com o horário
+    const interval = setInterval(atualizarIconeTopo, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Função para renderizar o ícone do topo esquerdo
+  const renderIconTopo = () => {
+    switch (iconTopo) {
+      case 'sol':
+        return <span role="img" aria-label="Dia">☀️</span>;
+      case 'por-do-sol':
+        return <span role="img" aria-label="Pôr do sol">🌇</span>;
+      case 'lua':
+        return <span role="img" aria-label="Noite">🌙</span>;
+      default:
+        return null;
+    }
+  };
 
   const toggleTheme = () => setTheme(prev => (prev === 'light-theme' ? 'dark-theme' : 'light-theme'));
 
@@ -38,12 +79,29 @@ const Configuracoes = ({ isReading, toggleReading }) => {
   };
 
   return (
-    <div className="configuracoes-overlay">
-      <button className="fechar-btn" onClick={() => navigate(-1)} title="Fechar configurações">✕</button>
+    <div className="configuracoes-overlay" style={{ position: 'relative' }}>
+      {/* Ícone no topo esquerdo */}
+      <div
+        className="icone-topo-esquerdo"
+
+        style={{
+          position: 'absolute',
+          top: 10,
+          left: 10,
+          fontSize: '28px',
+          userSelect: 'none',
+          cursor: 'default',
+        }}
+      >
+        {renderIconTopo()}
+      </div>
+
+      <button className="fechar-btn" onClick={() => navigate(-1)} title="Fechar configurações">
+        ✕
+      </button>
 
       <div className="conteudo-configuracoes">
         <div className="btn-container">
-
           <button className="comando-btn" title="Comandos" onClick={() => navigate('/comandosChat')}>
             <img src={comandosImg} alt="Comandos" className="imgComando" />
           </button>
@@ -71,14 +129,15 @@ const Configuracoes = ({ isReading, toggleReading }) => {
           </button>
 
           <div className="top-buttons" style={{ marginTop: '10px' }}>
-            <button title="Logar" onClick={() => navigate('/login')}>{logar}</button>
+            <button title="Logar" onClick={() => navigate('/login')}>
+              {logar}
+            </button>
 
             {/* Botão de deslogar abre confirmação */}
             <button title="Deslogar" onClick={() => setShowLogoutConfirm(true)}>
               {deslogar}
             </button>
           </div>
-
         </div>
       </div>
 
@@ -88,8 +147,12 @@ const Configuracoes = ({ isReading, toggleReading }) => {
           <div className="modal-logout-content">
             <p>Você quer deslogar?</p>
             <div>
-              <button onClick={handleLogoutConfirm} className="btn-sim">Sim</button>
-              <button onClick={() => setShowLogoutConfirm(false)} className="btn-nao">Não</button>
+              <button onClick={handleLogoutConfirm} className="btn-sim">
+                Sim
+              </button>
+              <button onClick={() => setShowLogoutConfirm(false)} className="btn-nao">
+                Não
+              </button>
             </div>
           </div>
         </div>
