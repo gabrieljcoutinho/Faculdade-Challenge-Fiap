@@ -1,0 +1,83 @@
+/* src/CSS/NotFound/index.css */
+
+/* body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    color: #ffffff;
+    height: 100vh;
+    overflow: hidden;
+} */
+
+.notfound-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 85vh;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 1.2s ease-in-out;
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    color: #ffffff;
+}
+
+.notfound-title {
+    font-size: 7rem;
+    font-weight: 900;
+    color: #ff4444;
+    text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.6);
+    margin-bottom: 0.2em;
+}
+
+.notfound-text {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #e0e0e0;
+}
+
+.notfound-link {
+    font-size: 1.2rem;
+    color: #00e0ff;
+    background-color: transparent;
+    border: 2px solid #00e0ff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.notfound-link:hover {
+    background-color: #00e0ff;
+    color: #000;
+    transform: scale(1.05);
+    box-shadow: 0 0 12px #00e0ff;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .notfound-title {
+        font-size: 4rem;
+    }
+
+    .notfound-text {
+        font-size: 1.2rem;
+    }
+
+    .notfound-link {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+}
