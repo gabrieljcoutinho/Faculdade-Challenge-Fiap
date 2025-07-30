@@ -40,6 +40,7 @@
 .fundoComimgAntesDografico.morning-bg::before {
     background-image: url('../../imgs//imgHome/placaManha.jpg');
     /* Morning image (6 AM - 11:59 AM) */
+    transition: opacity 1.5s ease-in-out;
 }
 
 .fundoComimgAntesDografico.afternoon-bg::before {
