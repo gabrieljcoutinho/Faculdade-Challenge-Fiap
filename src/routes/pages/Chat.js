@@ -61,31 +61,33 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
     // Detecta comando "conectar [a] <tipo> [nome personalizado]"
     if (textoNormalizado.startsWith('conectar')) {
-      let afterConectar = textoNormalizado.slice('conectar'.length).trim();
+      // Usa texto original para preservar maiúsculas no nome personalizado
+      let afterConectarOriginal = texto.slice('conectar'.length).trim();
 
       // Remove 'a ' se existir ("conectar a tv sala" -> "tv sala")
-      if (afterConectar.startsWith('a ')) {
-        afterConectar = afterConectar.slice(2).trim();
+      if (afterConectarOriginal.toLowerCase().startsWith('a ')) {
+        afterConectarOriginal = afterConectarOriginal.slice(2).trim();
       }
 
-      const partes = afterConectar.split(' ');
+      const partesOriginal = afterConectarOriginal.split(' ');
+      const partesLower = partesOriginal.map(p => p.toLowerCase());
 
-      if (partes.length >= 1) {
+      if (partesLower.length >= 1) {
         let tipoEncontrado = null;
 
         for (const cmd of connectionCommands) {
-          if (cmd.keywords.includes(partes[0])) {
+          if (cmd.keywords.includes(partesLower[0])) {
             tipoEncontrado = cmd.type;
             break;
           }
         }
 
         if (tipoEncontrado) {
-          const nomePersonalizadoRaw = partes.slice(1).join(' ');
-          const nomePersonalizado = nomePersonalizadoRaw
-            ? nomePersonalizadoRaw.charAt(0).toUpperCase() + nomePersonalizadoRaw.slice(1)
-            : '';
-          const nomeCompleto = nomePersonalizado ? `${tipoEncontrado} ${nomePersonalizado}` : tipoEncontrado;
+          // Pega nome personalizado preservando letras maiúsculas/minúsculas originais
+          const nomePersonalizadoRaw = partesOriginal.slice(1).join(' ');
+          const nomeCompleto = nomePersonalizadoRaw
+            ? `${tipoEncontrado} ${nomePersonalizadoRaw}`
+            : tipoEncontrado;
 
           // Chama a função passada por props para conectar dispositivo
           onConnectDevice?.(tipoEncontrado, nomeCompleto);
