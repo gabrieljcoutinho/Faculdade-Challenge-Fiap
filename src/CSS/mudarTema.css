@@ -198,3 +198,7 @@ body.dark .cadastro-info h2 {
 body.dark .cadastro-info li {
     color: #e0e0e0;
 }
+
+body.dark .pDescricaoHelpCenter {
+    background-color: red;
+}
