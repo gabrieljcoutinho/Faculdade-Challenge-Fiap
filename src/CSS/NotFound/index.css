@@ -1,0 +1,101 @@
+.notfound-container {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    color: #ffffff;
+}
+
+/* Container central */
+.notfound-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Título 404 */
+.notfound-title {
+    font-size: 6rem;
+    color: #ff6b6b;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+    animation: bounce 1.5s infinite alternate;
+}
+
+/* Texto informativo */
+.notfound-text {
+    font-size: 1.8rem;
+    margin: 20px 0;
+    color: #f1f1f1;
+    animation: fadeInText 2s ease-in-out;
+}
+
+/* Link estilizado */
+.notfound-link {
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    color: #0ff0fc;
+    background-color: transparent;
+    border: 2px solid #0ff0fc;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.notfound-link:hover {
+    background-color: #0ff0fc;
+    color: #1f1c2c;
+    box-shadow: 0 0 15px #0ff0fc;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes fadeInText {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .notfound-title {
+        font-size: 4rem;
+    }
+
+    .notfound-text {
+        font-size: 1.2rem;
+    }
+
+    .notfound-link {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
