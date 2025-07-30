@@ -61,6 +61,8 @@ const Home = () => {
                 setBackgroundClass('night-bg');
             }
 
+
+
         };
 
         updateBackground(); // Set initial background
