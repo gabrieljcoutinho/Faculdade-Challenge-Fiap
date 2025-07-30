@@ -1,18 +1,22 @@
-// src/routes/pages/NotFound.js
 import React from 'react';
-import { Link } from 'react-router-dom';
-import '../../CSS/NotFound/index.css'; // Importe o novo arquivo CSS
+import '../../CSS/NotFound/index.css';
+import { Link } from 'react-router-dom'; // Importe o Link para navegação
 
-const NotFound = () => {
+function NotFound() {
   return (
-    <div className="notfound-container">
-      <h1 className="notfound-title">404</h1>
-      <p className="notfound-text">Página não encontrada.</p>
-      <Link to="/" className="notfound-link">
-        Voltar para a página inicial
-      </Link>
+    <div className="divNotFound">
+      <div className="containerNotFound">
+        <h1 className="tituloNotFound">Erro 404! Ih, deu ruim!</h1>
+        <p className="textoNotFound">
+          <span className='styleBoneco404'>¯\_(ツ)_/¯</span></p>
+        <div className="botoesNotFound">
+          <Link to="/" className="botaoVoltar">Voltar para a página inicial</Link>
+          {/* Opcional: Adicionar um link para o sitemap ou ajuda */}
+          {/* <Link to="/sitemap" className="botaoOutro">Ver o mapa do site</Link> */}
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 export default NotFound;
