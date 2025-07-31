@@ -28,9 +28,8 @@ import ComandosChat from './routes/pages/ComandosChat';
 import EsqueciSenha from './routes/pages/EsqueciSenha';
 import HelpCenter from '../src/routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
-import NotFound from './routes/pages/NotFound'; // Página de erro 404
+import NotFound from './routes/pages/NotFound';
 
-// Global Read Aloud Hook
 const useReadAloud = (isReading) => {
   useEffect(() => {
     if (!isReading) return window.speechSynthesis.cancel();
@@ -140,16 +139,15 @@ function App() {
     }
   };
 
-  const handleConnectDevice = useCallback((tipo, nomeCompleto) => {
-    const [icon, backgroundColor] = getIconAndColorByType(tipo);
+  const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor) => {
     setConexions(prev => {
       const exists = prev.some(c => c.text === nomeCompleto);
       if (exists) return prev;
       return [...prev, {
         id: window.crypto.randomUUID(),
         text: nomeCompleto,
-        icon,
-        backgroundColor,
+        icon: iconSrc, // Usa o ícone passado como argumento
+        backgroundColor, // Usa a cor de fundo passada como argumento
         connected: true,
         connectedDate: new Date().toISOString(),
         bluetoothDeviceInfo: null
@@ -213,7 +211,7 @@ function App() {
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />
           <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
-          <Route path="*" element={<NotFound />} /> {/* Rota 404 */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>

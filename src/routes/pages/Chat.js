@@ -9,6 +9,13 @@ import '../../CSS/Chat/mediaScreen.css';
 import sendBtn from '../../imgs/imgChat/sendBtn.png';
 import comandosData from '../../data/commands.json';
 
+// Importe as imagens dos ícones para que o chat possa acessá-las
+import tvIcon from '../../imgs/imgConexao/TV.png';
+import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
+import airfry from '../../imgs/imgConexao/airfry.png';
+import lampIcon from '../../imgs/imgConexao/lampada.png';
+import carregador from '../../imgs/imgConexao/carregador.png';
+
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const normalizeText = t => t.trim().toLowerCase();
 
@@ -20,6 +27,15 @@ const formatProductionSummary = d => !d || !Array.isArray(d.labels) || !Array.is
     labels.forEach((h, i) => { const v = data[i] || 0; total += v; table += `| ${h} | ${v} |\n`; });
     return table + `\nProdução total: ${total} kWh`;
   })();
+
+// Mapeamento dos tipos de dispositivo para seus ícones
+const deviceIconMap = {
+  'TV': tvIcon,
+  'Ar-Condicionado': airConditionerIcon,
+  'Lâmpada': lampIcon,
+  'Airfry': airfry,
+  'Carregador': carregador,
+};
 
 const Chat = ({ onConnectDevice, productionData, setTheme }) => {
   const [messages, setMessages] = useState([]);
@@ -61,10 +77,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
     // Detecta comando "conectar [a] <tipo> [nome personalizado]"
     if (textoNormalizado.startsWith('conectar')) {
-      // Usa texto original para preservar maiúsculas no nome personalizado
       let afterConectarOriginal = texto.slice('conectar'.length).trim();
-
-      // Remove 'a ' se existir ("conectar a tv sala" -> "tv sala")
       if (afterConectarOriginal.toLowerCase().startsWith('a ')) {
         afterConectarOriginal = afterConectarOriginal.slice(2).trim();
       }
@@ -83,17 +96,25 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         }
 
         if (tipoEncontrado) {
-          // Pega nome personalizado preservando letras maiúsculas/minúsculas originais
           const nomePersonalizadoRaw = partesOriginal.slice(1).join(' ');
           const nomeCompleto = nomePersonalizadoRaw
             ? `${tipoEncontrado} ${nomePersonalizadoRaw}`
             : tipoEncontrado;
 
-          // Chama a função passada por props para conectar dispositivo
-          onConnectDevice?.(tipoEncontrado, nomeCompleto);
+          // Obtém o ícone correspondente ao tipo de dispositivo
+          const iconSrc = deviceIconMap[tipoEncontrado];
 
-          botResponseContent = `${nomeCompleto} conectado!`;
-          handledByLocalCommand = true;
+          if (iconSrc) {
+            // Chama a função passada por props para conectar o dispositivo, enviando o ícone
+            onConnectDevice?.(nomeCompleto, iconSrc);
+
+            botResponseContent = `${nomeCompleto} conectado!`;
+            handledByLocalCommand = true;
+          } else {
+            botResponseContent = `Não foi possível encontrar o ícone para ${tipoEncontrado}. O aparelho foi conectado com um ícone padrão.`;
+            onConnectDevice?.(nomeCompleto, null); // Conecta sem ícone ou com um padrão
+            handledByLocalCommand = true;
+          }
         }
       }
     }

@@ -85,7 +85,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
         if (conexions.some(c => c.text.toLowerCase() === nome.toLowerCase())) {
           updateUiState({ errorMessage: `Já existe um aparelho chamado "${nome}".` });
         } else {
-          onConnectDevice(nome, nome, iconSrc, actualBgColor);
+          onConnectDevice(nome, iconSrc, actualBgColor);
         }
       }
       window.history.replaceState({}, document.title, pathname);
@@ -144,7 +144,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
       if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
         updateUiState({ errorMessage: `Já existe um aparelho chamado "${deviceName}".`, isSearchingBluetooth: false }); return;
       }
-      onConnectDevice(deviceName, deviceName, guessedIcon, availableColors[0]);
+      // Passa o ícone adivinhado e a cor de fundo para a função de conexão
+      onConnectDevice(deviceName, guessedIcon, availableColors[0]);
       closeAllModals();
     } catch (error) {
       console.error('Erro ao conectar via Bluetooth:', error);
@@ -158,7 +159,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
 
     isEdit ?
       setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate, accumulatedSeconds: c.accumulatedSeconds } : c)) :
-      onConnectDevice(newConexion.text, newConexion.text, newConexion.icon, newConexion.backgroundColor);
+      onConnectDevice(newConexion.text, newConexion.icon, newConexion.backgroundColor);
     closeAllModals();
   };
 
@@ -362,12 +363,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
         {devicesToDisplay.length === 0 ? (
           <div className="placeholder-image-container">
             <br /><br /><br />
-            {/* INÍCIO DA ALTERAÇÃO */}
             <div className="image-wrapper">
               <img src={semConexao} alt="Nenhum aparelho aqui" className="placeholder-image" />
               <div className="light-effect"></div> {/* Novo elemento para o efeito de luz */}
             </div>
-            {/* FIM DA ALTERAÇÃO */}
             <p className="placeholder-text">
               {activeList === 'connected' ? 'Nenhum aparelho conectado no momento.' : 'Nenhum aparelho desconectado no momento.'}
             </p>
@@ -417,51 +416,66 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
             <div className="detalhes-content">
               <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
               <h3>{selectedConexion.text}</h3>
-              <p title="Status" alt="Status Aparelho">Status: {selectedConexion.connected ? 'Conectado' : 'Desconectado'}</p>
+              <p>ID do Aparelho: {selectedConexion.id.substring(0, 8)}...</p>
               {selectedConexion.connected && (
                 <>
-                  <p>{tempoAparelhoConectado}: {formatDate(selectedConexion.connectedDate)}</p>
-                  <p>{duracaoConecxao}{getConnectionDuration(selectedConexion.connectedDate, selectedConexion.accumulatedSeconds)}</p>
+                  <p>Status: Conectado</p>
+                  <p className="tempo-aparelho-conectado">
+                    <span className="info-label">{tempoAparelhoConectado}:</span>
+                    <span className="duracao-conexao">{getConnectionDuration(selectedConexion.connectedDate, selectedConexion.accumulatedSeconds)}</span>
+                  </p>
+                </>
+              )}
+              {!selectedConexion.connected && (
+                <>
+                  <p>Status: Desconectado</p>
+                  <p>Última vez conectado: {formatDate(selectedConexion.connectedDate)}</p>
                 </>
               )}
               <div className="detalhes-actions">
-                <button onClick={() => toggleConnection(selectedConexion.id, !selectedConexion.connected)} className={`toggle-connection-button ${selectedConexion.connected ? 'disconnect' : 'connect'}`}>
-                  {selectedConexion.connected ? 'Desconectar' : 'Conectar'}
-                </button>
-                <button onClick={() => { handleEditClick(selectedConexion); updateUiState({ selectedConexion: null }); }} className="edit-button-details" disabled={!selectedConexion.connected}>
+                <button className="edit-button-detalhes" onClick={() => handleEditClick(selectedConexion)} disabled={!selectedConexion.connected}>
+                  <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
                   {btnEditar}
                 </button>
-                <button onClick={() => { removeConexion(selectedConexion.id); updateUiState({ selectedConexion: null }); }} className="remove-button-details">
+                <button className="remove-button-detalhes" onClick={() => removeConexion(selectedConexion.id)}>
                   {btnRemover}
                 </button>
+                <label className="switch switch-detalhes">
+                  <input type="checkbox" checked={selectedConexion.connected} onChange={(e) => toggleConnection(selectedConexion.id, e.target.checked)} />
+                  <span className="slider round"></span>
+                </label>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {showConfirmDialog && (
-        <div className="modal-overlay" onClick={handleCancelRemove}>
-          <div className="confirmation-dialog" onClick={e => e.stopPropagation()}>
-            <p>{mensagemExcluirAparelho}</p>
-            <div className="confirmation-actions">
-              <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
-              <button onClick={handleCancelRemove} className="cancel-button">Não</button>
-            </div>
-          </div>
-        </div>
-      )}
+  {showConfirmDialog && (
+  <div className="modal-overlay">
+    <div className="confirmation-dialog">
+      <p className="mensagem-remover-aparelho">{mensagemExcluirAparelho}</p>
+      <div className="confirmation-actions">
+        <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
+        <button onClick={handleCancelRemove} className="cancel-button">Não</button>
+      </div>
+    </div>
+  </div>
+)}
 
       {visibleQRCode && (
-        <div className="modal-overlay" onClick={() => updateUiState({ visibleQRCode: null })} title="Qrcode">
-          <div className="qr-code-modal" onClick={e => e.stopPropagation()}>
-            <h3 title="">QR Code do aparelho: {visibleQRCode.text}</h3>
-            <br />
-            <QRCodeCanvas
-              value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
-              size={256} level="H" includeMargin={true}
-            />
-            <button className="close-button" onClick={() => updateUiState({ visibleQRCode: null })} title="Fechar QrCde">X</button>
+        <div className="modal-overlay" onClick={closeAllModals}>
+          <div className="qrcode-modal" onClick={e => e.stopPropagation()}>
+            <button className="close-button" onClick={closeAllModals}>X</button>
+            <h3>QR Code para {visibleQRCode.text}</h3>
+            <div className="qrCodeAparelho">
+              <QRCodeCanvas
+                value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
+                size={256}
+                style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+                id="qrCodeId"
+              />
+            </div>
+            <p className="instrucaoQrcode">Escaneie o QR code para conectar o aparelho.</p>
           </div>
         </div>
       )}
