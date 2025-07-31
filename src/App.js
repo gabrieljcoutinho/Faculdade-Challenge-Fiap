@@ -135,7 +135,8 @@ function App() {
       case 'charger':
         return [carregador, '#FFE4E1'];
       default:
-        return [lampIcon, '#CCCCCC'];
+      return [lampIcon, 'transparent'];
+
     }
   };
 
