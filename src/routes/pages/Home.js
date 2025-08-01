@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip } from 'chart.js';
 import initialProductionData from '../../data/graficoHomeApi.json';
-import { tituloPrincipal, graficos, dados, subTitulo, impacto, economia, descricaoEconomia, arvoresEquivalentes, absorcaoPorArvore, reducaoPoluicao, impactoDescricao } from '../../constants/Home/index.js';
+import { tituloPrincipal, graficos,relatorioDiário, dados, subTitulo, impacto, economia, descricaoEconomia, arvoresEquivalentes, absorcaoPorArvore, reducaoPoluicao, impactoDescricao } from '../../constants/Home/index.js';
 import logoGmail from '../../imgs/imgHome/Logogmail.png';
 import logoWhatsapp from '../../imgs/imgHome/Logowhatsapp.png';
 import logoInstagram from '../../imgs/imgHome/Logoinstagram.png';
@@ -211,7 +211,7 @@ const Home = () => {
                     <p className='paragrafoFonteGrafico'>{dados}</p>
                     <section className="daily-report-section" style={{ marginTop: '20px' }}>
                         <button onClick={() => setShowReport(true)} style={{ padding: '10px 20px', cursor: 'pointer', borderRadius: '5px', border: 'none', backgroundColor: '#252525', color: '#fff', fontWeight: 'bold' }}>
-                            Relatório Diário
+                            {relatorioDiário}
                         </button>
                     </section>
                 </section>
