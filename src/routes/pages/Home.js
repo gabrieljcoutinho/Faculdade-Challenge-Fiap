@@ -37,16 +37,16 @@ const COLOR_PALETTES = {
          border: ["#0FF0FC", "#1E90FF"],
         pie: ['#ADD8E6', '#87CEFA', '#00BFFF', '#1E90FF', 'rgba(31,81,255,0.7)', '#0000FF', '#000080']
     },
-    green: {
-        background: ["rgba(144,238,144,0.3)", "rgba(50,205,50,0.2)"],
-       border: ["#90EE90", "#32CD32"],
-        pie: ['#90EE90', '#3CB371', '#2E8B57', '#008000', '#006400', '#556B2F']
-    },
+  green: {
+        background: ["rgba(144,238,144,0.3)", "rgba(50,205,50,0.2)"],
+        border: ["#90EE90", "#32CD32"],
+        pie: ['#008000', '#228B22', '#3CB371', '#8FBC8F', '#98FB98', '#ADFF2F', '#7CFC00']
+    },
     pink: {
-        background: ["rgba(255,192,203,0.3)", "rgba(255,105,180,0.2)"],
-        border: ["#FFC0CB", "#FF69B4"],
-        pie: ['#FFC0CB', '#FF69B4', '#FF1493', '#C71585', '#8B008B', '#4B0082']
-    },
+        background: ["rgba(255,192,203,0.3)", "rgba(255,105,180,0.2)"],
+        border: ["#FFC0CB", "#FF69B4"],
+        pie: ['#FF69B4', '#FF1493', '#C71585', '#8B008B', '#4B0082', '#6A5ACD']
+    },
 orange: {
     background: ["rgba(255,165,0,0.3)", "rgba(255,140,0,0.2)"],
     border: ["#FFA500", "#FF8C00"],
