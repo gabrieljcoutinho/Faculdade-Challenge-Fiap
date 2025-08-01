@@ -2,6 +2,8 @@ export const tituloPrincipal ="Produção Atual"
 
 export const graficos = 'Tipo de Gráfico:';
 
+export const relatorioDiário = 'Relatório Diário';
+
 export const dados = 'Fonte: Placas GoodWe';
 
 export const subTitulo = 'Clima e Previsão';
