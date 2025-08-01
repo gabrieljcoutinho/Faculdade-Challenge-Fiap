@@ -1,5 +1,7 @@
 export const mensagemLogar = ' Já tem uma conta?  Faça login '
 
+export const titulo = ' Crie sua conta '
+
 export const subTitulo = ' Comece sua jornada ! '
 
 export const recursos = '🚀 Acesse todos os nossos recursos.'
