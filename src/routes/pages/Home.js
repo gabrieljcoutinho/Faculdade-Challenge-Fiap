@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip } from 'chart.js';
 import initialProductionData from '../../data/graficoHomeApi.json';
-import { tituloPrincipal, graficos,relatorioDiário, dados, subTitulo, impacto, economia, descricaoEconomia, arvoresEquivalentes, absorcaoPorArvore, reducaoPoluicao, impactoDescricao } from '../../constants/Home/index.js';
+import { tituloPrincipal, graficos, relatorioDiário, dados, subTitulo, impacto, economia, descricaoEconomia, arvoresEquivalentes, absorcaoPorArvore, reducaoPoluicao, impactoDescricao } from '../../constants/Home/index.js';
 import logoGmail from '../../imgs/imgHome/Logogmail.png';
 import logoWhatsapp from '../../imgs/imgHome/Logowhatsapp.png';
 import logoInstagram from '../../imgs/imgHome/Logoinstagram.png';
@@ -22,21 +22,45 @@ import '../../CSS/Home/impactoAmbiental.css';
 import '../../CSS/Home/mediaScreen.css';
 import '../../CSS/Home/weatherAnimations.css';
 import '../../CSS/Home/relatorioConsumoDiario.css';
-import'../../CSS/Home/imgAtrazDoGrafico.css'
+import '../../CSS/Home/imgAtrazDoGrafico.css';
+import '../../CSS/Home/paletaCoresGrafico.css';
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
-const COLORS = ['#ADD8E6', '#87CEFA', '#00BFFF', '#1E90FF', 'rgba(31,81,255,0.7)', '#0000FF', '#000080'];
 const WEATHER_ICONS = { Ensolarado: '☀️', Nublado: '☁️', Chuvoso: '🌧️', 'Parcialmente Nublado': '⛅', Limpo: '🌙' };
 const CO2_PER_KWH = 0.85;
 const CO2_PER_TREE = 22;
+
+const COLOR_PALETTES = {
+    blue: {
+        background: ["rgba(15,240,252,0.3)", "rgba(30,144,255,0.2)"],
+         border: ["#0FF0FC", "#1E90FF"],
+        pie: ['#ADD8E6', '#87CEFA', '#00BFFF', '#1E90FF', 'rgba(31,81,255,0.7)', '#0000FF', '#000080']
+    },
+    green: {
+        background: ["rgba(144,238,144,0.3)", "rgba(50,205,50,0.2)"],
+       border: ["#90EE90", "#32CD32"],
+        pie: ['#90EE90', '#3CB371', '#2E8B57', '#008000', '#006400', '#556B2F']
+    },
+    pink: {
+        background: ["rgba(255,192,203,0.3)", "rgba(255,105,180,0.2)"],
+        border: ["#FFC0CB", "#FF69B4"],
+        pie: ['#FFC0CB', '#FF69B4', '#FF1493', '#C71585', '#8B008B', '#4B0082']
+    },
+orange: {
+    background: ["rgba(255,165,0,0.3)", "rgba(255,140,0,0.2)"],
+    border: ["#FFA500", "#FF8C00"],
+    pie: ['#FFA500', '#FFD700', '#FF7F50', '#F08080', '#CD5C5C', '#B22222', '#F0E68C']
+}
+};
 
 const Home = () => {
     const [currentChartType, setCurrentChartType] = useState(() => localStorage.getItem('preferredChartType') || 'line');
     const [expandedChartType, setExpandedChartType] = useState(null);
     const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
     const [showReport, setShowReport] = useState(false);
-    const [backgroundClass, setBackgroundClass] = useState(''); // New state for background class
+    const [backgroundClass, setBackgroundClass] = useState('');
+    const [colorPalette, setColorPalette] = useState(() => localStorage.getItem('colorPalette') || 'blue');
 
     const chartRef = useRef(null);
 
@@ -46,8 +70,8 @@ const Home = () => {
     }, []);
 
     useEffect(() => localStorage.setItem('preferredChartType', currentChartType), [currentChartType]);
+    useEffect(() => localStorage.setItem('colorPalette', colorPalette), [colorPalette]);
 
-    // Effect to set background image based on time
     useEffect(() => {
         const updateBackground = () => {
             const now = new Date();
@@ -60,14 +84,12 @@ const Home = () => {
             } else {
                 setBackgroundClass('night-bg');
             }
-
-
         };
 
-        updateBackground(); // Set initial background
-        const intervalId = setInterval(updateBackground, 60 * 60 * 1000); // Update every hour
+        updateBackground();
+        const intervalId = setInterval(updateBackground, 60 * 60 * 1000);
 
-        return () => clearInterval(intervalId); // Clear interval on unmount
+        return () => clearInterval(intervalId);
     }, []);
 
     const productionData = useMemo(() => {
@@ -157,16 +179,42 @@ const Home = () => {
     const getChartData = useCallback(type => {
         if (!productionData.datasets?.length) return { labels: [], datasets: [] };
         const base = productionData.datasets[0];
-        const common = { label: base.label, data: base.data, borderColor: "#1E90FF", borderWidth: 1 };
+        const selectedPalette = COLOR_PALETTES[colorPalette];
 
-        if (type === 'line') return { labels: productionData.labels, datasets: [{ ...common, backgroundColor: "rgba(30,144,255,0.2)", fill: true, tension: 0.3 }] };
-        if (type === 'bar') return { labels: productionData.labels, datasets: [{ ...common, backgroundColor: COLORS }] };
+        if (!selectedPalette) return productionData;
+
+        const common = {
+            label: base.label,
+            data: base.data,
+            borderColor: selectedPalette.border[0],
+            borderWidth: 1
+        };
+
+        if (type === 'line') return {
+            labels: productionData.labels,
+            datasets: [{ ...common, backgroundColor: selectedPalette.background[0], fill: true, tension: 0.3 }]
+        };
+
+        if (type === 'bar') return {
+            labels: productionData.labels,
+            datasets: [{ ...common, backgroundColor: selectedPalette.pie }]
+        };
+
         if (type === 'pie') {
-            const lLabels = productionData.labels.slice(0, 7), lData = base.data.slice(0, 7);
-            return { labels: lLabels, datasets: [{ ...common, data: lData, backgroundColor: COLORS.slice(0, lLabels.length) }] };
+            const lLabels = productionData.labels.slice(0, 7),
+            lData = base.data.slice(0, 7);
+            return {
+                labels: lLabels,
+                datasets: [{
+                    ...common,
+                    data: lData,
+                    backgroundColor: selectedPalette.pie.slice(0, lLabels.length)
+                }]
+            };
         }
+
         return productionData;
-    }, [productionData]);
+    }, [productionData, colorPalette]);
 
     const ChartComponent = useMemo(() => ({ line: Line, bar: Bar, pie: Pie })[currentChartType], [currentChartType]);
     const ExpandedChartComponent = useMemo(() => ({ line: Line, bar: Bar, pie: Pie })[expandedChartType], [expandedChartType]);
@@ -185,11 +233,7 @@ const Home = () => {
 
     return (
         <div className="home-container">
-
-            <div className={`fundoComimgAntesDografico ${backgroundClass}`}>
-                {/* <h1 className='teste1'></h1> */}
-            </div>
-
+            <div className={`fundoComimgAntesDografico ${backgroundClass}`}></div>
             <main className="main-content">
                 <section className="production-section">
                     <h2 className='tituloPrincipalHome'>{tituloPrincipal}</h2>
@@ -203,6 +247,22 @@ const Home = () => {
                             ))}
                         </div>
                     </div>
+
+                    <div className="color-palette-selector">
+                        <label className='paletaCores'>Paleta de Cores</label>
+                        <div className="palette-buttons">
+                            {Object.keys(COLOR_PALETTES).map(paletteName => (
+                                <button
+                                    key={paletteName}
+                                    onClick={() => setColorPalette(paletteName)}
+                                    className={colorPalette === paletteName ? 'active-palette' : ''}
+                                    style={{ backgroundColor: COLOR_PALETTES[paletteName].pie[0] }}
+                                    title={paletteName}
+                                ></button>
+                            ))}
+                        </div>
+                    </div>
+
                     <div style={{ backgroundColor: '#252525', borderRadius: '8px', padding: '15px' }}>
                         <div className="chart-container" onClick={() => setExpandedChartType(currentChartType)}>
                             {ChartComponent && <ChartComponent data={getChartData(currentChartType)} options={getChartOptions(currentChartType)} ref={chartRef} />}
