@@ -5,7 +5,7 @@ import '../../CSS/Cadastro/input.css';
 import '../../CSS/Cadastro/password.css';
 import '../../CSS/Cadastro/links.css';
 import '../../CSS/Cadastro/error.css';
-import { mensagemLogar, subTitulo, recursos, comunidade, suporte } from '../../constants/Cadastro/index.js';
+import { mensagemLogar, subTitulo, recursos, comunidade, suporte, titulo} from '../../constants/Cadastro/index.js';
 
 const Cadastro = () => {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Cadastro = () => {
   return (
     <main className="cadastro-container">
       <section className="cadastro-box">
-        <h1>Crie sua conta</h1>
+      <h1>{titulo}</h1>
         <form className="cadastro-form" onSubmit={handleSubmit}>
           {['nome', 'email'].map(f => (
             <div key={f} className="input-group">
