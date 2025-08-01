@@ -224,40 +224,62 @@
     box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
 }
 
-/* Estilo para o botão de Editar */
-.edit-button-details {
-    background-color: #f39c12;
-    /* Laranja dourado para editar */
+/* Botão Editar Aparelho */
+.edit-button-detalhes {
+    background-color: #00BFFF;
+    /* Laranja dourado */
     color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(15, 240, 252, 0.3);
 }
 
-.edit-button-details:hover {
-    background-color: #e67e22;
+.edit-button-detalhes:hover {
+    background-color: #00BFFF;
+    /* Laranja mais escuro */
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(243, 156, 18, 0.3);
+    box-shadow: 0 6px 15px rgba(15, 240, 252, 0.4);
 }
 
-.edit-button-details:disabled {
+.edit-button-detalhes:disabled {
     background-color: #bdc3c7;
-    /* Cinza claro quando desabilitado */
     cursor: not-allowed;
     opacity: 0.8;
     transform: none;
     box-shadow: none;
 }
 
-/* Estilo para o botão de Remover */
-.remove-button-details {
-    background-color: #95a5a6;
-    /* Cinza médio para remover */
+/* Botão Remover Aparelho */
+.remove-button-detalhes {
+    background-color: #FF073A;
+    ;
+    /* Cinza médio */
     color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(149, 165, 166, 0.3);
 }
 
-.remove-button-details:hover {
+.remove-button-detalhes:hover {
     background-color: #7f8c8d;
+    /* Cinza escuro */
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(149, 165, 166, 0.3);
+    box-shadow: 0 6px 15px rgba(149, 165, 166, 0.4);
 }
+
 
 /* Media Queries para responsividade aprimorada */
 @media (max-width: 600px) {
