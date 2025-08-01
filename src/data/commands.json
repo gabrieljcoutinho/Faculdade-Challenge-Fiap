@@ -217,7 +217,7 @@
                "quais os comandos",
                 "quais os comandos ?"
       ],
-      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Mudar para o modo escuro** / **claro**: Para trocar o tema da interface.\n- **Ir para [Página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções\n\n  "
+      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Tema claro ou Tema escuro** / **claro**: Para trocar o tema da interface.\n- **Ir para [Página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções\n\n  "
     },
 
 
