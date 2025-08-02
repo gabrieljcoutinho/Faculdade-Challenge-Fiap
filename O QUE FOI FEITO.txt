@@ -21,6 +21,7 @@ O usuário pode adicionar dispositivos de duas formas: via conexão Bluetooth (s
  com opções de gerar QR Code (para facilitar o compartilhamento), editar, excluir ou desativar.
 Os dispositivos conectados são organizados em duas listas: conectados e desconectados. Quando um aparelho é desativado,
  ele é automaticamente movido para a seção de desconectados, podendo ser reativado a qualquer momento. Também é possível reordenar os dispositivos arrastando-os na tela.
+ Na tela há uma imagem que msotra que nã otem nenhum aprelho coenctado para o usuário sber e para não deixar simplesmente em branco.
 
 Chatbot
 Foi implementado um sistema de mensagens com recursos básicos de chat. Além disso, o chatbot integra uma API
