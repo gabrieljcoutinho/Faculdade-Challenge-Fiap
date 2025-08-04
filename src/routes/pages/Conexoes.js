@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useLocation } from 'react-router-dom';
 
-// Consolidated CSS imports (still necessary for functionality)
+// Consolidated CSS imports
 import '../../CSS/Conexao/conexao.css';
 import '../../CSS/Conexao/mediaScreen.css';
 import '../../CSS/Conexao/edit.css';
@@ -38,7 +38,7 @@ import manual from '../../imgs/imgConexao/manual.png';
 // Constants imports
 import { tituloPrincipal, adicionarAparelho, escolherIcone, escolherCorDefundo, btnBluetooth,
   procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado,
-detalhesaparelhoAmpliados, mensagemExcluirAparelho, btnEditar, btnRemover, tempoAparelhoConectado, duracaoConecxao
+  detalhesaparelhoAmpliados, mensagemExcluirAparelho, btnEditar, btnRemover, tempoAparelhoConectado, duracaoConecxao
 } from '../../constants/Conexao/index.js';
 
 // Constants
@@ -144,7 +144,6 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
       if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
         updateUiState({ errorMessage: `Já existe um aparelho chamado "${deviceName}".`, isSearchingBluetooth: false }); return;
       }
-      // Passa o ícone adivinhado e a cor de fundo para a função de conexão
       onConnectDevice(deviceName, guessedIcon, availableColors[0]);
       closeAllModals();
     } catch (error) {
@@ -347,7 +346,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
                 </button>
                 <button onClick={abrirModoManual} className="add-button-styled" style={{ marginTop: '10px' }} disabled={isSearchingBluetooth} type="button">
                   <img src={manual} alt="Bluetooth" style={{ width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' }} />
-                 {adicicionarAparelhoManualmente}
+                  {adicicionarAparelhoManualmente}
                 </button>
                 {isSearchingBluetooth && (<p className="connecting-message">{esperaMenuBluetoothAbrir}</p>)}
                 <div className="form-actions">
@@ -450,17 +449,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
         </div>
       )}
 
-  {showConfirmDialog && (
-  <div className="modal-overlay">
-    <div className="confirmation-dialog">
-      <p className="mensagem-remover-aparelho">{mensagemExcluirAparelho}</p>
-      <div className="confirmation-actions">
-        <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
-        <button onClick={handleCancelRemove} className="cancel-button">Não</button>
-      </div>
-    </div>
-  </div>
-)}
+      {showConfirmDialog && (
+        <div className="modal-overlay">
+          <div className="confirmation-dialog">
+            <p className="mensagem-remover-aparelho">{mensagemExcluirAparelho}</p>
+            <div className="confirmation-actions">
+              <button onClick={handleConfirmRemove} className="confirm-button">Sim</button>
+              <button onClick={handleCancelRemove} className="cancel-button">Não</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {visibleQRCode && (
         <div className="modal-overlay" onClick={closeAllModals}>
