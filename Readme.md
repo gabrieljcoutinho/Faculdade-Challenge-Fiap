@@ -1,18 +1,31 @@
-# Projeto GoodWe - Aplicação React para Gerenciamento de Energia Solar
+# 🌞 Projeto GoodWe - Aplicação React para Gerenciamento de Energia Solar
 
-## Descrição do Projeto
+## 📌 Visão Geral
 
 Realizei um projeto acadêmico baseado em uma proposta apresentada por uma empresa durante uma visita à faculdade. O objetivo da atividade era compreender as dificuldades que a empresa vem enfrentando e, a partir disso, os alunos deveriam desenvolver soluções tecnológicas que pudessem colaborar com a melhoria de seus processos.
 
-As soluções poderiam ser projetos completos ou mais simples, utilizando linguagens como React, Python ou até mesmo o uso de inteligência artificial. A empresa escolhida para esse projeto foi a **GoodWe**, que atua no setor de energia solar.
+O objetivo era identificar os principais desafios enfrentados pela empresa e, a partir disso, desenvolver soluções tecnológicas criativas e funcionais. A aplicação simula um **app mobile** para o **gerenciamento inteligente de energia solar residencial**, com funcionalidades modernas e acessíveis. Todo o sistema foi construído utilizando **React**, com simulações via APIs fake e integração com inteligência artificial.
 
-Diante do desafio, desenvolvi uma aplicação completa utilizando a tecnologia **React**. O projeto foi publicado na web, permitindo que qualquer pessoa com o link possa acessá-lo diretamente.
+> 🔗 O projeto está publicado na web e pode ser acessado publicamente por meio de um link: https://challenge-fiap-nine.vercel.app/
 
 ---
 
 ## Proposta do Sistema
 
 A aplicação simula um aplicativo para celular voltado para o gerenciamento e automação de recursos relacionados à energia solar.
+
+---
+
+## 🧠 Tecnologias Utilizadas
+
+- **React** (Framework principal)
+- **TypeScript**
+- **React Router DOM**
+- **CSS Modules** e animações
+- **Chart.js** (Gráficos)
+- **APIs Fake (JSON Server ou simuladas)**
+- **Text-to-Speech API** (para acessibilidade)
+- **Integração com API de IA (como OpenAI)**
 
 ---
 
@@ -28,73 +41,126 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
 
 ---
 
-### Seção Home
+## 📱 Funcionalidades Principais
 
-- Exibe um gráfico que pode ser alternado entre três tipos diferentes:
-  - Gráfico de linha
-  - Gráfico de barras
-  - Gráfico de pizza
+### 1. 🏠 Home
 
-- Os dados apresentados são obtidos a partir de uma API simulada (fake API), que fornece as informações necessárias para gerar as visualizações.
-
-- Abaixo do gráfico, há informações sobre o clima atual e a previsão do tempo.
-
-- Mais abaixo, uma área destinada a mostrar o impacto positivo do uso de placas solares, destacando os benefícios econômicos e ambientais, como a economia gerada ao adotar essa energia.
-
----
-
-### Seção Conexões de Aparelhos
-
-- O usuário pode adicionar dispositivos de duas formas:
-  - Por meio de conexão Bluetooth real (busca dispositivos próximos)
-  - De forma manual
-
-- Na forma manual, o usuário pode inserir um nome para o aparelho, escolher um ícone representativo e selecionar uma cor de fundo personalizada.
-
-- Após o cadastro, o aparelho aparece como conectado e oferece funcionalidades adicionais:
-  - Geração de QR Code para facilitar a conexão por outros usuários
-  - Opções para editar, excluir ou desativar o dispositivo
-  - Opções de Ativar e Desativar os aprelhos conectados
----
-
-### Seção Chatbot
-
-- Sistema de mensagens com funcionalidades básicas de um chat tradicional (envio e recebimento de mensagens).
-
-- Integrado a uma API personalizada de perguntas e respostas específicas e a uma API real de IA para responder outras perguntas.
-
-- Reconhece comandos como “conectar aparelho”, “mudar de página”, entre outros, respondendo automaticamente com instruções úteis, simulando um assistente virtual.
+- Alternância entre **3 tipos de gráficos**:
+  - Linha
+  - Barras
+  - Pizza
+- Dados gerados por uma API simulada.
+- Exibição de **clima atual e previsão do tempo**.
+- **Imagem dinâmica** de fundo do gráfico muda conforme o período do dia (manhã, tarde ou noite).
+- Destaque para **impactos positivos da energia solar**, com foco ambiental e econômico.
 
 ---
 
-### Seção Contato
+### 2. 🔌 Conexões de Aparelhos
 
-- Formulário simples para que o usuário informe nome, e-mail e mensagem.
-
-- Recursos adicionais:
-  - Botão de acesso às perguntas frequentes
-  - Opção para envio de arquivos junto com a mensagem, facilitando a comunicação com a empresa
-
----
-
-### Seção Configurações
-
-Implementa seis funcionalidades principais:
-
-1. Botão que leva o usuário para uma página com todos os comandos especiais reconhecidos pelo sistema.
-2. Central de ajuda para suporte ao usuário.
-3. Ativação de comandos de voz que permite que qualquer texto clicado na tela seja lido em voz alta, promovendo acessibilidade.
-4. Opção de modo claro/escuro para alternar o tema conforme preferência.
-5. Funcionalidade de login e logout, com suporte para autenticação via e-mail/senha, Google ou Facebook.
-6. Opção “esqueci minha senha” que redireciona para uma página de recuperação (ainda não funcional).
+- Dispositivos podem ser adicionados de duas formas:
+  - **Conexão Bluetooth simulada**
+  - **Cadastro manual personalizado** (nome, ícone e cor de fundo)
+- Recursos disponíveis após o cadastro:
+  - **Geração de QR Code**
+  - **Edição, exclusão e desativação**
+  - **Ativação/desativação dos aparelhos**
+  - **Organização dos dispositivos em listas de "conectados" e "desconectados"**
+  - **Drag and drop** para reordenação dos dispositivos
+- Caso não haja dispositivos, é exibida uma **ilustração indicativa**, evitando deixar a tela em branco.
 
 ---
 
-## Detalhes Técnicos e Usabilidade
+### 3. 🤖 Chatbot
 
-- Projeto responsivo para mobile e desktop, com preferência para dispositivos móveis, facilitando o acesso quando o usuário estiver fora de casa.
+- Chat com envio e recebimento de mensagens em tempo real.
+- Integração com:
+  - **API personalizada** (respostas específicas)
+  - **API real de IA** (respostas gerais e simulação de assistente virtual)
+- Reconhecimento de comandos inteligentes, como:
+  - "conectar aparelho"
+  - "mudar de página"
+  - "listar comandos"
+- Animação de transição ao mudar de página, com efeito de "apagando e acendendo".
 
-- As APIs utilizadas são simuladas, pois não temos acesso total às informações reais da empresa.
+---
 
-- O sistema possui pequenas animações para melhorar a experiência do usuário.
-  Por exemplo, no chat, ao digitar comandos para mudar de página (como “Home”), o usuário é redirecionado com uma animação suave de apagar e acender a página.
+### 4. 📬 Contato
+
+- Formulário com os seguintes campos:
+  - Nome
+  - E-mail
+  - Mensagem
+- Funcionalidades adicionais:
+  - **Envio de arquivos**
+  - Acesso à seção de **perguntas frequentes (FAQ)**
+
+---
+
+### 5. ⚙️ Configurações
+
+Conjunto de ferramentas essenciais para o usuário:
+
+1. **Lista de Comandos Reconhecidos**
+2. **Central de Ajuda**
+3. **Acessibilidade com leitura em voz alta** (textos clicáveis)
+4. **Alternância entre modo Claro e Escuro**
+5. **Sistema de autenticação (fake)**:
+   - E-mail e senha
+   - Login via Google ou Facebook
+6. **Página de recuperação de senha** (em desenvolvimento)
+
+---
+
+## 💡 Diferenciais
+
+- ✅ **Responsividade total**: funciona em dispositivos móveis e desktops.
+- 🌐 **Publicação Web** com acesso facilitado.
+- 🎨 **Animações suaves** em trocas de página, enriquecendo a experiência do usuário.
+- 📊 **Gráficos interativos** e informativos.
+- 🎤 **Comandos de voz e acessibilidade inclusa**
+- 🔐 **Simulação de login realista** com autenticação via múltiplas opções.
+- 🧠 **Chat com IA**, incluindo comandos inteligentes e contexto dinâmico.
+
+---
+
+## 📁 Estrutura de Pastas (Exemplo)
+
+```
+/src
+│
+├── /components
+│   ├── Header
+│   ├── Charts
+│   ├── Chatbot
+│   ├── DeviceManager
+│   └── ...
+│
+├── /pages
+│   ├── Home
+│   ├── Conexoes
+│   ├── Chatbot
+│   ├── Contato
+│   └── Configuracoes
+│
+├── /api
+├── /utils
+├── /assets
+├── /styles
+└── App.tsx
+```
+
+---
+
+## ⚠️ Limitações
+
+- APIs utilizadas são **fictícias**, pois os dados reais da empresa não foram disponibilizados.
+- Algumas funcionalidades estão **em desenvolvimento**, como recuperação de senha.
+
+---
+
+## 👨‍🎓 Conclusão
+
+Este projeto foi desenvolvido com o intuito de aplicar na prática conceitos de **desenvolvimento web, acessibilidade, automação, usabilidade, e integração com IA**, tudo isso dentro de um cenário realista e desafiador proposto por uma empresa do mercado.
+
+---
