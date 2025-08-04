@@ -19,11 +19,12 @@ import carregador from '../../imgs/imgConexao/carregador.png';
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const normalizeText = t => t.trim().toLowerCase();
 
+// A alteração foi feita aqui: a string ' (Opção 1)' foi removida da tabela.
 const formatProductionSummary = d => !d || !Array.isArray(d.labels) || !Array.isArray(d.datasets) || !d.datasets.length
   ? "Dados de produção solar não disponíveis."
   : (() => {
     const { labels } = d, data = d.datasets[0].data.slice(0, labels.length);
-    let total = 0, table = "Produção solar (Opção 1):\n\n| Hora | Produção (kWh) |\n|-------|---------------|\n";
+    let total = 0, table = "Produção solar:\n\n| Hora | Produção (kWh) |\n|-------|---------------|\n";
     labels.forEach((h, i) => { const v = data[i] || 0; total += v; table += `| ${h} | ${v} |\n`; });
     return table + `\nProdução total: ${total} kWh`;
   })();
@@ -80,8 +81,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     window.addEventListener('beforeunload', handleUnload);
     return () => window.removeEventListener('beforeunload', handleUnload);
   }, []);
-
-  // ... (todo seu handleSendMessage e lógica permanece igual)
 
   const connectionCommands = [
     { type: 'TV', keywords: ['tv', 'televisao', 'televisão'] },
