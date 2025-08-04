@@ -26,7 +26,9 @@ Os dispositivos conectados são organizados em duas listas: conectados e descone
 Chatbot
 Foi implementado um sistema de mensagens com recursos básicos de chat. Além disso, o chatbot integra uma API
  personalizada de perguntas e respostas específicas, e uma API de inteligência artificial para respostas gerais. Ele reconhece
- comandos como “conectar aparelho” ou “mudar de página”, interagindo como um assistente virtual.
+ comandos como “conectar aparelho” ou “mudar de página”, interagindo como um assistente virtual. É possivel
+ atraves de certos comandos como (Conectar tv) fazer co mque nas Conexoes esse aprelho conecte, sendo possivel
+ adiconar um horario ou temp oapra coenctar como por exemplo: Conectar TV daqui 30 minutos.
 
 Contato
 Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos
