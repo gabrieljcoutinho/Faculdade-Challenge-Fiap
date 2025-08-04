@@ -70,7 +70,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     return () => window.removeEventListener('beforeunload', handleUnload);
   }, []);
 
-  // Comandos reconhecidos e seus aliases
   const connectionCommands = [
     { type: 'TV', keywords: ['tv', 'televisao', 'televisão'] },
     { type: 'Ar-Condicionado', keywords: ['ar-condicionado', 'ar condicionado'] },
@@ -79,15 +78,12 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     { type: 'Carregador', keywords: ['carregador'] }
   ];
 
-  // Função para extrair tempo (em ms) do texto, ex: "daqui 10 minutos", "daqui 30 segundos", "daqui 2 horas"
   function parseTimeDelay(text) {
     const regex = /daqui\s+(\d+)\s*(hora|horas|minuto|minutos|segundo|segundos)/i;
     const match = text.match(regex);
     if (!match) return null;
-
     const value = parseInt(match[1], 10);
     const unit = match[2].toLowerCase();
-
     if (unit.startsWith('hora')) return value * 3600000;
     if (unit.startsWith('minuto')) return value * 60000;
     if (unit.startsWith('segundo')) return value * 1000;
@@ -111,42 +107,35 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     let botResponseContent = '';
 
     if (textoNormalizado.startsWith('conectar')) {
-      // Retira "conectar" e espaços
       let afterConectar = texto.slice(9).trim();
-
-      // Detecta qual aparelho
+      const delayMs = parseTimeDelay(afterConectar);
+      const palavras = afterConectar.split(' ').filter(Boolean);
       let tipoEncontrado = null;
-      let dispositivoPalavra = afterConectar.split(' ')[0].toLowerCase();
+      let nomeExtra = '';
 
       for (const cmd of connectionCommands) {
-        if (cmd.keywords.includes(dispositivoPalavra)) {
+        if (palavras.length > 0 && cmd.keywords.includes(palavras[0].toLowerCase())) {
           tipoEncontrado = cmd.type;
+          nomeExtra = palavras.slice(1).join(' ').replace(/daqui.*$/, '').trim();
           break;
         }
       }
 
       if (tipoEncontrado) {
-        // Extrai delay se existir
-        const delayMs = parseTimeDelay(afterConectar);
-
         const iconSrc = deviceIconMap[tipoEncontrado];
-        const nomeCompleto = tipoEncontrado;
+        const nomeCompleto = nomeExtra ? `${tipoEncontrado} ${nomeExtra}` : tipoEncontrado;
 
         if (delayMs === null) {
-          // Conecta na hora
           onConnectDevice?.(nomeCompleto, iconSrc);
           botResponseContent = `${nomeCompleto} conectado ✅`;
-          handledByLocalCommand = true;
         } else {
-          // Agenda conexão após delay
           botResponseContent = `Ok, vou conectar o ${nomeCompleto} daqui a ${delayMs / 60000 >= 1 ? (delayMs / 60000) + ' minutos' : (delayMs / 1000) + ' segundos'}. ⏳`;
-          handledByLocalCommand = true;
-
           setTimeout(() => {
             onConnectDevice?.(nomeCompleto, iconSrc);
             setMessages(m => [...m, { role: 'assistant', content: `${nomeCompleto} conectado agora! ✅` }]);
           }, delayMs);
         }
+        handledByLocalCommand = true;
       } else {
         botResponseContent = 'Dispositivo não reconhecido para conexão.';
         handledByLocalCommand = true;
@@ -161,7 +150,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       if (foundCmd) {
         if (foundCmd.resposta.startsWith("REDIRECT:")) {
           setIsFadingOut(true);
-          setTimeout(() => navigate(foundCmd.resposta.split(":")[1]), 700);
+          setTimeout(() => navigate(foundCmd.resposta.split(":"[1])), 700);
           setLoading(false);
           inputRef.current?.focus();
           return;
@@ -169,7 +158,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
         switch (foundCmd.resposta) {
           case 'PRODUCAO_GRAFICO':
-            // Coloque aqui sua função para formatar dados de produção
             botResponseContent = 'Aqui está o gráfico de produção (funcionalidade não implementada nesta demo).';
             break;
           case 'TEMA_ESCURO':
@@ -200,6 +188,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       return;
     }
 
+    // fallback para Gemini (IA)
     if (!GEMINI_API_KEY) {
       setMessages(m => [...m, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
       setLoading(false);
