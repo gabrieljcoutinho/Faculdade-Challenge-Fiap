@@ -10,16 +10,16 @@ A aplicação conta com um cabeçalho fixo que direciona o usuário para as segu
 
 Home
 Nesta seção, o usuário pode alternar entre três tipos de gráficos (linha, barras e pizza) onde há um botao que mostra a produção do gráfico
-sem ser pelo chat ta,bem, gerados com base em dados de uma API simulada.
+sem ser pelo chat tambem, gerados com base em dados de uma API simulada.
 Abaixo dos gráficos, são exibidas informações do clima atual e previsão do tempo. Ao final da página, há uma área dedicada a destacar os
  impactos positivos do uso de energia solar, com foco nos benefícios econômicos e ambientais.. Atraz do gráfico, há uma imgagem simbolizando
-o período do dia, se for de manhã vai ser um sol mais fraco, se for de tarde um sol masi forte e e for À noite nã ovai ter sol
+o período do dia, se for de manhã vai ser um sol mais fraco, se for de tarde um sol masi forte e e for à noite nã ovai ter sol
 
 Conexões de Aparelhos
 O usuário pode adicionar dispositivos de duas formas: via conexão Bluetooth (simulada) ou manualmente. Na adição manual,
 é possível escolher o nome, ícone e cor de fundo do dispositivo. Após o cadastro, o aparelho aparece como conectado,
  com opções de gerar QR Code (para facilitar o compartilhamento), editar, excluir ou desativar.
-Os dispositivos conectados são organizados em duas listas: conectados e desconectados. Quando um aparelho é desativado,
+Os dispositivos conectados são organizados em duas listas: conectados e desconectados. Quando um aparelho é descoenctado,
  ele é automaticamente movido para a seção de desconectados, podendo ser reativado a qualquer momento. Também é possível reordenar os dispositivos arrastando-os na tela.
  Na tela há uma imagem que msotra que nã otem nenhum aprelho coenctado para o usuário sber e para não deixar simplesmente em branco.
 
@@ -28,11 +28,11 @@ Foi implementado um sistema de mensagens com recursos básicos de chat. Além di
  personalizada de perguntas e respostas específicas, e uma API de inteligência artificial para respostas gerais. Ele reconhece
  comandos como “conectar aparelho” ou “mudar de página”, interagindo como um assistente virtual. É possivel
  atraves de certos comandos como (Conectar tv) fazer co mque nas Conexoes esse aprelho conecte, sendo possivel
- adiconar um horario ou temp oapra coenctar como por exemplo: Conectar TV daqui 30 minutos.
+ adiconar um horario ou tempo pra conetcar como por exemplo: Conectar TV daqui 30 minutos ou COenctar Tv sala daqui 10 segundo.
 
 Contato
 Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos
- e acessar uma seção de perguntas frequentes, facilitando a comunicação com a empresa.
+ e um botao para acessar uma seção de perguntas frequentes, facilitando a comunicação com a empresa.
 
 
 Configurações
