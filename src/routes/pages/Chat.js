@@ -37,11 +37,22 @@ const deviceIconMap = {
   'Carregador': carregador,
 };
 
+const CHAT_STORAGE_KEY = 'chat_messages';
+const FIRST_INTERACTION_KEY = 'chat_firstInteraction';
+
 const Chat = ({ onConnectDevice, productionData, setTheme }) => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(() => {
+    const saved = sessionStorage.getItem(CHAT_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [firstInteraction, setFirstInteraction] = useState(() => {
+    const saved = sessionStorage.getItem(FIRST_INTERACTION_KEY);
+    return saved === null ? true : JSON.parse(saved);
+  });
+
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [firstInteraction, setFirstInteraction] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   const messagesEndRef = useRef(null);
@@ -50,6 +61,27 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
   useEffect(() => inputRef.current?.focus(), []);
   useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
+
+  // Salva as mensagens e o firstInteraction no sessionStorage ao mudarem
+  useEffect(() => {
+    sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
+  }, [messages]);
+
+  useEffect(() => {
+    sessionStorage.setItem(FIRST_INTERACTION_KEY, JSON.stringify(firstInteraction));
+  }, [firstInteraction]);
+
+  // Limpa o sessionStorage quando recarregar a página (F5 ou reload)
+  useEffect(() => {
+    const handleUnload = () => {
+      sessionStorage.removeItem(CHAT_STORAGE_KEY);
+      sessionStorage.removeItem(FIRST_INTERACTION_KEY);
+    };
+    window.addEventListener('beforeunload', handleUnload);
+    return () => window.removeEventListener('beforeunload', handleUnload);
+  }, []);
+
+  // ... (todo seu handleSendMessage e lógica permanece igual)
 
   const connectionCommands = [
     { type: 'TV', keywords: ['tv', 'televisao', 'televisão'] },
@@ -75,7 +107,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     let handledByLocalCommand = false;
     let botResponseContent = '';
 
-    // Detecta comando "conectar [a] <tipo> [nome personalizado]"
     if (textoNormalizado.startsWith('conectar')) {
       let afterConectarOriginal = texto.slice('conectar'.length).trim();
       if (afterConectarOriginal.toLowerCase().startsWith('a ')) {
@@ -101,25 +132,21 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
             ? `${tipoEncontrado} ${nomePersonalizadoRaw}`
             : tipoEncontrado;
 
-          // Obtém o ícone correspondente ao tipo de dispositivo
           const iconSrc = deviceIconMap[tipoEncontrado];
 
           if (iconSrc) {
-            // Chama a função passada por props para conectar o dispositivo, enviando o ícone
             onConnectDevice?.(nomeCompleto, iconSrc);
-
             botResponseContent = `${nomeCompleto} conectado!`;
             handledByLocalCommand = true;
           } else {
             botResponseContent = `Não foi possível encontrar o ícone para ${tipoEncontrado}. O aparelho foi conectado com um ícone padrão.`;
-            onConnectDevice?.(nomeCompleto, null); // Conecta sem ícone ou com um padrão
+            onConnectDevice?.(nomeCompleto, null);
             handledByLocalCommand = true;
           }
         }
       }
     }
 
-    // Se não foi comando local de conexão, tenta comandos estáticos
     if (!handledByLocalCommand) {
       const foundCmd = comandosData.comandos.find(c =>
         c.triggers?.some(t => normalizeText(t) === textoNormalizado)
@@ -173,7 +200,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       return;
     }
 
-    // Chamada API Gemini para respostas mais gerais
     try {
       const geminiMessages = [
         { role: 'model', parts: [{ text: "Ok, entendi. Como posso ajudar?" }] },
