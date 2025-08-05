@@ -465,12 +465,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
         <div className="modal-overlay" onClick={closeAllModals}>
           <div className="qrcode-modal" onClick={e => e.stopPropagation()}>
             <button className="close-button" onClick={closeAllModals}>X</button>
-            <h3>QR Code para {visibleQRCode.text}</h3>
+            <h3 className='tituloQrcode'>QR Code para {visibleQRCode.text}</h3>
+            <br />
             <div className="qrCodeAparelho">
-              <QRCodeCanvas
+              <QRCodeCanvas className='qrcode'
                 value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
                 size={256}
-                style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
                 id="qrCodeId"
               />
             </div>
