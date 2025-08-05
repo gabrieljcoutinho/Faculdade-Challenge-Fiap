@@ -202,3 +202,34 @@ body.dark .cadastro-info li {
 body.dark .pDescricaoHelpCenter {
     background-color: red;
 }
+
+
+
+/*---------------------------------------------------------------------------------------------------------------*/
+
+/* Botões de sugestão - estilo padrão */
+.suggestion-button {
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Tema escuro: fundo branco e texto preto */
+body.dark-theme .suggestion-button {
+    background-color: var(--branco);
+    color: var(--preto);
+}
+
+/* Tema claro: fundo preto e texto branco */
+body.light-theme .suggestion-button {
+    background-color: var(--preto);
+    color: var(--branco);
+}
+
+/* Hover para ambos os temas (opcionalmente ajustável) */
+.suggestion-button:hover {
+    opacity: 0.85;
+}
