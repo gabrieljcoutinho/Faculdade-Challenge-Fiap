@@ -29,6 +29,8 @@ Foi implementado um sistema de mensagens com recursos básicos de chat. Além di
  comandos como “conectar aparelho” ou “mudar de página”, interagindo como um assistente virtual. É possivel
  atraves de certos comandos como (Conectar tv) fazer co mque nas Conexoes esse aprelho conecte, sendo possivel
  adiconar um horario ou tempo pra conetcar como por exemplo: Conectar TV daqui 30 minutos ou COenctar Tv sala daqui 10 segundo.
+ Antes de inserir o coamndo, ha botoes já programados para colcoar o comando como COenctar TV ai a pessao clciar e
+ autoamticamente aprece no input d ochat ai ela pode ja enviar ou colcoar masi detalhes
 
 Contato
 Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos
