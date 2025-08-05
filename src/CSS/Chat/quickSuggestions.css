@@ -7,15 +7,17 @@
 }
 
 .suggestion-button {
-    background-color: #f0f0f0;
+    background-color: #252525;
     border: none;
     border-radius: 20px;
     padding: 6px 14px;
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    color: #fff;
 }
 
 .suggestion-button:hover {
-    background-color: #ddd;
+    background-color: #ccc;
+    color: #252525;
 }
