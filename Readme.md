@@ -147,7 +147,7 @@ Conjunto de ferramentas essenciais para o usuário:
 ├── /utils
 ├── /assets
 ├── /styles
-└── App.tsx
+└── App.js
 ```
 
 ---
