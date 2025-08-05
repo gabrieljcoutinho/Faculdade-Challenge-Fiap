@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import '../CSS/Header/header.css';
 import '../CSS/Header/menu.css';
 
 import home from '../imgs/imgHeader/home.png';
@@ -49,7 +48,6 @@ const Header = () => {
         <span
           id="menuIcon"
           onClick={toggleMenu}
-          className='btnBurguer'
           ref={buttonRef}
           title='Abrir Menu'
         >☰</span>
