@@ -52,15 +52,8 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
   useEffect(() => inputRef.current?.focus(), []);
   useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
-
-  useEffect(() => {
-    sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
-  }, [messages]);
-
-  useEffect(() => {
-    sessionStorage.setItem(FIRST_INTERACTION_KEY, JSON.stringify(firstInteraction));
-  }, [firstInteraction]);
-
+  useEffect(() => sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages)), [messages]);
+  useEffect(() => sessionStorage.setItem(FIRST_INTERACTION_KEY, JSON.stringify(firstInteraction)), [firstInteraction]);
   useEffect(() => {
     const handleUnload = () => {
       sessionStorage.removeItem(CHAT_STORAGE_KEY);
@@ -94,6 +87,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     e.preventDefault();
     const texto = newMessage.trim();
     if (!texto) return;
+
     if (firstInteraction) setFirstInteraction(false);
 
     setMessages(m => [...m, { role: 'user', content: texto }]);
@@ -102,7 +96,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
     inputRef.current?.focus();
 
     const textoNormalizado = normalizeText(texto);
-
     let handledByLocalCommand = false;
     let botResponseContent = '';
 
@@ -135,6 +128,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
             setMessages(m => [...m, { role: 'assistant', content: `${nomeCompleto} conectado agora! ✅` }]);
           }, delayMs);
         }
+
         handledByLocalCommand = true;
       } else {
         botResponseContent = 'Dispositivo não reconhecido para conexão.';
@@ -149,8 +143,9 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
       if (foundCmd) {
         if (foundCmd.resposta.startsWith("REDIRECT:")) {
+          const redirectPath = foundCmd.resposta.split(":")[1];
           setIsFadingOut(true);
-          setTimeout(() => navigate(foundCmd.resposta.split(":"[1])), 700);
+          setTimeout(() => navigate(redirectPath), 700);
           setLoading(false);
           inputRef.current?.focus();
           return;
@@ -188,7 +183,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
       return;
     }
 
-    // fallback para Gemini (IA)
     if (!GEMINI_API_KEY) {
       setMessages(m => [...m, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
       setLoading(false);
@@ -202,16 +196,24 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] })),
         { role: 'user', parts: [{ text: texto }] }
       ];
+
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contents: geminiMessages, generationConfig: { temperature: 0.9, topP: 0.8, maxOutputTokens: 1000 } })
       });
+
       const data = await res.json();
-      if (!res.ok) setMessages(m => [...m, { role: 'assistant', content: `Erro na API Gemini: ${data.error?.message || 'Problema desconhecido'} (Código: ${res.status})` }]);
-      else if (data.candidates?.[0]?.content?.parts) setMessages(m => [...m, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
-      else if (data.promptFeedback?.blockReason) setMessages(m => [...m, { role: 'assistant', content: `Sua mensagem foi bloqueada: ${data.promptFeedback.blockReason}` }]);
-      else setMessages(m => [...m, { role: 'assistant', content: 'Resposta inválida da API Gemini' }]);
+      if (!res.ok) {
+        setMessages(m => [...m, { role: 'assistant', content: `Erro na API Gemini: ${data.error?.message || 'Problema desconhecido'} (Código: ${res.status})` }]);
+      } else if (data.candidates?.[0]?.content?.parts) {
+        setMessages(m => [...m, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
+      } else if (data.promptFeedback?.blockReason) {
+        setMessages(m => [...m, { role: 'assistant', content: `Sua mensagem foi bloqueada: ${data.promptFeedback.blockReason}` }]);
+      } else {
+        setMessages(m => [...m, { role: 'assistant', content: 'Resposta inválida da API Gemini' }]);
+      }
+
     } catch (error) {
       setMessages(m => [...m, { role: 'assistant', content: `Erro: ${error.message}` }]);
     } finally {

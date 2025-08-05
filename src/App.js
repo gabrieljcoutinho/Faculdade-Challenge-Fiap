@@ -32,9 +32,19 @@ import NotFound from './routes/pages/NotFound';
 
 const useReadAloud = (isReading) => {
   useEffect(() => {
-    if (!isReading) return window.speechSynthesis.cancel();
+    if (!isReading) {
+      window.speechSynthesis.cancel();
+      return;
+    }
+
     const handleClick = (e) => {
-      const text = e.target.getAttribute('aria-label') || e.target.getAttribute('title') || e.target.innerText || e.target.alt || e.target.value || '';
+      const text = e.target.getAttribute('aria-label')
+        || e.target.getAttribute('title')
+        || e.target.innerText
+        || e.target.alt
+        || e.target.value
+        || '';
+
       if (text.trim()) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
@@ -42,7 +52,9 @@ const useReadAloud = (isReading) => {
         window.speechSynthesis.speak(utterance);
       }
     };
+
     document.addEventListener('click', handleClick);
+
     return () => {
       document.removeEventListener('click', handleClick);
       window.speechSynthesis.cancel();
@@ -51,30 +63,35 @@ const useReadAloud = (isReading) => {
 };
 
 function App() {
+  // Estado das conexões, com carregamento seguro do localStorage
   const [conexions, setConexions] = useState(() => {
     try {
       const saved = localStorage.getItem('conexions');
-      return saved ? JSON.parse(saved).map(c => ({
+      if (!saved) return [];
+      const parsed = JSON.parse(saved);
+      return parsed.map(c => ({
         ...c,
         id: c.id || window.crypto.randomUUID(),
         connectedDate: c.connectedDate || new Date().toISOString(),
-        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object' ? {
-          id: c.bluetoothDeviceInfo.id,
-          name: c.bluetoothDeviceInfo.name
-        } : null
-      })) : [];
+        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object'
+          ? {
+            id: c.bluetoothDeviceInfo.id,
+            name: c.bluetoothDeviceInfo.name
+          }
+          : null
+      }));
     } catch (e) {
       console.error("Erro ao carregar conexões:", e);
       return [];
     }
   });
 
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark-theme');
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark-theme');
   const [isReading, setIsReading] = useState(() => localStorage.getItem('isReading') === 'true');
   const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
 
   useEffect(() => {
-    if (initialProductionData.datasetsOptions?.length > 0) {
+    if (initialProductionData.datasetsOptions?.length) {
       setChosenDatasetIndex(Math.floor(Math.random() * initialProductionData.datasetsOptions.length));
     }
   }, []);
@@ -94,6 +111,7 @@ function App() {
     };
   }, [chosenDatasetIndex]);
 
+  // Salvar conexões no localStorage com tratamento de erro
   useEffect(() => {
     try {
       localStorage.setItem('conexions', JSON.stringify(conexions.map(c => ({
@@ -108,46 +126,35 @@ function App() {
     }
   }, [conexions]);
 
-  useEffect(() => { localStorage.setItem('isReading', isReading); }, [isReading]);
-  useEffect(() => { document.body.className = theme; }, [theme]);
+  useEffect(() => {
+    localStorage.setItem('isReading', isReading);
+  }, [isReading]);
+
+  useEffect(() => {
+    document.body.className = theme;
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   useReadAloud(isReading);
 
-  const getIconAndColorByType = (deviceType) => {
-    switch (deviceType.toLowerCase()) {
-      case 'tv':
-      case 'televisão':
-      case 'smart tv':
-        return [tvIcon, '#B0E0E6'];
-      case 'ar-condicionado':
-      case 'ar':
-      case 'ac':
-        return [airConditionerIcon, '#E0FFFF'];
-      case 'lâmpada':
-      case 'lampada':
-      case 'lamp':
-        return [lampIcon, '#FFEBCD'];
-      case 'airfry':
-      case 'fritadeira':
-        return [airfry, '#FFDAB9'];
-      case 'carregador':
-      case 'charger':
-        return [carregador, '#FFE4E1'];
-      default:
-      return [lampIcon, 'transparent'];
-
-    }
-  };
+  const getIconAndColorByType = useCallback((deviceType) => {
+    const type = deviceType.toLowerCase();
+    if (['tv', 'televisão', 'smart tv'].includes(type)) return [tvIcon, '#B0E0E6'];
+    if (['ar-condicionado', 'ar', 'ac'].includes(type)) return [airConditionerIcon, '#E0FFFF'];
+    if (['lâmpada', 'lampada', 'lamp'].includes(type)) return [lampIcon, '#FFEBCD'];
+    if (['airfry', 'fritadeira'].includes(type)) return [airfry, '#FFDAB9'];
+    if (['carregador', 'charger'].includes(type)) return [carregador, '#FFE4E1'];
+    return [lampIcon, 'transparent'];
+  }, []);
 
   const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor) => {
     setConexions(prev => {
-      const exists = prev.some(c => c.text === nomeCompleto);
-      if (exists) return prev;
+      if (prev.some(c => c.text === nomeCompleto)) return prev;
       return [...prev, {
         id: window.crypto.randomUUID(),
         text: nomeCompleto,
-        icon: iconSrc, // Usa o ícone passado como argumento
-        backgroundColor, // Usa a cor de fundo passada como argumento
+        icon: iconSrc,
+        backgroundColor,
         connected: true,
         connectedDate: new Date().toISOString(),
         bluetoothDeviceInfo: null
@@ -168,8 +175,14 @@ function App() {
   }, []);
 
   const toggleReading = useCallback(() => setIsReading(prev => !prev), []);
+
   const ReadAloudToggle = () => (
-    <button onClick={toggleReading} style={{ fontSize: '16px', padding: '8px', marginLeft: '10px' }} title="Ativar/Desativar leitura em voz alta">
+    <button
+      onClick={toggleReading}
+      style={{ fontSize: '16px', padding: '8px', marginLeft: '10px' }}
+      title="Ativar/Desativar leitura em voz alta"
+      aria-pressed={isReading}
+    >
       {isReading ? '🔈 Leitura Ativa' : '🔇 Leitura Desativada'}
     </button>
   );
