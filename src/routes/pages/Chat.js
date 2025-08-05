@@ -162,7 +162,17 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
         switch (foundCmd.resposta) {
           case 'PRODUCAO_GRAFICO':
-            botResponseContent = 'Aqui está o gráfico de produção (funcionalidade não implementada nesta demo).';
+            // Lógica ATUALIZADA para exibir os dados do gráfico
+            if (productionData && productionData.datasets?.length > 0) {
+              const totalProduction = productionData.datasets[0].data.reduce((acc, val) => acc + val, 0).toFixed(2);
+              const hourlyData = productionData.labels.map((label, index) =>
+                `- ${label}: **${productionData.datasets[0].data[index]} kWh**`
+              ).join('\n');
+
+              botResponseContent = `**Relatório de Produção Diária**\n\nProdução total de hoje: **${totalProduction} kWh**\n\n**Produção por hora:**\n${hourlyData}`;
+            } else {
+              botResponseContent = 'Não foi possível obter os dados de produção no momento. Tente novamente mais tarde.';
+            }
             break;
           case 'TEMA_ESCURO':
             document.body.classList.replace('light-theme', 'dark-theme');
@@ -259,6 +269,21 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* -- Aqui ficam as sugestões rápidas clicáveis -- */}
+      <div className="quick-suggestions">
+        {quickSuggestions.map((suggestion, index) => (
+          <button
+            key={index}
+            type="button"
+            className="suggestion-button"
+            onClick={() => setNewMessage(suggestion)}
+            title={`Clique para preencher: ${suggestion}`}
+          >
+            {suggestion}
+          </button>
+        ))}
+      </div>
+
       <form onSubmit={handleSendMessage} className="message-input-form">
         <input
           ref={inputRef}
@@ -275,19 +300,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
           <img src={sendBtn} alt="Enviar" className="send-icon" title="Enviar Texto ou Mensagem" />
         </button>
       </form>
-
-      <div className="quick-suggestions">
-        {quickSuggestions.map((suggestion, index) => (
-          <button
-            key={index}
-            type="button"
-            className="suggestion-button"
-            onClick={() => setNewMessage(suggestion)}
-          >
-            {suggestion}
-          </button>
-        ))}
-      </div>
     </div>
   );
 };
