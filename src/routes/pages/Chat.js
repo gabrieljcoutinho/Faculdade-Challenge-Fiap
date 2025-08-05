@@ -50,6 +50,14 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
+  const quickSuggestions = [
+    'Conectar TV',
+    'Conectar Ar-Condicionado',
+    'Conectar Lâmpada',
+    'Conectar Airfry',
+    'Conectar Carregador'
+  ];
+
   useEffect(() => inputRef.current?.focus(), []);
   useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
   useEffect(() => sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages)), [messages]);
@@ -249,6 +257,7 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
+
       <form onSubmit={handleSendMessage} className="message-input-form">
         <input
           ref={inputRef}
@@ -265,6 +274,19 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
           <img src={sendBtn} alt="Enviar" className="send-icon" title="Enviar Texto ou Mensagem" />
         </button>
       </form>
+
+      <div className="quick-suggestions">
+        {quickSuggestions.map((suggestion, index) => (
+          <button
+            key={index}
+            type="button"
+            className="suggestion-button"
+            onClick={() => setNewMessage(suggestion)}
+          >
+            {suggestion}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
