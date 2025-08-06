@@ -63,7 +63,6 @@ const useReadAloud = (isReading) => {
 };
 
 function App() {
-  // Estado das conexões, com carregamento seguro do localStorage
   const [conexions, setConexions] = useState(() => {
     try {
       const saved = localStorage.getItem('conexions');
@@ -74,10 +73,7 @@ function App() {
         id: c.id || window.crypto.randomUUID(),
         connectedDate: c.connectedDate || new Date().toISOString(),
         bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object'
-          ? {
-            id: c.bluetoothDeviceInfo.id,
-            name: c.bluetoothDeviceInfo.name
-          }
+          ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name }
           : null
       }));
     } catch (e) {
@@ -111,15 +107,11 @@ function App() {
     };
   }, [chosenDatasetIndex]);
 
-  // Salvar conexões no localStorage com tratamento de erro
   useEffect(() => {
     try {
       localStorage.setItem('conexions', JSON.stringify(conexions.map(c => ({
         ...c,
-        bluetoothDeviceInfo: c.bluetoothDeviceInfo ? {
-          id: c.bluetoothDeviceInfo.id,
-          name: c.bluetoothDeviceInfo.name
-        } : null
+        bluetoothDeviceInfo: c.bluetoothDeviceInfo ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name } : null
       }))));
     } catch (e) {
       console.error("Erro ao salvar conexões:", e);
@@ -137,19 +129,9 @@ function App() {
 
   useReadAloud(isReading);
 
-  const getIconAndColorByType = useCallback((deviceType) => {
-    const type = deviceType.toLowerCase();
-    if (['tv', 'televisão', 'smart tv'].includes(type)) return [tvIcon, '#B0E0E6'];
-    if (['ar-condicionado', 'ar', 'ac'].includes(type)) return [airConditionerIcon, '#E0FFFF'];
-    if (['lâmpada', 'lampada', 'lamp'].includes(type)) return [lampIcon, '#FFEBCD'];
-    if (['airfry', 'fritadeira'].includes(type)) return [airfry, '#FFDAB9'];
-    if (['carregador', 'charger'].includes(type)) return [carregador, '#FFE4E1'];
-    return [lampIcon, 'transparent'];
-  }, []);
-
-  const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor) => {
+  const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor = '#e0e0e0') => {
     setConexions(prev => {
-      if (prev.some(c => c.text === nomeCompleto)) return prev;
+      if (prev.some(c => c.text.toLowerCase() === nomeCompleto.toLowerCase())) return prev;
       return [...prev, {
         id: window.crypto.randomUUID(),
         text: nomeCompleto,
@@ -166,10 +148,36 @@ function App() {
     setConexions(prev => prev.filter(c => c.id !== id));
   }, []);
 
+  const handleDisconnectAll = useCallback(() => {
+    setConexions(prevConexions =>
+      prevConexions.map(c => {
+        if (c.connected) {
+          let updatedConexion = { ...c, connected: false };
+          if (c.connectedDate) {
+            const [now, connectedStartTime] = [new Date().getTime(), new Date(c.connectedDate).getTime()];
+            updatedConexion.accumulatedSeconds = (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000;
+            updatedConexion.connectedDate = null;
+          }
+          return updatedConexion;
+        }
+        return c;
+      })
+    );
+  }, []);
+
+  const handleRemoveAll = useCallback(() => {
+    setConexions([]);
+  }, []);
+
   const handleToggleConnection = useCallback((id, newDesiredState) => {
     setConexions(prev => prev.map(c =>
       c.id === id
-        ? { ...c, connected: newDesiredState, connectedDate: newDesiredState ? new Date().toISOString() : c.connectedDate }
+        ? {
+            ...c,
+            connected: newDesiredState,
+            connectedDate: newDesiredState ? new Date().toISOString() : null,
+            accumulatedSeconds: newDesiredState ? c.accumulatedSeconds : (c.accumulatedSeconds || 0) + (new Date().getTime() - new Date(c.connectedDate).getTime()) / 1000
+          }
         : c
     ));
   }, []);
@@ -219,7 +227,18 @@ function App() {
           <Route path="/configuracoes" element={<Configuracoes isReading={isReading} toggleReading={toggleReading} />} />
           <Route path="/login" element={<Logar />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/chat" element={<Chat onConnectDevice={handleConnectDevice} productionData={formattedProductionData} setTheme={setTheme} />} />
+          <Route
+            path="/chat"
+            element={
+              <Chat
+                onConnectDevice={handleConnectDevice}
+                onDisconnectAll={handleDisconnectAll}
+                onRemoveAll={handleRemoveAll}
+                productionData={formattedProductionData}
+                setTheme={setTheme}
+              />
+            }
+          />
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />

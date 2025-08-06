@@ -2,64 +2,62 @@
   "comandos": [
     {
       "triggers": [
-       "Você tem nome?",
-    "Você tem nome ?",
-       "Você tem nome",
-       "você tem nome?",
+        "Você tem nome?",
+        "Você tem nome ?",
+        "Você tem nome",
+        "você tem nome?",
         "você tem nome ?",
-       "você tem nome",
-       "Se tem nome?",
+        "você tem nome",
+        "Se tem nome?",
         "Se tem nome ?",
-       "Se tem nome",
-       "se tem nome?",
+        "Se tem nome",
+        "se tem nome?",
         "se tem nome ?",
-       "se tem nome",
-       "Qual o seu nome?",
-       "Qual o seu nome ?",
-       "Qual o seu nome",
-      "qual o seu nome?",
-       "qual o seu nome ?",
-       "qual o seu nome",
-         "Qual é o seu nome?",
-       "Qual é o seu nome ?",
-       "Qual é o  seu nome",
-      "qual é o  seu nome?",
-       "qual é o  seu nome ?",
-       "qual é o seu nome",
-          "Qual é seu nome?",
-       "Qual é seu nome ?",
-       "Qual é seu nome",
-      "qual é seu nome?",
-       "qual é seu nome ?",
-       "qual é seu nome",
-           "Qual seu nome?",
-       "Qual seu nome ?",
-       "Qual seu nome",
-      "qual seu nome?",
-       "qual seu nome ?",
-       "qual seu nome",
-       "Se tem nome?",
-       "Se tem nome ?",
-       "se tem nome?",
-       "se tem nome ?",
-       "Ce tem nome?",
-       "Ce tem nome ?",
-       "ce tem nome?",
-       "ce tem nome ?",
-       "Vc tem nome ?",
-       "Vc tem nome ",
-       "vc tem nome ?",
-       "vc tem nome ",
-       "Seu nome",
-       "seu nome ?",
-       "seu nome?",
-       "Seu nome?",
-       "Seu nome ?"
+        "se tem nome",
+        "Qual o seu nome?",
+        "Qual o seu nome ?",
+        "Qual o seu nome",
+        "qual o seu nome?",
+        "qual o seu nome ?",
+        "qual o seu nome",
+        "Qual é o seu nome?",
+        "Qual é o seu nome ?",
+        "Qual é o  seu nome",
+        "qual é o  seu nome?",
+        "qual é o  seu nome ?",
+        "qual é o seu nome",
+        "Qual é seu nome?",
+        "Qual é seu nome ?",
+        "Qual é seu nome",
+        "qual é seu nome?",
+        "qual é seu nome ?",
+        "qual é seu nome",
+        "Qual seu nome?",
+        "Qual seu nome ?",
+        "Qual seu nome",
+        "qual seu nome?",
+        "qual seu nome ?",
+        "qual seu nome",
+        "Se tem nome?",
+        "Se tem nome ?",
+        "se tem nome?",
+        "se tem nome ?",
+        "Ce tem nome?",
+        "Ce tem nome ?",
+        "ce tem nome?",
+        "ce tem nome ?",
+        "Vc tem nome ?",
+        "Vc tem nome ",
+        "vc tem nome ?",
+        "vc tem nome ",
+        "Seu nome",
+        "seu nome ?",
+        "seu nome?",
+        "Seu nome?",
+        "Seu nome ?"
       ],
       "resposta": "Me chamo Solaris! ☀️😁"
     },
-
-
     {
       "triggers": [
         "Quais dispositivos eu posso conectar",
@@ -89,35 +87,27 @@
       ],
       "resposta": "TV, Ar-Condicionado, Lâmpada, Airfry e Carregador. Caso queira conectar algum desses dispositivos, basta dizer 'Conectar [nome do dispositivo]'."
     },
-
-
     {
       "triggers": [
         "Conectar TV",
         "Conectar Televisao",
         "Conectar Televisão",
         "Ligar tv",
-         "conectar tv",
-         "conectar televisao",
-          "conectar televisão",
-           "ligar tv",
-          "Conectar a TV",
+        "conectar tv",
+        "conectar televisao",
+        "conectar televisão",
+        "ligar tv",
+        "Conectar a TV",
         "Conectar a Televisao",
         "Conectar a Televisão",
         "Ligar a tv",
-         "conectar a tv",
-         "conectar a televisao",
-          "conectar a televisão",
-           "ligar a tv"
-
-
-
-
+        "conectar a tv",
+        "conectar a televisao",
+        "conectar a televisão",
+        "ligar a tv"
       ],
       "resposta": "TV Conectada"
     },
-
-
     {
       "triggers": [
         "Conectar Ar-Condicionado",
@@ -129,7 +119,7 @@
         "ligar ar-condicionado",
         "conectar ar condicionado",
         "ligar ar condicionado",
-   "Conectar o Ar-condicionado",
+        "Conectar o Ar-condicionado",
         "Conectar o Arcondiconado",
         "Ligar o Ar-Condicionado",
         "Conectar o ar condicionado",
@@ -139,51 +129,43 @@
         "conectar o ar condicionado",
         "ligar o ar condicionado",
         "Conectar Ar condicionado"
-
-
       ],
       "resposta": "Ar-Condicionado Conectado"
     },
-
-
     {
       "triggers": [
         "Conectar Lâmpada",
         "Ligar Lâmpada",
         "Conectar lampada",
-         "Ligar lampada",
+        "Ligar lampada",
         "conectar lâmpada",
         "ligar lâmpada",
-         "conectar lampada",
-         "ligar lampada",
-          "Conectar a Lâmpada",
+        "conectar lampada",
+        "ligar lampada",
+        "Conectar a Lâmpada",
         "Ligar a Lâmpada",
         "Conectar a lampada",
-         "Ligar a lampada",
+        "Ligar a lampada",
         "conectar a lâmpada",
         "ligar a lâmpada",
-         "conectar a lampada",
-         "ligar a lampada"
+        "conectar a lampada",
+        "ligar a lampada"
       ],
       "resposta": "Lâmpada Conectada"
     },
-
-
     {
       "triggers": [
         "Conectar Airfry",
         "Ligar Airfry",
         "conectar airfry",
         "ligar airfry",
-         "Conectar a Airfry",
+        "Conectar a Airfry",
         "Ligar a Airfry",
         "conectar a airfry",
         "ligar a airfry"
       ],
       "resposta": "Airfry Conectada"
     },
-
-
     {
       "triggers": [
         "Conectar Carregador",
@@ -191,64 +173,60 @@
         "Conectar carregador",
         "Ligar carregador",
         "conectar carregador",
-         "ligar carregador",
-
-               "Conectar o Carregador",
+        "ligar carregador",
+        "Conectar o Carregador",
         "Ligar o Carregador",
         "Conectar o carregador",
         "Ligar o carregador",
         "conectar o carregador",
-         "ligar o carregador"
+        "ligar o carregador"
       ],
       "resposta": "Carregador Conectado"
     },
-
-
     {
       "triggers": [
         "Comandos",
-         "Comandos ?",
-          "Comandos?",
-           "comandos",
-            "comandos ?",
-             "comandos?",
-             "Quais os comandos",
-              "Quais os comandos ?",
-               "quais os comandos",
-                "quais os comandos ?"
+        "Comandos ?",
+        "Comandos?",
+        "comandos",
+        "comandos ?",
+        "comandos?",
+        "Quais os comandos",
+        "Quais os comandos ?",
+        "quais os comandos",
+        "quais os comandos ?"
       ],
-      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Tema claro ou Tema escuro** / **claro**: Para trocar o tema da interface.\n- **Ir para [Página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções\n\n  "
+      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n **Remover todas as conexões** \n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Tema claro ou Tema escuro** / **claro**: Para trocar o tema da interface.\n- **Ir para [Página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções\n\n  "
     },
-
-
     {
       "triggers": [
         "Analisar gráfico",
-         "Analisar o gráfico",
-         "Analisar grafico",
+        "Analisar o gráfico",
+        "Analisar grafico",
         "Análise do Grafico",
         "Dados do grafico",
-           "Dados grafico",
-         "Producao de energia",
+        "Dados grafico",
+        "Producao de energia",
         "Produção de energia do Gráfico",
-         "Analise o grafico", "Análise o Gráfico",
+        "Analise o grafico",
+        "Análise o Gráfico",
         "Relatório de produção",
-         "Dados do gráfico",
-         "Meus dados de energia do Grafico",
+        "Dados do gráfico",
+        "Meus dados de energia do Grafico",
         "Como está a energia",
         "Informações do gráfico",
-         "Analise do grafico",
-          "Análise do gráfico",
-         "Relatório do gráfico",
-          "Relatorio do gráfico",
-         "Relatório do grafico",
-          "Relatorio do grafico",
-          "Relatorio grafico",
-          "Faça uma análise do gráfico",
-         "Faça uma análise do grafico",
-          "Faça uma anáaise do grafico",
-         "Faca uma analise do grafico",
-         "Dado do grafico",
+        "Analise do grafico",
+        "Análise do gráfico",
+        "Relatório do gráfico",
+        "Relatorio do gráfico",
+        "Relatório do grafico",
+        "Relatorio do grafico",
+        "Relatorio grafico",
+        "Faça uma análise do gráfico",
+        "Faça uma análise do grafico",
+        "Faça uma anáaise do grafico",
+        "Faca uma analise do grafico",
+        "Dado do grafico",
         "Dados do grafico",
         "Informações do gráfico",
         "Informações do grafico",
@@ -256,26 +234,24 @@
         "Informacoes do grafico",
         "Informacao do gráfico",
         "Informacao do grafico",
-          "Informação do gráfico",
+        "Informação do gráfico",
         "nformação do grafico"
       ],
       "resposta": "PRODUCAO_GRAFICO"
     },
-
-
     {
       "triggers": [
         "Mudar para o modo escuro",
-         "Ativar modo escuro",
-         "Modo escuro",
+        "Ativar modo escuro",
+        "Modo escuro",
         "Tema escuro",
         "mudar para o modo escuro",
-         "ativar modo escuro",
+        "ativar modo escuro",
         "modo escuro",
-         "tema escuro",
-          "modo escuro",
-          "Modo Escuro"
-          , "Tema Escuro",
+        "tema escuro",
+        "modo escuro",
+        "Modo Escuro",
+        "Tema Escuro",
         "Dark mode",
         "Dark Mode",
         "dark mode",
@@ -286,8 +262,6 @@
       ],
       "resposta": "TEMA_ESCURO"
     },
-
-
     {
       "triggers": [
         "Mudar para o modo claro",
@@ -295,11 +269,11 @@
         "Modo claro",
         "Tema claro",
         "mudar para o modo claro",
-         "ativar modo claro",
+        "ativar modo claro",
         "modo claro",
-         "tema claro",
-          "modo claro",
-           "Modo Claro",
+        "tema claro",
+        "modo claro",
+        "Modo Claro",
         "Tema Claro",
         "Light mode",
         "Light Mode",
@@ -312,8 +286,6 @@
       ],
       "resposta": "TEMA_CLARO"
     },
-
-
     {
       "triggers": [
         "Ir para a página inicial",
@@ -323,41 +295,37 @@
         "Home",
         "Início",
         "Página home",
-         "Página Home",
-         "Pagina home",
-         "Pagina Home",
-         "Inicio"
+        "Página Home",
+        "Pagina home",
+        "Pagina Home",
+        "Inicio"
       ],
       "resposta": "REDIRECT:/"
     },
-
-
     {
       "triggers": [
-      "Ir para conexões",
-  "Abrir conexões",
-  "Página de conexões",
-  "Ver meus dispositivos",
-  "Conexões",
-  "Conexão",
-  "Página conexão",
-  "Página Conexão",
-  "Página conexao",
-  "Página Conexao",
-  "Pagina conexão",
-  "Pagina Conexão",
-  "Pagina conexao",
-  "Pagina Conexao",
-  "Conexao",
-  "Página de Conexão",
-   "Página de Conexao",
-    "Pagina de Conexão",
-   "Pagina de Conexao"
+        "Ir para conexões",
+        "Abrir conexões",
+        "Página de conexões",
+        "Ver meus dispositivos",
+        "Conexões",
+        "Conexão",
+        "Página conexão",
+        "Página Conexão",
+        "Página conexao",
+        "Página Conexao",
+        "Pagina conexão",
+        "Pagina Conexão",
+        "Pagina conexao",
+        "Pagina Conexao",
+        "Conexao",
+        "Página de Conexão",
+        "Página de Conexao",
+        "Pagina de Conexão",
+        "Pagina de Conexao"
       ],
       "resposta": "REDIRECT:/conexoes"
     },
-
-
     {
       "triggers": [
         "Ir para o chat",
@@ -368,12 +336,10 @@
         "Página chat",
         "Página Chat",
         "Pagina chat",
-         "Pagina Chat"
+        "Pagina Chat"
       ],
       "resposta": "REDIRECT:/chat"
     },
-
-
     {
       "triggers": [
         "Ir para configurações",
@@ -381,19 +347,17 @@
         "Página de configurações",
         "Configurações",
         "Configuracoes",
-              "Página configuração",
-               "Página Configuração",
-               "Página configuracao",
-               "Página Configuracao",
-                "Pagina configuração",
-               "Pagina Configuração",
-               "Pagina configuracao",
-               "Pagina Configuracao"
+        "Página configuração",
+        "Página Configuração",
+        "Página configuracao",
+        "Página Configuracao",
+        "Pagina configuração",
+        "Pagina Configuração",
+        "Pagina configuracao",
+        "Pagina Configuracao"
       ],
       "resposta": "REDIRECT:/configuracoes"
     },
-
-
     {
       "triggers": [
         "Ir para contato",
@@ -408,8 +372,6 @@
       ],
       "resposta": "REDIRECT:/contato"
     },
-
-
     {
       "triggers": [
         "Ir para ajuda",
@@ -424,8 +386,6 @@
       ],
       "resposta": "REDIRECT:/helpCenter"
     },
-
-
     {
       "triggers": [
         "Ir para perguntas frequentes",
@@ -455,71 +415,87 @@
         "Pagina Duvidas",
         "Pagina duvida",
         "Pagina duvidas"
-
       ],
       "resposta": "REDIRECT:/perguntas-frequentes"
     },
-
-
     {
       "triggers": [
         "Ir para comandos do chat",
         "Abrir comandos do chat",
         "Ver comandos do chat",
         "Comandos do chat",
-      "Página Comando",
-      "Página comando",
-      "Página Comandos",
-      "Página comandos",
-      "Pagina Comando",
-      "Pagina comando",
-      "Pagina Comandos",
-      "Pagina comandos"
-          ],
+        "Página Comando",
+        "Página comando",
+        "Página Comandos",
+        "Página comandos",
+        "Pagina Comando",
+        "Pagina comando",
+        "Pagina Comandos",
+        "Pagina comandos"
+      ],
       "resposta": "REDIRECT:/comandosChat"
     },
-
-
     {
       "triggers": [
-            "Logar",
-            "Logir",
-            "Acessar conta",
-            "Fazer login",
-            "Fazer Login"
-          ],
+        "Logar",
+        "Logir",
+        "Acessar conta",
+        "Fazer login",
+        "Fazer Login"
+      ],
       "resposta": "REDIRECT:/login"
     },
-
-
-
-
     {
       "triggers": [
-            "Cadastro",
-            "Fazer Cadastro",
-            "Fazer cadastro",
-            "Cadastrar"
-          ],
+        "Cadastro",
+        "Fazer Cadastro",
+        "Fazer cadastro",
+        "Cadastrar"
+      ],
       "resposta": "REDIRECT:/cadastro"
     },
-
-
     {
-            "triggers": [
-           "Configurações",
-           "Configuração",
-           "Configuracao",
-           "Configuraçao",
-           "Configurar",
-           "Setting",
-           "Settings",
-           "Configuracao",
-           "Configuracoes"
-          ],
+      "triggers": [
+        "Configurações",
+        "Configuração",
+        "Configuracao",
+        "Configuraçao",
+        "Configurar",
+        "Setting",
+        "Settings",
+        "Configuracao",
+        "Configuracoes"
+      ],
       "resposta": "REDIRECT:/configuracoes"
+    },
+    {
+      "triggers": [
+        "Desconectar todos os aparelhos",
+        "desconectar todos os aparelhos",
+        "Desconectar todos",
+        "desconectar todos"
+      ],
+      "resposta": "DESCONECTAR_TODOS"
+    },
+    {
+      "triggers": [
+        "Remover todos os aparelhos",
+        "remover todos os aparelhos",
+        "Remover aparelhos",
+        "remover aparelhos",
+
+         "Remover todos os aparelhos conectados",
+        "remover todos os aparelhos conectados",
+        "Remover todos os parelhos conectados",
+        "remover todos os parelhos conectados",
+
+
+        "Remover todas as conexões",
+         "Remover todas as conexoes",
+             "remover todas as conexões",
+         "remover todas as conexoes"
+      ],
+      "resposta": "REMOVER_TODOS"
     }
-
   ]
-
 }

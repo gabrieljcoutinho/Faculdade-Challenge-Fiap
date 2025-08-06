@@ -64,6 +64,27 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
   const updateUiState = (newState) => setUiState(prev => ({ ...prev, ...newState }));
   const getIconKeyBySrc = (src) => availableIcons.find(icon => icon.src === src)?.name || '';
 
+  const handleDisconnectAll = () => {
+    setConexions(prevConexions =>
+      prevConexions.map(c => {
+        if (c.connected) {
+          let updatedConexion = { ...c, connected: false };
+          if (c.connectedDate) {
+            const [now, connectedStartTime] = [new Date().getTime(), new Date(c.connectedDate).getTime()];
+            updatedConexion.accumulatedSeconds = (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000;
+            updatedConexion.connectedDate = null;
+          }
+          return updatedConexion;
+        }
+        return c;
+      })
+    );
+  };
+
+  const handleRemoveAll = () => {
+    setConexions([]);
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(search);
     const [nome, iconKey, bgColor] = [params.get('add'), params.get('icon'), params.get('bgColor')];
@@ -122,9 +143,9 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
       const name = deviceName.toLowerCase();
       const guessedIcon = name.includes('tv') || name.includes('monitor') ? tvIcon :
         name.includes('ar') || name.includes('condicionado') ? airConditionerIcon :
-        name.includes('lamp') || name.includes('lâmpada') ? lampIcon :
-        name.includes('airfry') || name.includes('fritadeira') ? airfry :
-        name.includes('carregador') || name.includes('charger') ? carregador : lampIcon;
+          name.includes('lamp') || name.includes('lâmpada') ? lampIcon :
+            name.includes('airfry') || name.includes('fritadeira') ? airfry :
+              name.includes('carregador') || name.includes('charger') ? carregador : lampIcon;
       if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
         updateUiState({ errorMessage: `Já existe um aparelho chamado "${deviceName}".`, isSearchingBluetooth: false });
         return;
@@ -135,8 +156,8 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
       console.error('Erro ao conectar via Bluetooth:', error);
       const errorMessage = error.name === 'NotFoundError' ? 'Nenhum aparelho Bluetooth encontrado ou selecionado.' :
         error.name === 'NotAllowedError' ? 'Permissão de Bluetooth negada.' :
-        error.message.includes('User cancelled') ? 'Seleção de aparelho Bluetooth cancelada.' :
-        'Falha na conexão Bluetooth. Tente novamente.';
+          error.message.includes('User cancelled') ? 'Seleção de aparelho Bluetooth cancelada.' :
+            'Falha na conexão Bluetooth. Tente novamente.';
       updateUiState({ errorMessage, isSearchingBluetooth: false });
     }
   };

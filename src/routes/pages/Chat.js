@@ -32,7 +32,7 @@ const deviceIconMap = {
 const CHAT_STORAGE_KEY = 'chat_messages';
 const FIRST_INTERACTION_KEY = 'chat_firstInteraction';
 
-const Chat = ({ onConnectDevice, productionData, setTheme }) => {
+const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme }) => {
   const [messages, setMessages] = useState(() => {
     const saved = sessionStorage.getItem(CHAT_STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
@@ -162,13 +162,11 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
 
         switch (foundCmd.resposta) {
           case 'PRODUCAO_GRAFICO':
-            // Lógica ATUALIZADA para exibir os dados do gráfico
             if (productionData && productionData.datasets?.length > 0) {
               const totalProduction = productionData.datasets[0].data.reduce((acc, val) => acc + val, 0).toFixed(2);
               const hourlyData = productionData.labels.map((label, index) =>
                 `- ${label}: **${productionData.datasets[0].data[index]} kWh**`
               ).join('\n');
-
               botResponseContent = `**Relatório de Produção Diária**\n\nProdução total de hoje: **${totalProduction} kWh**\n\n**Produção por hora:**\n${hourlyData}`;
             } else {
               botResponseContent = 'Não foi possível obter os dados de produção no momento. Tente novamente mais tarde.';
@@ -185,6 +183,14 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
             localStorage.setItem('theme', 'light-theme');
             setTheme?.('light-theme');
             botResponseContent = "Tema claro ativado! ☀️";
+            break;
+          case 'DESCONECTAR_TODOS':
+            onDisconnectAll?.();
+            botResponseContent = "Todos os aparelhos foram desconectados.";
+            break;
+          case 'REMOVER_TODOS':
+            onRemoveAll?.();
+            botResponseContent = "Todos os aparelhos foram removidos.";
             break;
           default:
             botResponseContent = foundCmd.resposta;
@@ -268,8 +274,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-
-      {/* -- Aqui ficam as sugestões rápidas clicáveis -- */}
       <div className="quick-suggestions">
         {quickSuggestions.map((suggestion, index) => (
           <button
@@ -283,7 +287,6 @@ const Chat = ({ onConnectDevice, productionData, setTheme }) => {
           </button>
         ))}
       </div>
-
       <form onSubmit={handleSendMessage} className="message-input-form">
         <input
           ref={inputRef}
