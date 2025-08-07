@@ -87,7 +87,10 @@ const Timer = () => {
 
         <div className="aparelhos-container">
           {aparelhos.map((aparelho, index) => (
-            <div key={aparelho.id} className="aparelho-card">
+            <div
+              key={aparelho.id}
+              className={`aparelho-card ${aparelho.id === 5 ? 'margem-airfry' : ''}`}
+            >
               <div className="aparelho-img-bg" style={{ backgroundColor: aparelho.corFundo }}>
                 <img src={aparelho.imagem} alt={`Aparelho ${index + 1}`} className="img-aparelho" />
               </div>
