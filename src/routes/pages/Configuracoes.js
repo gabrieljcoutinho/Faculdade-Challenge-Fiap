@@ -13,6 +13,7 @@ import { logar, deslogar } from '../../constants/Configuracao/index.js';
 
 import comandosImg from '../../imgs/imgConfiguracao/comandos.png';
 import atendimentoImg from '../../imgs/imgConfiguracao/atendimento.png';
+import relogioImg from '../../imgs/imgConfiguracao/relogio.png';
 
 const Configuracoes = ({ isReading, toggleReading }) => {
   const navigate = useNavigate();
@@ -50,6 +51,10 @@ const Configuracoes = ({ isReading, toggleReading }) => {
 
           <button className="comando-btn" title="Central de Ajuda" onClick={() => navigate('/helpCenter')}>
             <img src={atendimentoImg} alt="Atendimento" className="imgComando" />
+          </button>
+
+          <button className="comando-btn" onClick={() => navigate('/timer')}>
+            <img src={relogioImg} alt="Marcar conexão" className="imgComando" />
           </button>
 
           <button
