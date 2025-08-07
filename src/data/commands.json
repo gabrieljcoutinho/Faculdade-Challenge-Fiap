@@ -468,6 +468,30 @@
       ],
       "resposta": "REDIRECT:/configuracoes"
     },
+
+
+{
+ "triggers": [
+      "Horário",
+      "Horario",
+      "Relógio",
+      "Relogio",
+      "Marcar conexão",
+      "Marcar conexao",
+      "Marcar horário",
+      "Marcar horario",
+      "Marcar aparelho",
+      "Agendar conexão",
+      "Agendar aparelho",
+      "Agendar conexão",
+      "Agendar",
+      "Timer"
+      ],
+      "resposta": "REDIRECT:/timer"
+},
+
+
+
     {
       "triggers": [
         "Desconectar todos os aparelhos",
@@ -493,7 +517,9 @@
         "Remover todas as conexões",
          "Remover todas as conexoes",
              "remover todas as conexões",
-         "remover todas as conexoes"
+         "remover todas as conexoes",
+         "Excluir aparelhos",
+         "Excluir todos os aparelhos"
       ],
       "resposta": "REMOVER_TODOS"
     }
