@@ -1,0 +1,122 @@
+.timer-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    padding-bottom: 5rem;
+}
+
+.timer-container h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.aparelhos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.aparelho-card {
+    background-color: transparent;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    width: 260px;
+    padding: 15px 20px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.aparelho-img-bg {
+    background-color: #eee;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+}
+
+.img-aparelho {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.aparelho-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-nome,
+.input-horario {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 15px;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    transition: border-color 0.3s ease;
+}
+
+.input-nome:focus,
+.input-horario:focus {
+    border-color: #0077cc;
+    outline: none;
+}
+
+.dias-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.dia-bolinha {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 17px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.dia-bolinha:hover {
+    filter: brightness(0.85);
+}
+
+.selecionado-preto {
+    background-color: black;
+    color: white;
+    box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.7);
+}
+
+.selecionado-vermelho {
+    background-color: red;
+    color: white;
+    box-shadow: 0 0 6px 1px rgba(255, 0, 0, 0.7);
+}
+
+@media (max-width: 600px) {
+    .timer-container {
+        padding-top: 30px;
+    }
+}
