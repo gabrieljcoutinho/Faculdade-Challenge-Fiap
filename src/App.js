@@ -31,6 +31,33 @@ import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 import NotFound from './routes/pages/NotFound';
 import Timer from './routes/pages/Timer';
 
+// --- Configurações dos Aparelhos Iniciais ---
+const aparelhosDisponiveis = [
+  { id: 1, imagem: tvIcon, nome: 'TV', corFundo: '#e0f7fa' },
+  { id: 2, imagem: lampIcon, nome: 'Lâmpada', corFundo: '#fff9c4' },
+  { id: 3, imagem: carregador, nome: 'Carregador', corFundo: '#ffe0b2' },
+  { id: 4, imagem: airConditionerIcon, nome: 'Ar Condicionado', corFundo: '#d1c4e9' },
+  { id: 5, imagem: airfry, nome: 'Airfryer', corFundo: '#c8e6c9' }
+];
+
+const getInitialAparelhos = () => {
+  try {
+    const storedAparelhos = localStorage.getItem('aparelhos');
+    if (storedAparelhos) {
+      return JSON.parse(storedAparelhos);
+    }
+  } catch (e) {
+    console.error("Erro ao carregar aparelhos do localStorage:", e);
+  }
+  return aparelhosDisponiveis.map(a => ({
+    ...a,
+    agendamentos: [],
+    conectado: false,
+    connectedDate: null,
+    accumulatedSeconds: 0
+  }));
+};
+
 const useReadAloud = (isReading) => {
   useEffect(() => {
     if (!isReading) {
@@ -64,25 +91,7 @@ const useReadAloud = (isReading) => {
 };
 
 function App() {
-  const [conexions, setConexions] = useState(() => {
-    try {
-      const saved = localStorage.getItem('conexions');
-      if (!saved) return [];
-      const parsed = JSON.parse(saved);
-      return parsed.map(c => ({
-        ...c,
-        id: c.id || window.crypto.randomUUID(),
-        connectedDate: c.connectedDate || new Date().toISOString(),
-        bluetoothDeviceInfo: c.bluetoothDeviceInfo && typeof c.bluetoothDeviceInfo === 'object'
-          ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name }
-          : null
-      }));
-    } catch (e) {
-      console.error("Erro ao carregar conexões:", e);
-      return [];
-    }
-  });
-
+  const [aparelhos, setAparelhos] = useState(getInitialAparelhos);
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark-theme');
   const [isReading, setIsReading] = useState(() => localStorage.getItem('isReading') === 'true');
   const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
@@ -110,14 +119,53 @@ function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('conexions', JSON.stringify(conexions.map(c => ({
-        ...c,
-        bluetoothDeviceInfo: c.bluetoothDeviceInfo ? { id: c.bluetoothDeviceInfo.id, name: c.bluetoothDeviceInfo.name } : null
-      }))));
+      localStorage.setItem('aparelhos', JSON.stringify(aparelhos));
     } catch (e) {
-      console.error("Erro ao salvar conexões:", e);
+      console.error("Erro ao salvar aparelhos:", e);
     }
-  }, [conexions]);
+  }, [aparelhos]);
+
+  useEffect(() => {
+    const checkAgendamentos = () => {
+      const now = new Date();
+      const diaAtual = now.getDay(); // 0 = Domingo, 1 = Segunda, etc.
+      const horaAtual = now.getHours().toString().padStart(2, '0');
+      const minutoAtual = now.getMinutes().toString().padStart(2, '0');
+      const horarioAtual = `${horaAtual}:${minutoAtual}`;
+
+      setAparelhos(prevAparelhos => {
+        return prevAparelhos.map(aparelho => {
+          let novoStatusConectado = false;
+          if (aparelho.agendamentos.length > 0) {
+            novoStatusConectado = aparelho.agendamentos.some(agendamento =>
+              agendamento.dias.includes(diaAtual) && agendamento.horario === horarioAtual
+            );
+          }
+
+          // Lógica de atualização de tempo acumulado e data de conexão
+          let updatedConexion = { ...aparelho };
+          if (updatedConexion.conectado && !novoStatusConectado) {
+            // Se estava conectado e agora não está
+            if (updatedConexion.connectedDate) {
+              const nowTime = new Date().getTime();
+              const connectedStartTime = new Date(updatedConexion.connectedDate).getTime();
+              updatedConexion.accumulatedSeconds = (updatedConexion.accumulatedSeconds || 0) + (nowTime - connectedStartTime) / 1000;
+            }
+            updatedConexion.connectedDate = null;
+          } else if (!updatedConexion.conectado && novoStatusConectado) {
+            // Se não estava conectado e agora está
+            updatedConexion.connectedDate = new Date().toISOString();
+          }
+
+          return { ...updatedConexion, conectado: novoStatusConectado };
+        });
+      });
+    };
+
+    const intervalId = setInterval(checkAgendamentos, 60000); // Checa a cada minuto
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('isReading', isReading);
@@ -129,59 +177,6 @@ function App() {
   }, [theme]);
 
   useReadAloud(isReading);
-
-  const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor = '#e0e0e0') => {
-    setConexions(prev => {
-      if (prev.some(c => c.text.toLowerCase() === nomeCompleto.toLowerCase())) return prev;
-      return [...prev, {
-        id: window.crypto.randomUUID(),
-        text: nomeCompleto,
-        icon: iconSrc,
-        backgroundColor,
-        connected: true,
-        connectedDate: new Date().toISOString(),
-        bluetoothDeviceInfo: null
-      }];
-    });
-  }, []);
-
-  const handleRemoveDevice = useCallback((id) => {
-    setConexions(prev => prev.filter(c => c.id !== id));
-  }, []);
-
-  const handleDisconnectAll = useCallback(() => {
-    setConexions(prevConexions =>
-      prevConexions.map(c => {
-        if (c.connected) {
-          let updatedConexion = { ...c, connected: false };
-          if (c.connectedDate) {
-            const [now, connectedStartTime] = [new Date().getTime(), new Date(c.connectedDate).getTime()];
-            updatedConexion.accumulatedSeconds = (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000;
-            updatedConexion.connectedDate = null;
-          }
-          return updatedConexion;
-        }
-        return c;
-      })
-    );
-  }, []);
-
-  const handleRemoveAll = useCallback(() => {
-    setConexions([]);
-  }, []);
-
-  const handleToggleConnection = useCallback((id, newDesiredState) => {
-    setConexions(prev => prev.map(c =>
-      c.id === id
-        ? {
-            ...c,
-            connected: newDesiredState,
-            connectedDate: newDesiredState ? new Date().toISOString() : null,
-            accumulatedSeconds: newDesiredState ? c.accumulatedSeconds : (c.accumulatedSeconds || 0) + (new Date().getTime() - new Date(c.connectedDate).getTime()) / 1000
-          }
-        : c
-    ));
-  }, []);
 
   const toggleReading = useCallback(() => setIsReading(prev => !prev), []);
 
@@ -195,6 +190,48 @@ function App() {
       {isReading ? '🔈 Leitura Ativa' : '🔇 Leitura Desativada'}
     </button>
   );
+
+  const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor = '#e0e0e0') => {
+    const newDevice = {
+      id: window.crypto.randomUUID(),
+      nome: nomeCompleto,
+      imagem: iconSrc,
+      corFundo: backgroundColor,
+      conectado: true,
+      agendamentos: [],
+      connectedDate: new Date().toISOString(),
+      accumulatedSeconds: 0
+    };
+    setAparelhos(prev => [...prev, newDevice]);
+  }, []);
+
+  const handleRemoveDevice = useCallback((id) => {
+    setAparelhos(prev => prev.filter(c => c.id !== id));
+  }, []);
+
+  const handleToggleConnection = useCallback((id, newDesiredState) => {
+    setAparelhos(prev => prev.map(c => {
+      if (c.id === id) {
+        if (c.conectado && !newDesiredState) {
+          const now = new Date().getTime();
+          const connectedStartTime = new Date(c.connectedDate).getTime();
+          return {
+            ...c,
+            conectado: false,
+            connectedDate: null,
+            accumulatedSeconds: (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000
+          };
+        } else if (!c.conectado && newDesiredState) {
+          return {
+            ...c,
+            conectado: true,
+            connectedDate: new Date().toISOString()
+          };
+        }
+      }
+      return c;
+    }));
+  }, []);
 
   return (
     <div className="App">
@@ -216,8 +253,8 @@ function App() {
             path="/conexoes"
             element={
               <Conexoes
-                conexions={conexions}
-                setConexions={setConexions}
+                aparelhos={aparelhos}
+                setAparelhos={setAparelhos}
                 onConnectDevice={handleConnectDevice}
                 onRemoveDevice={handleRemoveDevice}
                 onToggleConnection={handleToggleConnection}
@@ -232,9 +269,6 @@ function App() {
             path="/chat"
             element={
               <Chat
-                onConnectDevice={handleConnectDevice}
-                onDisconnectAll={handleDisconnectAll}
-                onRemoveAll={handleRemoveAll}
                 productionData={formattedProductionData}
                 setTheme={setTheme}
               />
@@ -245,9 +279,7 @@ function App() {
           <Route path="/helpCenter" element={<HelpCenter />} />
           <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
           <Route path="*" element={<NotFound />} />
-
-              <Route path="/timer" element={<Timer />} />
-
+          <Route path="/timer" element={<Timer aparelhos={aparelhos} setAparelhos={setAparelhos} />} />
         </Routes>
         <Footer />
       </BrowserRouter>

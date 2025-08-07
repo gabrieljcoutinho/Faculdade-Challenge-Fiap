@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useLocation } from 'react-router-dom';
 import '../../CSS/Conexao/conexao.css';
@@ -40,14 +40,14 @@ const availableIcons = [
 ];
 const iconMap = availableIcons.reduce((acc, icon) => ({ ...acc, [icon.name]: icon.src }), {});
 
-const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) => {
+const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice }) => {
   const { search, pathname } = useLocation();
 
   const [uiState, setUiState] = useState({
     showAddForm: false, modoManual: false, isSearchingBluetooth: false, errorMessage: '',
     showConfirmDialog: false, visibleQRCode: null, selectedConexion: null, activeList: 'connected',
-    newConexion: { text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: '' },
-    activeIcon: null, activeColor: availableColors[0], editingId: null, removingId: null, conexionToDelete: null,
+    newConexion: { nome: '', imagem: '', corFundo: availableColors[0] },
+    activeIcon: null, activeColor: availableColors[0], editingId: null, conexionToDelete: null,
   });
 
   const {
@@ -64,11 +64,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
   const updateUiState = (newState) => setUiState(prev => ({ ...prev, ...newState }));
   const getIconKeyBySrc = (src) => availableIcons.find(icon => icon.src === src)?.name || '';
 
-  const handleDisconnectAll = () => {
-    setConexions(prevConexions =>
-      prevConexions.map(c => {
-        if (c.connected) {
-          let updatedConexion = { ...c, connected: false };
+  const handleDisconnectAll = useCallback(() => {
+    setAparelhos(prevAparelhos =>
+      prevAparelhos.map(c => {
+        if (c.conectado) {
+          let updatedConexion = { ...c, conectado: false };
           if (c.connectedDate) {
             const [now, connectedStartTime] = [new Date().getTime(), new Date(c.connectedDate).getTime()];
             updatedConexion.accumulatedSeconds = (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000;
@@ -79,11 +79,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
         return c;
       })
     );
-  };
+  }, [setAparelhos]);
 
-  const handleRemoveAll = () => {
-    setConexions([]);
-  };
+  const handleRemoveAll = useCallback(() => {
+    setAparelhos([]);
+  }, [setAparelhos]);
 
   useEffect(() => {
     const params = new URLSearchParams(search);
@@ -92,17 +92,17 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
     const iconSrc = iconMap[iconKey];
     if (!iconSrc) return;
     const actualBgColor = availableColors.includes(bgColor) ? bgColor : availableColors[0];
-    if (conexions.some(c => c.text.toLowerCase() === nome.toLowerCase())) {
+    if (aparelhos.some(c => c.nome.toLowerCase() === nome.toLowerCase())) {
       updateUiState({ errorMessage: `Já existe um aparelho chamado "${nome}".` });
     } else {
       onConnectDevice(nome, iconSrc, actualBgColor);
     }
     window.history.replaceState({}, document.title, pathname);
-  }, [search, onConnectDevice, conexions, pathname]);
+  }, [search, onConnectDevice, aparelhos, pathname]);
 
   useEffect(() => {
-    const timers = conexions.reduce((acc, c) => {
-      if (c.connected && c.connectedDate) {
+    const timers = aparelhos.reduce((acc, c) => {
+      if (c.conectado && c.connectedDate) {
         acc[c.id] = setInterval(() => {
           setConnectionTimers(prev => ({ ...prev, [c.id]: (new Date().getTime() - new Date(c.connectedDate).getTime()) / 1000 }));
         }, 1000);
@@ -110,13 +110,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
       return acc;
     }, {});
     return () => Object.values(timers).forEach(clearInterval);
-  }, [conexions]);
+  }, [aparelhos]);
 
   const closeAllModals = () => {
     updateUiState({
       showAddForm: false, modoManual: false, errorMessage: '', isSearchingBluetooth: false,
       showConfirmDialog: false, visibleQRCode: null, selectedConexion: null,
-      newConexion: { text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() },
+      newConexion: { nome: '', imagem: '', corFundo: availableColors[0] },
       activeIcon: null, activeColor: availableColors[0], editingId: null, conexionToDelete: null,
     });
     if (touchStartTimer.current) { clearTimeout(touchStartTimer.current); touchStartTimer.current = null; }
@@ -126,7 +126,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
   };
 
   const resetFormState = () => updateUiState({
-    newConexion: { text: '', icon: '', backgroundColor: availableColors[0], connected: true, connectedDate: new Date().toISOString() },
+    newConexion: { nome: '', imagem: '', corFundo: availableColors[0] },
     activeIcon: null, activeColor: availableColors[0], editingId: null, errorMessage: '', selectedConexion: null,
   });
 
@@ -146,7 +146,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
           name.includes('lamp') || name.includes('lâmpada') ? lampIcon :
             name.includes('airfry') || name.includes('fritadeira') ? airfry :
               name.includes('carregador') || name.includes('charger') ? carregador : lampIcon;
-      if (conexions.some(c => c.text.toLowerCase() === deviceName.toLowerCase())) {
+      if (aparelhos.some(c => c.nome.toLowerCase() === deviceName.toLowerCase())) {
         updateUiState({ errorMessage: `Já existe um aparelho chamado "${deviceName}".`, isSearchingBluetooth: false });
         return;
       }
@@ -162,50 +162,59 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
     }
   };
 
-  const saveConexion = (isEdit) => {
-    if (!newConexion.text.trim() || !newConexion.icon) {
+  const saveConexion = useCallback((isEdit) => {
+    if (!newConexion.nome.trim() || !newConexion.imagem) {
       updateUiState({ errorMessage: 'Dê um nome e selecione um ícone para o aparelho 😊' });
       return;
     }
-    if (conexions.some(c => c.text.toLowerCase() === newConexion.text.toLowerCase() && (!isEdit || c.id !== editingId))) {
-      updateUiState({ errorMessage: `Já existe um aparelho com o nome "${newConexion.text}".` });
+    if (aparelhos.some(c => c.nome.toLowerCase() === newConexion.nome.toLowerCase() && (!isEdit || c.id !== editingId))) {
+      updateUiState({ errorMessage: `Já existe um aparelho com o nome "${newConexion.nome}".` });
       return;
     }
-    isEdit ? setConexions(prev => prev.map(c => c.id === editingId ? { ...newConexion, id: c.id, connectedDate: c.connectedDate, accumulatedSeconds: c.accumulatedSeconds } : c)) : onConnectDevice(newConexion.text, newConexion.icon, newConexion.backgroundColor);
+    if (isEdit) {
+      setAparelhos(prev => prev.map(c => c.id === editingId ? {
+        ...c,
+        nome: newConexion.nome,
+        imagem: newConexion.imagem,
+        corFundo: newConexion.corFundo
+      } : c));
+    } else {
+      onConnectDevice(newConexion.nome, newConexion.imagem, newConexion.corFundo);
+    }
     closeAllModals();
-  };
+  }, [aparelhos, newConexion, editingId, onConnectDevice, setAparelhos]);
 
   const removeConexion = (id) => updateUiState({ conexionToDelete: id, showConfirmDialog: true });
   const handleConfirmRemove = () => { onRemoveDevice(conexionToDelete); closeAllModals(); };
   const handleCancelRemove = () => closeAllModals();
 
-  const handleEditClick = (c) => c.connected && updateUiState({
-    newConexion: { text: c.text, icon: c.icon, backgroundColor: c.backgroundColor || availableColors[0], connected: c.connected, connectedDate: c.connectedDate },
-    activeIcon: c.icon, activeColor: c.backgroundColor || availableColors[0], editingId: c.id,
+  const handleEditClick = (c) => c.conectado && updateUiState({
+    newConexion: { nome: c.nome, imagem: c.imagem, corFundo: c.corFundo || availableColors[0] },
+    activeIcon: c.imagem, activeColor: c.corFundo || availableColors[0], editingId: c.id,
     errorMessage: '', selectedConexion: null, showAddForm: true, isSearchingBluetooth: false, modoManual: true,
   });
 
-  const toggleConnection = (id, newDesiredState) => {
-    setConexions(prevConexions => prevConexions.map(c => {
+  const toggleConnection = useCallback((id, newDesiredState) => {
+    setAparelhos(prevAparelhos => prevAparelhos.map(c => {
       if (c.id === id) {
         let updatedConexion = { ...c };
-        if (c.connected && !newDesiredState) {
+        if (c.conectado && !newDesiredState) {
           if (c.connectedDate) {
             const [now, connectedStartTime] = [new Date().getTime(), new Date(c.connectedDate).getTime()];
             updatedConexion.accumulatedSeconds = (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000;
             updatedConexion.connectedDate = null;
           }
-          updatedConexion.connected = false;
-        } else if (!c.connected && newDesiredState) {
+          updatedConexion.conectado = false;
+        } else if (!c.conectado && newDesiredState) {
           updatedConexion.connectedDate = new Date().toISOString();
-          updatedConexion.connected = true;
+          updatedConexion.conectado = true;
         }
         return updatedConexion;
       }
       return c;
     }));
     if (selectedConexion && selectedConexion.id === id && !newDesiredState) updateUiState({ selectedConexion: null });
-  };
+  }, [setAparelhos, selectedConexion]);
 
   const formatDate = (d) => d ? new Date(d).toLocaleString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A';
   const getConnectionDuration = (connectedDateString, accumulatedSeconds = 0) => {
@@ -240,10 +249,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
     e.preventDefault(); e.currentTarget?.classList.remove('drag-over');
     const [draggedIdx, droppedIdx] = [dragItem.current, dragOverItem.current];
     if (draggedIdx === null || droppedIdx === null || draggedIdx === droppedIdx) return;
-    const newConexions = [...conexions];
-    const [draggedItemData] = newConexions.splice(draggedIdx, 1);
-    newConexions.splice(droppedIdx, 0, draggedItemData);
-    setConexions(newConexions);
+    const newAparelhos = [...aparelhos];
+    const [draggedItemData] = newAparelhos.splice(draggedIdx, 1);
+    newAparelhos.splice(droppedIdx, 0, draggedItemData);
+    setAparelhos(newAparelhos);
     dragItem.current = null; dragOverItem.current = null; setIsDragging(false);
   };
   const handleDragOver = (e) => e.preventDefault();
@@ -274,22 +283,22 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
     document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
     const [draggedIdx, droppedIdx] = [dragItem.current, dragOverItem.current];
     if (draggedIdx !== null && droppedIdx !== null && draggedIdx !== droppedIdx) {
-      const newConexions = [...conexions];
-      const [draggedItemData] = newConexions.splice(draggedIdx, 1);
-      newConexions.splice(droppedIdx, 0, draggedItemData);
-      setConexions(newConexions);
+      const newAparelhos = [...aparelhos];
+      const [draggedItemData] = newAparelhos.splice(draggedIdx, 1);
+      newAparelhos.splice(droppedIdx, 0, draggedItemData);
+      setAparelhos(newAparelhos);
     }
     dragItem.current = null; dragOverItem.current = null; setIsDragging(false);
   };
 
   const handleConexionClick = (c, e) => {
     if (isDragging || touchStartTimer.current) return;
-    if (c.connected && (e.target === e.currentTarget || e.target.classList.contains('conexion-text-overlay') || e.target.classList.contains('conexion-icon-overlay'))) {
+    if (c.conectado && (e.target === e.currentTarget || e.target.classList.contains('conexion-text-overlay') || e.target.classList.contains('conexion-icon-overlay'))) {
       updateUiState({ selectedConexion: c });
     }
   };
 
-  const devicesToDisplay = activeList === 'connected' ? conexions.filter(c => c.connected) : conexions.filter(c => !c.connected);
+  const devicesToDisplay = activeList === 'connected' ? aparelhos.filter(c => c.conectado) : aparelhos.filter(c => !c.conectado);
 
   return (
     <div className="conexao-container">
@@ -299,10 +308,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
       <div className="list-toggle-buttons">
         <span className={`slider-bar ${activeList}`} />
         <button className={`toggle-button connected-btn ${activeList === 'connected' ? 'active' : ''}`} onClick={() => updateUiState({ activeList: 'connected' })}>
-          Conectados ({conexions.filter(c => c.connected).length})
+          Conectados ({aparelhos.filter(c => c.conectado).length})
         </button>
         <button className={`toggle-button disconnected-btn ${activeList === 'disconnected' ? 'active' : ''}`} onClick={() => updateUiState({ activeList: 'disconnected' })}>
-          Desconectados ({conexions.filter(c => !c.connected).length})
+          Desconectados ({aparelhos.filter(c => !c.conectado).length})
         </button>
       </div>
 
@@ -313,12 +322,12 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             {(editingId || modoManual) ? (
               <>
-                <input title="Nome do aparelho" type="text" placeholder="Nome do Aparelho" value={newConexion.text} onChange={(e) => updateUiState({ newConexion: { ...newConexion, text: e.target.value } })} />
+                <input title="Nome do aparelho" type="text" placeholder="Nome do Aparelho" value={newConexion.nome} onChange={(e) => updateUiState({ newConexion: { ...newConexion, nome: e.target.value } })} />
                 <div className="icon-picker-styled">
                   <label>{escolherIcone}</label>
                   <div className="icons">
                     {availableIcons.map(icon => (
-                      <button key={icon.name} className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`} onClick={() => updateUiState({ newConexion: { ...newConexion, icon: icon.src }, activeIcon: icon.src })} type="button">
+                      <button key={icon.name} className={`icon-option ${activeIcon === icon.src ? 'active' : ''}`} onClick={() => updateUiState({ newConexion: { ...newConexion, imagem: icon.src }, activeIcon: icon.src })} type="button">
                         <img src={icon.src} alt={icon.name} style={{ width: 30, height: 30 }} />
                       </button>
                     ))}
@@ -328,7 +337,7 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
                   <label className="tipoDoFundoConexao">{escolherCorDefundo}</label>
                   <div className="colors">
                     {availableColors.map(color => (
-                      <button key={color} className={`color-option ${activeColor === color ? 'active' : ''}`} style={{ backgroundColor: color }} onClick={() => updateUiState({ newConexion: { ...newConexion, backgroundColor: color }, activeColor: color })} type="button" />
+                      <button key={color} className={`color-option ${activeColor === color ? 'active' : ''}`} style={{ backgroundColor: color }} onClick={() => updateUiState({ newConexion: { ...newConexion, corFundo: color }, activeColor: color })} type="button" />
                     ))}
                   </div>
                 </div>
@@ -378,31 +387,31 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
           devicesToDisplay.map((c, index) => (
             <div
               key={c.id} className={`retanguloAdicionado ${isDragging && dragItem.current === index ? 'dragging' : ''}`}
-              style={{ backgroundColor: c.connected ? (c.backgroundColor || '#e0e0e0') : '#696969' }}
+              style={{ backgroundColor: c.conectado ? (c.corFundo || '#e0e0e0') : '#696969' }}
               onClick={(e) => handleConexionClick(c, e)} draggable="true"
               onDragStart={(e) => handleDragStart(e, index)} onDragEnter={(e) => handleDragEnter(e, index)}
               onDragLeave={handleDragLeave} onDragEnd={handleDragEnd} onDrop={handleDrop} onDragOver={handleDragOver}
               onTouchStart={(e) => handleTouchStart(e, index)} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}
             >
-              {c.connected && (
+              {c.conectado && (
                 <div className="qrcode-top-left">
                   <button className="qrcode-button" onClick={(e) => { e.stopPropagation(); updateUiState({ visibleQRCode: c }); }} type="button">
                     <img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" />
                   </button>
                 </div>
               )}
-              {!c.connected && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
+              {!c.conectado && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
               <div className="icon-text-overlay">
-                <img src={c.icon} alt={c.text} className="conexion-icon-overlay" style={{ opacity: c.connected ? 1 : 0.5 }} />
-                <span className="conexion-text-overlay" style={{ color: c.connected ? 'inherit' : '#a9a9a9' }}>{c.text}</span>
+                <img src={c.imagem} alt={c.nome} className="conexion-icon-overlay" style={{ opacity: c.conectado ? 1 : 0.5 }} />
+                <span className="conexion-text-overlay" style={{ color: c.conectado ? 'inherit' : '#a9a9a9' }}>{c.nome}</span>
               </div>
               <div className="actions-overlay">
                 <button className="remove-button" onClick={(e) => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button>
-                <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.connected}>
+                <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.conectado}>
                   <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
                 </button>
                 <label className="switch">
-                  <input type="checkbox" checked={c.connected} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
+                  <input type="checkbox" checked={c.conectado} onChange={(e) => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} />
                   <span className="slider round"></span>
                 </label>
               </div>
@@ -417,10 +426,10 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
             <button className="close-button" onClick={() => updateUiState({ selectedConexion: null })}>X</button>
             <h2 title="Detalhes do Aparelho" alt=" Detalhes do Aprelho">{detalhesaparelhoAmpliados}</h2>
             <div className="detalhes-content">
-              <img src={selectedConexion.icon} alt={selectedConexion.text} className="detalhes-icon" />
-              <h3>{selectedConexion.text}</h3>
+              <img src={selectedConexion.imagem} alt={selectedConexion.nome} className="detalhes-icon" />
+              <h3>{selectedConexion.nome}</h3>
               <p>ID do Aparelho: {selectedConexion.id.substring(0, 8)}...</p>
-              {selectedConexion.connected ? (
+              {selectedConexion.conectado ? (
                 <>
                   <p>Status: Conectado</p>
                   <p className="tempo-aparelho-conectado">
@@ -435,13 +444,13 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
                 </>
               )}
               <div className="detalhes-actions">
-                <button className="edit-button-detalhes" onClick={() => handleEditClick(selectedConexion)} disabled={!selectedConexion.connected}>
+                <button className="edit-button-detalhes" onClick={() => handleEditClick(selectedConexion)} disabled={!selectedConexion.conectado}>
                   <img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} />
                   {btnEditar}
                 </button>
                 <button className="remove-button-detalhes" onClick={() => removeConexion(selectedConexion.id)}>{btnRemover}</button>
                 <label className="switch switch-detalhes">
-                  <input type="checkbox" checked={selectedConexion.connected} onChange={(e) => toggleConnection(selectedConexion.id, e.target.checked)} />
+                  <input type="checkbox" checked={selectedConexion.conectado} onChange={(e) => toggleConnection(selectedConexion.id, e.target.checked)} />
                   <span className="slider round"></span>
                 </label>
               </div>
@@ -466,11 +475,11 @@ const Conexoes = ({ conexions, setConexions, onConnectDevice, onRemoveDevice }) 
         <div className="modal-overlay" onClick={closeAllModals}>
           <div className="qrcode-modal" onClick={e => e.stopPropagation()}>
             <button className="close-button" onClick={closeAllModals}>X</button>
-            <h3 className='tituloQrcode'>QR Code para {visibleQRCode.text}</h3>
+            <h3 className='tituloQrcode'>QR Code para {visibleQRCode.nome}</h3>
             <br />
             <div className="qrCodeAparelho">
               <QRCodeCanvas className='qrcode'
-                value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.text)}&icon=${getIconKeyBySrc(visibleQRCode.icon)}&bgColor=${encodeURIComponent(visibleQRCode.backgroundColor)}`}
+                value={`${siteBaseURL}/conexoes?add=${encodeURIComponent(visibleQRCode.nome)}&icon=${getIconKeyBySrc(visibleQRCode.imagem)}&bgColor=${encodeURIComponent(visibleQRCode.corFundo)}`}
                 size={256} id="qrCodeId"
               />
             </div>
