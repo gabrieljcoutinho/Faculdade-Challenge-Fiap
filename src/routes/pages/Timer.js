@@ -27,11 +27,7 @@ const aparelhos = [
 
 const Timer = () => {
   const [configs, setConfigs] = useState(
-    aparelhos.map(() => ({
-      nome: '',
-      diasSelecionados: [],
-      horario: ''
-    }))
+    aparelhos.map(() => ({ nome: '', diasSelecionados: [], horario: '' }))
   );
 
   const [diasVermelhos, setDiasVermelhos] = useState(
@@ -43,12 +39,10 @@ const Timer = () => {
       const novoConfigs = [...prevConfigs];
       const diasAtuais = novoConfigs[indexAparelho].diasSelecionados;
 
-      if (diasAtuais.includes(diaIndex)) {
-        return prevConfigs;
-      } else {
+      if (!diasAtuais.includes(diaIndex)) {
         novoConfigs[indexAparelho].diasSelecionados = [...diasAtuais, diaIndex];
-        return novoConfigs;
       }
+      return novoConfigs;
     });
 
     setDiasVermelhos(prev => {
@@ -67,11 +61,7 @@ const Timer = () => {
   const excluirAgendamento = (index) => {
     setConfigs(prev => {
       const novo = [...prev];
-      novo[index] = {
-        nome: '',
-        diasSelecionados: [],
-        horario: ''
-      };
+      novo[index] = { nome: '', diasSelecionados: [], horario: '' };
       return novo;
     });
 
@@ -93,17 +83,13 @@ const Timer = () => {
   return (
     <>
       <div className="timer-container">
-        <h1>Agendar</h1>
+        <h1 className="titulo-principal">Agendar</h1>
 
         <div className="aparelhos-container">
           {aparelhos.map((aparelho, index) => (
             <div key={aparelho.id} className="aparelho-card">
               <div className="aparelho-img-bg" style={{ backgroundColor: aparelho.corFundo }}>
-                <img
-                  src={aparelho.imagem}
-                  alt={`Aparelho ${index + 1}`}
-                  className="img-aparelho"
-                />
+                <img src={aparelho.imagem} alt={`Aparelho ${index + 1}`} className="img-aparelho" />
               </div>
 
               <div className="aparelho-info">
@@ -112,26 +98,20 @@ const Timer = () => {
                   placeholder="Nome do aparelho"
                   value={configs[index].nome}
                   onChange={e => {
-                    const novoNome = e.target.value;
-                    setConfigs(prev => {
-                      const novo = [...prev];
-                      novo[index].nome = novoNome;
-                      return novo;
-                    });
+                    const novo = [...configs];
+                    novo[index].nome = e.target.value;
+                    setConfigs(novo);
                   }}
                   className="input-nome"
                 />
 
                 <input
                   type="time"
-                  value={configs[index].horario || ''}
+                  value={configs[index].horario}
                   onChange={e => {
-                    const novoHorario = e.target.value;
-                    setConfigs(prev => {
-                      const novo = [...prev];
-                      novo[index].horario = novoHorario;
-                      return novo;
-                    });
+                    const novo = [...configs];
+                    novo[index].horario = e.target.value;
+                    setConfigs(novo);
                   }}
                   className="input-horario"
                 />
@@ -144,9 +124,7 @@ const Timer = () => {
                     return (
                       <div
                         key={diaIndex}
-                        className={`dia-bolinha ${
-                          selecionado ? (vermelho ? 'selecionado-vermelho' : 'selecionado-preto') : ''
-                        }`}
+                        className={`dia-bolinha ${selecionado ? (vermelho ? 'selecionado-vermelho' : 'selecionado-preto') : ''}`}
                         title={dia.nome}
                         onClick={() => toggleDia(index, diaIndex)}
                       >
@@ -163,81 +141,21 @@ const Timer = () => {
 
       {aparelhosAgendados.length > 0 && (
         <>
-          <h2 style={{ textAlign: 'center', marginTop: '30px', color: '#333' }}>Agendamentos</h2>
-          <div style={{
-            backgroundColor: 'black',
-            padding: '20px',
-            borderRadius: '12px',
-            margin: '20px auto',
-            maxWidth: '900px',
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '20px',
-            justifyContent: 'center',
-            paddingBottom: '10rem'
-          }}>
+          <h2 className="titulo-agendamentos">Agendamentos</h2>
+
+          <div className="agendamentos-container">
             {aparelhosAgendados.map(({ aparelho, nome, diasSelecionados, horario, index }) => (
               <div key={index} className="aparelho-card">
                 <div className="aparelho-img-bg" style={{ backgroundColor: aparelho.corFundo }}>
-                  <img
-                    src={aparelho.imagem}
-                    alt={nome}
-                    className="img-aparelho"
-                  />
+                  <img src={aparelho.imagem} alt={nome} className="img-aparelho" />
                 </div>
 
                 <div className="aparelho-info">
-                  <div
-                    style={{
-                      width: '100%',
-                      marginBottom: '12px',
-                      fontWeight: '700',
-                      fontSize: '15px',
-                      color: '#fff',
-                      textAlign: 'center'
-                    }}
-                  >
-                    {nome}
-                  </div>
+                  <div className="nome-aparelho">{nome}</div>
+                  <div className="info-aparelho">Dias: {diasSelecionados.map(diaIdx => diasSemana[diaIdx].nome).join(', ')}</div>
+                  <div className="info-aparelho">Horário: {horario}</div>
 
-                  <div
-                    style={{
-                      width: '100%',
-                      marginBottom: '18px',
-                      fontSize: '14px',
-                      color: '#ccc',
-                      textAlign: 'center'
-                    }}
-                  >
-                    Dias: {diasSelecionados.map(diaIdx => diasSemana[diaIdx].nome).join(', ')}
-                  </div>
-
-                  <div
-                    style={{
-                      width: '100%',
-                      fontSize: '14px',
-                      color: '#ccc',
-                      textAlign: 'center',
-                      marginBottom: '10px'
-                    }}
-                  >
-                    Horário: {horario}
-                  </div>
-
-                  <button
-                    onClick={() => excluirAgendamento(index)}
-                    style={{
-                      cursor: 'pointer',
-                      padding: '6px 12px',
-                      borderRadius: '6px',
-                      border: 'none',
-                      backgroundColor: '#e53935',
-                      color: 'white',
-                      fontWeight: '600',
-                      width: '100%'
-                    }}
-                    title="Excluir agendamento"
-                  >
+                  <button className="btn-excluir" onClick={() => excluirAgendamento(index)}>
                     Excluir
                   </button>
                 </div>

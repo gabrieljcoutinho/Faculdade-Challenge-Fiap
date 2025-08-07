@@ -115,8 +115,149 @@
     box-shadow: 0 0 6px 1px rgba(255, 0, 0, 0.7);
 }
 
+
+
+
+
 @media (max-width: 600px) {
     .timer-container {
         padding-top: 30px;
     }
+}
+
+
+
+
+
+
+
+
+
+
+.timer-container {
+    height: auto;
+    padding: 20px;
+}
+
+.titulo-principal {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.aparelhos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.aparelho-card {
+    background-color: transparent;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 220px;
+    padding: 10px;
+    text-align: center;
+}
+
+.aparelho-img-bg {
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.img-aparelho {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.aparelho-info {
+    margin-top: 10px;
+}
+
+.input-nome,
+.input-horario {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.dias-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.dia-bolinha {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.selecionado-preto {
+    background-color: black;
+    color: white;
+}
+
+.selecionado-vermelho {
+    background-color: red;
+    color: white;
+}
+
+.titulo-agendamentos {
+    text-align: center;
+    margin-top: 30px;
+    color: #333;
+}
+
+.agendamentos-container {
+    background-color: black;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px auto;
+    max-width: 900px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding-bottom: 10rem;
+}
+
+.nome-aparelho {
+    width: 100%;
+    margin-bottom: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+}
+
+.info-aparelho {
+    width: 100%;
+    font-size: 14px;
+    color: #ccc;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.btn-excluir {
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #e53935;
+    color: white;
+    font-weight: 600;
+    width: 100%;
 }
