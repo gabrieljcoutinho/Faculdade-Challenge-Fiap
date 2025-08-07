@@ -142,10 +142,8 @@ function App() {
             );
           }
 
-          // Lógica de atualização de tempo acumulado e data de conexão
           let updatedConexion = { ...aparelho };
           if (updatedConexion.conectado && !novoStatusConectado) {
-            // Se estava conectado e agora não está
             if (updatedConexion.connectedDate) {
               const nowTime = new Date().getTime();
               const connectedStartTime = new Date(updatedConexion.connectedDate).getTime();
@@ -153,7 +151,6 @@ function App() {
             }
             updatedConexion.connectedDate = null;
           } else if (!updatedConexion.conectado && novoStatusConectado) {
-            // Se não estava conectado e agora está
             updatedConexion.connectedDate = new Date().toISOString();
           }
 
@@ -191,19 +188,26 @@ function App() {
     </button>
   );
 
-  const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor = '#e0e0e0') => {
-    const newDevice = {
-      id: window.crypto.randomUUID(),
-      nome: nomeCompleto,
-      imagem: iconSrc,
-      corFundo: backgroundColor,
-      conectado: true,
-      agendamentos: [],
-      connectedDate: new Date().toISOString(),
-      accumulatedSeconds: 0
-    };
-    setAparelhos(prev => [...prev, newDevice]);
-  }, []);
+  const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor = '#e0e0e0', delay = 0) => {
+    setTimeout(() => {
+      const existingDevice = aparelhos.find(c => c.nome.toLowerCase() === nomeCompleto.toLowerCase());
+      if (existingDevice) {
+        console.warn(`Aparelho "${nomeCompleto}" já existe.`);
+        return;
+      }
+      const newDevice = {
+        id: window.crypto.randomUUID(),
+        nome: nomeCompleto,
+        imagem: iconSrc,
+        corFundo: backgroundColor,
+        conectado: true,
+        agendamentos: [],
+        connectedDate: new Date().toISOString(),
+        accumulatedSeconds: 0
+      };
+      setAparelhos(prev => [...prev, newDevice]);
+    }, delay);
+  }, [aparelhos]);
 
   const handleRemoveDevice = useCallback((id) => {
     setAparelhos(prev => prev.filter(c => c.id !== id));
@@ -232,6 +236,20 @@ function App() {
       return c;
     }));
   }, []);
+
+  const handleRemoveAllDevices = useCallback(() => {
+    setAparelhos([]);
+  }, []);
+
+  const handleDisconnectAllDevices = useCallback(() => {
+    setAparelhos(prevAparelhos => prevAparelhos.map(c => ({
+      ...c,
+      conectado: false,
+      connectedDate: null,
+      accumulatedSeconds: (c.connectedDate ? (c.accumulatedSeconds || 0) + (new Date().getTime() - new Date(c.connectedDate).getTime()) / 1000 : c.accumulatedSeconds)
+    })));
+  }, []);
+
 
   return (
     <div className="App">
@@ -271,6 +289,10 @@ function App() {
               <Chat
                 productionData={formattedProductionData}
                 setTheme={setTheme}
+                aparelhos={aparelhos}
+                onConnectDevice={handleConnectDevice}
+                onRemoveAllDevices={handleRemoveAllDevices}
+                onDisconnectAllDevices={handleDisconnectAllDevices}
               />
             }
           />
