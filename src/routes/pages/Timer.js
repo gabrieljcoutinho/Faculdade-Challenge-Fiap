@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../CSS/Timer/index.css';
 
 import tv from '../../imgs/imgConexao/TV.png';
@@ -25,35 +25,68 @@ const aparelhos = [
   { id: 5, imagem: airfry, corFundo: '#c8e6c9' }
 ];
 
+// Função para carregar o estado inicial do localStorage
+const getInitialState = (key, defaultValue) => {
+  try {
+    const storedValue = localStorage.getItem(key);
+    if (storedValue) {
+      return JSON.parse(storedValue);
+    }
+    return defaultValue;
+  } catch (error) {
+    console.error("Erro ao carregar do localStorage:", error);
+    return defaultValue;
+  }
+};
+
 const Timer = () => {
-  const [configs, setConfigs] = useState(
-    aparelhos.map(() => ({ nome: '', diasSelecionados: [], horario: '' }))
+  const [configs, setConfigs] = useState(() =>
+    getInitialState(
+      'agendamentos',
+      aparelhos.map(() => ({ nome: '', diasSelecionados: [], horario: '' }))
+    )
   );
 
-  const [diasVermelhos, setDiasVermelhos] = useState(
-    aparelhos.map(() => [])
+  const [diasVermelhos, setDiasVermelhos] = useState(() =>
+    getInitialState(
+      'diasVermelhos',
+      aparelhos.map(() => [])
+    )
   );
+
+  // Salva os estados no localStorage sempre que eles mudam
+  useEffect(() => {
+    localStorage.setItem('agendamentos', JSON.stringify(configs));
+    localStorage.setItem('diasVermelhos', JSON.stringify(diasVermelhos));
+  }, [configs, diasVermelhos]);
 
   const toggleDia = (indexAparelho, diaIndex) => {
+    // Cria uma nova cópia do array de configurações
     setConfigs(prevConfigs => {
       const novoConfigs = [...prevConfigs];
       const diasAtuais = novoConfigs[indexAparelho].diasSelecionados;
 
-      if (!diasAtuais.includes(diaIndex)) {
-        novoConfigs[indexAparelho].diasSelecionados = [...diasAtuais, diaIndex];
-      }
+      const novoDias = diasAtuais.includes(diaIndex)
+        ? diasAtuais.filter(d => d !== diaIndex)
+        : [...diasAtuais, diaIndex];
+
+      // Cria uma nova cópia do objeto de agendamento para o aparelho
+      novoConfigs[indexAparelho] = {
+        ...novoConfigs[indexAparelho],
+        diasSelecionados: novoDias
+      };
+
       return novoConfigs;
     });
 
     setDiasVermelhos(prev => {
       const novoDiasVermelhos = [...prev];
       const diasAparelho = novoDiasVermelhos[indexAparelho];
+      const novoDias = diasAparelho.includes(diaIndex)
+        ? diasAparelho.filter(d => d !== diaIndex)
+        : [...diasAparelho, diaIndex];
 
-      if (diasAparelho.includes(diaIndex)) {
-        novoDiasVermelhos[indexAparelho] = diasAparelho.filter(d => d !== diaIndex);
-      } else {
-        novoDiasVermelhos[indexAparelho] = [...diasAparelho, diaIndex];
-      }
+      novoDiasVermelhos[indexAparelho] = novoDias;
       return novoDiasVermelhos;
     });
   };
@@ -101,9 +134,11 @@ const Timer = () => {
                   placeholder="Nome do aparelho"
                   value={configs[index].nome}
                   onChange={e => {
-                    const novo = [...configs];
-                    novo[index].nome = e.target.value;
-                    setConfigs(novo);
+                    setConfigs(prev => {
+                      const novo = [...prev];
+                      novo[index] = { ...novo[index], nome: e.target.value };
+                      return novo;
+                    });
                   }}
                   className="input-nome"
                 />
@@ -112,9 +147,11 @@ const Timer = () => {
                   type="time"
                   value={configs[index].horario}
                   onChange={e => {
-                    const novo = [...configs];
-                    novo[index].horario = e.target.value;
-                    setConfigs(novo);
+                    setConfigs(prev => {
+                      const novo = [...prev];
+                      novo[index] = { ...novo[index], horario: e.target.value };
+                      return novo;
+                    });
                   }}
                   className="input-horario"
                 />
