@@ -1,0 +1,120 @@
+.bateria-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    border-radius: 20px;
+    padding: 40px 50px;
+    max-width: 340px;
+    margin: 50px auto;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+    color: #004d40;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.bateria-container:hover {
+    box-shadow: 0 12px 35px rgba(0, 77, 64, 0.3);
+}
+
+.titulo-bateria {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 3px rgba(0, 77, 64, 0.3);
+}
+
+.imagem-bateria {
+    max-height: 180px;
+    width: 180px;
+    overflow: visible;
+    /* Removi o rotate pra deixar imagem na posição natural */
+    /* transform: rotate(-90deg); */
+    background: #b2dfdb;
+    border-radius: 30px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease-in-out, transform 0.5s ease;
+    cursor: default;
+    margin-bottom: 25px;
+}
+
+.imagem-bateria:hover {
+    transform: scale(1.05);
+}
+
+.imagem-bateria img {
+    max-height: 160px;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+@keyframes piscar-suave {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+.fade-piscar {
+    animation: piscar-suave 1.6s infinite;
+}
+
+.barra-progresso {
+    margin-top: 30px;
+    width: 100%;
+    height: 28px;
+    background: #b2dfdb;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 4px 8px rgba(0, 77, 64, 0.25);
+}
+
+.barra-preenchida {
+    height: 100%;
+    background: linear-gradient(90deg, #00796b, #004d40);
+    border-radius: 20px 0 0 20px;
+    transition: width 1s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0, 150, 136, 0.6);
+}
+
+.texto-nivel {
+    margin-top: 22px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #004d40;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.05em;
+}
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+    color: #004d40;
+    text-align: center;
+}
