@@ -6,7 +6,7 @@ import '../src/CSS/Reset.css';
 import '../src/CSS/mudarCorScrollBar.css';
 import tvIcon from './imgs/imgConexao/TV.png';
 import airConditionerIcon from '../src/imgs/imgConexao/ar-condicionado.png';
-import airfry from '../src/imgs/imgConexao/airfry.png';
+import geladeira from '../src/imgs/imgConexao/geladeira.png';
 import lampIcon from '../src/imgs/imgConexao/lampada.png';
 import carregador from '../src/imgs/imgConexao/carregador.png';
 
@@ -37,7 +37,7 @@ const aparelhosDisponiveis = [
   { id: 2, imagem: lampIcon, nome: 'Lâmpada', corFundo: '#fff9c4' },
   { id: 3, imagem: carregador, nome: 'Carregador', corFundo: '#ffe0b2' },
   { id: 4, imagem: airConditionerIcon, nome: 'Ar Condicionado', corFundo: '#d1c4e9' },
-  { id: 5, imagem: airfry, nome: 'Airfryer', corFundo: '#c8e6c9' }
+  { id: 5, imagem: geladeira, nome: 'Geladeira', corFundo: '#c8e6c9' }
 ];
 
 const getInitialAparelhos = () => {

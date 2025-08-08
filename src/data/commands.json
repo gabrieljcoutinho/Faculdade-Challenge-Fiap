@@ -155,16 +155,16 @@
     },
     {
       "triggers": [
-        "Conectar Airfry",
-        "Ligar Airfry",
-        "conectar airfry",
-        "ligar airfry",
-        "Conectar a Airfry",
-        "Ligar a Airfry",
-        "conectar a airfry",
-        "ligar a airfry"
+        "Conectar Geladeira",
+        "Ligar Geladeira",
+        "conectar gealadeira",
+        "ligar gealadeira",
+        "Conectar a Geladeira",
+        "Ligar a Geladeira",
+        "conectar a geladeira",
+        "ligar a geladeira"
       ],
-      "resposta": "Airfry Conectada"
+      "resposta": "Geladeira Conectada"
     },
     {
       "triggers": [

@@ -13,7 +13,7 @@ import comandosData from '../../data/commands.json';
 // Ícones
 import tvIcon from '../../imgs/imgConexao/TV.png';
 import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
-import airfry from '../../imgs/imgConexao/airfry.png';
+import geladeira from '../../imgs/imgConexao/geladeira.png'
 import lampIcon from '../../imgs/imgConexao/lampada.png';
 import carregador from '../../imgs/imgConexao/carregador.png';
 
@@ -25,7 +25,7 @@ const deviceIconMap = {
   TV: tvIcon,
   'Ar-Condicionado': airConditionerIcon,
   Lâmpada: lampIcon,
-  Airfry: airfry,
+  Geladeira: geladeira,
   Carregador: carregador,
 };
 
@@ -55,7 +55,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     'Conectar TV',
     'Conectar Ar-Condicionado',
     'Conectar Lâmpada',
-    'Conectar Airfry',
+    'Conectar Geladeira',
     'Conectar Carregador'
   ];
 
@@ -76,7 +76,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     { type: 'TV', keywords: ['tv', 'televisao', 'televisão'] },
     { type: 'Ar-Condicionado', keywords: ['ar-condicionado', 'ar condicionado'] },
     { type: 'Lâmpada', keywords: ['lampada', 'lâmpada'] },
-    { type: 'Airfry', keywords: ['airfry'] },
+    { type: 'Geladeira', keywords: ['geladeira'] },
     { type: 'Carregador', keywords: ['carregador'] }
   ];
 

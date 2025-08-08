@@ -22,7 +22,7 @@ import '../../CSS/Conexao/marcadorDeConsumo.css'
 import '../../CSS/Conexao/luzPelaImgNaoConectado.css'
 import tvIcon from '../../imgs/imgConexao/TV.png';
 import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
-import airfry from '../../imgs/imgConexao/airfry.png';
+import geladeira from '../../imgs/imgConexao/geladeira.png'
 import lampIcon from '../../imgs/imgConexao/lampada.png';
 import carregador from '../../imgs/imgConexao/carregador.png';
 import editIcon from '../../imgs/imgConexao/pencil.png'
@@ -36,7 +36,7 @@ const availableColors = ['#FFFFF0', '#FFFFE0', '#E0FFFF', '#F0FFF0', '#F5FFFA', 
 const siteBaseURL = "https://challenge-fiap-nine.vercel.app";
 const availableIcons = [
   { name: 'tv', src: tvIcon }, { name: 'arcondicionado', src: airConditionerIcon },
-  { name: 'lampada', src: lampIcon }, { name: 'airfry', src: airfry }, { name: 'carregador', src: carregador }
+  { name: 'lampada', src: lampIcon }, { name: 'geladeira', src: geladeira }, { name: 'carregador', src: carregador }
 ];
 const iconMap = availableIcons.reduce((acc, icon) => ({ ...acc, [icon.name]: icon.src }), {});
 
@@ -144,7 +144,7 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice }) 
       const guessedIcon = name.includes('tv') || name.includes('monitor') ? tvIcon :
         name.includes('ar') || name.includes('condicionado') ? airConditionerIcon :
           name.includes('lamp') || name.includes('lâmpada') ? lampIcon :
-            name.includes('airfry') || name.includes('fritadeira') ? airfry :
+            name.includes('geladeira') || name.includes('fritadeira') ? geladeira :
               name.includes('carregador') || name.includes('charger') ? carregador : lampIcon;
       if (aparelhos.some(c => c.nome.toLowerCase() === deviceName.toLowerCase())) {
         updateUiState({ errorMessage: `Já existe um aparelho chamado "${deviceName}".`, isSearchingBluetooth: false });
