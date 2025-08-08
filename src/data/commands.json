@@ -471,25 +471,14 @@
 
 
 {
- "triggers": [
-      "Horário",
-      "Horario",
-      "Relógio",
-      "Relogio",
-      "Marcar conexão",
-      "Marcar conexao",
-      "Marcar horário",
-      "Marcar horario",
-      "Marcar aparelho",
-      "Agendar conexão",
-      "Agendar aparelho",
-      "Agendar conexão",
-      "Agendar",
-      "Timer"
-      ],
-      "resposta": "REDIRECT:/timer"
+  "triggers": [
+"bateria",
+"Bateria",
+"Carregamento",
+"Carga"
+  ],
+  "resposta": "REDIRECT:/bateria"
 },
-
 
 
     {
