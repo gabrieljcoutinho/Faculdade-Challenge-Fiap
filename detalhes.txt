@@ -33,6 +33,8 @@ Lista de todos os comandos reconhecidos pelo sistema;
 
 Central de ajuda;
 
+Págian de % de energia na bateria
+
 Leitura em voz alta de textos clicados, promovendo acessibilidade;
 
 Alternância entre modo claro e escuro;
