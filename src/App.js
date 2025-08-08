@@ -29,6 +29,7 @@ import EsqueciSenha from './routes/pages/EsqueciSenha';
 import HelpCenter from '../src/routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 import NotFound from './routes/pages/NotFound';
+import Bateria from './routes/pages/Bateria';
 
 
 // --- Configurações dos Aparelhos Iniciais ---
@@ -301,6 +302,7 @@ function App() {
           <Route path="/helpCenter" element={<HelpCenter />} />
           <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/bateria" element={<Bateria />} />
         </Routes>
         <Footer />
       </BrowserRouter>
