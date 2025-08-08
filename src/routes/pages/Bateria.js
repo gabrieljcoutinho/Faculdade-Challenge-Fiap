@@ -41,7 +41,7 @@ const Bateria = () => {
         setIndiceAtual(i => (i < imagens.length - 1 ? i + 1 : i));
         setFadeState('fade-in');
       }, 800);
-    }, 10000);
+    }, 5000); // <--- Aqui foi alterado para 5 segundos
 
     return () => {
       clearInterval(piscarInterval.current);
