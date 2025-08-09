@@ -17,8 +17,14 @@ const imagens = [
   { src: bateriaCheia, alt: 'Bateria Cheia', nivel: 100 },
 ];
 
+const STORAGE_KEY = 'indiceBateriaAtual';
+
 const Bateria = () => {
-  const [indiceAtual, setIndiceAtual] = useState(0);
+  // Tenta carregar o índice salvo no localStorage ou começa no 0
+  const [indiceAtual, setIndiceAtual] = useState(() => {
+    const savedIndex = localStorage.getItem(STORAGE_KEY);
+    return savedIndex !== null ? Number(savedIndex) : 0;
+  });
   const [fadeState, setFadeState] = useState('fade-in');
   const piscarInterval = useRef(null);
   const trocaTimeout = useRef(null);
@@ -26,6 +32,9 @@ const Bateria = () => {
   useEffect(() => {
     clearInterval(piscarInterval.current);
     clearTimeout(trocaTimeout.current);
+
+    // Salva sempre o índice atual no localStorage
+    localStorage.setItem(STORAGE_KEY, indiceAtual);
 
     if (indiceAtual === 0 || indiceAtual === 1) {
       piscarInterval.current = setInterval(() => {
@@ -35,13 +44,16 @@ const Bateria = () => {
       setFadeState('fade-in');
     }
 
-    trocaTimeout.current = setTimeout(() => {
-      setFadeState('fade-out');
-      setTimeout(() => {
-        setIndiceAtual(i => (i < imagens.length - 1 ? i + 1 : i));
-        setFadeState('fade-in');
-      }, 800);
-    }, 5000); // <--- Aqui foi alterado para 5 segundos
+    // Só avança se não estiver no último índice (100%)
+    if (indiceAtual < imagens.length - 1) {
+      trocaTimeout.current = setTimeout(() => {
+        setFadeState('fade-out');
+        setTimeout(() => {
+          setIndiceAtual(i => (i < imagens.length - 1 ? i + 1 : i));
+          setFadeState('fade-in');
+        }, 800);
+      }, 5000); // 5 segundos
+    }
 
     return () => {
       clearInterval(piscarInterval.current);
