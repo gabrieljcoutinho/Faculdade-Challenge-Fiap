@@ -48,3 +48,25 @@ O sistema foi desenvolvido para funcionar tanto em dispositivos móveis quanto e
 As APIs utilizadas são fictícias, pois não há acesso direto aos dados reais da empresa.
 O projeto conta ainda com animações suaves, especialmente visíveis nas transições entre páginas, que apresentam um efeito de “apagando e acendendo” ao navegar entre seções, contribuindo para uma experiência mais fluida e agradável.
 O código-fonte está disponível publicamente para consulta.
+
+
+
+
+TELAS:
+iphone se (FEITO)
+iphone xr (FEITO)
+iphone 12 pro (FEITO)
+iphone 14 pro max (FEITO)
+pixel 7 (FEITO)
+sansung galaxy s8+ (FEITO + da pra melhorar)
+sansung galaxy s20 ultra (FEITO)
+ipad mini(FAZER)
+ipad air(FAZER)
+ipad pro (FEITO)
+surface pro 7 (FAZER)
+suface duo(FAZER)
+galaxy Z fold 5(FAZER)
+Asus zenbook fold (FAZER)
+SAnsung galaxy a51/71 (FEITO)
+Nest hub (FEITO)
+Nest hub max (FEITO)

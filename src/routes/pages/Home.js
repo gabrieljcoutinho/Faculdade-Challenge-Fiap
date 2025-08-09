@@ -191,8 +191,11 @@ const Home = () => {
             </div>
 
             <main className="main-content">
+
+
                 <section className="production-section">
-                    <h2 className='tituloPrincipalHome'>{tituloPrincipal}</h2>
+               <div className='producao'>
+                     <h2 className='tituloPrincipalHome'>{tituloPrincipal}</h2>
                     <div className="chart-type-selector">
                         <label className='tipoGrafico'>{graficos}</label>
                         <div className="chart-buttons" title='Gráfico'>
@@ -214,9 +217,13 @@ const Home = () => {
                             {relatorioDiário}
                         </button>
                     </section>
+               </div>
                 </section>
 
-                <section className="wf-section">
+
+
+               <div className='impactoAmbiental'>
+                 <section className="wf-section">
                     <h2>{subTitulo}</h2>
                     <div className="wf-card-container">
                         <div className="wf-card">
@@ -234,8 +241,10 @@ const Home = () => {
                         ))}
                     </div>
                 </section>
+               </div>
 
-                <section className="environmental-impact-section">
+
+                 <section className="environmental-impact-section">
                     <h2>{impacto}</h2>
                     <div className="impact-cards-container">
                         <div className="impact-card">
@@ -254,6 +263,8 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
+
+
                 <br /><br /><br /><br /><br />
             </main>
 
