@@ -9,6 +9,8 @@ import airConditionerIcon from '../src/imgs/imgConexao/ar-condicionado.png';
 import geladeira from '../src/imgs/imgConexao/geladeira.png';
 import lampIcon from '../src/imgs/imgConexao/lampada.png';
 import carregador from '../src/imgs/imgConexao/carregador.png';
+import caboIcon from '../src/imgs/imgConexao/cabo.png';
+import bateriaIcon from '../src/imgs/imgConexao/bateria.png';
 
 // Data
 import initialProductionData from './data/graficoHomeApi.json';
@@ -31,8 +33,6 @@ import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 import NotFound from './routes/pages/NotFound';
 import Bateria from './routes/pages/Bateria';
 
-
-// --- Configurações dos Aparelhos Iniciais ---
 const aparelhosDisponiveis = [
   { id: 1, imagem: tvIcon, nome: 'TV', corFundo: '#e0f7fa' },
   { id: 2, imagem: lampIcon, nome: 'Lâmpada', corFundo: '#fff9c4' },
@@ -97,6 +97,14 @@ function App() {
   const [isReading, setIsReading] = useState(() => localStorage.getItem('isReading') === 'true');
   const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
 
+  // NOVO: Estado para gerenciar o tipo de conexão (cabo ou bateria)
+  const [connectionType, setConnectionType] = useState(() => {
+    const savedType = localStorage.getItem('activeConnectionIcon');
+    return savedType || 'cabo';
+  });
+
+  const connectedDevicesCount = useMemo(() => aparelhos.filter(c => c.conectado).length, [aparelhos]);
+
   useEffect(() => {
     if (initialProductionData.datasetsOptions?.length) {
       setChosenDatasetIndex(Math.floor(Math.random() * initialProductionData.datasetsOptions.length));
@@ -127,45 +135,6 @@ function App() {
   }, [aparelhos]);
 
   useEffect(() => {
-    const checkAgendamentos = () => {
-      const now = new Date();
-      const diaAtual = now.getDay(); // 0 = Domingo, 1 = Segunda, etc.
-      const horaAtual = now.getHours().toString().padStart(2, '0');
-      const minutoAtual = now.getMinutes().toString().padStart(2, '0');
-      const horarioAtual = `${horaAtual}:${minutoAtual}`;
-
-      setAparelhos(prevAparelhos => {
-        return prevAparelhos.map(aparelho => {
-          let novoStatusConectado = false;
-          if (aparelho.agendamentos.length > 0) {
-            novoStatusConectado = aparelho.agendamentos.some(agendamento =>
-              agendamento.dias.includes(diaAtual) && agendamento.horario === horarioAtual
-            );
-          }
-
-          let updatedConexion = { ...aparelho };
-          if (updatedConexion.conectado && !novoStatusConectado) {
-            if (updatedConexion.connectedDate) {
-              const nowTime = new Date().getTime();
-              const connectedStartTime = new Date(updatedConexion.connectedDate).getTime();
-              updatedConexion.accumulatedSeconds = (updatedConexion.accumulatedSeconds || 0) + (nowTime - connectedStartTime) / 1000;
-            }
-            updatedConexion.connectedDate = null;
-          } else if (!updatedConexion.conectado && novoStatusConectado) {
-            updatedConexion.connectedDate = new Date().toISOString();
-          }
-
-          return { ...updatedConexion, conectado: novoStatusConectado };
-        });
-      });
-    };
-
-    const intervalId = setInterval(checkAgendamentos, 60000); // Checa a cada minuto
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
     localStorage.setItem('isReading', isReading);
   }, [isReading]);
 
@@ -173,6 +142,11 @@ function App() {
     document.body.className = theme;
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // NOVO: Efeito para salvar o tipo de conexão no localStorage
+  useEffect(() => {
+    localStorage.setItem('activeConnectionIcon', connectionType);
+  }, [connectionType]);
 
   useReadAloud(isReading);
 
@@ -214,30 +188,6 @@ function App() {
     setAparelhos(prev => prev.filter(c => c.id !== id));
   }, []);
 
-  const handleToggleConnection = useCallback((id, newDesiredState) => {
-    setAparelhos(prev => prev.map(c => {
-      if (c.id === id) {
-        if (c.conectado && !newDesiredState) {
-          const now = new Date().getTime();
-          const connectedStartTime = new Date(c.connectedDate).getTime();
-          return {
-            ...c,
-            conectado: false,
-            connectedDate: null,
-            accumulatedSeconds: (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000
-          };
-        } else if (!c.conectado && newDesiredState) {
-          return {
-            ...c,
-            conectado: true,
-            connectedDate: new Date().toISOString()
-          };
-        }
-      }
-      return c;
-    }));
-  }, []);
-
   const handleRemoveAllDevices = useCallback(() => {
     setAparelhos([]);
   }, []);
@@ -250,7 +200,6 @@ function App() {
       accumulatedSeconds: (c.connectedDate ? (c.accumulatedSeconds || 0) + (new Date().getTime() - new Date(c.connectedDate).getTime()) / 1000 : c.accumulatedSeconds)
     })));
   }, []);
-
 
   return (
     <div className="App">
@@ -276,7 +225,8 @@ function App() {
                 setAparelhos={setAparelhos}
                 onConnectDevice={handleConnectDevice}
                 onRemoveDevice={handleRemoveDevice}
-                onToggleConnection={handleToggleConnection}
+                onConnectionTypeChange={setConnectionType} // NOVO: Passa a função para alterar o tipo de conexão
+                activeConnectionIcon={connectionType} // NOVO: Passa o tipo de conexão ativo
               />
             }
           />
@@ -302,7 +252,14 @@ function App() {
           <Route path="/helpCenter" element={<HelpCenter />} />
           <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/bateria" element={<Bateria />} />
+          <Route
+            path="/bateria"
+            element={
+              <Bateria
+                isDischarging={connectionType === 'bateria' && connectedDevicesCount > 0}
+              />
+            }
+          />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -49,7 +49,8 @@ const connectionIcons = [
 
 const iconMap = availableIcons.reduce((acc, icon) => ({ ...acc, [icon.name]: icon.src }), {});
 
-const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice }) => {
+// NOVO: Adiciona a prop `onConnectionTypeChange` e `activeConnectionIcon`
+const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice, onConnectionTypeChange, activeConnectionIcon }) => {
   const { search, pathname } = useLocation();
 
   const [uiState, setUiState] = useState({
@@ -59,17 +60,14 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice }) 
     activeIcon: null, activeColor: availableColors[0], editingId: null, conexionToDelete: null,
   });
 
-  const [activeConnectionIcon, setActiveConnectionIcon] = useState(() => {
-    const savedIcon = localStorage.getItem('activeConnectionIcon');
-    return savedIcon || connectionIcons[0].name;
-  });
+  // REMOVIDO: O estado `activeConnectionIcon` e a função `setActiveConnectionIcon` não são mais necessários aqui, pois são gerenciados no `App.js`.
 
+  // NOVO: A função `toggleConnectionIcon` agora usa a prop `onConnectionTypeChange`
   const toggleConnectionIcon = () => {
     const currentIndex = connectionIcons.findIndex(icon => icon.name === activeConnectionIcon);
     const nextIndex = (currentIndex + 1) % connectionIcons.length;
     const nextIconName = connectionIcons[nextIndex].name;
-    setActiveConnectionIcon(nextIconName);
-    localStorage.setItem('activeConnectionIcon', nextIconName);
+    onConnectionTypeChange(nextIconName);
   };
 
   const {
@@ -327,7 +325,6 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice }) 
     <div className="conexao-container">
       <h1 className='tituloConexao'>{tituloPrincipal}</h1>
 
-      {/* Botão de adicionar aparelho com o ícone de conexão ao lado */}
       <div className="add-button-container">
         <button className="add-button-styled" onClick={handleAddClick}>
           <span className="plus-icon">+</span> {adicionarAparelho}

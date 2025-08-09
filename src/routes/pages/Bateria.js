@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import '../../CSS/Bateria/index.css';
 
+// Importando as imagens da bateria
 import bateriaVazia from '../../imgs/imgBateria/bateriaVazia.png';
 import bateriaCritica from '../../imgs/imgBateria/nivelCrítico.png';
 import semBateria from '../../imgs/imgBateria/semBateria.png';
@@ -8,60 +9,84 @@ import acabandoBateria from '../../imgs/imgBateria/acabandoBateria.png';
 import bateriaMedia from '../../imgs/imgBateria/bateriaMedia.png';
 import bateriaCheia from '../../imgs/imgBateria/bateriaCheia.png';
 
+// Array de imagens agora com um limiar de nível de porcentagem
 const imagens = [
-  { src: bateriaVazia, alt: 'Bateria Vazia', nivel: 0 },
-  { src: semBateria, alt: 'Sem Bateria', nivel: 10 },
-  { src: bateriaCritica, alt: 'Bateria Crítica', nivel: 25 },
-  { src: acabandoBateria, alt: 'Acabando Bateria', nivel: 50 },
-  { src: bateriaMedia, alt: 'Bateria Média', nivel: 75 },
-  { src: bateriaCheia, alt: 'Bateria Cheia', nivel: 100 },
+  { src: bateriaVazia, alt: 'Bateria Vazia', nivelMinimo: 0 },
+  { src: semBateria, alt: 'Sem Bateria', nivelMinimo: 1 },
+  { src: bateriaCritica, alt: 'Bateria Crítica', nivelMinimo: 11 },
+  { src: acabandoBateria, alt: 'Acabando Bateria', nivelMinimo: 26 },
+  { src: bateriaMedia, alt: 'Bateria Média', nivelMinimo: 51 },
+  { src: bateriaCheia, alt: 'Bateria Cheia', nivelMinimo: 76 },
 ];
 
-const STORAGE_KEY = 'indiceBateriaAtual';
-
-const Bateria = () => {
-  // Tenta carregar o índice salvo no localStorage ou começa no 0
-  const [indiceAtual, setIndiceAtual] = useState(() => {
-    const savedIndex = localStorage.getItem(STORAGE_KEY);
-    return savedIndex !== null ? Number(savedIndex) : 0;
-  });
+const Bateria = ({ isDischarging }) => {
+  // Agora usamos o estado para o nível da bateria diretamente em porcentagem (0-100)
+  const [nivelBateria, setNivelBateria] = useState(100);
   const [fadeState, setFadeState] = useState('fade-in');
-  const piscarInterval = useRef(null);
-  const trocaTimeout = useRef(null);
+  const dischargeIntervalRef = useRef(null);
+  const piscarIntervalRef = useRef(null);
 
+  // Efeito principal para controlar o descarregamento
   useEffect(() => {
-    clearInterval(piscarInterval.current);
-    clearTimeout(trocaTimeout.current);
+    // Limpa o intervalo anterior para evitar timers duplicados
+    if (dischargeIntervalRef.current) {
+      clearInterval(dischargeIntervalRef.current);
+    }
 
-    // Salva sempre o índice atual no localStorage
-    localStorage.setItem(STORAGE_KEY, indiceAtual);
+    // O descarregamento só acontece se `isDischarging` for verdadeiro
+    if (isDischarging) {
+      dischargeIntervalRef.current = setInterval(() => {
+        setNivelBateria(prevNivel => {
+          // Diminui o nível em 1, garantindo que não seja menor que 0
+          const newNivel = prevNivel > 0 ? prevNivel - 1 : 0;
+          // Se a bateria chegou a 0, limpa o timer
+          if (newNivel === 0) {
+            clearInterval(dischargeIntervalRef.current);
+          }
+          return newNivel;
+        });
+      }, 1000); // Descarrega a cada 1 segundo (1%)
+    } else {
+      // Se a animação for desligada, reseta a bateria para 100%
+      setNivelBateria(100);
+    }
 
-    if (indiceAtual === 0 || indiceAtual === 1) {
-      piscarInterval.current = setInterval(() => {
+    return () => {
+      if (dischargeIntervalRef.current) {
+        clearInterval(dischargeIntervalRef.current);
+      }
+    };
+  }, [isDischarging]); // O efeito roda sempre que `isDischarging` muda
+
+  // useMemo para selecionar a imagem correta de forma eficiente
+  const imagemAtual = useMemo(() => {
+    // A imagem é selecionada procurando no array de imagens
+    // a que tem o nível mínimo maior que a porcentagem atual da bateria.
+    // Usamos 'reverse' e 'find' para encontrar a imagem certa de forma mais limpa.
+    return imagens.slice().reverse().find(img => nivelBateria >= img.nivelMinimo) || imagens[0];
+  }, [nivelBateria]);
+
+  // Efeito para a animação de piscar quando o nível está baixo
+  useEffect(() => {
+    if (piscarIntervalRef.current) {
+      clearInterval(piscarIntervalRef.current);
+    }
+
+    // Ativa o piscar apenas para os níveis mais baixos (0% a 10%)
+    if (nivelBateria <= 10 && nivelBateria > 0) {
+      piscarIntervalRef.current = setInterval(() => {
         setFadeState(state => (state === 'fade-in' ? 'fade-piscar' : 'fade-in'));
       }, 800);
     } else {
       setFadeState('fade-in');
     }
 
-    // Só avança se não estiver no último índice (100%)
-    if (indiceAtual < imagens.length - 1) {
-      trocaTimeout.current = setTimeout(() => {
-        setFadeState('fade-out');
-        setTimeout(() => {
-          setIndiceAtual(i => (i < imagens.length - 1 ? i + 1 : i));
-          setFadeState('fade-in');
-        }, 800);
-      }, 5000); // 5 segundos
-    }
-
     return () => {
-      clearInterval(piscarInterval.current);
-      clearTimeout(trocaTimeout.current);
+      if (piscarIntervalRef.current) {
+        clearInterval(piscarIntervalRef.current);
+      }
     };
-  }, [indiceAtual]);
-
-  const nivelBateria = imagens[indiceAtual].nivel;
+  }, [nivelBateria]); // Roda sempre que o nível da bateria muda
 
   return (
     <div className="bateria-container">
@@ -69,9 +94,8 @@ const Bateria = () => {
 
       <div className={`imagem-bateria ${fadeState}`}>
         <img
-          src={imagens[indiceAtual].src}
-          alt={imagens[indiceAtual].alt}
-          key={indiceAtual}
+          src={imagemAtual.src}
+          alt={imagemAtual.alt}
           draggable={false}
           loading="lazy"
         />
@@ -91,7 +115,9 @@ const Bateria = () => {
         />
       </div>
 
-      <p className="texto-nivel">{nivelBateria}% carregado</p>
+      <p className="texto-nivel">
+        {nivelBateria}% {isDischarging ? 'descarregando' : 'carregado'}
+      </p>
     </div>
   );
 };
