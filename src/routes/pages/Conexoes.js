@@ -20,6 +20,8 @@ import '../../CSS/Conexao/mensagemMuitosAprelhosConectadosAoMesmoTempo.css';
 import '../../CSS/Conexao/btnConectadoEnaoConectado.css'
 import '../../CSS/Conexao/marcadorDeConsumo.css'
 import '../../CSS/Conexao/luzPelaImgNaoConectado.css'
+import '../../CSS/Conexao/iconeBateriaEcabo.css'
+
 import tvIcon from '../../imgs/imgConexao/TV.png';
 import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
 import geladeira from '../../imgs/imgConexao/geladeira.png'
@@ -30,6 +32,8 @@ import imgQrcode from '../../imgs/imgConexao/qrCode.png';
 import semConexao from '../../imgs/imgConexao/semConexao.png';
 import bluetoothIcon from '../../imgs/imgConexao/bluetooth.png';
 import manual from '../../imgs/imgConexao/manual.png';
+import caboIcon from '../../imgs/imgConexao/cabo.png';
+import bateriaIcon from '../../imgs/imgConexao/bateria.png';
 import { tituloPrincipal, adicionarAparelho, escolherIcone, escolherCorDefundo, btnBluetooth, procurarAparelhosBluetooth, adicicionarAparelhoManualmente, esperaMenuBluetoothAbrir, mensagemAparelhoDesativado, detalhesaparelhoAmpliados, mensagemExcluirAparelho, btnEditar, btnRemover, tempoAparelhoConectado, duracaoConecxao } from '../../constants/Conexao/index.js';
 
 const availableColors = ['#FFFFF0', '#FFFFE0', '#E0FFFF', '#F0FFF0', '#F5FFFA', '#FFFACD', '#F0FFFF', '#FFFAF0', '#F8F8FF'];
@@ -38,6 +42,11 @@ const availableIcons = [
   { name: 'tv', src: tvIcon }, { name: 'arcondicionado', src: airConditionerIcon },
   { name: 'lampada', src: lampIcon }, { name: 'geladeira', src: geladeira }, { name: 'carregador', src: carregador }
 ];
+const connectionIcons = [
+  { name: 'cabo', src: caboIcon },
+  { name: 'bateria', src: bateriaIcon },
+];
+
 const iconMap = availableIcons.reduce((acc, icon) => ({ ...acc, [icon.name]: icon.src }), {});
 
 const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice }) => {
@@ -49,6 +58,19 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice }) 
     newConexion: { nome: '', imagem: '', corFundo: availableColors[0] },
     activeIcon: null, activeColor: availableColors[0], editingId: null, conexionToDelete: null,
   });
+
+  const [activeConnectionIcon, setActiveConnectionIcon] = useState(() => {
+    const savedIcon = localStorage.getItem('activeConnectionIcon');
+    return savedIcon || connectionIcons[0].name;
+  });
+
+  const toggleConnectionIcon = () => {
+    const currentIndex = connectionIcons.findIndex(icon => icon.name === activeConnectionIcon);
+    const nextIndex = (currentIndex + 1) % connectionIcons.length;
+    const nextIconName = connectionIcons[nextIndex].name;
+    setActiveConnectionIcon(nextIconName);
+    localStorage.setItem('activeConnectionIcon', nextIconName);
+  };
 
   const {
     showAddForm, modoManual, isSearchingBluetooth, errorMessage, showConfirmDialog,
@@ -299,11 +321,23 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice }) 
   };
 
   const devicesToDisplay = activeList === 'connected' ? aparelhos.filter(c => c.conectado) : aparelhos.filter(c => !c.conectado);
+  const currentConnectionIconSrc = connectionIcons.find(icon => icon.name === activeConnectionIcon)?.src;
 
   return (
     <div className="conexao-container">
       <h1 className='tituloConexao'>{tituloPrincipal}</h1>
-      <button className="add-button-styled" onClick={handleAddClick}><span className="plus-icon">+</span> {adicionarAparelho}</button>
+
+      {/* Botão de adicionar aparelho com o ícone de conexão ao lado */}
+      <div className="add-button-container">
+        <button className="add-button-styled" onClick={handleAddClick}>
+          <span className="plus-icon">+</span> {adicionarAparelho}
+        </button>
+        {currentConnectionIconSrc && (
+          <button className="icon-connection-button" onClick={toggleConnectionIcon}>
+            <img src={currentConnectionIconSrc} alt={activeConnectionIcon} />
+          </button>
+        )}
+      </div>
 
       <div className="list-toggle-buttons">
         <span className={`slider-bar ${activeList}`} />
