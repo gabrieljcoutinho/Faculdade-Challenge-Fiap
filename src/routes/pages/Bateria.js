@@ -9,7 +9,6 @@ import acabandoBateria from '../../imgs/imgBateria/acabandoBateria.png';
 import bateriaMedia from '../../imgs/imgBateria/bateriaMedia.png';
 import bateriaCheia from '../../imgs/imgBateria/bateriaCheia.png';
 
-// Array de imagens agora com um limiar de nível de porcentagem
 const imagens = [
   { src: bateriaVazia, alt: 'Bateria Vazia', nivelMinimo: 0 },
   { src: semBateria, alt: 'Sem Bateria', nivelMinimo: 1 },
@@ -19,60 +18,62 @@ const imagens = [
   { src: bateriaCheia, alt: 'Bateria Cheia', nivelMinimo: 76 },
 ];
 
-const Bateria = ({ isDischarging }) => {
-  // Agora usamos o estado para o nível da bateria diretamente em porcentagem (0-100)
+const Bateria = ({ isDischarging, isCharging }) => {
   const [nivelBateria, setNivelBateria] = useState(100);
   const [fadeState, setFadeState] = useState('fade-in');
-  const dischargeIntervalRef = useRef(null);
+  const batteryIntervalRef = useRef(null);
   const piscarIntervalRef = useRef(null);
 
-  // Efeito principal para controlar o descarregamento
   useEffect(() => {
-    // Limpa o intervalo anterior para evitar timers duplicados
-    if (dischargeIntervalRef.current) {
-      clearInterval(dischargeIntervalRef.current);
+    if (batteryIntervalRef.current) {
+      clearInterval(batteryIntervalRef.current);
     }
 
-    // O descarregamento só acontece se `isDischarging` for verdadeiro
+    // A lógica de descarregamento tem prioridade
     if (isDischarging) {
-      dischargeIntervalRef.current = setInterval(() => {
+      batteryIntervalRef.current = setInterval(() => {
         setNivelBateria(prevNivel => {
-          // Diminui o nível em 1, garantindo que não seja menor que 0
           const newNivel = prevNivel > 0 ? prevNivel - 1 : 0;
-          // Se a bateria chegou a 0, limpa o timer
           if (newNivel === 0) {
-            clearInterval(dischargeIntervalRef.current);
+            clearInterval(batteryIntervalRef.current);
           }
           return newNivel;
         });
-      }, 1000); // Descarrega a cada 1 segundo (1%)
+      }, 1000);
+    } else if (isCharging) {
+      // Se não estiver descarregando, verificamos se está carregando
+      batteryIntervalRef.current = setInterval(() => {
+        setNivelBateria(prevNivel => {
+          const newNivel = prevNivel < 100 ? prevNivel + 1 : 100;
+          if (newNivel === 100) {
+            clearInterval(batteryIntervalRef.current);
+          }
+          return newNivel;
+        });
+      }, 1000);
     } else {
-      // Se a animação for desligada, reseta a bateria para 100%
-      setNivelBateria(100);
+        // Se a bateria não estiver carregando nem descarregando
+        // e o nível estiver em 100%, paramos qualquer timer ativo.
+        // Se não estiver em 100%, o timer para automaticamente.
+        setNivelBateria(prevNivel => prevNivel);
     }
 
     return () => {
-      if (dischargeIntervalRef.current) {
-        clearInterval(dischargeIntervalRef.current);
+      if (batteryIntervalRef.current) {
+        clearInterval(batteryIntervalRef.current);
       }
     };
-  }, [isDischarging]); // O efeito roda sempre que `isDischarging` muda
+  }, [isDischarging, isCharging]);
 
-  // useMemo para selecionar a imagem correta de forma eficiente
   const imagemAtual = useMemo(() => {
-    // A imagem é selecionada procurando no array de imagens
-    // a que tem o nível mínimo maior que a porcentagem atual da bateria.
-    // Usamos 'reverse' e 'find' para encontrar a imagem certa de forma mais limpa.
     return imagens.slice().reverse().find(img => nivelBateria >= img.nivelMinimo) || imagens[0];
   }, [nivelBateria]);
 
-  // Efeito para a animação de piscar quando o nível está baixo
   useEffect(() => {
     if (piscarIntervalRef.current) {
       clearInterval(piscarIntervalRef.current);
     }
 
-    // Ativa o piscar apenas para os níveis mais baixos (0% a 10%)
     if (nivelBateria <= 10 && nivelBateria > 0) {
       piscarIntervalRef.current = setInterval(() => {
         setFadeState(state => (state === 'fade-in' ? 'fade-piscar' : 'fade-in'));
@@ -86,7 +87,17 @@ const Bateria = ({ isDischarging }) => {
         clearInterval(piscarIntervalRef.current);
       }
     };
-  }, [nivelBateria]); // Roda sempre que o nível da bateria muda
+  }, [nivelBateria]);
+
+  const statusText = useMemo(() => {
+    if (isCharging) {
+      return 'carregando';
+    } else if (isDischarging) {
+      return 'descarregando';
+    } else {
+      return 'carregado';
+    }
+  }, [isCharging, isDischarging]);
 
   return (
     <div className="bateria-container">
@@ -116,7 +127,7 @@ const Bateria = ({ isDischarging }) => {
       </div>
 
       <p className="texto-nivel">
-        {nivelBateria}% {isDischarging ? 'descarregando' : 'carregado'}
+        {nivelBateria}% {statusText}
       </p>
     </div>
   );
