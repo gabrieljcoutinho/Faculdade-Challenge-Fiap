@@ -97,13 +97,20 @@ function App() {
   const [isReading, setIsReading] = useState(() => localStorage.getItem('isReading') === 'true');
   const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
 
-  // NOVO: Estado para gerenciar o tipo de conexão (cabo ou bateria)
   const [connectionType, setConnectionType] = useState(() => {
     const savedType = localStorage.getItem('activeConnectionIcon');
     return savedType || 'cabo';
   });
 
   const connectedDevicesCount = useMemo(() => aparelhos.filter(c => c.conectado).length, [aparelhos]);
+
+  const isCharging = useMemo(() => {
+    return connectionType === 'cabo';
+  }, [connectionType]);
+
+  const isDischarging = useMemo(() => {
+    return connectionType === 'bateria' && connectedDevicesCount > 0;
+  }, [connectionType, connectedDevicesCount]);
 
   useEffect(() => {
     if (initialProductionData.datasetsOptions?.length) {
@@ -143,7 +150,6 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // NOVO: Efeito para salvar o tipo de conexão no localStorage
   useEffect(() => {
     localStorage.setItem('activeConnectionIcon', connectionType);
   }, [connectionType]);
@@ -225,8 +231,8 @@ function App() {
                 setAparelhos={setAparelhos}
                 onConnectDevice={handleConnectDevice}
                 onRemoveDevice={handleRemoveDevice}
-                onConnectionTypeChange={setConnectionType} // NOVO: Passa a função para alterar o tipo de conexão
-                activeConnectionIcon={connectionType} // NOVO: Passa o tipo de conexão ativo
+                onConnectionTypeChange={setConnectionType}
+                activeConnectionIcon={connectionType}
               />
             }
           />
@@ -256,7 +262,8 @@ function App() {
             path="/bateria"
             element={
               <Bateria
-                isDischarging={connectionType === 'bateria' && connectedDevicesCount > 0}
+                isDischarging={isDischarging}
+                isCharging={isCharging}
               />
             }
           />
