@@ -13,11 +13,16 @@ import comandosData from '../../data/commands.json';
 // Ícones
 import tvIcon from '../../imgs/imgConexao/TV.png';
 import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
-import geladeira from '../../imgs/imgConexao/geladeira.png'
+import geladeira from '../../imgs/imgConexao/geladeira.png';
 import lampIcon from '../../imgs/imgConexao/lampada.png';
 import carregador from '../../imgs/imgConexao/carregador.png';
 
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+// Credenciais XWeather
+const XWEATHER_ID = 'AIY5fj62BOwQZ80a7DcMs';
+const XWEATHER_SECRET = 'EF6K9vozbZA3l03mZ3u7fQm98neqljrvODu0A1UC';
+const XWEATHER_NAMESPACE = 'Solaris';
+
+const GEMINI_API_KEY = 'AIzaSyA_OEC15jeB1rJsNrRYO3v7QDan7J3AWPg';
 
 const normalizeText = t => t.trim().toLowerCase();
 
@@ -92,6 +97,26 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     return null;
   }
 
+  // Função para chamar API XWeather (URL corrigida)
+  async function fetchClimaXWeather(cidade) {
+    try {
+      const response = await fetch(`https://api.xweather.com/v1/weather?city=${encodeURIComponent(cidade)}`, {
+        headers: {
+          'X-ID': XWEATHER_ID,
+          'X-Secret': XWEATHER_SECRET,
+          'X-Namespace': XWEATHER_NAMESPACE,
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`Erro na API XWeather: ${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   const handleSendMessage = async e => {
     e.preventDefault();
     const texto = newMessage.trim();
@@ -108,6 +133,40 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     let handledByLocalCommand = false;
     let botResponseContent = '';
 
+    // COMANDO: clima em [cidade]
+    const climaMatch = texto.match(/clima em (.+)/i);
+    if (climaMatch) {
+      const cidade = climaMatch[1].trim();
+
+      try {
+        const data = await fetchClimaXWeather(cidade);
+
+        // Ajuste conforme a estrutura real da resposta XWeather:
+        const descricao = data.weather?.description || 'Descrição indisponível';
+        const temp = data.temperature?.current ?? 'N/D';
+        const umidade = data.humidity ?? 'N/D';
+        const vento = data.wind_speed ?? 'N/D';
+
+        botResponseContent = `
+Clima em **${cidade}**:
+- Condição: ${descricao}
+- Temperatura: ${temp} °C
+- Umidade: ${umidade}%
+- Vento: ${vento} m/s
+        `;
+
+        setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
+      } catch (error) {
+        setMessages(m => [...m, { role: 'assistant', content: `Erro ao buscar clima: ${error.message}` }]);
+      } finally {
+        setLoading(false);
+        inputRef.current?.focus();
+      }
+
+      return;
+    }
+
+    // Comando "Conectar" dispositivos
     if (textoNormalizado.startsWith('conectar')) {
       let afterConectar = texto.slice(9).trim();
       const delayMs = parseTimeDelay(afterConectar);
@@ -145,6 +204,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
       }
     }
 
+    // Comandos fixos via JSON e navegação
     if (!handledByLocalCommand) {
       const foundCmd = comandosData.comandos.find(c =>
         c.triggers?.some(t => normalizeText(t) === textoNormalizado)
@@ -208,6 +268,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
       return;
     }
 
+    // Chamada para Gemini API
     if (!GEMINI_API_KEY) {
       setMessages(m => [...m, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
       setLoading(false);
