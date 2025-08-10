@@ -295,6 +295,7 @@ function App() {
                 onConnectDevice={handleConnectDevice}
                 onRemoveAllDevices={handleRemoveAllDevices}
                 onDisconnectAllDevices={handleDisconnectAllDevices}
+                onConnectionTypeChange={setConnectionType}
               />
             }
           />
