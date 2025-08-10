@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // CSS & Images
@@ -40,6 +40,8 @@ const aparelhosDisponiveis = [
   { id: 4, imagem: airConditionerIcon, nome: 'Ar Condicionado', corFundo: '#d1c4e9' },
   { id: 5, imagem: geladeira, nome: 'Geladeira', corFundo: '#c8e6c9' }
 ];
+
+const TAXA = 1; // 1% por segundo
 
 const getInitialAparelhos = () => {
   try {
@@ -104,12 +106,55 @@ function App() {
 
   const connectedDevicesCount = useMemo(() => aparelhos.filter(c => c.conectado).length, [aparelhos]);
 
-  const isCharging = useMemo(() => {
-    return connectionType === 'cabo';
-  }, [connectionType]);
+  // Estado e lógica global da bateria
+  const [nivelBateria, setNivelBateria] = useState(() => {
+    const saved = localStorage.getItem('nivelBateria');
+    return saved !== null ? Number(saved) : 100;
+  });
 
-  const isDischarging = useMemo(() => {
-    return connectionType === 'bateria' && connectedDevicesCount > 0;
+  const [statusBateria, setStatusBateria] = useState(() => {
+    const saved = localStorage.getItem('statusBateria');
+    return saved || 'stopped'; // 'discharging' | 'charging' | 'stopped'
+  });
+
+  // Definir isCharging e isDischarging baseados no status
+  const isCharging = statusBateria === 'charging';
+  const isDischarging = statusBateria === 'discharging';
+
+  // Atualiza bateria todo segundo independente da página
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNivelBateria(prevNivel => {
+        let novoNivel = prevNivel;
+
+        if (statusBateria === 'discharging') {
+          novoNivel = Math.max(0, prevNivel - TAXA);
+        } else if (statusBateria === 'charging') {
+          novoNivel = Math.min(100, prevNivel + TAXA);
+        }
+
+        localStorage.setItem('nivelBateria', novoNivel.toString());
+        return novoNivel;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [statusBateria]);
+
+  // Sincroniza statusBateria com localStorage
+  useEffect(() => {
+    localStorage.setItem('statusBateria', statusBateria);
+  }, [statusBateria]);
+
+  // Define o status da bateria com base na conexão e dispositivos conectados
+  useEffect(() => {
+    if (connectionType === 'bateria' && connectedDevicesCount > 0) {
+      setStatusBateria('discharging');
+    } else if (connectionType === 'cabo') {
+      setStatusBateria('charging');
+    } else {
+      setStatusBateria('stopped');
+    }
   }, [connectionType, connectedDevicesCount]);
 
   useEffect(() => {
@@ -264,6 +309,7 @@ function App() {
               <Bateria
                 isDischarging={isDischarging}
                 isCharging={isCharging}
+                nivelBateria={nivelBateria}
               />
             }
           />
