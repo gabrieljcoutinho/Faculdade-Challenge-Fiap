@@ -515,7 +515,9 @@
         "conexão por cabo",
         "carregar com cabo",
         "conectar cabo",
-        "usar cabo"
+        "usar cabo",
+        "Ativar cabo",
+        "ativar cabo"
             ],
       "resposta": "MUDAR_PARA_CABO"
     },
@@ -527,7 +529,9 @@
         "modo bateria",
         "conexão por bateria",
         "desconectar cabo",
-        "desconectar da tomada"
+        "desconectar da tomada",
+        "Ativar bateria",
+        "ativar bateria"
       ],
       "resposta": "MUDAR_PARA_BATERIA"
     }

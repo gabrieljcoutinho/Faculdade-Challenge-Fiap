@@ -20,7 +20,32 @@ const imagens = [
 const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   const [fadeState, setFadeState] = useState('fade-in');
   const piscarIntervalRef = useRef(null);
+  const notificou50 = useRef(false); // Evita notificar mais de uma vez
 
+  // Ativar permissão para notificações ao carregar
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  // Detectar quando atinge 50% e notificar
+  useEffect(() => {
+    if (nivelBateria === 50 && !notificou50.current) {
+      notificou50.current = true;
+
+      if (Notification.permission === "granted") {
+        new Notification("Aviso de Bateria", {
+          body: "A bateria está em 50%.",
+          icon: bateriaMedia
+        });
+      } else {
+        alert("A bateria está em 50%.");
+      }
+    }
+  }, [nivelBateria]);
+
+  // Piscar se crítico
   useEffect(() => {
     if (piscarIntervalRef.current) {
       clearInterval(piscarIntervalRef.current);
