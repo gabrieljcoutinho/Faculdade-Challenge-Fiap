@@ -28,7 +28,7 @@ import Cadastro from './routes/pages/Cadastro';
 import Chat from './routes/pages/Chat';
 import ComandosChat from './routes/pages/ComandosChat';
 import EsqueciSenha from './routes/pages/EsqueciSenha';
-import HelpCenter from '../src/routes/pages/HelpCenter';
+import HelpCenter from './routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 import NotFound from './routes/pages/NotFound';
 import Bateria from './routes/pages/Bateria';
@@ -41,16 +41,14 @@ const aparelhosDisponiveis = [
   { id: 5, imagem: geladeira, nome: 'Geladeira', corFundo: '#c8e6c9' }
 ];
 
-const TAXA = 1; // 1% por segundo
+const TAXA = 1; // % por segundo
 
 const getInitialAparelhos = () => {
   try {
-    const storedAparelhos = localStorage.getItem('aparelhos');
-    if (storedAparelhos) {
-      return JSON.parse(storedAparelhos);
-    }
+    const stored = localStorage.getItem('aparelhos');
+    if (stored) return JSON.parse(stored);
   } catch (e) {
-    console.error("Erro ao carregar aparelhos do localStorage:", e);
+    console.error("Erro ao carregar aparelhos:", e);
   }
   return aparelhosDisponiveis.map(a => ({
     ...a,
@@ -67,7 +65,6 @@ const useReadAloud = (isReading) => {
       window.speechSynthesis.cancel();
       return;
     }
-
     const handleClick = (e) => {
       const text = e.target.getAttribute('aria-label')
         || e.target.getAttribute('title')
@@ -75,7 +72,6 @@ const useReadAloud = (isReading) => {
         || e.target.alt
         || e.target.value
         || '';
-
       if (text.trim()) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
@@ -83,9 +79,7 @@ const useReadAloud = (isReading) => {
         window.speechSynthesis.speak(utterance);
       }
     };
-
     document.addEventListener('click', handleClick);
-
     return () => {
       document.removeEventListener('click', handleClick);
       window.speechSynthesis.cancel();
@@ -98,55 +92,50 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark-theme');
   const [isReading, setIsReading] = useState(() => localStorage.getItem('isReading') === 'true');
   const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
-
-  const [connectionType, setConnectionType] = useState(() => {
-    const savedType = localStorage.getItem('activeConnectionIcon');
-    return savedType || 'cabo';
-  });
+  const [connectionType, setConnectionType] = useState(() => localStorage.getItem('activeConnectionIcon') || 'cabo');
 
   const connectedDevicesCount = useMemo(() => aparelhos.filter(c => c.conectado).length, [aparelhos]);
 
-  // Estado e lógica global da bateria
+  // Bateria
   const [nivelBateria, setNivelBateria] = useState(() => {
     const saved = localStorage.getItem('nivelBateria');
     return saved !== null ? Number(saved) : 100;
   });
+  const [statusBateria, setStatusBateria] = useState(() => localStorage.getItem('statusBateria') || 'stopped');
 
-  const [statusBateria, setStatusBateria] = useState(() => {
-    const saved = localStorage.getItem('statusBateria');
-    return saved || 'stopped'; // 'discharging' | 'charging' | 'stopped'
-  });
-
-  // Definir isCharging e isDischarging baseados no status
   const isCharging = statusBateria === 'charging';
   const isDischarging = statusBateria === 'discharging';
 
-  // Atualiza bateria todo segundo independente da página
+  // Troca automática para cabo quando a bateria acabar
+  useEffect(() => {
+    if (isDischarging && nivelBateria <= 0) {
+      setConnectionType('cabo');
+    }
+  }, [isDischarging, nivelBateria]);
+
+  // Atualiza nível da bateria
   useEffect(() => {
     const interval = setInterval(() => {
-      setNivelBateria(prevNivel => {
-        let novoNivel = prevNivel;
-
+      setNivelBateria(prev => {
+        let novoNivel = prev;
         if (statusBateria === 'discharging') {
-          novoNivel = Math.max(0, prevNivel - TAXA);
+          novoNivel = Math.max(0, prev - TAXA);
         } else if (statusBateria === 'charging') {
-          novoNivel = Math.min(100, prevNivel + TAXA);
+          novoNivel = Math.min(100, prev + TAXA);
         }
-
         localStorage.setItem('nivelBateria', novoNivel.toString());
         return novoNivel;
       });
     }, 1000);
-
     return () => clearInterval(interval);
   }, [statusBateria]);
 
-  // Sincroniza statusBateria com localStorage
+  // Salva statusBateria
   useEffect(() => {
     localStorage.setItem('statusBateria', statusBateria);
   }, [statusBateria]);
 
-  // Define o status da bateria com base na conexão e dispositivos conectados
+  // Ajusta statusBateria conforme conexão
   useEffect(() => {
     if (connectionType === 'bateria' && connectedDevicesCount > 0) {
       setStatusBateria('discharging');
@@ -178,26 +167,11 @@ function App() {
     };
   }, [chosenDatasetIndex]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('aparelhos', JSON.stringify(aparelhos));
-    } catch (e) {
-      console.error("Erro ao salvar aparelhos:", e);
-    }
-  }, [aparelhos]);
-
-  useEffect(() => {
-    localStorage.setItem('isReading', isReading);
-  }, [isReading]);
-
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  useEffect(() => {
-    localStorage.setItem('activeConnectionIcon', connectionType);
-  }, [connectionType]);
+  // LocalStorage sincronização
+  useEffect(() => { localStorage.setItem('aparelhos', JSON.stringify(aparelhos)); }, [aparelhos]);
+  useEffect(() => { localStorage.setItem('isReading', isReading); }, [isReading]);
+  useEffect(() => { document.body.className = theme; localStorage.setItem('theme', theme); }, [theme]);
+  useEffect(() => { localStorage.setItem('activeConnectionIcon', connectionType); }, [connectionType]);
 
   useReadAloud(isReading);
 
@@ -214,24 +188,20 @@ function App() {
     </button>
   );
 
-  const handleConnectDevice = useCallback((nomeCompleto, iconSrc, backgroundColor = '#e0e0e0', delay = 0) => {
+  const handleConnectDevice = useCallback((nome, icon, cor = '#e0e0e0', delay = 0) => {
     setTimeout(() => {
-      const existingDevice = aparelhos.find(c => c.nome.toLowerCase() === nomeCompleto.toLowerCase());
-      if (existingDevice) {
-        console.warn(`Aparelho "${nomeCompleto}" já existe.`);
-        return;
-      }
-      const newDevice = {
+      if (aparelhos.find(c => c.nome.toLowerCase() === nome.toLowerCase())) return;
+      const novo = {
         id: window.crypto.randomUUID(),
-        nome: nomeCompleto,
-        imagem: iconSrc,
-        corFundo: backgroundColor,
+        nome,
+        imagem: icon,
+        corFundo: cor,
         conectado: true,
         agendamentos: [],
         connectedDate: new Date().toISOString(),
         accumulatedSeconds: 0
       };
-      setAparelhos(prev => [...prev, newDevice]);
+      setAparelhos(prev => [...prev, novo]);
     }, delay);
   }, [aparelhos]);
 
@@ -239,16 +209,14 @@ function App() {
     setAparelhos(prev => prev.filter(c => c.id !== id));
   }, []);
 
-  const handleRemoveAllDevices = useCallback(() => {
-    setAparelhos([]);
-  }, []);
+  const handleRemoveAllDevices = useCallback(() => setAparelhos([]), []);
 
   const handleDisconnectAllDevices = useCallback(() => {
-    setAparelhos(prevAparelhos => prevAparelhos.map(c => ({
+    setAparelhos(prev => prev.map(c => ({
       ...c,
       conectado: false,
       connectedDate: null,
-      accumulatedSeconds: (c.connectedDate ? (c.accumulatedSeconds || 0) + (new Date().getTime() - new Date(c.connectedDate).getTime()) / 1000 : c.accumulatedSeconds)
+      accumulatedSeconds: c.connectedDate ? (c.accumulatedSeconds || 0) + ((new Date().getTime() - new Date(c.connectedDate).getTime()) / 1000) : c.accumulatedSeconds
     })));
   }, []);
 
@@ -258,62 +226,19 @@ function App() {
         <Header><ReadAloudToggle /></Header>
         <ThemeToggle setTheme={setTheme} />
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                productionData={formattedProductionData}
-                initialProductionData={initialProductionData}
-                onDatasetChange={setChosenDatasetIndex}
-              />
-            }
-          />
-          <Route
-            path="/conexoes"
-            element={
-              <Conexoes
-                aparelhos={aparelhos}
-                setAparelhos={setAparelhos}
-                onConnectDevice={handleConnectDevice}
-                onRemoveDevice={handleRemoveDevice}
-                onConnectionTypeChange={setConnectionType}
-                activeConnectionIcon={connectionType}
-              />
-            }
-          />
+          <Route path="/" element={<Home productionData={formattedProductionData} initialProductionData={initialProductionData} onDatasetChange={setChosenDatasetIndex} />} />
+          <Route path="/conexoes" element={<Conexoes aparelhos={aparelhos} setAparelhos={setAparelhos} onConnectDevice={handleConnectDevice} onRemoveDevice={handleRemoveDevice} onConnectionTypeChange={setConnectionType} activeConnectionIcon={connectionType} />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/configuracoes" element={<Configuracoes isReading={isReading} toggleReading={toggleReading} />} />
           <Route path="/login" element={<Logar />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route
-            path="/chat"
-            element={
-              <Chat
-                productionData={formattedProductionData}
-                setTheme={setTheme}
-                aparelhos={aparelhos}
-                onConnectDevice={handleConnectDevice}
-                onRemoveAllDevices={handleRemoveAllDevices}
-                onDisconnectAllDevices={handleDisconnectAllDevices}
-                onConnectionTypeChange={setConnectionType}
-              />
-            }
-          />
+          <Route path="/chat" element={<Chat productionData={formattedProductionData} setTheme={setTheme} aparelhos={aparelhos} onConnectDevice={handleConnectDevice} onRemoveAllDevices={handleRemoveAllDevices} onDisconnectAllDevices={handleDisconnectAllDevices} onConnectionTypeChange={setConnectionType} />} />
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />
           <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
           <Route path="*" element={<NotFound />} />
-          <Route
-            path="/bateria"
-            element={
-              <Bateria
-                isDischarging={isDischarging}
-                isCharging={isCharging}
-                nivelBateria={nivelBateria}
-              />
-            }
-          />
+          <Route path="/bateria" element={<Bateria isDischarging={isDischarging} isCharging={isCharging} nivelBateria={nivelBateria} />} />
         </Routes>
         <Footer />
       </BrowserRouter>
