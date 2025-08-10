@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import '../../CSS/Bateria/index.css';
 
-// Importando as imagens da bateria
 import bateriaVazia from '../../imgs/imgBateria/bateriaVazia.png';
 import bateriaCritica from '../../imgs/imgBateria/nivelCrítico.png';
 import semBateria from '../../imgs/imgBateria/semBateria.png';
@@ -18,62 +17,14 @@ const imagens = [
   { src: bateriaCheia, alt: 'Bateria Cheia', nivelMinimo: 76 },
 ];
 
-const Bateria = ({ isDischarging, isCharging }) => {
-  const [nivelBateria, setNivelBateria] = useState(100);
+const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   const [fadeState, setFadeState] = useState('fade-in');
-  const batteryIntervalRef = useRef(null);
   const piscarIntervalRef = useRef(null);
-
-  useEffect(() => {
-    if (batteryIntervalRef.current) {
-      clearInterval(batteryIntervalRef.current);
-    }
-
-    // A lógica de descarregamento tem prioridade
-    if (isDischarging) {
-      batteryIntervalRef.current = setInterval(() => {
-        setNivelBateria(prevNivel => {
-          const newNivel = prevNivel > 0 ? prevNivel - 1 : 0;
-          if (newNivel === 0) {
-            clearInterval(batteryIntervalRef.current);
-          }
-          return newNivel;
-        });
-      }, 1000);
-    } else if (isCharging) {
-      // Se não estiver descarregando, verificamos se está carregando
-      batteryIntervalRef.current = setInterval(() => {
-        setNivelBateria(prevNivel => {
-          const newNivel = prevNivel < 100 ? prevNivel + 1 : 100;
-          if (newNivel === 100) {
-            clearInterval(batteryIntervalRef.current);
-          }
-          return newNivel;
-        });
-      }, 1000);
-    } else {
-        // Se a bateria não estiver carregando nem descarregando
-        // e o nível estiver em 100%, paramos qualquer timer ativo.
-        // Se não estiver em 100%, o timer para automaticamente.
-        setNivelBateria(prevNivel => prevNivel);
-    }
-
-    return () => {
-      if (batteryIntervalRef.current) {
-        clearInterval(batteryIntervalRef.current);
-      }
-    };
-  }, [isDischarging, isCharging]);
-
-  const imagemAtual = useMemo(() => {
-    return imagens.slice().reverse().find(img => nivelBateria >= img.nivelMinimo) || imagens[0];
-  }, [nivelBateria]);
 
   useEffect(() => {
     if (piscarIntervalRef.current) {
       clearInterval(piscarIntervalRef.current);
     }
-
     if (nivelBateria <= 10 && nivelBateria > 0) {
       piscarIntervalRef.current = setInterval(() => {
         setFadeState(state => (state === 'fade-in' ? 'fade-piscar' : 'fade-in'));
@@ -81,7 +32,6 @@ const Bateria = ({ isDischarging, isCharging }) => {
     } else {
       setFadeState('fade-in');
     }
-
     return () => {
       if (piscarIntervalRef.current) {
         clearInterval(piscarIntervalRef.current);
@@ -89,14 +39,14 @@ const Bateria = ({ isDischarging, isCharging }) => {
     };
   }, [nivelBateria]);
 
+  const imagemAtual = useMemo(() => {
+    return imagens.slice().reverse().find(img => nivelBateria >= img.nivelMinimo) || imagens[0];
+  }, [nivelBateria]);
+
   const statusText = useMemo(() => {
-    if (isCharging) {
-      return 'carregando';
-    } else if (isDischarging) {
-      return 'descarregando';
-    } else {
-      return 'carregado';
-    }
+    if (isCharging) return 'carregando';
+    if (isDischarging) return 'descarregando';
+    return 'carregado';
   }, [isCharging, isDischarging]);
 
   return (
@@ -104,12 +54,7 @@ const Bateria = ({ isDischarging, isCharging }) => {
       <h1 className="titulo-bateria">Nível da Bateria</h1>
 
       <div className={`imagem-bateria ${fadeState}`}>
-        <img
-          src={imagemAtual.src}
-          alt={imagemAtual.alt}
-          draggable={false}
-          loading="lazy"
-        />
+        <img src={imagemAtual.src} alt={imagemAtual.alt} draggable={false} loading="lazy" />
       </div>
 
       <div
@@ -122,12 +67,12 @@ const Bateria = ({ isDischarging, isCharging }) => {
         <div
           className="barra-preenchida"
           style={{ width: `${nivelBateria}%` }}
-          aria-label={`Nível da bateria: ${nivelBateria}%`}
+          aria-label={`Nível da bateria: ${nivelBateria.toFixed(0)}%`}
         />
       </div>
 
       <p className="texto-nivel">
-        {nivelBateria}% {statusText}
+        {nivelBateria.toFixed(0)}% {statusText}
       </p>
     </div>
   );
