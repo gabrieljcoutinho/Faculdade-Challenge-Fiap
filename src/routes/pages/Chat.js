@@ -37,7 +37,7 @@ const deviceIconMap = {
 const CHAT_STORAGE_KEY = 'chat_messages';
 const FIRST_INTERACTION_KEY = 'chat_firstInteraction';
 
-const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme }) => {
+const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme, onConnectionTypeChange }) => {
   const [messages, setMessages] = useState(() => {
     const saved = sessionStorage.getItem(CHAT_STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
@@ -251,6 +251,14 @@ Clima em **${cidade}**:
           case 'REMOVER_TODOS':
             onRemoveAll?.();
             botResponseContent = "Todos os aparelhos foram removidos.";
+            break;
+          case 'MUDAR_PARA_BATERIA':
+            onConnectionTypeChange('bateria');
+            botResponseContent = "Modo de energia alterado para Bateria. 🔋";
+            break;
+          case 'MUDAR_PARA_CABO':
+            onConnectionTypeChange('cabo');
+            botResponseContent = "Modo de energia alterado para Cabo. 🔌";
             break;
           default:
             botResponseContent = foundCmd.resposta;
