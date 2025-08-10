@@ -468,19 +468,17 @@
       ],
       "resposta": "REDIRECT:/configuracoes"
     },
-
-
-{
-  "triggers": [
-"bateria",
-"Bateria",
-"Carregamento",
-"Carga"
-  ],
-  "resposta": "REDIRECT:/bateria"
-},
-
-
+    {
+      "triggers": [
+        "bateria",
+        "Bateria",
+        "Carregamento",
+        "Carga",
+        "Modo bateria",
+        "Modo Bateria"
+      ],
+      "resposta": "REDIRECT:/bateria"
+    },
     {
       "triggers": [
         "Desconectar todos os aparelhos",
@@ -496,21 +494,42 @@
         "remover todos os aparelhos",
         "Remover aparelhos",
         "remover aparelhos",
-
-         "Remover todos os aparelhos conectados",
+        "Remover todos os aparelhos conectados",
         "remover todos os aparelhos conectados",
         "Remover todos os parelhos conectados",
         "remover todos os parelhos conectados",
-
-
         "Remover todas as conexões",
-         "Remover todas as conexoes",
-             "remover todas as conexões",
-         "remover todas as conexoes",
-         "Excluir aparelhos",
-         "Excluir todos os aparelhos"
+        "Remover todas as conexoes",
+        "remover todas as conexões",
+        "remover todas as conexoes",
+        "Excluir aparelhos",
+        "Excluir todos os aparelhos"
       ],
       "resposta": "REMOVER_TODOS"
+    },
+    {
+      "triggers": [
+        "Mudar para cabo",
+        "usar o cabo",
+        "cabo de energia",
+        "conexão por cabo",
+        "carregar com cabo",
+        "conectar cabo",
+        "usar cabo"
+            ],
+      "resposta": "MUDAR_PARA_CABO"
+    },
+    {
+      "triggers": [
+        "Mudar para bateria",
+        "usar a bateria",
+        "usar bateria",
+        "modo bateria",
+        "conexão por bateria",
+        "desconectar cabo",
+        "desconectar da tomada"
+      ],
+      "resposta": "MUDAR_PARA_BATERIA"
     }
   ]
 }
