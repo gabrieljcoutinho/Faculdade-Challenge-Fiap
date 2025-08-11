@@ -8,7 +8,8 @@ import acabandoBateria from '../../imgs/imgBateria/acabandoBateria.png';
 import bateriaMedia from '../../imgs/imgBateria/bateriaMedia.png';
 import bateriaCheia from '../../imgs/imgBateria/bateriaCheia.png';
 
-const imagens = [
+// Mapeamento de imagens
+const MAPA_BATERIA = [
   { src: bateriaVazia, alt: 'Bateria Vazia', nivelMinimo: 0 },
   { src: semBateria, alt: 'Sem Bateria', nivelMinimo: 1 },
   { src: bateriaCritica, alt: 'Bateria Crítica', nivelMinimo: 11 },
@@ -17,23 +18,25 @@ const imagens = [
   { src: bateriaCheia, alt: 'Bateria Cheia', nivelMinimo: 76 },
 ];
 
-const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
-  const [fadeState, setFadeState] = useState('fade-in');
-  const piscarIntervalRef = useRef(null);
-  const notificou50 = useRef(false); // Evita notificar mais de uma vez
+// Função para obter imagem baseada no nível
+const getImagemBateria = (nivel) =>
+  [...MAPA_BATERIA].reverse().find(img => nivel >= img.nivelMinimo) || MAPA_BATERIA[0];
 
-  // Ativar permissão para notificações ao carregar
+const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
+  const [piscar, setPiscar] = useState(false);
+  const notificou50 = useRef(false);
+
+  // Pede permissão de notificação uma vez
   useEffect(() => {
     if (Notification.permission !== "granted") {
       Notification.requestPermission();
     }
   }, []);
 
-  // Detectar quando atinge 50% e notificar
+  // Notificação ao atingir 50%
   useEffect(() => {
     if (nivelBateria === 50 && !notificou50.current) {
       notificou50.current = true;
-
       if (Notification.permission === "granted") {
         new Notification("Aviso de Bateria", {
           body: "A bateria está em 50%.",
@@ -45,28 +48,12 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     }
   }, [nivelBateria]);
 
-  // Piscar se crítico
+  // Ativa/desativa piscada
   useEffect(() => {
-    if (piscarIntervalRef.current) {
-      clearInterval(piscarIntervalRef.current);
-    }
-    if (nivelBateria <= 10 && nivelBateria > 0) {
-      piscarIntervalRef.current = setInterval(() => {
-        setFadeState(state => (state === 'fade-in' ? 'fade-piscar' : 'fade-in'));
-      }, 800);
-    } else {
-      setFadeState('fade-in');
-    }
-    return () => {
-      if (piscarIntervalRef.current) {
-        clearInterval(piscarIntervalRef.current);
-      }
-    };
+    setPiscar(nivelBateria <= 10 && nivelBateria > 0);
   }, [nivelBateria]);
 
-  const imagemAtual = useMemo(() => {
-    return imagens.slice().reverse().find(img => nivelBateria >= img.nivelMinimo) || imagens[0];
-  }, [nivelBateria]);
+  const imagemAtual = useMemo(() => getImagemBateria(nivelBateria), [nivelBateria]);
 
   const statusText = useMemo(() => {
     if (isCharging) return 'carregando';
@@ -75,10 +62,10 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   }, [isCharging, isDischarging]);
 
   return (
-    <div className="bateria-container">
+    <div className="bateria-container" aria-live="polite">
       <h1 className="titulo-bateria">Nível da Bateria</h1>
 
-      <div className={`imagem-bateria ${fadeState}`}>
+      <div className={`imagem-bateria ${piscar ? 'piscar' : ''}`}>
         <img src={imagemAtual.src} alt={imagemAtual.alt} draggable={false} loading="lazy" />
       </div>
 
