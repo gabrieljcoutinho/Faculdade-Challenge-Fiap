@@ -96,31 +96,27 @@ function App() {
 
   const connectedDevicesCount = useMemo(() => aparelhos.filter(c => c.conectado).length, [aparelhos]);
 
-  // Bateria
+  // Lógica de estado da bateria
   const [nivelBateria, setNivelBateria] = useState(() => {
     const saved = localStorage.getItem('nivelBateria');
     return saved !== null ? Number(saved) : 100;
   });
-  const [statusBateria, setStatusBateria] = useState(() => localStorage.getItem('statusBateria') || 'stopped');
 
-  const isCharging = statusBateria === 'charging';
-  const isDischarging = statusBateria === 'discharging';
+  // A nova lógica define isCharging e isDischarging com base na contagem de aparelhos conectados
+  // se houver 0 aparelhos conectados e o tipo de conexão for 'bateria', a bateria carrega.
+  // se o tipo de conexão for 'cabo', a bateria sempre carrega.
+  // se houver algum aparelho conectado e o tipo de conexão for 'bateria', a bateria descarrega.
+  const isCharging = (connectionType === 'bateria' && connectedDevicesCount === 0) || connectionType === 'cabo';
+  const isDischarging = connectionType === 'bateria' && connectedDevicesCount > 0;
 
-  // Troca automática para cabo quando a bateria acabar
-  useEffect(() => {
-    if (isDischarging && nivelBateria <= 0) {
-      setConnectionType('cabo');
-    }
-  }, [isDischarging, nivelBateria]);
-
-  // Atualiza nível da bateria
+  // Atualiza nível da bateria com base em isCharging e isDischarging
   useEffect(() => {
     const interval = setInterval(() => {
       setNivelBateria(prev => {
         let novoNivel = prev;
-        if (statusBateria === 'discharging') {
+        if (isDischarging) {
           novoNivel = Math.max(0, prev - TAXA);
-        } else if (statusBateria === 'charging') {
+        } else if (isCharging) {
           novoNivel = Math.min(100, prev + TAXA);
         }
         localStorage.setItem('nivelBateria', novoNivel.toString());
@@ -128,23 +124,19 @@ function App() {
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [statusBateria]);
+  }, [isDischarging, isCharging]);
 
-  // Salva statusBateria
+  // Salva o tipo de conexão no localStorage
   useEffect(() => {
-    localStorage.setItem('statusBateria', statusBateria);
-  }, [statusBateria]);
+    localStorage.setItem('activeConnectionIcon', connectionType);
+  }, [connectionType]);
 
-  // Ajusta statusBateria conforme conexão
+  // Troca automática para cabo quando a bateria acaba
   useEffect(() => {
-    if (connectionType === 'bateria' && connectedDevicesCount > 0) {
-      setStatusBateria('discharging');
-    } else if (connectionType === 'cabo') {
-      setStatusBateria('charging');
-    } else {
-      setStatusBateria('stopped');
+    if (nivelBateria <= 0 && connectionType === 'bateria') {
+      setConnectionType('cabo');
     }
-  }, [connectionType, connectedDevicesCount]);
+  }, [nivelBateria, connectionType]);
 
   useEffect(() => {
     if (initialProductionData.datasetsOptions?.length) {
@@ -171,7 +163,6 @@ function App() {
   useEffect(() => { localStorage.setItem('aparelhos', JSON.stringify(aparelhos)); }, [aparelhos]);
   useEffect(() => { localStorage.setItem('isReading', isReading); }, [isReading]);
   useEffect(() => { document.body.className = theme; localStorage.setItem('theme', theme); }, [theme]);
-  useEffect(() => { localStorage.setItem('activeConnectionIcon', connectionType); }, [connectionType]);
 
   useReadAloud(isReading);
 
