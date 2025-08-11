@@ -34,7 +34,8 @@ Lista de todos os comandos reconhecidos pelo sistema;
 
 Central de ajuda;
 
-Págian de % de energia na bateria com animação de descarregar quando tiver algum aprelho conectado nas conexoes usando a abateria e há um animação de carregar quando a bateria nao esta em 100% e na oesat em uso
+Págian de % de energia na bateria com animação de descarregar quando tiver algum aprelho conectado nas conexoes usando a
+bateria e há um animação de carregar quando a bateria nao esta em 100% e na oesat em uso
 
 Leitura em voz alta de textos clicados, promovendo acessibilidade;
 
