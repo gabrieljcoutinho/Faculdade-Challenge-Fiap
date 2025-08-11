@@ -1,0 +1,66 @@
+.imagem-bateria {
+    max-height: 180px;
+    width: 180px;
+    background: #b2dfdb;
+    border-radius: 30px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease-in-out, transform 0.5s ease;
+    cursor: default;
+    margin-bottom: 25px;
+}
+
+.imagem-bateria:hover {
+    transform: scale(1.05);
+}
+
+.imagem-bateria img {
+    max-height: 160px;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Animações */
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+@keyframes piscar-suave {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+.fade-piscar {
+    animation: piscar-suave 1.6s infinite;
+}
+
+.piscar {
+    animation: blink 0.8s infinite alternate;
+}
+
+@keyframes blink {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.4;
+    }
+}
