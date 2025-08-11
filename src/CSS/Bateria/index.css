@@ -107,3 +107,19 @@
     text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
     letter-spacing: 0.05em;
 }
+
+
+
+.piscar {
+    animation: blink 0.8s infinite alternate;
+}
+
+@keyframes blink {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.4;
+    }
+}
