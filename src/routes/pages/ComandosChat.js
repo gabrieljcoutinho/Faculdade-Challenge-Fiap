@@ -79,6 +79,18 @@ const comandos = [
       '➤ Ir para perguntas frequentes',
       '➤ Ir para comandos do chat'
     ]
+  },
+
+  {
+    title: 'Troca bateria/energia elétrica',
+    subcommands: [
+      '➤ Usar bateria',
+      '➤ Modo bateria',
+      '➤ Usar energia elétrica',
+      '➤ Usar cabo',
+      '➤ Ativar cabo'
+
+    ]
   }
 ];
 
