@@ -19,7 +19,7 @@ O usuário pode adicionar dispositivos de duas formas: via conexão Bluetooth (s
   em duas listas: conectados e desconectados. Quando um aparelho é desconectado, ele é automaticamente movido para a seção de desconectados, podendo ser reativado a qualquer momento.
  Também é possível reordenar os dispositivos arrastando-os na tela. Na tela, há uma imagem que indica que não há nenhum aparelho conectado, para informar o usuário e evitar que a área fique em branco.
  Há aum sitema de usra bateria e usar energia eletrica
-do lado de conectar um aprelho o usuario pdoe escolehr em usar energia eletrica ou bateria.
+do lado de conectar um aprelho o usuario pode escolher em usar energia eletrica ou bateria.
 
 Chatbot
 Foi implementado um sistema de mensagens com recursos básicos de chat. Além disso, o chatbot integra uma API personalizada de perguntas e respostas específicas, e uma API de inteligência artificial para respostas gerais.
