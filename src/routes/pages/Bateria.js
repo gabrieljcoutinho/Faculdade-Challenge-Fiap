@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import '../../CSS/Bateria/index.css';
+import '../../CSS/Bateria/container.css';
+import '../../CSS/Bateria//imagem.css';
+import '../../CSS/Bateria//progresso.css';
+
 
 import bateriaVazia from '../../imgs/imgBateria/bateriaVazia.png';
 import bateriaCritica from '../../imgs/imgBateria/nivelCrítico.png';
