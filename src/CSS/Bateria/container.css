@@ -1,0 +1,27 @@
+.bateria-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    border-radius: 20px;
+    padding: 40px 50px;
+    max-width: 340px;
+    margin: 50px auto;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+    color: #004d40;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.bateria-container:hover {
+    box-shadow: 0 12px 35px rgba(0, 77, 64, 0.3);
+}
+
+.titulo-bateria {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 3px rgba(0, 77, 64, 0.3);
+}
