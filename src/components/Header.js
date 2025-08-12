@@ -1,3 +1,4 @@
+// Header.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../CSS/Header/menu.css';
@@ -10,6 +11,7 @@ import settingsIcon from '../imgs/imgHeader/engrenagem.png';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hasNewMessage, setHasNewMessage] = useState(false); // estado para bolinha vermelha
   const location = useLocation();
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
@@ -42,6 +44,20 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [menuOpen]);
 
+  // Lê do sessionStorage se tem nova mensagem
+  useEffect(() => {
+    const novaMsg = sessionStorage.getItem('hasNewChatMessage');
+    setHasNewMessage(novaMsg === 'true');
+  }, []);
+
+  // Quando o usuário entra na página /chat, limpar notificação
+  useEffect(() => {
+    if (location.pathname === '/chat') {
+      setHasNewMessage(false);
+      sessionStorage.setItem('hasNewChatMessage', 'false');
+    }
+  }, [location.pathname]);
+
   return (
     <header>
       <div id="main">
@@ -72,8 +88,26 @@ const Header = () => {
 
         <br />
 
-        <Link to="/chat" onClick={closeMenu} className={`linkHeader ${location.pathname === '/chat' ? 'active' : ''}`}>
-          <p className='paragrafoListaHeader'><img src={chatIcon} alt="Chat" className='iconesHeader' title='Chat' /></p>
+        <Link to="/chat" onClick={closeMenu} className={`linkHeader ${location.pathname === '/chat' ? 'active' : ''}`} style={{ position: 'relative' }}>
+          <p className='paragrafoListaHeader'>
+            <img src={chatIcon} alt="Chat" className='iconesHeader' title='Chat' />
+            {hasNewMessage && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  width: '12px',
+                  height: '12px',
+                  backgroundColor: 'red',
+                  borderRadius: '50%',
+                  border: '2px solid white',
+                  pointerEvents: 'none',
+                }}
+                title="Nova mensagem"
+              />
+            )}
+          </p>
         </Link>
 
         <br />

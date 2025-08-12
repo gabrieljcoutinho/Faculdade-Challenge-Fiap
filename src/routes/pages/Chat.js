@@ -36,6 +36,7 @@ const deviceIconMap = {
 
 const CHAT_STORAGE_KEY = 'chat_messages';
 const FIRST_INTERACTION_KEY = 'chat_firstInteraction';
+const NEW_MESSAGE_FLAG = 'hasNewChatMessage';
 
 const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme, onConnectionTypeChange }) => {
   const [messages, setMessages] = useState(() => {
@@ -51,6 +52,9 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
+
+  // Estado para controlar se tem nova mensagem não vista
+  const [hasNewMessage, setHasNewMessage] = useState(false);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -68,10 +72,22 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
   useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
   useEffect(() => sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages)), [messages]);
   useEffect(() => sessionStorage.setItem(FIRST_INTERACTION_KEY, JSON.stringify(firstInteraction)), [firstInteraction]);
+
+  // Sincroniza estado da bolinha no sessionStorage para o Header ler
+  useEffect(() => {
+    sessionStorage.setItem(NEW_MESSAGE_FLAG, hasNewMessage ? 'true' : 'false');
+  }, [hasNewMessage]);
+
+  // Limpa o flag de mensagem nova quando o chat é aberto (o componente monta)
+  useEffect(() => {
+    setHasNewMessage(false);
+  }, []);
+
   useEffect(() => {
     const handleUnload = () => {
       sessionStorage.removeItem(CHAT_STORAGE_KEY);
       sessionStorage.removeItem(FIRST_INTERACTION_KEY);
+      sessionStorage.removeItem(NEW_MESSAGE_FLAG);
     };
     window.addEventListener('beforeunload', handleUnload);
     return () => window.removeEventListener('beforeunload', handleUnload);
@@ -315,6 +331,19 @@ Clima em **${cidade}**:
       inputRef.current?.focus();
     }
   };
+
+  // Detecta nova mensagem vindo de "outro" (bot) e seta flag da bolinha
+  useEffect(() => {
+    // Se última mensagem foi do assistente e a página não está ativa, marca nova mensagem
+    if (messages.length === 0) return;
+    const ultima = messages[messages.length - 1];
+    if (ultima.role === 'assistant') {
+      // Marca nova mensagem somente se o usuário não estiver na rota /chat
+      if (window.location.pathname !== '/chat') {
+        setHasNewMessage(true);
+      }
+    }
+  }, [messages]);
 
   return (
     <div className={`chat-container ${isFadingOut ? 'fade-out' : ''}`}>
