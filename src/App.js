@@ -12,6 +12,11 @@ import carregador from '../src/imgs/imgConexao/carregador.png';
 import caboIcon from '../src/imgs/imgConexao/cabo.png';
 import bateriaIcon from '../src/imgs/imgConexao/bateria.png';
 
+// Imagens para notificações
+import bateriaCritica from '../src/imgs/imgBateria/nivelCrítico.png';
+import bateriaVazia from '../src/imgs/imgBateria/bateriaVazia.png';
+import bateriaMedia from '../src/imgs/imgBateria/bateriaMedia.png';
+
 // Data
 import initialProductionData from './data/graficoHomeApi.json';
 
@@ -102,15 +107,67 @@ function App() {
     return saved !== null ? Number(saved) : 100;
   });
 
+  // Novo estado para rastrear notificações enviadas
+  const [notificacoesEnviadas, setNotificacoesEnviadas] = useState({
+    50: false,
+    10: false,
+    5: false,
+    0: false,
+  });
+
   const isCharging = (connectionType === 'bateria' && connectedDevicesCount === 0) || connectionType === 'cabo';
   const isDischarging = connectionType === 'bateria' && connectedDevicesCount > 0;
+
+  // Função para exibir a notificação
+  const mostrarNotificacao = useCallback((titulo, corpo, icone) => {
+    if (Notification.permission === "granted") {
+      new Notification(titulo, { body: corpo, icon: icone });
+    } else {
+      alert(`${titulo}: ${corpo}`);
+    }
+  }, []);
+
+  // Efeito para monitorar e enviar as notificações de bateria
+  useEffect(() => {
+    // Notificação de 50%
+    if (nivelBateria <= 50 && nivelBateria > 10 && !notificacoesEnviadas[50]) {
+      mostrarNotificacao("Aviso de Bateria", "A bateria atingiu 50%.", bateriaMedia);
+      setNotificacoesEnviadas(prev => ({ ...prev, 50: true }));
+    } else if (nivelBateria > 50 && notificacoesEnviadas[50]) {
+      setNotificacoesEnviadas(prev => ({ ...prev, 50: false }));
+    }
+
+    // Notificação de 10%
+    if (nivelBateria <= 10 && nivelBateria > 5 && !notificacoesEnviadas[10]) {
+      mostrarNotificacao("Aviso de Bateria Crítica", "A bateria está em 10%. Conecte o carregador.", bateriaCritica);
+      setNotificacoesEnviadas(prev => ({ ...prev, 10: true }));
+    } else if (nivelBateria > 10 && notificacoesEnviadas[10]) {
+      setNotificacoesEnviadas(prev => ({ ...prev, 10: false }));
+    }
+
+    // Notificação de 5%
+    if (nivelBateria <= 5 && nivelBateria > 0 && !notificacoesEnviadas[5]) {
+      mostrarNotificacao("Aviso de Bateria Crítica", "A bateria está em 5%. O dispositivo pode desligar a qualquer momento.", bateriaCritica);
+      setNotificacoesEnviadas(prev => ({ ...prev, 5: true }));
+    } else if (nivelBateria > 5 && notificacoesEnviadas[5]) {
+      setNotificacoesEnviadas(prev => ({ ...prev, 5: false }));
+    }
+
+    // Notificação de 0% e mudança para energia elétrica
+    if (nivelBateria <= 0 && !notificacoesEnviadas[0]) {
+      mostrarNotificacao("Energia da bateria acabou", "Usando energia elétrica. Conecte o cabo para recarregar.", bateriaVazia);
+      setNotificacoesEnviadas(prev => ({ ...prev, 0: true }));
+    } else if (nivelBateria > 0 && notificacoesEnviadas[0]) {
+      setNotificacoesEnviadas(prev => ({ ...prev, 0: false }));
+    }
+  }, [nivelBateria, notificacoesEnviadas, mostrarNotificacao]);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
       setNivelBateria(prev => {
         let novoNivel = prev;
 
-        // Nova lógica de consumo dinâmico
         const taxaConsumo = connectedDevicesCount * CONSUMO_POR_APARELHO;
 
         if (isDischarging) {
@@ -124,10 +181,15 @@ function App() {
       });
     }, 1000);
 
-    // O array de dependências agora inclui `connectedDevicesCount` para que o efeito seja re-executado
-    // quando o número de aparelhos conectados muda, garantindo a taxa de consumo correta.
     return () => clearInterval(interval);
   }, [isDischarging, isCharging, connectedDevicesCount]);
+
+  // Efeito para pedir permissão de notificação
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('activeConnectionIcon', connectionType);
