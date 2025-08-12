@@ -41,7 +41,8 @@ const aparelhosDisponiveis = [
   { id: 5, imagem: geladeira, nome: 'Geladeira', corFundo: '#c8e6c9' }
 ];
 
-const TAXA = 1; // % por segundo
+const TAXA_CARREGAMENTO = 1; // % por segundo
+const CONSUMO_POR_APARELHO = 0.5; // % por segundo por aparelho
 
 const getInitialAparelhos = () => {
   try {
@@ -96,42 +97,42 @@ function App() {
 
   const connectedDevicesCount = useMemo(() => aparelhos.filter(c => c.conectado).length, [aparelhos]);
 
-  // Lógica de estado da bateria
   const [nivelBateria, setNivelBateria] = useState(() => {
     const saved = localStorage.getItem('nivelBateria');
     return saved !== null ? Number(saved) : 100;
   });
 
-  // A nova lógica define isCharging e isDischarging com base na contagem de aparelhos conectados
-  // se houver 0 aparelhos conectados e o tipo de conexão for 'bateria', a bateria carrega.
-  // se o tipo de conexão for 'cabo', a bateria sempre carrega.
-  // se houver algum aparelho conectado e o tipo de conexão for 'bateria', a bateria descarrega.
   const isCharging = (connectionType === 'bateria' && connectedDevicesCount === 0) || connectionType === 'cabo';
   const isDischarging = connectionType === 'bateria' && connectedDevicesCount > 0;
 
-  // Atualiza nível da bateria com base em isCharging e isDischarging
   useEffect(() => {
     const interval = setInterval(() => {
       setNivelBateria(prev => {
         let novoNivel = prev;
+
+        // Nova lógica de consumo dinâmico
+        const taxaConsumo = connectedDevicesCount * CONSUMO_POR_APARELHO;
+
         if (isDischarging) {
-          novoNivel = Math.max(0, prev - TAXA);
+          novoNivel = Math.max(0, prev - taxaConsumo);
         } else if (isCharging) {
-          novoNivel = Math.min(100, prev + TAXA);
+          novoNivel = Math.min(100, prev + TAXA_CARREGAMENTO);
         }
+
         localStorage.setItem('nivelBateria', novoNivel.toString());
         return novoNivel;
       });
     }, 1000);
-    return () => clearInterval(interval);
-  }, [isDischarging, isCharging]);
 
-  // Salva o tipo de conexão no localStorage
+    // O array de dependências agora inclui `connectedDevicesCount` para que o efeito seja re-executado
+    // quando o número de aparelhos conectados muda, garantindo a taxa de consumo correta.
+    return () => clearInterval(interval);
+  }, [isDischarging, isCharging, connectedDevicesCount]);
+
   useEffect(() => {
     localStorage.setItem('activeConnectionIcon', connectionType);
   }, [connectionType]);
 
-  // Troca automática para cabo quando a bateria acaba
   useEffect(() => {
     if (nivelBateria <= 0 && connectionType === 'bateria') {
       setConnectionType('cabo');
@@ -159,7 +160,6 @@ function App() {
     };
   }, [chosenDatasetIndex]);
 
-  // LocalStorage sincronização
   useEffect(() => { localStorage.setItem('aparelhos', JSON.stringify(aparelhos)); }, [aparelhos]);
   useEffect(() => { localStorage.setItem('isReading', isReading); }, [isReading]);
   useEffect(() => { document.body.className = theme; localStorage.setItem('theme', theme); }, [theme]);
