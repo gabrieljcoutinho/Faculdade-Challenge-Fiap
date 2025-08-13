@@ -205,6 +205,11 @@ function App() {
     })));
   }, []);
 
+  // Nova função para mudar o tipo de conexão, chamada pelo chat
+  const handleConnectionTypeChange = useCallback((type) => {
+    setConnectionType(type);
+  }, []);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -212,13 +217,12 @@ function App() {
         <ThemeToggle setTheme={setTheme} />
         <Routes>
           <Route path="/" element={<Home productionData={formattedProductionData} initialProductionData={initialProductionData} onDatasetChange={setChosenDatasetIndex} />} />
-          <Route path="/conexoes" element={<Conexoes aparelhos={aparelhos} setAparelhos={setAparelhos} onConnectDevice={handleConnectDevice} onRemoveDevice={handleRemoveDevice} onConnectionTypeChange={setConnectionType} activeConnectionIcon={connectionType} />} />
+          <Route path="/conexoes" element={<Conexoes aparelhos={aparelhos} setAparelhos={setAparelhos} onConnectDevice={handleConnectDevice} onRemoveDevice={handleRemoveDevice} onConnectionTypeChange={handleConnectionTypeChange} activeConnectionIcon={connectionType} />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/configuracoes" element={<Configuracoes isReading={isReading} toggleReading={toggleReading} />} />
           <Route path="/login" element={<Logar />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          {/* Aqui, o chat recebe a função `onRemoveAll` com o nome correto */}
-          <Route path="/chat" element={<Chat productionData={formattedProductionData} setTheme={setTheme} aparelhos={aparelhos} onConnectDevice={handleConnectDevice} onRemoveAll={handleRemoveAll} onDisconnectAllDevices={handleDisconnectAllDevices} onConnectionTypeChange={setConnectionType} />} />
+          <Route path="/chat" element={<Chat productionData={formattedProductionData} setTheme={setTheme} aparelhos={aparelhos} onConnectDevice={handleConnectDevice} onRemoveAll={handleRemoveAll} onDisconnectAllDevices={handleDisconnectAllDevices} onConnectionTypeChange={handleConnectionTypeChange} />} />
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />

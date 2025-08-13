@@ -470,12 +470,9 @@
     },
     {
       "triggers": [
-        "bateria",
-        "Bateria",
-        "Carregamento",
-        "Carga",
-        "Modo bateria",
-        "Modo Bateria"
+        "Ir para a bteria",
+        "Págian bateria",
+        "Págian da bateria"
       ],
       "resposta": "REDIRECT:/bateria"
     },
@@ -510,14 +507,21 @@
     {
       "triggers": [
         "Mudar para cabo",
+           "Mudar para cabo de energia",
         "usar o cabo",
+        "usar o cabo de energia",
         "cabo de energia",
         "conexão por cabo",
+           "conexão por cabo de energia",
         "carregar com cabo",
+        "carregar com cabo co mcab ode energia",
         "conectar cabo",
+        "conectar cabo de energia",
         "usar cabo",
         "Ativar cabo",
-        "ativar cabo"
+        "ativar cabo",
+        "Modo cabo",
+        "modo cabo"
             ],
       "resposta": "MUDAR_PARA_CABO"
     },
@@ -531,7 +535,9 @@
         "desconectar cabo",
         "desconectar da tomada",
         "Ativar bateria",
-        "ativar bateria"
+        "ativar bateria",
+        "Modo bateria",
+        "modo bateria"
       ],
       "resposta": "MUDAR_PARA_BATERIA"
     }
