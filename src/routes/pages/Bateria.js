@@ -1,94 +1,102 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import '../../CSS/Bateria/container.css';
-import '../../CSS/Bateria//imagem.css';
-import '../../CSS/Bateria//progresso.css';
-
-
-import bateriaVazia from '../../imgs/imgBateria/bateriaVazia.png';
-import bateriaCritica from '../../imgs/imgBateria/nivelCrítico.png';
-import semBateria from '../../imgs/imgBateria/semBateria.png';
-import acabandoBateria from '../../imgs/imgBateria/acabandoBateria.png';
-import bateriaMedia from '../../imgs/imgBateria/bateriaMedia.png';
-import bateriaCheia from '../../imgs/imgBateria/bateriaCheia.png';
-
-// Mapeamento de imagens
-const MAPA_BATERIA = [
-  { src: bateriaVazia, alt: 'Bateria Vazia', nivelMinimo: 0 },
-  { src: semBateria, alt: 'Sem Bateria', nivelMinimo: 1 },
-  { src: bateriaCritica, alt: 'Bateria Crítica', nivelMinimo: 11 },
-  { src: acabandoBateria, alt: 'Acabando Bateria', nivelMinimo: 26 },
-  { src: bateriaMedia, alt: 'Bateria Média', nivelMinimo: 51 },
-  { src: bateriaCheia, alt: 'Bateria Cheia', nivelMinimo: 76 },
-];
-
-// Função para obter imagem baseada no nível
-const getImagemBateria = (nivel) =>
-  [...MAPA_BATERIA].reverse().find(img => nivel >= img.nivelMinimo) || MAPA_BATERIA[0];
 
 const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   const [piscar, setPiscar] = useState(false);
+  const [nivelAnimado, setNivelAnimado] = useState(nivelBateria);
   const notificou50 = useRef(false);
 
-  // Pede permissão de notificação uma vez
+  // Solicita permissão de notificação
   useEffect(() => {
-    if (Notification.permission !== "granted") {
+    if (Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
   }, []);
 
-  // Notificação ao atingir 50%
+  // Notificação em 50%
   useEffect(() => {
     if (nivelBateria === 50 && !notificou50.current) {
       notificou50.current = true;
-      if (Notification.permission === "granted") {
-        new Notification("Aviso de Bateria", {
-          body: "A bateria está em 50%.",
-          icon: bateriaMedia
-        });
+      if (Notification.permission === 'granted') {
+        new Notification('Aviso de Bateria', { body: 'A bateria está em 50%.' });
       } else {
-        alert("A bateria está em 50%.");
+        alert('A bateria está em 50%.');
       }
     }
   }, [nivelBateria]);
 
-  // Ativa/desativa piscada
+  // Piscar em nível crítico
   useEffect(() => {
     setPiscar(nivelBateria <= 10 && nivelBateria > 0);
   }, [nivelBateria]);
 
-  const imagemAtual = useMemo(() => getImagemBateria(nivelBateria), [nivelBateria]);
+  // Animação suave do nível da bateria
+  useEffect(() => {
+    const diff = nivelBateria - nivelAnimado;
+    if (diff === 0) return;
+
+    const step = diff > 0 ? 1 : -1;
+    const interval = setInterval(() => {
+      setNivelAnimado(prev => {
+        const novo = prev + step;
+        if ((step > 0 && novo >= nivelBateria) || (step < 0 && novo <= nivelBateria)) {
+          clearInterval(interval);
+          return nivelBateria;
+        }
+        return novo;
+      });
+    }, 25); // mais fluido
+
+    return () => clearInterval(interval);
+  }, [nivelBateria]);
 
   const statusText = useMemo(() => {
-    if (isCharging) return 'carregando';
-    if (isDischarging) return 'descarregando';
-    return 'carregado';
+    if (isCharging) return 'Carregando';
+    if (isDischarging) return 'Descarregando';
+    return 'Carregado';
   }, [isCharging, isDischarging]);
 
+  const corBarra = nivelAnimado >= 50 ? '#00fff0' : nivelAnimado >= 20 ? '#ffff00' : '#FF0000';
+
   return (
-    <div className="bateria-container" aria-live="polite">
+    <div className={`bateria-container-neon ${piscar ? 'piscar' : ''}`}>
       <h1 className="titulo-bateria">Nível da Bateria</h1>
 
-      <div className={`imagem-bateria ${piscar ? 'piscar' : ''}`}>
-        <img src={imagemAtual.src} alt={imagemAtual.alt} draggable={false} loading="lazy" />
+      <div className="bateria-central">
+        <svg className="barra-circular" viewBox="0 0 120 120">
+          <circle
+            cx="60"
+            cy="60"
+            r="54"
+            stroke="#252525"
+            strokeWidth="12"
+            fill="none"
+          />
+          <circle
+            cx="60"
+            cy="60"
+            r="54"
+            stroke={corBarra}
+            strokeWidth="12"
+            fill="none"
+            strokeDasharray={2 * Math.PI * 54}
+            strokeDashoffset={2 * Math.PI * 54 * (1 - nivelAnimado / 100)}
+            strokeLinecap="round"
+            style={{ transition: 'stroke-dashoffset 0.3s ease, stroke 0.3s ease' }}
+          />
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dy="7"
+            fontSize="18px"
+            fill={corBarra}
+          >
+            {nivelAnimado.toFixed(0)}%
+          </text>
+        </svg>
       </div>
 
-      <div
-        className="barra-progresso"
-        role="progressbar"
-        aria-valuenow={nivelBateria}
-        aria-valuemin="0"
-        aria-valuemax="100"
-      >
-        <div
-          className="barra-preenchida"
-          style={{ width: `${nivelBateria}%` }}
-          aria-label={`Nível da bateria: ${nivelBateria.toFixed(0)}%`}
-        />
-      </div>
-
-      <p className="texto-nivel">
-        {nivelBateria.toFixed(0)}% {statusText}
-      </p>
+      <p className="texto-nivel-neon">{statusText}</p>
     </div>
   );
 };
