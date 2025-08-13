@@ -12,15 +12,19 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     }
   }, []);
 
-  // Notificação em 50%
+  // Notificação em 50% de forma segura
   useEffect(() => {
     if (nivelBateria === 50 && !notificou50.current) {
       notificou50.current = true;
-      if (Notification.permission === 'granted') {
-        new Notification('Aviso de Bateria', { body: 'A bateria está em 50%.' });
-      } else {
-        alert('A bateria está em 50%.');
-      }
+
+      // Dispara notificação de forma assíncrona
+      setTimeout(() => {
+        if (Notification.permission === 'granted') {
+          new Notification('Aviso de Bateria', { body: 'A bateria está em 50%.' });
+        } else {
+          alert('A bateria está em 50%.');
+        }
+      }, 100); // pequeno delay evita travamento
     }
   }, [nivelBateria]);
 
@@ -44,7 +48,7 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
         }
         return novo;
       });
-    }, 25); // mais fluido
+    }, 25);
 
     return () => clearInterval(interval);
   }, [nivelBateria]);
