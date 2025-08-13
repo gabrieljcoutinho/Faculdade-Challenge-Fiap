@@ -9,8 +9,6 @@ import airConditionerIcon from '../src/imgs/imgConexao/ar-condicionado.png';
 import geladeira from '../src/imgs/imgConexao/geladeira.png';
 import lampIcon from '../src/imgs/imgConexao/lampada.png';
 import carregador from '../src/imgs/imgConexao/carregador.png';
-import caboIcon from '../src/imgs/imgConexao/cabo.png';
-import bateriaIcon from '../src/imgs/imgConexao/bateria.png';
 
 // Data
 import initialProductionData from './data/graficoHomeApi.json';
@@ -41,8 +39,8 @@ const aparelhosDisponiveis = [
   { id: 5, imagem: geladeira, nome: 'Geladeira', corFundo: '#c8e6c9' }
 ];
 
-const TAXA_CARREGAMENTO = 1; // % por segundo
-const CONSUMO_POR_APARELHO = 0.5; // % por segundo por aparelho
+const TAXA_CARREGAMENTO = 1;
+const CONSUMO_POR_APARELHO = 0.5;
 
 const getInitialAparelhos = () => {
   try {
@@ -109,23 +107,16 @@ function App() {
     const interval = setInterval(() => {
       setNivelBateria(prev => {
         let novoNivel = prev;
-
-        // Nova lógica de consumo dinâmico
         const taxaConsumo = connectedDevicesCount * CONSUMO_POR_APARELHO;
-
         if (isDischarging) {
           novoNivel = Math.max(0, prev - taxaConsumo);
         } else if (isCharging) {
           novoNivel = Math.min(100, prev + TAXA_CARREGAMENTO);
         }
-
         localStorage.setItem('nivelBateria', novoNivel.toString());
         return novoNivel;
       });
     }, 1000);
-
-    // O array de dependências agora inclui `connectedDevicesCount` para que o efeito seja re-executado
-    // quando o número de aparelhos conectados muda, garantindo a taxa de consumo correta.
     return () => clearInterval(interval);
   }, [isDischarging, isCharging, connectedDevicesCount]);
 
@@ -200,7 +191,10 @@ function App() {
     setAparelhos(prev => prev.filter(c => c.id !== id));
   }, []);
 
-  const handleRemoveAllDevices = useCallback(() => setAparelhos([]), []);
+  // Alterei o nome da função para `handleRemoveAll` para ser mais claro
+  const handleRemoveAll = useCallback(() => {
+    setAparelhos([]);
+  }, []);
 
   const handleDisconnectAllDevices = useCallback(() => {
     setAparelhos(prev => prev.map(c => ({
@@ -223,7 +217,8 @@ function App() {
           <Route path="/configuracoes" element={<Configuracoes isReading={isReading} toggleReading={toggleReading} />} />
           <Route path="/login" element={<Logar />} />
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/chat" element={<Chat productionData={formattedProductionData} setTheme={setTheme} aparelhos={aparelhos} onConnectDevice={handleConnectDevice} onRemoveAllDevices={handleRemoveAllDevices} onDisconnectAllDevices={handleDisconnectAllDevices} onConnectionTypeChange={setConnectionType} />} />
+          {/* Aqui, o chat recebe a função `onRemoveAll` com o nome correto */}
+          <Route path="/chat" element={<Chat productionData={formattedProductionData} setTheme={setTheme} aparelhos={aparelhos} onConnectDevice={handleConnectDevice} onRemoveAll={handleRemoveAll} onDisconnectAllDevices={handleDisconnectAllDevices} onConnectionTypeChange={setConnectionType} />} />
           <Route path="/comandosChat" element={<ComandosChat />} />
           <Route path="/esqueciSenha" element={<EsqueciSenha />} />
           <Route path="/helpCenter" element={<HelpCenter />} />

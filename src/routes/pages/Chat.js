@@ -29,7 +29,7 @@ const normalizeText = t => t.trim().toLowerCase();
 const deviceIconMap = {
   TV: tvIcon,
   'Ar-Condicionado': airConditionerIcon,
-  Lâmpada: lampIcon,
+  'Lâmpada': lampIcon,
   Geladeira: geladeira,
   Carregador: carregador,
 };
@@ -52,8 +52,6 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
-
-  // Estado para controlar se tem nova mensagem não vista
   const [hasNewMessage, setHasNewMessage] = useState(false);
 
   const messagesEndRef = useRef(null);
@@ -68,17 +66,26 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     'Conectar Carregador'
   ];
 
-  useEffect(() => inputRef.current?.focus(), []);
-  useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
-  useEffect(() => sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages)), [messages]);
-  useEffect(() => sessionStorage.setItem(FIRST_INTERACTION_KEY, JSON.stringify(firstInteraction)), [firstInteraction]);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
-  // Sincroniza estado da bolinha no sessionStorage para o Header ler
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  useEffect(() => {
+    sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
+  }, [messages]);
+
+  useEffect(() => {
+    sessionStorage.setItem(FIRST_INTERACTION_KEY, JSON.stringify(firstInteraction));
+  }, [firstInteraction]);
+
   useEffect(() => {
     sessionStorage.setItem(NEW_MESSAGE_FLAG, hasNewMessage ? 'true' : 'false');
   }, [hasNewMessage]);
 
-  // Limpa o flag de mensagem nova quando o chat é aberto (o componente monta)
   useEffect(() => {
     setHasNewMessage(false);
   }, []);
@@ -113,7 +120,6 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     return null;
   }
 
-  // Função para chamar API XWeather (URL corrigida)
   async function fetchClimaXWeather(cidade) {
     try {
       const response = await fetch(`https://api.xweather.com/v1/weather?city=${encodeURIComponent(cidade)}`, {
@@ -153,32 +159,20 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     const climaMatch = texto.match(/clima em (.+)/i);
     if (climaMatch) {
       const cidade = climaMatch[1].trim();
-
       try {
         const data = await fetchClimaXWeather(cidade);
-
-        // Ajuste conforme a estrutura real da resposta XWeather:
         const descricao = data.weather?.description || 'Descrição indisponível';
         const temp = data.temperature?.current ?? 'N/D';
         const umidade = data.humidity ?? 'N/D';
         const vento = data.wind_speed ?? 'N/D';
-
-        botResponseContent = `
-Clima em **${cidade}**:
-- Condição: ${descricao}
-- Temperatura: ${temp} °C
-- Umidade: ${umidade}%
-- Vento: ${vento} m/s
-        `;
-
-        setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
+        botResponseContent = `Clima em **${cidade}**:\n- Condição: ${descricao}\n- Temperatura: ${temp} °C\n- Umidade: ${umidade}%\n- Vento: ${vento} m/s`;
       } catch (error) {
-        setMessages(m => [...m, { role: 'assistant', content: `Erro ao buscar clima: ${error.message}` }]);
+        botResponseContent = `Erro ao buscar clima: ${error.message}`;
       } finally {
+        setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
         setLoading(false);
         inputRef.current?.focus();
       }
-
       return;
     }
 
@@ -189,7 +183,6 @@ Clima em **${cidade}**:
       const palavras = afterConectar.split(' ').filter(Boolean);
       let tipoEncontrado = null;
       let nomeExtra = '';
-
       for (const cmd of connectionCommands) {
         if (palavras.length > 0 && cmd.keywords.includes(palavras[0].toLowerCase())) {
           tipoEncontrado = cmd.type;
@@ -197,11 +190,9 @@ Clima em **${cidade}**:
           break;
         }
       }
-
       if (tipoEncontrado) {
         const iconSrc = deviceIconMap[tipoEncontrado];
         const nomeCompleto = nomeExtra ? `${tipoEncontrado} ${nomeExtra}` : tipoEncontrado;
-
         if (delayMs === null) {
           onConnectDevice?.(nomeCompleto, iconSrc);
           botResponseContent = `${nomeCompleto} conectado ✅`;
@@ -212,7 +203,6 @@ Clima em **${cidade}**:
             setMessages(m => [...m, { role: 'assistant', content: `${nomeCompleto} conectado agora! ✅` }]);
           }, delayMs);
         }
-
         handledByLocalCommand = true;
       } else {
         botResponseContent = 'Dispositivo não reconhecido para conexão.';
@@ -223,7 +213,7 @@ Clima em **${cidade}**:
     // Comandos fixos via JSON e navegação
     if (!handledByLocalCommand) {
       const foundCmd = comandosData.comandos.find(c =>
-        c.triggers?.some(t => normalizeText(t) === textoNormalizado)
+        c.triggers?.some(t => textoNormalizado.includes(normalizeText(t)))
       );
 
       if (foundCmd) {
@@ -265,6 +255,7 @@ Clima em **${cidade}**:
             botResponseContent = "Todos os aparelhos foram desconectados.";
             break;
           case 'REMOVER_TODOS':
+            // Chamada para a prop onRemoveAll
             onRemoveAll?.();
             botResponseContent = "Todos os aparelhos foram removidos.";
             break;
@@ -306,39 +297,34 @@ Clima em **${cidade}**:
         ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] })),
         { role: 'user', parts: [{ text: texto }] }
       ];
-
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contents: geminiMessages, generationConfig: { temperature: 0.9, topP: 0.8, maxOutputTokens: 1000 } })
       });
-
       const data = await res.json();
       if (!res.ok) {
-        setMessages(m => [...m, { role: 'assistant', content: `Erro na API Gemini: ${data.error?.message || 'Problema desconhecido'} (Código: ${res.status})` }]);
+        botResponseContent = `Erro na API Gemini: ${data.error?.message || 'Problema desconhecido'} (Código: ${res.status})`;
       } else if (data.candidates?.[0]?.content?.parts) {
-        setMessages(m => [...m, { role: 'assistant', content: data.candidates[0].content.parts[0].text.trim() }]);
+        botResponseContent = data.candidates[0].content.parts[0].text.trim();
       } else if (data.promptFeedback?.blockReason) {
-        setMessages(m => [...m, { role: 'assistant', content: `Sua mensagem foi bloqueada: ${data.promptFeedback.blockReason}` }]);
+        botResponseContent = `Sua mensagem foi bloqueada: ${data.promptFeedback.blockReason}`;
       } else {
-        setMessages(m => [...m, { role: 'assistant', content: 'Resposta inválida da API Gemini' }]);
+        botResponseContent = 'Resposta inválida da API Gemini';
       }
-
     } catch (error) {
-      setMessages(m => [...m, { role: 'assistant', content: `Erro: ${error.message}` }]);
+      botResponseContent = `Erro: ${error.message}`;
     } finally {
+      setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
       setLoading(false);
       inputRef.current?.focus();
     }
   };
 
-  // Detecta nova mensagem vindo de "outro" (bot) e seta flag da bolinha
   useEffect(() => {
-    // Se última mensagem foi do assistente e a página não está ativa, marca nova mensagem
     if (messages.length === 0) return;
     const ultima = messages[messages.length - 1];
     if (ultima.role === 'assistant') {
-      // Marca nova mensagem somente se o usuário não estiver na rota /chat
       if (window.location.pathname !== '/chat') {
         setHasNewMessage(true);
       }
