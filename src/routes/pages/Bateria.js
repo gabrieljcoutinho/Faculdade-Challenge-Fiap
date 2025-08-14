@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
+import '../../CSS/Bateria/animacaoPiscar.css'
+
 const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
-  const [piscar, setPiscar] = useState(false);
+  const [piscarCritico, setPiscarCritico] = useState(false);
   const [nivelAnimado, setNivelAnimado] = useState(nivelBateria);
   const notificou50 = useRef(false);
 
@@ -12,25 +14,23 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     }
   }, []);
 
-  // Notificação em 50% de forma segura
+  // Notificação em 50%
   useEffect(() => {
     if (nivelBateria === 50 && !notificou50.current) {
       notificou50.current = true;
-
-      // Dispara notificação de forma assíncrona
       setTimeout(() => {
         if (Notification.permission === 'granted') {
           new Notification('Aviso de Bateria', { body: 'A bateria está em 50%.' });
         } else {
           alert('A bateria está em 50%.');
         }
-      }, 100); // pequeno delay evita travamento
+      }, 100);
     }
   }, [nivelBateria]);
 
   // Piscar em nível crítico
   useEffect(() => {
-    setPiscar(nivelBateria <= 10 && nivelBateria > 0);
+    setPiscarCritico(nivelBateria <= 20 && nivelBateria > 0);
   }, [nivelBateria]);
 
   // Animação suave do nível da bateria
@@ -62,7 +62,7 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   const corBarra = nivelAnimado >= 50 ? '#00fff0' : nivelAnimado >= 20 ? '#ffff00' : '#FF0000';
 
   return (
-    <div className={`bateria-container-neon ${piscar ? 'piscar' : ''}`}>
+    <div className={`bateria-container-neon ${piscarCritico ? 'piscar-suave' : ''}`}>
       <h1 className="titulo-bateria">Nível da Bateria</h1>
 
       <div className="bateria-central">
