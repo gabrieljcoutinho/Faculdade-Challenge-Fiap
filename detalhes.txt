@@ -39,7 +39,12 @@ Lista de todos os comandos reconhecidos pelo sistema;
 Central de ajuda;
 
 Págian de % de energia na bateria com animação de descarregar quando tiver algum aprelho conectado nas conexoes usando a
-bateria e há um animação de carregar quando a bateria nao esta em 100% e nao esta em uso
+bateria e há um animação de carregar quando a bateria nao esta em 100% e nao esta em uso. Conforme a betria vai descarregando ou carregando a cor
+vai mudando para te uma represnetação melhor do nivel da bateria sendo:
+AZUL  100% --> 50%;
+AMARELO 40% --> 30%;
+LARANJA 29%----->  21%;
+VERMELHO de 20% ---> 0%;
 
 Leitura em voz alta de textos clicados, promovendo acessibilidade;
 
@@ -54,6 +59,3 @@ O sistema foi desenvolvido para funcionar tanto em dispositivos móveis quanto e
 As APIs utilizadas são fictícias, pois não há acesso direto aos dados reais da empresa.
 O projeto conta ainda com animações suaves, especialmente visíveis nas transições entre páginas, que apresentam um efeito de “apagando e acendendo” ao navegar entre seções, contribuindo para uma experiência mais fluida e agradável.
 O código-fonte está disponível publicamente para consulta.
-
-
-
