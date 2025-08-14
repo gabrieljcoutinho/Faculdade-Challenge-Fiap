@@ -1,5 +1,6 @@
 :root {
-    --preto: #252525
+    --preto: #252525;
+    --brnaco: #fff
 }
 
 .configuracoes-overlay {
@@ -13,7 +14,7 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    color: #fff;
+    color: var(--brnaco);
     padding: 20px;
     /* align-items: center; */
     justify-content: flex-start;
