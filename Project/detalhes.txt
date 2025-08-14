@@ -1,0 +1,61 @@
+Realizei um projeto acadêmico baseado em uma proposta apresentada pela empresa GoodWe, do setor de energia solar, durante uma visita à faculdade.
+O objetivo da atividade foi identificar os principais desafios enfrentados pela empresa e desenvolver soluções tecnológicas capazes de aprimorar seus processos.
+As propostas poderiam variar entre sistemas completos ou protótipos simples, utilizando tecnologias como React, Python ou até inteligência artificial.
+
+Diante disso, desenvolvi uma aplicação completa em React, simulando um aplicativo mobile para o gerenciamento e automação de recursos relacionados à energia solar.
+O projeto foi publicado na web, permitindo o acesso público por meio de um link.
+
+Estrutura do Sistema
+A aplicação possui um cabeçalho fixo que direciona o usuário para as seguintes seções: Home, Conexões de Aparelhos, Chatbot, Contato e Configurações.
+
+Home
+Nesta seção, o usuário pode alternar entre três tipos de gráficos (linha, barras e pizza), que podem ser visualizados também por meio de um botão, sem ser pelo chat. Os gráficos são gerados com base em dados de uma API simulada.
+Abaixo dos gráficos, são exibidas informações do clima atual e a previsão do tempo. Ao final da página, há uma área dedicada a destacar os impactos positivos do uso da energia solar, com foco nos benefícios econômicos e ambientais.
+Por trás do gráfico, há uma imagem que simboliza o período do dia: um sol mais fraco pela manhã, mais forte à tarde e ausência de sol à noite.
+
+Conexões de Aparelhos
+O usuário pode adicionar dispositivos de duas formas: via conexão Bluetooth (simulada) ou manualmente. Na adição manual, é possível escolher o nome, ícone e cor de fundo do dispositivo.
+ Após o cadastro, o aparelho aparece como conectado, com opções para gerar QR Code (facilitando o compartilhamento), editar, excluir ou desativar. Os dispositivos conectados são organizados
+  em duas listas: conectados e desconectados. Quando um aparelho é desconectado, ele é automaticamente movido para a seção de desconectados, podendo ser reativado a qualquer momento.
+ Também é possível reordenar os dispositivos arrastando-os na tela. Na tela, há uma imagem que indica que não há nenhum aparelho conectado, para informar o usuário e evitar que a área fique em branco.
+ Há aum sitema de usra bateria e usar energia eletrica
+do lado de conectar um aprelho o usuario pode escolher em usar energia eletrica ou bateria.
+
+Chatbot
+Foi implementado um sistema de mensagens com recursos básicos de chat. Além disso, o chatbot integra uma API personalizada de perguntas e respostas específicas, e uma API de inteligência artificial para respostas gerais.
+Ele reconhece comandos como “conectar aparelho” ou “mudar de página”, atuando como um assistente virtual. Por meio de certos comandos, como “Conectar TV”, é possível fazer com que o aparelho correspondente seja
+ conectado na seção de Conexões, inclusive com agendamento de horários ou temporizadores, por exemplo: “Conectar TV daqui a 30 minutos” ou “Conectar TV sala daqui a 10 segundos”. Antes de inserir o comando, há botões
+ já programados que adicionam comandos prontos ao input do chat, facilitando o uso pelo usuário, que pode enviar o comando diretamente ou adicionar mais detalhes. O usuário pdeo tambem pedir pelo chat trocar o uso da energia, pdoe ser
+ o uso da bateria ou o uso da energia elétrica.
+
+Contato
+Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos e um botão que direciona para uma seção de perguntas frequentes, facilitando a comunicação com a empresa.
+
+Configurações
+Esta seção reúne seis funcionalidades principais:
+
+Lista de todos os comandos reconhecidos pelo sistema;
+
+Central de ajuda;
+
+Págian de % de energia na bateria com animação de descarregar quando tiver algum aprelho conectado nas conexoes usando a
+bateria e há um animação de carregar quando a bateria nao esta em 100% e nao esta em uso. Conforme a betria vai descarregando ou carregando a cor
+vai mudando para te uma represnetação melhor do nivel da bateria sendo:
+AZUL  100% --> 50%;
+AMARELO 40% --> 30%;
+LARANJA 29%----->  21%;
+VERMELHO de 20% ---> 0%;
+
+Leitura em voz alta de textos clicados, promovendo acessibilidade;
+
+Alternância entre modo claro e escuro;
+
+Login e logout com autenticação fake via e-mail/senha, Google ou Facebook;
+
+Página de recuperação de senha (em desenvolvimento).
+
+Considerações Finais
+O sistema foi desenvolvido para funcionar tanto em dispositivos móveis quanto em desktops, com foco na experiência mobile para facilitar o acesso remoto.
+As APIs utilizadas são fictícias, pois não há acesso direto aos dados reais da empresa.
+O projeto conta ainda com animações suaves, especialmente visíveis nas transições entre páginas, que apresentam um efeito de “apagando e acendendo” ao navegar entre seções, contribuindo para uma experiência mais fluida e agradável.
+O código-fonte está disponível publicamente para consulta.
