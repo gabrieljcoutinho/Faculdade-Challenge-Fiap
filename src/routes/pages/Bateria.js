@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-
-import '../../CSS/Bateria/animacaoPiscar.css'
+import '../../CSS/Bateria/animacaoPiscar.css';
 
 const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   const [piscarCritico, setPiscarCritico] = useState(false);
@@ -30,7 +29,7 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
 
   // Piscar em nível crítico
   useEffect(() => {
-    setPiscarCritico(nivelBateria <= 20 && nivelBateria > 0);
+    setPiscarCritico(nivelBateria < 20 && nivelBateria > 0);
   }, [nivelBateria]);
 
   // Animação suave do nível da bateria
@@ -53,13 +52,19 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     return () => clearInterval(interval);
   }, [nivelBateria]);
 
+  // Texto do status da bateria
   const statusText = useMemo(() => {
     if (isCharging) return 'Carregando';
     if (isDischarging) return 'Descarregando';
     return 'Carregado';
   }, [isCharging, isDischarging]);
 
-  const corBarra = nivelAnimado >= 50 ? '#00fff0' : nivelAnimado >= 20 ? '#ffff00' : '#FF0000';
+  // Nova lógica de cores
+  const corBarra = nivelAnimado >= 50 ? '#00fff0'     // azul/ciano
+                  : nivelAnimado >= 30 ? '#ffff00'  // amarelo
+                  : nivelAnimado >= 20 ? '#FFA500'  // laranja
+                  : '#FF0000';                      // vermelho
+
 
   return (
     <div className={`bateria-container-neon ${piscarCritico ? 'piscar-suave' : ''}`}>
