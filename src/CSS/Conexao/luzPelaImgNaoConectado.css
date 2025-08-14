@@ -1,5 +1,10 @@
-/* No seu arquivo CSS, por exemplo, conexao.css */
+/* Variáveis de cor */
+:root {
+    --light-color: rgba(255, 255, 255, 0.4);
+    --light-transparent: rgba(255, 255, 255, 0);
+}
 
+/* Wrapper da imagem */
 .image-wrapper {
     position: relative;
     /* Essencial para posicionar a luz em relação à imagem */
@@ -9,6 +14,7 @@
     /* Garante que a luz não saia do container */
 }
 
+/* Efeito de luz */
 .light-effect {
     position: absolute;
     top: 0;
@@ -17,12 +23,12 @@
     width: 50%;
     /* Largura da "faixa de luz" */
     height: 100%;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
-    /* Um gradiente para criar um efeito de brilho suave */
+    background: linear-gradient(to right, var(--light-transparent) 0%, var(--light-color) 50%, var(--light-transparent) 100%);
+    /* Gradiente usando variáveis */
     animation: passLight 2.5s infinite linear;
-    /* Animação: nome, duração, repetição e tipo de velocidade */
 }
 
+/* Animação da luz */
 @keyframes passLight {
     0% {
         left: -100%;
@@ -31,129 +37,24 @@
 
     100% {
         left: 150%;
-        /* Termina bem fora da tela, à direita, para um fluxo suave */
+        /* Termina bem fora da tela, à direita */
     }
 }
 
-/* Opcional: Se a imagem placeholder tiver um tamanho fixo, você pode precisar ajustar o image-wrapper */
+/* Container de placeholder da imagem */
 .placeholder-image-container {
-    /* ... seu estilo existente ... */
     display: flex;
-    /* ou block, dependendo do seu layout */
     flex-direction: column;
-    /* Se for flex, para alinhar a imagem e o texto */
     align-items: center;
-    /* Centraliza horizontalmente se for flex */
+    /* Centraliza horizontalmente */
     justify-content: center;
-    /* Centraliza verticalmente se for flex */
+    /* Centraliza verticalmente */
 }
 
+/* Estilo da imagem placeholder */
 .placeholder-image {
-    /* ... seu estilo existente ... */
     max-width: 100%;
     /* Garante que a imagem não ultrapasse o container */
     height: auto;
     /* Mantém a proporção */
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Adicione isso em um dos seus arquivos CSS, por exemplo, 'adicionar.css' */
-
-/* Container para alinhar o botão de adicionar e o botão de ícone de conexão */
-.add-button-container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.icon-connection-button {
-    background-color: #f0f0f0;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    width: 48px;
-    height: 48px;
-    padding: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Adiciona uma margem à esquerda para criar espaço */
-    margin-left: 10px;
-}
-
-.icon-connection-button:hover {
-    background-color: #e0e0e0;
-    border-color: #007bff;
-
-}
-
-/* Estilo para a imagem dentro do botão */
-.icon-connection-button img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
 }
