@@ -19,7 +19,7 @@ import carregador from '../../imgs/imgConexao/carregador.png';
 
 // Credenciais XWeather
 const XWEATHER_ID = 'AIY5fj62BOwQZ80a7DcMs';
-const XWEATHER_SECRET = 'weI68P2HPkwUjc1eBf0LSnZooc5e2KgZMaJj0mW'; // Esta linha foi alterada
+const XWEATHER_SECRET = 'EF6K9vozbZA3l03mZ3u7fQm98neqljrvODu0A1UC';
 const XWEATHER_NAMESPACE = 'Solaris';
 
 const GEMINI_API_KEY = 'AIzaSyA_OEC15jeB1rJsNrRYO3v7QDan7J3AWPg';
