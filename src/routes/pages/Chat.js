@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { marked } from 'marked';
-import DOMPurify from 'dompurify'; // Recomendado para sanitizar HTML
+import DOMPurify from 'dompurify';
 import '../../CSS/Chat/chat.css';
 import '../../CSS/Chat/animacaoComandoTrocaPageViaChat.css';
 import '../../CSS/Chat/mensagem.css';
@@ -48,6 +48,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     const [loading, setLoading] = useState(false);
     const [isFadingOut, setIsFadingOut] = useState(false);
     const [hasNewMessage, setHasNewMessage] = useState(false);
+    const [awaitingACConfirmation, setAwaitingACConfirmation] = useState(false);
 
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
@@ -111,17 +112,10 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         return null;
     }
 
-    /**
-     * Busca dados de clima usando a API do OpenWeatherMap.
-     * @param {string} cidade - Nome da cidade a ser pesquisada.
-     * @returns {object} Os dados do clima.
-     */
     async function fetchClimaOpenWeather(cidade) {
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&units=metric&appid=${OPENWEATHER_API_KEY}&lang=pt_br`;
         const res = await fetch(url);
-        if (!res.ok) {
-            throw new Error(`Erro: Cidade não encontrada ou problema na API. Código: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`Cidade não encontrada ou problema na API. Código: ${res.status}`);
         return res.json();
     }
 
@@ -130,12 +124,26 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         const texto = newMessage.trim();
         if (!texto) return;
 
-        if (firstInteraction) setFirstInteraction(false);
-
-        setMessages(m => [...m, { role: 'user', content: texto }]);
         setNewMessage('');
         setLoading(true);
         inputRef.current?.focus();
+
+        // --- TRATAMENTO DE CONFIRMAÇÃO DO AR-CONDICIONADO ---
+        if (awaitingACConfirmation) {
+            const resposta = normalizeText(texto);
+            if (resposta === 'sim') {
+                onConnectDevice?.('Ar-Condicionado', airConditionerIcon);
+                setMessages(m => [...m, { role: 'assistant', content: 'Ar-Condicionado conectado ✅' }]);
+            } else {
+                setMessages(m => [...m, { role: 'assistant', content: 'Ar-Condicionado não conectado ❌' }]);
+            }
+            setAwaitingACConfirmation(false);
+            setLoading(false);
+            return;
+        }
+
+        if (firstInteraction) setFirstInteraction(false);
+        setMessages(m => [...m, { role: 'user', content: texto }]);
 
         const textoNormalizado = normalizeText(texto);
         let handledByLocalCommand = false;
@@ -148,14 +156,10 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             try {
                 const data = await fetchClimaOpenWeather(cidade);
                 const desc = data.weather[0].description;
-                const temp = parseInt(data.main.temp);
+                const temp = Math.round(data.main.temp);
                 const umidity = data.main.humidity;
                 const wind = data.wind.speed;
-                botResponseContent = `Clima em **${data.name}**:
-- Condição: ${desc}
-- Temperatura: ${temp}°C
-- Umidade: ${umidity}%
-- Vento: ${wind} km/h`;
+                botResponseContent = `Clima em **${data.name}**:\n- Condição: ${desc}\n- Temperatura: ${temp}°C\n- Umidade: ${umidity}%\n- Vento: ${wind} km/h`;
             } catch (error) {
                 botResponseContent = `Erro ao buscar clima: ${error.message}`;
             } finally {
@@ -166,7 +170,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             return;
         }
 
-        // Comando "Conectar" dispositivos
+        // COMANDO: conectar dispositivos
         if (textoNormalizado.startsWith('conectar')) {
             let afterConectar = texto.slice(9).trim();
             const delayMs = parseTimeDelay(afterConectar);
@@ -180,9 +184,30 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
                     break;
                 }
             }
+
             if (tipoEncontrado) {
                 const iconSrc = deviceIconMap[tipoEncontrado];
                 const nomeCompleto = nomeExtra ? `${tipoEncontrado} ${nomeExtra}` : tipoEncontrado;
+
+                // AR-CONDICIONADO: verifica temperatura
+                if (tipoEncontrado === 'Ar-Condicionado') {
+                    try {
+                        const cidade = 'São Paulo'; // pode ser dinâmica
+                        const clima = await fetchClimaOpenWeather(cidade);
+                        const tempAtual = Math.round(clima.main.temp);
+
+                        if (tempAtual <= 20) {
+                            botResponseContent = `No momento está ${tempAtual}°C, está um pouco frio para conectar o Ar-Condicionado. Deseja conectar mesmo assim? (SIM/NÃO)`;
+                            setMessages(m => [...m, { role: 'assistant', content: botResponseContent }]);
+                            setAwaitingACConfirmation(true);
+                            setLoading(false);
+                            return;
+                        }
+                    } catch (err) {
+                        console.error('Erro ao obter temperatura:', err);
+                    }
+                }
+
                 if (delayMs === null) {
                     onConnectDevice?.(nomeCompleto, iconSrc);
                     botResponseContent = `${nomeCompleto} conectado ✅`;
@@ -200,7 +225,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             }
         }
 
-        // Comandos fixos via JSON e navegação
+        // Comandos fixos JSON e navegação
         if (!handledByLocalCommand) {
             const foundCmd = comandosData.comandos.find(c =>
                 c.triggers?.some(t => textoNormalizado.includes(normalizeText(t)))
@@ -271,7 +296,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             return;
         }
 
-        // Chamada para Gemini API como fallback
+        // Fallback Gemini API
         if (!GEMINI_API_KEY) {
             setMessages(m => [...m, { role: 'assistant', content: 'Erro: Chave da API Gemini não configurada.' }]);
             setLoading(false);
@@ -307,7 +332,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             setLoading(false);
             inputRef.current?.focus();
         }
-    }, [messages, newMessage, loading, firstInteraction, onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme, onConnectionTypeChange, navigate, isFadingOut]);
+    }, [messages, newMessage, firstInteraction, onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme, onConnectionTypeChange, navigate, isFadingOut, awaitingACConfirmation]);
 
     useEffect(() => {
         if (messages.length === 0) return;
