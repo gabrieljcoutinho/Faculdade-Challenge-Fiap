@@ -26,7 +26,7 @@ Foi implementado um sistema de mensagens com recursos básicos de chat. Além di
 Ele reconhece comandos como “conectar aparelho” ou “mudar de página”, atuando como um assistente virtual. Por meio de certos comandos, como “Conectar TV”, é possível fazer com que o aparelho correspondente seja
  conectado na seção de Conexões, inclusive com agendamento de horários ou temporizadores, por exemplo: “Conectar TV daqui a 30 minutos” ou “Conectar TV sala daqui a 10 segundos”. Antes de inserir o comando, há botões
  já programados que adicionam comandos prontos ao input do chat, facilitando o uso pelo usuário, que pode enviar o comando diretamente ou adicionar mais detalhes. O usuário pdeo tambem pedir pelo chat trocar o uso da energia, pdoe ser
- o uso da bateria ou o uso da energia elétrica. Dicionei a api de clia me tempo para que o usuario posa acessar o cliam de qualquer cidade perguntnado pel ochat
+ o uso da bateria ou o uso da energia elétrica. Dicionei a api de clia me tempo para que o usuario posa acessar o cliam de qualquer cidade perguntnado pelo chat
 
 Contato
 Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos e um botão que direciona para uma seção de perguntas frequentes, facilitando a comunicação com a empresa.
