@@ -500,7 +500,14 @@
         "remover todas as conexões",
         "remover todas as conexoes",
         "Excluir aparelhos",
-        "Excluir todos os aparelhos"
+        "Excluir todos os aparelhos",
+        "Remover todas as conexões",
+        "Remover todas as conexoes",
+        "Remover conexões",
+        "Excluir conexões",
+        "Excluir conexões",
+        "excluir conexoes",
+        "excluir conexões",
       ],
       "resposta": "REMOVER_TODOS"
     },
