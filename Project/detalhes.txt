@@ -56,6 +56,6 @@ Página de recuperação de senha (em desenvolvimento).
 
 Considerações Finais
 O sistema foi desenvolvido para funcionar tanto em dispositivos móveis quanto em desktops, com foco na experiência mobile para facilitar o acesso remoto.
-As APIs utilizadas são fictícias, pois não há acesso direto aos dados reais da empresa.
+A api de dado d ografico é ficticio pore ma do cliam tmepo é uma api real, pois não há acesso direto aos dados reais da empresa.
 O projeto conta ainda com animações suaves, especialmente visíveis nas transições entre páginas, que apresentam um efeito de “apagando e acendendo” ao navegar entre seções, contribuindo para uma experiência mais fluida e agradável.
 O código-fonte está disponível publicamente para consulta.
