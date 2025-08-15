@@ -57,7 +57,8 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         'Conectar TV',
         'Conectar Ar-Condicionado',
         'Conectar Lâmpada',
-        'Clima em São Paulo'
+        'Conectar Geladeira',
+        'Conectar Carregador'
     ];
 
     useEffect(() => {
