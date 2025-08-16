@@ -32,7 +32,7 @@ Ele reconhece comandos como “conectar aparelho” ou “mudar de página”, a
 
 Contato
 Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos e um botão
-que direciona para uma seção de perguntas frequentes, facilitando a comunicação com a empresa.
+que direciona para uma seção de perguntas frequentes, facilitando a comunicação com a empresa. Porem é só uma simulação
 
 Configurações
 Esta seção reúne seis funcionalidades principais:
