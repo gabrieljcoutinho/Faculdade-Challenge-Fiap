@@ -9,9 +9,10 @@ Estrutura do Sistema
 A aplicação possui um cabeçalho fixo que direciona o usuário para as seguintes seções: Home, Conexões de Aparelhos, Chatbot, Contato e Configurações.
 
 Home
-Nesta seção, o usuário pode alternar entre três tipos de gráficos (linha, barras e pizza), que podem ser visualizados também por meio de um botão, sem ser pelo chat. Os gráficos são gerados com base em dados de uma API simulada.
-Abaixo dos gráficos, são exibidas informações do clima atual e a previsão do tempo com integraçã ode ap ireal de clima . Ao final da página, há uma área dedicada a destacar os impactos positivos do uso da energia solar, com foco nos benefícios econômicos e ambientais.
-Por trás do gráfico, há uma imagem que simboliza o período do dia: um sol mais fraco pela manhã, mais forte à tarde e ausência de sol à noite.
+Nesta seção, o usuário pode alternar entre três tipos de gráficos (linha, barras e pizza), que podem ser visualizados também por meio de um botão, sem ser pelo chat.
+Os gráficos são gerados com base em dados de uma API simulada. Abaixo dos gráficos, são exibidas informações do clima atual e a previsão do tempo com integraçã ode ap ireal de clima .
+ Ao final da página, há uma área dedicada a destacar os impactos positivos do uso da energia solar, com foco nos benefícios econômicos e ambientais.Por trás do gráfico, há uma imagem que simboliza
+  o período do dia: um sol mais fraco pela manhã, mais forte à tarde e ausência de sol à noite. Há tambem um marcadir de temperatura no momento funcional que mostra seta frio quente etc.
 
 Conexões de Aparelhos
 O usuário pode adicionar dispositivos de duas formas: via conexão Bluetooth (simulada) ou manualmente. Na adição manual, é possível escolher o nome, ícone e cor de fundo do dispositivo.
@@ -26,10 +27,12 @@ Foi implementado um sistema de mensagens com recursos básicos de chat. Além di
 Ele reconhece comandos como “conectar aparelho” ou “mudar de página”, atuando como um assistente virtual. Por meio de certos comandos, como “Conectar TV”, é possível fazer com que o aparelho correspondente seja
  conectado na seção de Conexões, inclusive com agendamento de horários ou temporizadores, por exemplo: “Conectar TV daqui a 30 minutos” ou “Conectar TV sala daqui a 10 segundos”. Antes de inserir o comando, há botões
  já programados que adicionam comandos prontos ao input do chat, facilitando o uso pelo usuário, que pode enviar o comando diretamente ou adicionar mais detalhes. O usuário pdeo tambem pedir pelo chat trocar o uso da energia, pdoe ser
- o uso da bateria ou o uso da energia elétrica. Dicionei a api de clia me tempo para que o usuario posa acessar o cliam de qualquer cidade perguntnado pelo chat
+ o uso da bateria ou o uso da energia elétrica. Dicionei a api de clia me tempo para que o usuario posa acessar o cliam de qualquer cidade perguntnado pelo chat. Como adicione a api de cliam e tempo alem dem ostar a temperatura na Home,
+ caso esteja frio abixo de 20 graus se o usuario pedir para conectar o arcondiconado, o chat vai perguntar se relamente o usuari oque pois esta frio, se for sim coencta se for nao. na oconecta
 
 Contato
-Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos e um botão que direciona para uma seção de perguntas frequentes, facilitando a comunicação com a empresa.
+Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos e um botão
+que direciona para uma seção de perguntas frequentes, facilitando a comunicação com a empresa.
 
 Configurações
 Esta seção reúne seis funcionalidades principais:
@@ -38,8 +41,8 @@ Lista de todos os comandos reconhecidos pelo sistema;
 
 Central de ajuda;
 
-Págian de % de energia na bateria com animação de descarregar quando tiver algum aprelho conectado nas conexoes usando a
-bateria e há um animação de carregar quando a bateria nao esta em 100% e nao esta em uso. Conforme a betria vai descarregando ou carregando a cor
+Págian de % de energia na bateria com animação de descarregar quando tiver algum aprelho conectado nas conexoes usando abateria e
+há um animação de carregar quando a bateria nao esta em 100% e nao esta em uso. Conforme a betria vai descarregando ou carregando a cor
 vai mudando para te uma represnetação melhor do nivel da bateria sendo:
 AZUL  100% --> 50%;
 AMARELO 40% --> 30%;
@@ -57,5 +60,5 @@ Página de recuperação de senha (em desenvolvimento).
 Considerações Finais
 O sistema foi desenvolvido para funcionar tanto em dispositivos móveis quanto em desktops, com foco na experiência mobile para facilitar o acesso remoto.
 A api de dado d ografico é ficticio pore ma do cliam tmepo é uma api real, pois não há acesso direto aos dados reais da empresa.
-O projeto conta ainda com animações suaves, especialmente visíveis nas transições entre páginas, que apresentam um efeito de “apagando e acendendo” ao navegar entre seções, contribuindo para uma experiência mais fluida e agradável.
-O código-fonte está disponível publicamente para consulta.
+O projeto conta ainda com animações suaves, especialmente visíveis nas transições entre páginas, que apresentam um efeito de
+ “apagando e acendendo” ao navegar entre seções, contribuindo para uma experiência mais fluida e agradável.O código-fonte está disponível publicamente para consulta.
