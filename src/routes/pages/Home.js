@@ -102,12 +102,27 @@ const Home = () => {
             const forecastData = await forecastRes.json();
 
             const dailyForecasts = forecastData.list.filter(item => item.dt_txt.includes('12:00:00')).slice(0, 3);
-            const formattedForecast = dailyForecasts.map((item, index) => ({
-                day: index === 0 ? 'Hoje' : index === 1 ? 'Amanhã' : 'Depois de Amanhã',
-                condition: item.weather[0].description,
-                high: item.main.temp_max,
-                low: item.main.temp_min
-            }));
+
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            const dayAfterTomorrow = new Date(today);
+            dayAfterTomorrow.setDate(today.getDate() + 2);
+
+            const formattedForecast = dailyForecasts.map((item, index) => {
+                let dayLabel = 'Hoje';
+                if (index === 1) {
+                    dayLabel = tomorrow.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                } else if (index === 2) {
+                    dayLabel = dayAfterTomorrow.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                }
+                return {
+                    day: dayLabel,
+                    condition: item.weather[0].description,
+                    high: item.main.temp_max,
+                    low: item.main.temp_min
+                };
+            });
 
             setWeatherData({
                 current: {
