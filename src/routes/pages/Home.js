@@ -84,10 +84,6 @@ const Home = () => {
         equivalentTrees: Math.round((totalProduction * CO2_PER_KWH) / CO2_PER_TREE)
     }), [totalProduction]);
 
-    /**
-     * Fetches weather data for a given city and forecast.
-     * @param {string} city - The city to search for.
-     */
     const fetchWeather = async (city = 'São Paulo') => {
         setWeatherLoading(true);
         setWeatherError(null);
@@ -114,7 +110,12 @@ const Home = () => {
             }));
 
             setWeatherData({
-                current: { temperature: weatherData.main.temp, condition: weatherData.weather[0].description },
+                current: {
+                    temperature: weatherData.main.temp,
+                    condition: weatherData.weather[0].description,
+                    humidity: weatherData.main.humidity,
+                    windSpeed: weatherData.wind.speed
+                },
                 forecast: formattedForecast
             });
         } catch (error) {
@@ -275,6 +276,8 @@ const Home = () => {
                                             <p className="wf-condition">
                                                 {getWeatherIcon(weatherData.current.condition)} {weatherData.current.condition.charAt(0).toUpperCase() + weatherData.current.condition.slice(1)}
                                             </p>
+                                            <p className="wf-details">Umidade: {weatherData.current.humidity}%</p>
+                                            <p className="wf-details">Vento: {(weatherData.current.windSpeed * 3.6).toFixed(1)} km/h</p>
                                         </div>
                                     )}
                                     {displayForecast ? (

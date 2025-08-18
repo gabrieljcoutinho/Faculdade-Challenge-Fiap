@@ -158,8 +158,8 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
                 const desc = data.weather[0].description;
                 const temp = Math.round(data.main.temp);
                 const umidity = data.main.humidity;
-                const wind = data.wind.speed;
-                botResponseContent = `Clima em **${data.name}**:\n- Condição: ${desc}\n- Temperatura: ${temp}°C\n- Umidade: ${umidity}%\n- Vento: ${wind} km/h`;
+                const windSpeedKmH = (data.wind.speed * 3.6).toFixed(1); // CONVERSÃO APLICADA AQUI
+                botResponseContent = `Clima em **${data.name}**:\n- Condição: ${desc}\n- Temperatura: ${temp}°C\n- Umidade: ${umidity}%\n- Vento: ${windSpeedKmH} km/h`;
             } catch (error) {
                 botResponseContent = `Erro ao buscar clima: ${error.message}`;
             } finally {
