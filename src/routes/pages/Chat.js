@@ -19,7 +19,7 @@ import lampIcon from '../../imgs/imgConexao/lampada.png';
 import carregador from '../../imgs/imgConexao/carregador.png';
 
 // Chaves de API e constantes
-const GEMINI_API_KEY = 'AIzaSyA_OEC15jeB1rJsNrRYO3v7QDan7J3AWPg';
+const GEMINI_API_KEY = 'AIzaSyBTS2eZLs70fjre5e0k8F_E8fIpgIGF_os';
 const OPENWEATHER_API_KEY = '50b5d79d3b8c0475ba7dba090402b21c';
 const CHAT_STORAGE_KEY = 'chat_messages';
 const FIRST_INTERACTION_KEY = 'chat_firstInteraction';
