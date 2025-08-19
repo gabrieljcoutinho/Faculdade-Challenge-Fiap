@@ -233,3 +233,8 @@ body.light-theme .suggestion-button {
 .suggestion-button:hover {
     opacity: 0.85;
 }
+
+
+body.dark-theme .titulo-bateria {
+    color: #fff;
+}
