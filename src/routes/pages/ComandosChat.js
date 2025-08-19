@@ -89,9 +89,20 @@ const comandos = [
       '➤ Usar energia elétrica',
       '➤ Usar cabo',
       '➤ Ativar cabo'
+    ]
+  },
+
+    {
+    title: 'Leitor de tela do Chat',
+    subcommands: [
+      '➤ modo de fala',
+      '➤ desativar modo de fala'
+
 
     ]
   }
+
+
 ];
 
 const ComandosChat = () => (

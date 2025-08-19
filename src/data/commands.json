@@ -196,7 +196,7 @@
         "quais os comandos",
         "quais os comandos ?"
       ],
-      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n **Remover todas as conexões**\n **Clima em alguama cidade** - Ex: Clima em [Cidade] \n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Tema claro ou Tema escuro** / **claro**: \nPara trocar o tema da interface.\n- **Ir para [Página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções\n\n  "
+      "resposta": "Você pode usar os seguintes comandos:\n\n- **Quais dispositivos eu posso conectar?**: Para saber quais dispositivos podem ser conectados.\n- **Conectar [nome do dispositivo]**: Para conectar um dispositivo específico (ex: Conectar TV).\n **Remover todas as conexões**\n **Clima em alguama cidade** - Ex: Clima em [Cidade] \n- **Analisar gráfico**: Para analisar o gráfico de produção de energia.\n- **Tema claro ou Tema escuro** / **claro**: \nPara trocar o tema da interface.\n- **Ir para [Página]**: Para navegar entre as páginas do sistema\n\nOu acesse o menu de configurações para mais opções\n\n**Modo Leitor do chat:**\n\nmodo de fala\n\n ativar leitor de tela\n\ndesativar modo de fala"
     },
     {
       "triggers": [
@@ -507,7 +507,9 @@
         "Excluir conexões",
         "Excluir conexões",
         "excluir conexoes",
-        "excluir conexões"
+        "excluir conexões",
+        "remover conexões"
+
       ],
       "resposta": "REMOVER_TODOS"
     },
