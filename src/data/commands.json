@@ -508,7 +508,15 @@
         "Excluir conexões",
         "excluir conexoes",
         "excluir conexões",
-        "remover conexões"
+        "remover conexões",
+        "Excluir todas as conexões",
+        "Excluir todas as conexoes",
+          "Excluir todas as conexão",
+         "Excluir todas as conexao",
+           "excluir todas as conexões",
+        "excluir todas as conexoes",
+          "excluir todas as conexão",
+         "excluir todas as conexao"
 
       ],
       "resposta": "REMOVER_TODOS"
