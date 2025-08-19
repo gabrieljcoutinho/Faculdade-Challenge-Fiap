@@ -4,30 +4,42 @@ import '../../CSS/Bateria/animacaoPiscar.css';
 const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   const [piscarCritico, setPiscarCritico] = useState(false);
   const [nivelAnimado, setNivelAnimado] = useState(nivelBateria);
-  const notificou50 = useRef(false);
 
-  // Solicita permissão de notificação
+  // Guardar quais níveis já notificaram
+  const notificacoes = useRef({
+    100: false,
+    50: false,
+    10: false,
+    5: false,
+    0: false,
+  });
+
+  // Solicita permissão de notificação ao iniciar
   useEffect(() => {
     if (Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
   }, []);
 
-  // Notificação em 50%
+  // Dispara notificações nos níveis configurados
   useEffect(() => {
-    if (nivelBateria === 50 && !notificou50.current) {
-      notificou50.current = true;
+    const niveisCriticos = [100, 50, 10, 5, 0];
+
+    if (niveisCriticos.includes(nivelBateria) && !notificacoes.current[nivelBateria]) {
+      notificacoes.current[nivelBateria] = true;
+
       setTimeout(() => {
+        const mensagem = `A bateria está em ${nivelBateria}%.`;
         if (Notification.permission === 'granted') {
-          new Notification('Aviso de Bateria', { body: 'A bateria está em 50%.' });
+          new Notification('Aviso de Bateria', { body: mensagem });
         } else {
-          alert('A bateria está em 50%.');
+          alert(mensagem);
         }
       }, 100);
     }
   }, [nivelBateria]);
 
-  // Piscar em nível crítico
+  // Piscar quando estiver crítico (<20% e >0)
   useEffect(() => {
     setPiscarCritico(nivelBateria < 20 && nivelBateria > 0);
   }, [nivelBateria]);
@@ -52,7 +64,7 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     return () => clearInterval(interval);
   }, [nivelBateria]);
 
-  // Texto do status da bateria
+  // Texto do status
   const statusText = useMemo(() => {
     if (isCharging) return 'Carregando';
     if (isDischarging) return 'Descarregando';
@@ -60,11 +72,11 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   }, [isCharging, isDischarging]);
 
   // Nova lógica de cores
-  const corBarra = nivelAnimado >= 50 ? '#00fff0'     // azul/ciano
-                  : nivelAnimado >= 30 ? '#ffff00'  // amarelo
-                  : nivelAnimado >= 20 ? '#FFA500'  // laranja
-                  : '#FF0000';                      // vermelho
-
+  const corBarra =
+    nivelAnimado >= 50 ? '#00fff0' : // azul/ciano
+    nivelAnimado >= 30 ? '#ffff00' : // amarelo
+    nivelAnimado >= 20 ? '#FFA500' : // laranja
+    '#FF0000'; // vermelho
 
   return (
     <div className={`bateria-container-neon ${piscarCritico ? 'piscar-suave' : ''}`}>
@@ -72,14 +84,7 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
 
       <div className="bateria-central">
         <svg className="barra-circular" viewBox="0 0 120 120">
-          <circle
-            cx="60"
-            cy="60"
-            r="54"
-            stroke="#252525"
-            strokeWidth="12"
-            fill="none"
-          />
+          <circle cx="60" cy="60" r="54" stroke="#252525" strokeWidth="12" fill="none" />
           <circle
             cx="60"
             cy="60"
