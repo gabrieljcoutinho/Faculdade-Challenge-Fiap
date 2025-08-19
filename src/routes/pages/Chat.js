@@ -164,9 +164,16 @@ if (
     textoNormalizado === 'modo leitor tela' ||
   textoNormalizado === 'ativar leitor tela' ||
   textoNormalizado === 'ativar leitura tela' ||
-
     textoNormalizado === 'ativar leitor tela' ||
-    textoNormalizado === 'ativar leitor tela'
+    textoNormalizado === 'ativar leitor tela' ||
+      textoNormalizado === 'Modo leitor de tela' ||
+  textoNormalizado === 'Ativar leitor de tela' ||
+  textoNormalizado === 'Ativar leitura de tela' ||
+    textoNormalizado === 'Modo leitor tela' ||
+  textoNormalizado === 'Ativar leitor tela' ||
+  textoNormalizado === 'Ativar leitura tela' ||
+    textoNormalizado === 'Ativar leitor tela' ||
+    textoNormalizado === 'Ativar leitor tela'
 ) {
   setScreenReaderMode(true);
   sendAssistantMessage('Leitor de tela ativado. 👁️‍🗨️');
@@ -177,11 +184,18 @@ else if (
   textoNormalizado === 'desativar leitor tela' ||
   textoNormalizado === 'desligar leitor tela' ||
    textoNormalizado === 'desativar leitura tela' ||
-
-
      textoNormalizado === 'desativar leitor de tela' ||
   textoNormalizado === 'desligar leitor de tela' ||
-   textoNormalizado === 'desativar leitura de tela'
+   textoNormalizado === 'desativar leitura de tela' ||
+     textoNormalizado === 'Desativar leitor tela' ||
+  textoNormalizado === 'Desligar leitor tela' ||
+   textoNormalizado === 'Desativar leitura tela' ||
+     textoNormalizado === 'Desativar leitor de tela' ||
+  textoNormalizado === 'Desligar leitor de tela' ||
+   textoNormalizado === 'Desativar leitura de tela'
+
+
+
 ) {
   setScreenReaderMode(false);
   window.speechSynthesis.cancel();
