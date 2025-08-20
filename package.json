@@ -20,6 +20,7 @@
     "lucide-react": "^0.525.0",
     "mammoth": "^1.9.1",
     "marked": "^15.0.12",
+    "node-fetch": "^3.3.2",
     "openai": "^4.102.0",
     "pdfjs-dist": "^5.3.31",
     "qrcode.react": "^4.2.0",
