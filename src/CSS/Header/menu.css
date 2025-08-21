@@ -104,16 +104,34 @@ header {
 }
 
 
+.logoGoodwe {
+    width: 30px;
+    padding-left: 125rem;
+}
 
 @media screen and (width: 360px) and (height: 720px) {
     .imgHeader {
         padding-top: 15rem;
+    }
+
+    .logoGoodwe {
+        display: block;
+        padding-left: 0;
+        margin: 0 auto;
+        /* centraliza */
     }
 }
 
 @media screen and (width: 360px) and (height: 740px) {
     .imgHeader {
         padding-top: 15rem;
+    }
+
+    .logoGoodwe {
+        display: block;
+        padding-left: 0;
+        margin: 0 auto;
+        /* centraliza */
     }
 }
 
@@ -124,5 +142,81 @@ header {
         left: 0;
         width: 100%;
         padding-top: 25rem;
+    }
+
+    .logoGoodwe {
+        display: block;
+        padding-left: 260px;
+        margin: 0 auto;
+        /* centraliza */
+    }
+
+}
+
+
+
+
+
+
+
+
+/* iPhone XR (414 x 896) */
+@media screen and (width: 414px) and (height: 896px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+
+    .logoGoodwe {
+        display: block;
+        padding-left: 20rem;
+        margin: 0 auto;
+        /* centraliza */
+    }
+}
+
+/* iPhone 14 Pro Max (430 x 932) */
+@media screen and (width: 430px) and (height: 932px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+
+    .logoGoodwe {
+        display: block;
+        padding-left: 20rem;
+        margin: 0 auto;
+        /* centraliza */
+    }
+}
+
+@media screen and (width: 412px) and (height: 915px) {
+    .imgHeader {
+        padding-top: 15rem;
+        text-align: right;
+        /* joga o conteúdo para a direita */
+    }
+
+    .logoGoodwe {
+        display: inline-block;
+        /* permite alinhar com text-align */
+        margin: 0;
+        /* remove centralização */
+        padding-left: 0;
+        max-width: 200px;
+        /* ajusta tamanho se precisar */
+    }
+}
+
+
+/* Samsung Galaxy S20 Ultra (412 x 915) */
+@media screen and (width: 412px) and (height: 915px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+
+    .logoGoodwe {
+        display: block;
+        padding-left: 20rem;
+        margin: 0 auto;
+        /* centraliza */
     }
 }

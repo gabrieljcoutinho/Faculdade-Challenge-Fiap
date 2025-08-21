@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../CSS/Header/menu.css';
 
+import logoGoodWe from '../imgs/imgHeader/logo.png'
+
 import home from '../imgs/imgHeader/home.png';
 import wifi from '../imgs/imgHeader/wifi.png';
 import contato from '../imgs/imgHeader/contato.png';
@@ -69,6 +71,7 @@ const Header = () => {
         >☰</span>
       </div>
 
+<img src={logoGoodWe} alt=""  className='logoGoodwe'/>
       <div
         id="menu"
         className={menuOpen ? 'open' : ''}
