@@ -54,6 +54,10 @@ header {
     z-index: 200;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    /* logo sempre no canto direito */
+    padding: 0 10px;
+    /* espaço lateral */
     color: var(--color-text-header);
     height: 40px;
 }
@@ -65,11 +69,7 @@ header {
 }
 
 .close-btn {
-    position: absolute;
-    top: 0;
-    right: 25px;
     font-size: 36px;
-    margin-left: 50px;
     cursor: pointer;
     background: none;
     border: none;
@@ -85,13 +85,10 @@ header {
 /* IMG */
 .iconesHeader {
     width: 35px;
-    padding-top: 0;
     cursor: pointer;
-    padding-left: 2rem;
 }
 
 .settings {
-    padding-left: 50px;
     cursor: pointer;
     margin-bottom: 15px;
     display: flex;
@@ -100,110 +97,55 @@ header {
 
 .imgHeader {
     padding-top: 3.5rem;
-    padding-left: 3.5rem;
 }
 
+/* LOGO GOODWE SEMPRE NO CANTO DIREITO */
 .logoGoodwe {
-    width: 30px;
-    padding-left: 125rem;
+    width: 40px;
+    /* ajuste do tamanho da logo */
+    display: block;
+    margin: 0;
 }
 
-/* ----------- Media Queries ----------- */
+/* Media queries podem ajustar padding ou top se quiser, mas a logo já está fixa no canto direito */
+@media (max-width: 400px) {
+    .imgHeader {
+        padding-top: 15rem;
+        width: 20px;
+    }
+}
 
-/* Motorola G7 Play (360 x 720) */
 @media screen and (width: 360px) and (height: 720px) {
     .imgHeader {
         padding-top: 15rem;
-    }
-
-    .logoGoodwe {
-        display: block;
-        padding-left: 0;
-        margin: 0 auto;
-        /* centraliza */
+        width: 20px;
     }
 }
 
-/* Motorola G7 Power (360 x 740) */
 @media screen and (width: 360px) and (height: 740px) {
     .imgHeader {
         padding-top: 15rem;
-    }
-
-    .logoGoodwe {
-        display: block;
-        padding-left: 0;
-        margin: 0 auto;
-        /* centraliza */
+        width: 20px;
     }
 }
 
-/* Telas menores que 400px */
-@media (max-width: 400px) {
-    .sua-classe {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        padding-top: 25rem;
-    }
-
-    .logoGoodwe {
-        display: block;
-        padding-left: 260px;
-        margin: 0 auto;
-        /* centraliza */
-    }
-}
-
-/* iPhone XR (414 x 896) */
 @media screen and (width: 414px) and (height: 896px) {
     .imgHeader {
         padding-top: 15rem;
-    }
-
-    .logoGoodwe {
-        display: block;
-        padding-left: 20rem;
-        margin: 0 auto;
-        /* centraliza */
+        width: 20px;
     }
 }
 
-/* iPhone 14 Pro Max (430 x 932) */
 @media screen and (width: 430px) and (height: 932px) {
     .imgHeader {
         padding-top: 15rem;
-    }
-
-    .logoGoodwe {
-        display: block;
-        padding-left: 20rem;
-        margin: 0 auto;
-        /* centraliza */
+        width: 20px;
     }
 }
 
-/* Samsung Galaxy A51 (412 x 915) */
 @media screen and (width: 412px) and (height: 915px) {
     .imgHeader {
         padding-top: 15rem;
-        width: 100%;
-        text-align: right;
-        /* joga para a direita */
-        position: relative;
-    }
-
-    .logoGoodwe {
-        position: absolute;
-        top: 5px;
-        /* distância do topo */
-        right: 10px;
-        /* cola no canto direito */
-        width: 30px;
-        /* tamanho da logo */
-        margin: 0;
-        padding: 0;
-        display: block;
+        width: 20px;
     }
 }
