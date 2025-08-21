@@ -103,12 +103,14 @@ header {
     padding-left: 3.5rem;
 }
 
-
 .logoGoodwe {
     width: 30px;
     padding-left: 125rem;
 }
 
+/* ----------- Media Queries ----------- */
+
+/* Motorola G7 Play (360 x 720) */
 @media screen and (width: 360px) and (height: 720px) {
     .imgHeader {
         padding-top: 15rem;
@@ -122,6 +124,7 @@ header {
     }
 }
 
+/* Motorola G7 Power (360 x 740) */
 @media screen and (width: 360px) and (height: 740px) {
     .imgHeader {
         padding-top: 15rem;
@@ -135,6 +138,7 @@ header {
     }
 }
 
+/* Telas menores que 400px */
 @media (max-width: 400px) {
     .sua-classe {
         position: absolute;
@@ -150,15 +154,7 @@ header {
         margin: 0 auto;
         /* centraliza */
     }
-
 }
-
-
-
-
-
-
-
 
 /* iPhone XR (414 x 896) */
 @media screen and (width: 414px) and (height: 896px) {
@@ -188,57 +184,26 @@ header {
     }
 }
 
-@media screen and (width: 412px) and (height: 915px) {
-    .imgHeader {
-        padding-top: 15rem;
-        text-align: right;
-        /* joga o conteúdo para a direita */
-    }
-
-    .logoGoodwe {
-        display: inline-block;
-        /* permite alinhar com text-align */
-        margin: 0;
-        /* remove centralização */
-        padding-left: 0;
-        max-width: 200px;
-        /* ajusta tamanho se precisar */
-    }
-}
-
-
-/* Samsung Galaxy S20 Ultra (412 x 915) */
-@media screen and (width: 412px) and (height: 915px) {
-    .imgHeader {
-        padding-top: 15rem;
-    }
-
-    .logoGoodwe {
-        display: block;
-        padding-left: 20rem;
-        margin: 0 auto;
-        /* centraliza */
-    }
-}
-
-
-
 /* Samsung Galaxy A51 (412 x 915) */
 @media screen and (width: 412px) and (height: 915px) {
     .imgHeader {
         padding-top: 15rem;
-        display: flex;
-        justify-content: flex-end;
-        /* joga tudo para a direita */
-        padding-right: 1rem;
-        /* dá espaço da borda */
+        width: 100%;
+        text-align: right;
+        /* joga para a direita */
+        position: relative;
     }
 
     .logoGoodwe {
-        display: block;
+        position: absolute;
+        top: 5px;
+        /* distância do topo */
+        right: 10px;
+        /* cola no canto direito */
+        width: 30px;
+        /* tamanho da logo */
         margin: 0;
-        padding-left: 0;
-        max-width: 80px;
-        /* ajuste do tamanho se necessário */
+        padding: 0;
+        display: block;
     }
 }
