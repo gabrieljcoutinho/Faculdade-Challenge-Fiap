@@ -220,3 +220,25 @@ header {
         /* centraliza */
     }
 }
+
+
+
+/* Samsung Galaxy A51 (412 x 915) */
+@media screen and (width: 412px) and (height: 915px) {
+    .imgHeader {
+        padding-top: 15rem;
+        display: flex;
+        justify-content: flex-end;
+        /* joga tudo para a direita */
+        padding-right: 1rem;
+        /* dá espaço da borda */
+    }
+
+    .logoGoodwe {
+        display: block;
+        margin: 0;
+        padding-left: 0;
+        max-width: 80px;
+        /* ajuste do tamanho se necessário */
+    }
+}
