@@ -43,6 +43,9 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
 
 ## 📱 Funcionalidades Principais
 
+![Tela Home](../3-Challenge-Fiap/src/imgs/GITHUB/home.png)
+
+
 ### 1. 🏠 Home
 
 - Alternância entre **3 tipos de gráficos**:
