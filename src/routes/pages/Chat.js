@@ -17,6 +17,8 @@ import geladeira from '../../imgs/imgConexao/geladeira.png';
 import lampIcon from '../../imgs/imgConexao/lampada.png';
 import carregador from '../../imgs/imgConexao/carregador.png';
 
+import logoGoodwe from '../../imgs/imgHeader/logo.png'
+
 const GEMINI_API_KEY = 'AIzaSyBTS2eZLs70fjre5e0k8F_E8fIpgIGF_os';
 const OPENWEATHER_API_KEY = '50b5d79d3b8c0475ba7dba090402b21c';
 const CHAT_STORAGE_KEY = 'chat_messages';
@@ -156,53 +158,21 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             handledByLocalCommand = true;
         }
 
-       // Modo leitor de tela
-if (
-  textoNormalizado === 'modo leitor de tela' ||
-  textoNormalizado === 'ativar leitor de tela' ||
-  textoNormalizado === 'ativar leitura de tela' ||
-    textoNormalizado === 'modo leitor tela' ||
-  textoNormalizado === 'ativar leitor tela' ||
-  textoNormalizado === 'ativar leitura tela' ||
-    textoNormalizado === 'ativar leitor tela' ||
-    textoNormalizado === 'ativar leitor tela' ||
-      textoNormalizado === 'Modo leitor de tela' ||
-  textoNormalizado === 'Ativar leitor de tela' ||
-  textoNormalizado === 'Ativar leitura de tela' ||
-    textoNormalizado === 'Modo leitor tela' ||
-  textoNormalizado === 'Ativar leitor tela' ||
-  textoNormalizado === 'Ativar leitura tela' ||
-    textoNormalizado === 'Ativar leitor tela' ||
-    textoNormalizado === 'Ativar leitor tela'
-) {
-  setScreenReaderMode(true);
-  sendAssistantMessage('Leitor de tela ativado. 👁️‍🗨️');
-  handledByLocalCommand = true;
-}
-
-else if (
-  textoNormalizado === 'desativar leitor tela' ||
-  textoNormalizado === 'desligar leitor tela' ||
-   textoNormalizado === 'desativar leitura tela' ||
-     textoNormalizado === 'desativar leitor de tela' ||
-  textoNormalizado === 'desligar leitor de tela' ||
-   textoNormalizado === 'desativar leitura de tela' ||
-     textoNormalizado === 'Desativar leitor tela' ||
-  textoNormalizado === 'Desligar leitor tela' ||
-   textoNormalizado === 'Desativar leitura tela' ||
-     textoNormalizado === 'Desativar leitor de tela' ||
-  textoNormalizado === 'Desligar leitor de tela' ||
-   textoNormalizado === 'Desativar leitura de tela'
-
-
-
-) {
-  setScreenReaderMode(false);
-  window.speechSynthesis.cancel();
-  sendAssistantMessage('Leitor de tela desativado. ');
-  handledByLocalCommand = true;
-}
-
+        // Modo leitor de tela
+        if (
+          ['modo leitor de tela','ativar leitor de tela','ativar leitura de tela','modo leitor tela','ativar leitor tela','ativar leitura tela'].includes(textoNormalizado)
+        ) {
+          setScreenReaderMode(true);
+          sendAssistantMessage('Leitor de tela ativado. 👁️‍🗨️');
+          handledByLocalCommand = true;
+        } else if (
+          ['desativar leitor tela','desligar leitor tela','desativar leitura tela','desativar leitor de tela','desligar leitor de tela','desativar leitura de tela'].includes(textoNormalizado)
+        ) {
+          setScreenReaderMode(false);
+          window.speechSynthesis.cancel();
+          sendAssistantMessage('Leitor de tela desativado.');
+          handledByLocalCommand = true;
+        }
 
         // clima em [cidade]
         const climaMatch = texto.match(/clima em (.+)/i);
@@ -351,6 +321,12 @@ else if (
                                 💡 Digite <strong>Comandos</strong> para receber comandos específicos do site.
                             </span>
                         </div>
+
+                        <img
+                            src={logoGoodwe}
+                            alt="Imagem opaca"
+                            className={`chat-center-image ${messages.length > 0 ? 'hide' : ''}`}
+                        />
                     </div>
                 )}
                 {messages.filter(m=>m.role!=='system').map((m,i)=>(
