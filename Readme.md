@@ -87,7 +87,7 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
 - Reconhecimento de comandos inteligentes, como:
   - "conectar aparelho"
   - "mudar de página"
-  - "listar comandos"
+  - "comandos"
 - Animação de transição ao mudar de página, com efeito de "apagando e acendendo".
 
 <img width="522" height="1127" alt="Image" src="https://github.com/user-attachments/assets/86881f2a-2358-47df-86e1-4abe4f64773e" />
