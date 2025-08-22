@@ -90,6 +90,8 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
   - "listar comandos"
 - Animação de transição ao mudar de página, com efeito de "apagando e acendendo".
 
+<img width="522" height="1127" alt="Image" src="https://github.com/user-attachments/assets/86881f2a-2358-47df-86e1-4abe4f64773e" />
+
 ---
 
 ### 4. 📬 Contato
@@ -101,6 +103,9 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
 - Funcionalidades adicionais:
   - **Envio de arquivos**
   - Acesso à seção de **perguntas frequentes (FAQ)**
+
+
+<img width="379" height="810" alt="Image" src="https://github.com/user-attachments/assets/95bb6624-4944-4b55-a8a8-61cd43e4fb58" />
 
 ---
 
@@ -116,6 +121,8 @@ Conjunto de ferramentas essenciais para o usuário:
    - E-mail e senha
    - Login via Google ou Facebook
 6. **Página de recuperação de senha** (em desenvolvimento)
+
+<img width="364" height="803" alt="Image" src="https://github.com/user-attachments/assets/a4a531b8-4db4-46af-adee-38e963501152" />
 
 ---
 
