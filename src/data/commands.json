@@ -304,11 +304,11 @@
     },
     {
       "triggers": [
-        "Ir para conexões",
-        "Abrir conexões",
-        "Página de conexões",
+        "Ir para conexoes",
+        "Abrir conexoes",
+        "Página de conexoes",
         "Ver meus dispositivos",
-        "Conexões",
+        "Conexoes",
         "Conexão",
         "Página conexão",
         "Página Conexão",
@@ -324,7 +324,7 @@
         "Pagina de Conexão",
         "Pagina de Conexao"
       ],
-      "resposta": "REDIRECT:/conexoes"
+      "resposta": "REDIRECT:/conectar"
     },
     {
       "triggers": [
@@ -495,29 +495,15 @@
         "remover todos os aparelhos conectados",
         "Remover todos os parelhos conectados",
         "remover todos os parelhos conectados",
-        "Remover todas as conexões",
         "Remover todas as conexoes",
-        "remover todas as conexões",
         "remover todas as conexoes",
         "Excluir aparelhos",
         "Excluir todos os aparelhos",
-        "Remover todas as conexões",
-        "Remover todas as conexoes",
-        "Remover conexões",
-        "Excluir conexões",
-        "Excluir conexões",
-        "excluir conexoes",
-        "excluir conexões",
-        "remover conexões",
-        "Excluir todas as conexões",
         "Excluir todas as conexoes",
-          "Excluir todas as conexão",
-         "Excluir todas as conexao",
-           "excluir todas as conexões",
         "excluir todas as conexoes",
-          "excluir todas as conexão",
-         "excluir todas as conexao",
-         "remover conexoes"
+         "remover conexoes",
+         "excluir conexoes",
+         "Remover conexões"
 
       ],
       "resposta": "REMOVER_TODOS"

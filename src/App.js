@@ -217,7 +217,7 @@ function App() {
         <ThemeToggle setTheme={setTheme} />
         <Routes>
           <Route path="/" element={<Home productionData={formattedProductionData} initialProductionData={initialProductionData} onDatasetChange={setChosenDatasetIndex} />} />
-          <Route path="/conexoes" element={<Conexoes aparelhos={aparelhos} setAparelhos={setAparelhos} onConnectDevice={handleConnectDevice} onRemoveDevice={handleRemoveDevice} onConnectionTypeChange={handleConnectionTypeChange} activeConnectionIcon={connectionType} />} />
+          <Route path="/conectar" element={<Conexoes aparelhos={aparelhos} setAparelhos={setAparelhos} onConnectDevice={handleConnectDevice} onRemoveDevice={handleRemoveDevice} onConnectionTypeChange={handleConnectionTypeChange} activeConnectionIcon={connectionType} />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/configuracoes" element={<Configuracoes isReading={isReading} toggleReading={toggleReading} />} />
           <Route path="/login" element={<Logar />} />

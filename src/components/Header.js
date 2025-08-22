@@ -85,7 +85,7 @@ const Header = () => {
 
         <br />
 
-        <Link to="/conexoes" onClick={closeMenu} className={`linkHeader ${location.pathname === '/conexoes' ? 'active' : ''}`}>
+        <Link to="/conectar" onClick={closeMenu} className={`linkHeader ${location.pathname === '/conectar' ? 'active' : ''}`}>
           <p className='paragrafoListaHeader'><img src={wifi} alt="" className='iconesHeader' title='Conexão' /></p>
         </Link>
 
