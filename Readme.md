@@ -169,7 +169,7 @@ Conjunto de ferramentas essenciais para o usuário:
 ## ⚠️ Limitações
 
 - APIs utilizadas são **fictícias**, pois os dados reais da empresa não foram disponibilizados.
-- Algumas funcionalidades estão **em desenvolvimento**, como recuperação de senha.
+- Algumas funcionalidades são **apena estética**, como recuperação de senha.
 
 ---
 
