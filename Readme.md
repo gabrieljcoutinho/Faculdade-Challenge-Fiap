@@ -43,7 +43,7 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
 
 ## 📱 Funcionalidades Principais
 
-![Tela Home](./GITHUBimg//bateria.png)
+![Tela Home](./GITHUBimg/home.png)
 
 
 ### 1. 🏠 Home
