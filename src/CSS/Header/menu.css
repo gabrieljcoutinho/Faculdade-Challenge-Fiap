@@ -39,7 +39,7 @@
     color: var(--color-text-menu);
     display: block;
     transition: 0.3s;
-    margin-left: 15px;
+    margin-left: 45px;
 }
 
 #menu a:hover {
