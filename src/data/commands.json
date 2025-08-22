@@ -516,9 +516,7 @@
            "excluir todas as conexões",
         "excluir todas as conexoes",
           "excluir todas as conexão",
-         "excluir todas as conexao",
-         "remover conexoes",
-         "remover conexao"
+         "excluir todas as conexao"
 
       ],
       "resposta": "REMOVER_TODOS"
