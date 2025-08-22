@@ -55,6 +55,7 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
 - Destaque para **impactos positivos da energia solar**, com foco ambiental e econômico.
 
 ---
+<img width="495" height="1050" alt="Image" src="https://github.com/user-attachments/assets/a441030b-0a76-4f67-9a30-c6baae163b4d" />
 
 ### 2. 🔌 Conexões de Aparelhos
 
