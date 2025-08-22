@@ -73,6 +73,9 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
   - **Drag and drop** para reordenação dos dispositivos
 - Caso não haja dispositivos, é exibida uma **ilustração indicativa**, evitando deixar a tela em branco.
 
+
+<img width="495" height="705" alt="Image" src="https://github.com/user-attachments/assets/9cea78ca-e2e4-4927-8ff0-c63747908c67" />
+
 ---
 
 ### 3. 🤖 Chatbot
