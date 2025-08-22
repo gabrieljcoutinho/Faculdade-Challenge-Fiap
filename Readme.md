@@ -54,6 +54,9 @@ A aplicação conta com uma estrutura básica composta por um cabeçalho fixo, q
 - **Imagem dinâmica** de fundo do gráfico muda conforme o período do dia (manhã, tarde ou noite).
 - Destaque para **impactos positivos da energia solar**, com foco ambiental e econômico.
 
+
+<img width="603" height="906" alt="Image" src="https://github.com/user-attachments/assets/f9349b78-6c72-4765-8bd3-08da1ae31f83" />
+
 ---
 
 
