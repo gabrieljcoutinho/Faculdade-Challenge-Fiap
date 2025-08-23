@@ -52,29 +52,34 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
         console.warn('Não foi possível obter o nome via GATT:', err.message);
       }
 
-      // 3️⃣ Fallback baseado no tipo do dispositivo pelo nome ou ID
+      // 3️⃣ Fallback inteligente baseado no nome ou ID
       let deviceType = 'Outro';
-      if (deviceName.toLowerCase().includes('tv') || device.id.toLowerCase().includes('tv')) {
+      let guessedName = '';
+
+      const lowerId = device.id.toLowerCase();
+      const lowerName = deviceName.toLowerCase();
+
+      if (lowerName.includes('tv') || lowerId.includes('tv')) {
         deviceType = 'TV';
-        if (!deviceName) deviceName = 'TV desconhecida';
-      } else if (
-        deviceName.toLowerCase().includes('lamp') ||
-        deviceName.toLowerCase().includes('lâmpada') ||
-        device.id.toLowerCase().includes('lamp')
-      ) {
+        guessedName = deviceName || 'TV desconhecida';
+      } else if (lowerName.includes('lamp') || lowerName.includes('lâmpada') || lowerId.includes('lamp')) {
         deviceType = 'Lâmpada';
-        if (!deviceName) deviceName = 'Lâmpada desconhecida';
+        guessedName = deviceName || 'Lâmpada desconhecida';
+      } else if (lowerName.includes('sensor') || lowerId.includes('sensor')) {
+        deviceType = 'Sensor';
+        guessedName = deviceName || 'Sensor desconhecido';
       } else {
-        if (!deviceName) deviceName = 'Dispositivo desconhecido';
+        deviceType = 'Outro';
+        guessedName = deviceName || 'Dispositivo desconhecido';
       }
 
-      // 4️⃣ Atualizar lista de dispositivos conectados
+      // 4️⃣ Atualiza a lista de dispositivos conectados
       setDevices(prev => {
         if (!prev.some(d => d.id === device.id)) {
-          return [...prev, { id: device.id, name: deviceName, type: deviceType, connected: true }];
+          return [...prev, { id: device.id, name: guessedName, type: deviceType, connected: true }];
         }
         return prev.map(d =>
-          d.id === device.id ? { ...d, connected: true, name: deviceName, type: deviceType } : d
+          d.id === device.id ? { ...d, connected: true, name: guessedName, type: deviceType } : d
         );
       });
 
