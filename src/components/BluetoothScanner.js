@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const BluetoothScanner = ({ onDeviceConnected }) => {
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
-  const [devices, setDevices] = useState([]); // lista de dispositivos conectados
+  const [devices, setDevices] = useState([]);
+
+  // Detecta se o usuário está no iOS
+  const [isIOS, setIsIOS] = useState(false);
+  useEffect(() => {
+    const ua = window.navigator.userAgent.toLowerCase();
+    setIsIOS(/iphone|ipad|ipod/.test(ua));
+  }, []);
 
   const handleBluetoothConnect = async () => {
     setStatus('Procurando dispositivos Bluetooth...');
     setError('');
+
+    if (isIOS) {
+      setError('Web Bluetooth não é suportado em iOS. Use Android ou desktop.');
+      setStatus('');
+      return;
+    }
 
     if (!navigator.bluetooth) {
       setError('Seu navegador não suporta Web Bluetooth. Use Chrome ou Edge.');
@@ -18,16 +31,16 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
     try {
       const device = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: ['generic_access'] // serviços extras que queremos acessar
+        optionalServices: ['generic_access']
       });
 
       const server = await device.gatt.connect();
       setStatus('Dispositivo conectado!');
 
-      // Nome do dispositivo
-      let deviceName = device.name || 'Nome desconhecido';
+      // 1️⃣ Nome padrão do dispositivo
+      let deviceName = device.name || '';
 
-      // Tenta pegar nome real via GATT
+      // 2️⃣ Tentar obter nome via GATT
       try {
         const service = await server.getPrimaryService('generic_access');
         const characteristic = await service.getCharacteristic('gap.device_name');
@@ -39,12 +52,23 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
         console.warn('Não foi possível obter o nome via GATT:', err.message);
       }
 
-      // Identificar o tipo do dispositivo
+      // 3️⃣ Fallback baseado no tipo do dispositivo pelo nome ou ID
       let deviceType = 'Outro';
-      if (deviceName.toLowerCase().includes('tv')) deviceType = 'TV';
-      else if (deviceName.toLowerCase().includes('lamp') || deviceName.toLowerCase().includes('lâmpada')) deviceType = 'Lâmpada';
+      if (deviceName.toLowerCase().includes('tv') || device.id.toLowerCase().includes('tv')) {
+        deviceType = 'TV';
+        if (!deviceName) deviceName = 'TV desconhecida';
+      } else if (
+        deviceName.toLowerCase().includes('lamp') ||
+        deviceName.toLowerCase().includes('lâmpada') ||
+        device.id.toLowerCase().includes('lamp')
+      ) {
+        deviceType = 'Lâmpada';
+        if (!deviceName) deviceName = 'Lâmpada desconhecida';
+      } else {
+        if (!deviceName) deviceName = 'Dispositivo desconhecido';
+      }
 
-      // Atualiza a lista de dispositivos conectados
+      // 4️⃣ Atualizar lista de dispositivos conectados
       setDevices(prev => {
         if (!prev.some(d => d.id === device.id)) {
           return [...prev, { id: device.id, name: deviceName, type: deviceType, connected: true }];
@@ -54,7 +78,7 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
         );
       });
 
-      // Callback para o componente pai
+      // 5️⃣ Callback para o componente pai
       if (onDeviceConnected) {
         onDeviceConnected(device, server);
       }
