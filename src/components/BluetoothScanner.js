@@ -18,15 +18,16 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
     try {
       const device = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: ['generic_access']
+        optionalServices: ['generic_access'] // serviços extras que queremos acessar
       });
 
       const server = await device.gatt.connect();
       setStatus('Dispositivo conectado!');
 
-      let deviceName = device.name || 'Nome desconhecido'; // se não tiver nome, mostrar amigável
+      // Nome do dispositivo
+      let deviceName = device.name || 'Nome desconhecido';
 
-      // Tenta ler o nome real via GATT
+      // Tenta pegar nome real via GATT
       try {
         const service = await server.getPrimaryService('generic_access');
         const characteristic = await service.getCharacteristic('gap.device_name');
@@ -38,13 +39,18 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
         console.warn('Não foi possível obter o nome via GATT:', err.message);
       }
 
+      // Identificar o tipo do dispositivo
+      let deviceType = 'Outro';
+      if (deviceName.toLowerCase().includes('tv')) deviceType = 'TV';
+      else if (deviceName.toLowerCase().includes('lamp') || deviceName.toLowerCase().includes('lâmpada')) deviceType = 'Lâmpada';
+
       // Atualiza a lista de dispositivos conectados
       setDevices(prev => {
         if (!prev.some(d => d.id === device.id)) {
-          return [...prev, { id: device.id, name: deviceName, connected: true }];
+          return [...prev, { id: device.id, name: deviceName, type: deviceType, connected: true }];
         }
         return prev.map(d =>
-          d.id === device.id ? { ...d, connected: true, name: deviceName } : d
+          d.id === device.id ? { ...d, connected: true, name: deviceName, type: deviceType } : d
         );
       });
 
@@ -74,11 +80,20 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
       {devices.length > 0 && (
         <div style={{ marginTop: '20px' }}>
           <h3>Dispositivos conectados:</h3>
-          <ul>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
             {devices.map(d => (
-              <li key={d.id} style={{ marginBottom: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+              <li
+                key={d.id}
+                style={{
+                  marginBottom: '10px',
+                  padding: '10px',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                  backgroundColor: d.connected ? '#e0ffe0' : '#ffe0e0'
+                }}
+              >
                 <strong>Nome:</strong> {d.name} <br />
-                <strong>ID:</strong> {d.id} <br />
+                <strong>Tipo:</strong> {d.type} <br />
                 <strong>Status:</strong> {d.connected ? 'Conectado' : 'Desconectado'}
               </li>
             ))}
