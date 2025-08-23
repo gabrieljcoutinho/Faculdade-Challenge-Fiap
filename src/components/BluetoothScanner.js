@@ -16,7 +16,6 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
     }
 
     try {
-      // Janela de seleção do navegador
       const device = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
         optionalServices: ['generic_access']
@@ -25,7 +24,7 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
       const server = await device.gatt.connect();
       setStatus('Dispositivo conectado!');
 
-      let deviceName = device.name || 'Sem nome disponível';
+      let deviceName = device.name || 'Nome desconhecido'; // se não tiver nome, mostrar amigável
 
       // Tenta ler o nome real via GATT
       try {
@@ -33,14 +32,14 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
         const characteristic = await service.getCharacteristic('gap.device_name');
         const value = await characteristic.readValue();
         const decoder = new TextDecoder('utf-8');
-        deviceName = decoder.decode(value);
+        const gattName = decoder.decode(value);
+        if (gattName) deviceName = gattName;
       } catch (err) {
         console.warn('Não foi possível obter o nome via GATT:', err.message);
       }
 
-      // Adiciona à lista de dispositivos conectados
+      // Atualiza a lista de dispositivos conectados
       setDevices(prev => {
-        // Evita duplicar dispositivos na lista
         if (!prev.some(d => d.id === device.id)) {
           return [...prev, { id: device.id, name: deviceName, connected: true }];
         }
@@ -77,7 +76,7 @@ const BluetoothScanner = ({ onDeviceConnected }) => {
           <h3>Dispositivos conectados:</h3>
           <ul>
             {devices.map(d => (
-              <li key={d.id}>
+              <li key={d.id} style={{ marginBottom: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
                 <strong>Nome:</strong> {d.name} <br />
                 <strong>ID:</strong> {d.id} <br />
                 <strong>Status:</strong> {d.connected ? 'Conectado' : 'Desconectado'}
