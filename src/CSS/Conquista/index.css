@@ -1,0 +1,73 @@
+/* Container das conquistas */
+.conquista {
+    height: 2800px;
+}
+
+
+.conquistas-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Quebra linha se não couberem lado a lado */
+    gap: 10px;
+    /* Espaço entre as imagens */
+    justify-content: center;
+    /* Centraliza horizontalmente */
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+/* Estilo das imagens */
+.conquistas-container img {
+    width: 80px;
+    /* Largura fixa */
+    height: 80px;
+    /* Altura fixa */
+    object-fit: contain;
+    /* Mantém proporção da imagem */
+    filter: grayscale(100%);
+    /* Preto e branco */
+    transition: filter 0.3s;
+    /* Animação suave para hover */
+}
+
+/* Mantém as imagens sempre em preto e branco ao passar o mouse */
+.conquistas-container img:hover {
+    filter: grayscale(100%);
+}
+
+
+/* Título */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+/* Responsividade: telas pequenas (celulares) */
+@media (max-width: 600px) {
+    .conquistas-container {
+        flex-direction: column;
+        /* Coloca imagens uma embaixo da outra */
+        align-items: center;
+        /* Centraliza horizontalmente */
+    }
+
+    .conquistas-container img {
+        width: 100%;
+        /* Ocupa toda a largura do container */
+        max-width: 200px;
+        /* Limite máximo para não esticar demais */
+        height: auto;
+        /* Mantém proporção */
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        /* Ajusta título para telas pequenas */
+    }
+
+    img {
+        width: 110px;
+    }
+}
