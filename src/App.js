@@ -30,7 +30,6 @@ import HelpCenter from './routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 import NotFound from './routes/pages/NotFound';
 import Bateria from './routes/pages/Bateria';
-import Conquista from './routes/pages/Conquista'
 
 const aparelhosDisponiveis = [
   { id: 1, imagem: tvIcon, nome: 'TV', corFundo: '#e0f7fa' },
@@ -230,7 +229,6 @@ function App() {
           <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/bateria" element={<Bateria isDischarging={isDischarging} isCharging={isCharging} nivelBateria={nivelBateria} />} />
-          <Route path='/conquista' element={<Conquista />} />
         </Routes>
         <Footer />
       </BrowserRouter>
