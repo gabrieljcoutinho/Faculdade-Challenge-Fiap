@@ -71,3 +71,21 @@ h1 {
         width: 110px;
     }
 }
+
+
+
+
+
+
+.conquistas-container img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    filter: grayscale(100%);
+    transition: filter 0.3s;
+}
+
+/* Medalha desbloqueada */
+.conquistas-container img.ativa {
+    filter: none;
+}
