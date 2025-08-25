@@ -470,6 +470,9 @@
       "triggers": [
         "Desconectar todos os aparelhos",
         "desconectar todos os aparelhos",
+
+                "Excluir todos os aparelhos",
+        "excluir todos os aparelhos",
         "Desconectar todos",
         "desconectar todos",
         "remover aparelhos conectados",
@@ -478,8 +481,16 @@
         "Remover conexoes",
         "Desconectar aparelhos",
         "Desconectar aparelho",
+
+
         "descoenctar aparelho",
-        "desconectar aparelhos"
+        "desconectar aparelhos",
+        "Excluir aparelhos",
+        "excluir aparelho",
+
+
+        "Excluir aparelhos conectados",
+        "excluir aparelhos conectados"
       ],
       "resposta": "REMOVER_TODOS"
     },
