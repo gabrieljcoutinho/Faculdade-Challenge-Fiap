@@ -131,7 +131,7 @@ function App() {
     const timer = setTimeout(() => {
       setFadeOut(true); // inicia fade out
       setTimeout(() => setShowSplash(false), 500); // espera animação de 0.5s
-    }, 5000); // Splash dura 5s
+    }, 2500); // Splash dura  em segundos
     return () => clearTimeout(timer);
   }, []);
 
