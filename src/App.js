@@ -5,10 +5,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import '../src/CSS/Reset.css';
 import '../src/CSS/mudarCorScrollBar.css';
 import tvIcon from './imgs/imgConexao/TV.png';
-import airConditionerIcon from '../src/imgs/imgConexao/ar-condicionado.png';
-import geladeira from '../src/imgs/imgConexao/geladeira.png';
-import lampIcon from '../src/imgs/imgConexao/lampada.png';
-import carregador from '../src/imgs/imgConexao/carregador.png';
+import airConditionerIcon from './imgs/imgConexao/ar-condicionado.png';
+import geladeira from './imgs/imgConexao/geladeira.png';
+import lampIcon from './imgs/imgConexao/lampada.png';
+import carregador from './imgs/imgConexao/carregador.png';
+import primeiraMedalhaIcon from './imgs/Medalhas/1-entrouNaPáginaPelaPrimeraVez.png';
 
 // Data
 import initialProductionData from './data/graficoHomeApi.json';
@@ -30,6 +31,7 @@ import HelpCenter from './routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 import NotFound from './routes/pages/NotFound';
 import Bateria from './routes/pages/Bateria';
+import Conquista from './routes/pages/Conquista';
 
 const aparelhosDisponiveis = [
   { id: 1, imagem: tvIcon, nome: 'TV', corFundo: '#e0f7fa' },
@@ -102,6 +104,27 @@ function App() {
 
   const isCharging = (connectionType === 'bateria' && connectedDevicesCount === 0) || connectionType === 'cabo';
   const isDischarging = connectionType === 'bateria' && connectedDevicesCount > 0;
+
+  // Adiciona a primeira medalha na primeira visita
+  useEffect(() => {
+    const firstVisit = localStorage.getItem('firstVisit');
+    if (!firstVisit) {
+      localStorage.setItem('firstVisit', 'true');
+      setAparelhos(prev => [
+        ...prev,
+        {
+          id: 'primeira-visita',
+          nome: 'Primeira Visita',
+          imagem: primeiraMedalhaIcon,
+          corFundo: '#FFD700', // cor padrão da medalha
+          conectado: false,
+          agendamentos: [],
+          connectedDate: null,
+          accumulatedSeconds: 0
+        }
+      ]);
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -191,7 +214,6 @@ function App() {
     setAparelhos(prev => prev.filter(c => c.id !== id));
   }, []);
 
-  // Alterei o nome da função para `handleRemoveAll` para ser mais claro
   const handleRemoveAll = useCallback(() => {
     setAparelhos([]);
   }, []);
@@ -205,7 +227,6 @@ function App() {
     })));
   }, []);
 
-  // Nova função para mudar o tipo de conexão, chamada pelo chat
   const handleConnectionTypeChange = useCallback((type) => {
     setConnectionType(type);
   }, []);
@@ -229,6 +250,7 @@ function App() {
           <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/bateria" element={<Bateria isDischarging={isDischarging} isCharging={isCharging} nivelBateria={nivelBateria} />} />
+          <Route path='/conquista' element={<Conquista />} />
         </Routes>
         <Footer />
       </BrowserRouter>
