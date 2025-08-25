@@ -14,7 +14,6 @@ import { logar, deslogar } from '../../constants/Configuracao/index.js';
 import comandosImg from '../../imgs/imgConfiguracao/comandos.png';
 import atendimentoImg from '../../imgs/imgConfiguracao/atendimento.png';
 import bateria from '../../imgs/imgBateria/bateria.png';
-import conquistas from '../../imgs/Medalhas/01-iconeNasConfigurações.png'
 
 const Configuracoes = ({ isReading, toggleReading }) => {
   const navigate = useNavigate();
@@ -57,11 +56,6 @@ const Configuracoes = ({ isReading, toggleReading }) => {
           <button className='comando-btn' onClick={() => navigate('/bateria')} >
       <img src={bateria} alt="Bateria" className="imgComando"/>
           </button>
-
-        <button className='comando-btn' title="Conquistas" onClick={() => navigate('/conquista')}>
-  <img src={conquistas} alt="Conquistas" className='imgComando' />
-</button>
-
 
           <button
             className="comando-btn btnMudarTema"
