@@ -58,7 +58,7 @@ h1 {
         /* Ocupa toda a largura do container */
         max-width: 200px;
         /* Limite máximo para não esticar demais */
-        height: auto;
+        height: 10px;
         /* Mantém proporção */
     }
 
