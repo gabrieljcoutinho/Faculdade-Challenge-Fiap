@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../CSS/Conquista/index.css';
 
 import imgEntrada from '../../imgs/Medalhas/1-entrouNaPáginaPelaPrimeraVez.png';
@@ -14,11 +14,10 @@ import tema from '../../imgs/Medalhas/10-mudouOtemDaPagina.png';
 import acessibilidade from '../../imgs/Medalhas/11-acessibilidade.png';
 import tudo from '../../imgs/Medalhas/12-pegouTodasAsConquistas.png';
 
-const Conquista = () => {
+const Conquista = ({ graficoDesbloqueado }) => {
   const [primeiraVisita, setPrimeiraVisita] = useState(false);
 
   useEffect(() => {
-    // Ao entrar na página, marca a primeira visita como desbloqueada
     setPrimeiraVisita(true);
   }, []);
 
@@ -27,7 +26,7 @@ const Conquista = () => {
       <h1>Conquistas</h1>
       <div className="conquistas-container">
         <img src={imgEntrada} alt="Primeira visita" className={primeiraVisita ? 'ativa' : ''} />
-        <img src={imgGrafico} alt="Gráfico" />
+        <img src={imgGrafico} alt="Gráfico" className={graficoDesbloqueado ? 'ativa' : ''} />
         <img src={secoes} alt="Seções" />
         <img src={relatorio} alt="Relatório" />
         <img src={conexao} alt="Conexão" />
