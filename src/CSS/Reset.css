@@ -38,3 +38,70 @@ h1 {
   padding-top: 1rem;
   font-size: 25px;
 }
+
+
+/*Animação ao  entrar na página*/
+
+/* Fade In/Out para Splash */
+.splash-fade-enter {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.splash-fade-enter-active {
+  opacity: 1;
+}
+
+.splash-fade-exit {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.splash-fade-exit-active {
+  opacity: 0;
+}
+
+
+
+/* Animações internas do Splash */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
