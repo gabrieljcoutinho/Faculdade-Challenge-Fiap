@@ -5,15 +5,14 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   const [piscarCritico, setPiscarCritico] = useState(false);
   const [nivelAnimado, setNivelAnimado] = useState(nivelBateria);
   const notificou50 = useRef(false);
+  const animFrame = useRef(null);
 
-  // Solicita permissão de notificação
   useEffect(() => {
     if (Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
   }, []);
 
-  // Notificação em 50%
   useEffect(() => {
     if (nivelBateria === 50 && !notificou50.current) {
       notificou50.current = true;
@@ -27,44 +26,41 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     }
   }, [nivelBateria]);
 
-  // Piscar em nível crítico
   useEffect(() => {
-    setPiscarCritico(nivelBateria < 20 && nivelBateria > 0);
+    setPiscarCritico(nivelBateria > 0 && nivelBateria < 20);
   }, [nivelBateria]);
 
-  // Animação suave do nível da bateria
   useEffect(() => {
-    const diff = nivelBateria - nivelAnimado;
-    if (diff === 0) return;
+    if (animFrame.current) cancelAnimationFrame(animFrame.current);
 
-    const step = diff > 0 ? 1 : -1;
-    const interval = setInterval(() => {
+    const animarNivel = () => {
       setNivelAnimado(prev => {
-        const novo = prev + step;
-        if ((step > 0 && novo >= nivelBateria) || (step < 0 && novo <= nivelBateria)) {
-          clearInterval(interval);
-          return nivelBateria;
-        }
-        return novo;
+        if (prev === nivelBateria) return prev;
+        const step = (nivelBateria - prev) * 0.1;
+        const novoNivel = Math.abs(step) < 0.5 ? nivelBateria : prev + step;
+        return novoNivel;
       });
-    }, 25);
+      if (nivelAnimado !== nivelBateria) {
+        animFrame.current = requestAnimationFrame(animarNivel);
+      }
+    };
 
-    return () => clearInterval(interval);
+    animFrame.current = requestAnimationFrame(animarNivel);
+    return () => cancelAnimationFrame(animFrame.current);
   }, [nivelBateria]);
 
-  // Texto do status da bateria
   const statusText = useMemo(() => {
     if (isCharging) return 'Carregando';
     if (isDischarging) return 'Descarregando';
     return 'Carregado';
   }, [isCharging, isDischarging]);
 
-  // Nova lógica de cores
-  const corBarra = nivelAnimado >= 50 ? '#00fff0'     // azul/ciano
-                  : nivelAnimado >= 30 ? '#ffff00'  // amarelo
-                  : nivelAnimado >= 20 ? '#FFA500'  // laranja
-                  : '#FF0000';                      // vermelho
-
+  const corBarra = useMemo(() => {
+    if (nivelAnimado >= 50) return '#00fff0';
+    if (nivelAnimado >= 30) return '#ffff00';
+    if (nivelAnimado >= 20) return '#FFA500';
+    return '#FF0000';
+  }, [nivelAnimado]);
 
   return (
     <div className={`bateria-container-neon ${piscarCritico ? 'piscar-suave' : ''}`}>
@@ -90,7 +86,7 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
             strokeDasharray={2 * Math.PI * 54}
             strokeDashoffset={2 * Math.PI * 54 * (1 - nivelAnimado / 100)}
             strokeLinecap="round"
-            style={{ transition: 'stroke-dashoffset 0.3s ease, stroke 0.3s ease' }}
+            style={{ transition: 'stroke 0.3s ease, stroke-dashoffset 0.3s ease' }}
           />
           <text
             x="50%"
@@ -106,6 +102,28 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
       </div>
 
       <p className="texto-nivel-neon">{statusText}</p>
+
+      <style>
+        {`
+          /* Para telas grandes (PC) */
+          @media (min-width: 1024px) {
+            .bateria-container-neon {
+              max-width: 1000px;
+              margin: 70px auto;
+            }
+            .titulo-bateria {
+              font-size: 2.5rem;
+            }
+            .bateria-central svg {
+              width: 350px;
+              height: 350px;
+            }
+            .texto-nivel-neon {
+              font-size: 1.5rem;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };
