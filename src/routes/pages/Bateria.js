@@ -7,12 +7,14 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
   const notificou50 = useRef(false);
   const animFrame = useRef(null);
 
+  // Solicita permissão de notificação
   useEffect(() => {
     if (Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
   }, []);
 
+  // Notificação em 50%
   useEffect(() => {
     if (nivelBateria === 50 && !notificou50.current) {
       notificou50.current = true;
@@ -26,17 +28,19 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     }
   }, [nivelBateria]);
 
+  // Piscar em nível crítico
   useEffect(() => {
     setPiscarCritico(nivelBateria > 0 && nivelBateria < 20);
   }, [nivelBateria]);
 
+  // Animação suave do nível da bateria usando requestAnimationFrame
   useEffect(() => {
     if (animFrame.current) cancelAnimationFrame(animFrame.current);
 
     const animarNivel = () => {
       setNivelAnimado(prev => {
         if (prev === nivelBateria) return prev;
-        const step = (nivelBateria - prev) * 0.1;
+        const step = (nivelBateria - prev) * 0.1; // suaviza a animação
         const novoNivel = Math.abs(step) < 0.5 ? nivelBateria : prev + step;
         return novoNivel;
       });
@@ -49,17 +53,19 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     return () => cancelAnimationFrame(animFrame.current);
   }, [nivelBateria]);
 
+  // Texto do status da bateria
   const statusText = useMemo(() => {
     if (isCharging) return 'Carregando';
     if (isDischarging) return 'Descarregando';
     return 'Carregado';
   }, [isCharging, isDischarging]);
 
+  // Lógica de cores
   const corBarra = useMemo(() => {
-    if (nivelAnimado >= 50) return '#00fff0';
-    if (nivelAnimado >= 30) return '#ffff00';
-    if (nivelAnimado >= 20) return '#FFA500';
-    return '#FF0000';
+    if (nivelAnimado >= 50) return '#00fff0';  // azul/ciano
+    if (nivelAnimado >= 30) return '#ffff00';  // amarelo
+    if (nivelAnimado >= 20) return '#FFA500';  // laranja
+    return '#FF0000';                           // vermelho
   }, [nivelAnimado]);
 
   return (
@@ -102,28 +108,6 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
       </div>
 
       <p className="texto-nivel-neon">{statusText}</p>
-
-      <style>
-        {`
-          /* Para telas grandes (PC) */
-          @media (min-width: 1024px) {
-            .bateria-container-neon {
-              max-width: 1000px;
-              margin: 70px auto;
-            }
-            .titulo-bateria {
-              font-size: 2.5rem;
-            }
-            .bateria-central svg {
-              width: 350px;
-              height: 350px;
-            }
-            .texto-nivel-neon {
-              font-size: 1.5rem;
-            }
-          }
-        `}
-      </style>
     </div>
   );
 };
