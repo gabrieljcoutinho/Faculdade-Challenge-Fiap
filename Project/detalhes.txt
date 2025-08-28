@@ -69,6 +69,7 @@ O projeto conta ainda com animações suaves, especialmente visíveis nas transi
 
 
 
+
 APIS usadas:
 Chat gpt
 Open weather
