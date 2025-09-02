@@ -10,7 +10,7 @@ A aplicação possui um cabeçalho fixo que direciona o usuário para as seguint
 
 Home
 
-Antes de entrar há uma tela de carreagmento que dura usn 2 o u3 segudnso e entra na pa´gian nesse págian inciial é um fundo
+Antes de entrar há uma tela de carreagmento que dura usn 2 ou 3 segudnso e entra na pa´gian nesse págian inciial é um fundo
 degrade de vernelho e branco com  ologo da empres
 
 Nesta seção, o usuário pode alternar entre três tipos de gráficos (linha, barras e pizza), que podem ser visualizados também por meio de um botão, sem ser pelo chat.
