@@ -9,7 +9,7 @@ Estrutura do Sistema
 A aplicação possui um cabeçalho fixo que direciona o usuário para as seguintes seções: Home, Conexões de Aparelhos, Chatbot, Contato e Configurações.
 
 Tela de carregamento
-Antes de entrar há uma tela de carreagmento que dura usn 2 ou 3 segudnso e entra na pa´gian nesse págian inciial é um fundo
+Antes de entrar há uma tela de carreagmento que dura usn 2 ou 3 segudnso e entra na página nesse págian incial é um fundo
 degrade de vernelho e branco com  ologo da empres
 
 Home
