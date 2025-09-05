@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import '../../CSS/Bateria/index.css'
 import '../../CSS/Bateria/animacaoPiscar.css';
 
 const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
