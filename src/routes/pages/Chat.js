@@ -224,7 +224,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
 
                 if (delayMs===null) {
                     onConnectDevice?.(nomeCompleto, iconSrc);
-                    sendAssistantMessage(`${nomeCompleto} conectado ✅`);
+                    sendAssistantMessage(`**${nomeCompleto}** conectado ✅`);
                 } else {
                     sendAssistantMessage(`Ok, vou conectar o ${nomeCompleto} daqui a ${delayMs/60000>=1 ? (delayMs/60000)+' minutos':(delayMs/1000)+' segundos'}. ⏳`);
                     setTimeout(()=>{
