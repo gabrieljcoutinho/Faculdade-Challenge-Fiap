@@ -505,14 +505,26 @@
         "conexão por cabo",
            "conexão por cabo de energia",
         "carregar com cabo",
-        "carregar com cabo co mcab ode energia",
+        "carregar com cabo com cabo de energia",
         "conectar cabo",
         "conectar cabo de energia",
         "usar cabo",
         "Ativar cabo",
         "ativar cabo",
         "Modo cabo",
-        "modo cabo"
+        "modo cabo",
+        "Usar cabo",
+        "usar cabo",
+        "Usar cab ode energia",
+        "usar cabo de energia",
+        "Usar energia elétrica",
+        "Usar energia eletrica",
+        "usar energia elétrica",
+        "usar energia eletrica",
+        "Conectar cabo energia elétrica",
+         "Conectar cabo energia eletrica",
+          "conectar cabo energia elétrica",
+         "conectar cabo energia eletrica"
             ],
       "resposta": "MUDAR_PARA_CABO"
     },
@@ -528,7 +540,11 @@
         "Ativar bateria",
         "ativar bateria",
         "Modo bateria",
-        "modo bateria"
+        "modo bateria",
+        "Conetcra bateria",
+        "conectar bateria",
+        "Usar bateria",
+        "Usar a bateria"
       ],
       "resposta": "MUDAR_PARA_BATERIA"
     }
