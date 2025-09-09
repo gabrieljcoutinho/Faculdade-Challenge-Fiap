@@ -19,8 +19,8 @@ import carregador from '../../imgs/imgConexao/carregador.png';
 
 import logoGoodwe from '../../imgs/imgHeader/logo.png'
 
-const GEMINI_API_KEY = 'AIzaSyBTS2eZLs70fjre5e0k8F_E8fIpgIGF_os';
-const OPENWEATHER_API_KEY = '50b5d79d3b8c0475ba7dba090402b21c';
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+const OPENWEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
 const CHAT_STORAGE_KEY = 'chat_messages';
 const FIRST_INTERACTION_KEY = 'chat_firstInteraction';
 const NEW_MESSAGE_FLAG = 'hasNewChatMessage';
