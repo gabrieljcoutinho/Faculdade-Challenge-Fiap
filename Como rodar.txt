@@ -1,6 +1,6 @@
 1 - Nescessário ter o Node.js intalado
 
-2 - Se o proejto baixado nã orodar, verificar se há a pasta node_modules, se nã ohouver, inseriri o seguinte comando no terminal:
+2 - Se o proejto baixado não rodar, verificar se há a pasta node_modules, se não houver, inseriri o seguinte comando no terminal:
 npm i OU nom install
 
 3 - Quando tiver tudo baixado, ir no terminal e inicializar o projeto:
