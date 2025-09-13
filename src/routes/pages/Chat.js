@@ -231,7 +231,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         if (climaMatch) {
             const cidade = climaMatch[1].trim();
             try {
-                const data = await fetchClimaOpenWeather(cidade);
+                const data = await fetchClimaOpenWeather('São Paulo');
                 const desc = data.weather[0].description;
                 const temp = Math.round(data.main.temp);
                 const umidity = data.main.humidity;
@@ -261,6 +261,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
                 const iconSrc = deviceIconMap[tipoEncontrado];
                 const nomeCompleto = nomeExtra ? `${tipoEncontrado} ${nomeExtra}` : tipoEncontrado;
 
+                // Lógica de verificação de temperatura para o Ar-Condicionado
                 if (tipoEncontrado==='Ar-Condicionado') {
                     try {
                         const clima = await fetchClimaOpenWeather('São Paulo');
@@ -305,7 +306,8 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
                     case 'PRODUCAO_GRAFICO':
                         if(productionData?.datasets?.length>0){
                             const total = productionData.datasets[0].data.reduce((a,v)=>a+v,0).toFixed(2);
-                            const hourly = productionData.labels.map((label,index)=>`- ${label}: **${productionData.datasets[0].data[index]} kWh**`).join('\n');
+                            // Linha corrigida para usar template literals (crases)
+                            const hourly = productionData.labels.map((label, index) => `- **${label}**: **${productionData.datasets[0].data[index]} kWh**`).join('\n');
                             sendAssistantMessage(`**Produção diária**\nTotal: **${total} kWh**\n${hourly}`);
                         } else sendAssistantMessage('Não foi possível obter produção.');
                         break;
