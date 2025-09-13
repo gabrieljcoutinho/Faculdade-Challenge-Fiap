@@ -226,22 +226,24 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
           handledByLocalCommand = true;
         }
 
-        // clima
-        const climaMatch = texto.match(/clima em (.+)/i);
-        if (climaMatch) {
-            const cidade = climaMatch[1].trim();
-            try {
-                const data = await fetchClimaOpenWeather('São Paulo');
-                const desc = data.weather[0].description;
-                const temp = Math.round(data.main.temp);
-                const umidity = data.main.humidity;
-                const windSpeedKmH = (data.wind.speed*3.6).toFixed(1);
-                sendAssistantMessage(`Clima em **${data.name}**:\n- Condição: ${desc}\n- Temperatura: ${temp}°C\n- Umidade: ${umidity}%\n- Vento: ${windSpeedKmH} km/h`);
-            } catch (err) {
-                sendAssistantMessage(`Erro ao buscar clima: ${err.message}`);
-            } finally { setLoading(false); inputRef.current?.focus(); }
-            return;
-        }
+     // ... dentro da função handleSendMessage
+const climaMatch = texto.match(/clima em (.+)/i);
+if (climaMatch) {
+    const cidade = climaMatch[1].trim(); // Pega a cidade que o usuário digitou
+    try {
+        // CORRIGIDO: Passa a variável 'cidade' para a função
+        const data = await fetchClimaOpenWeather(cidade);
+        const desc = data.weather[0].description;
+        const temp = Math.round(data.main.temp);
+        const umidity = data.main.humidity;
+        const windSpeedKmH = (data.wind.speed * 3.6).toFixed(1);
+        sendAssistantMessage(`Clima em **${data.name}**:\n- Condição: ${desc}\n- Temperatura: ${temp}°C\n- Umidade: ${umidity}%\n- Vento: ${windSpeedKmH} km/h`);
+    } catch (err) {
+        sendAssistantMessage(`Erro ao buscar clima: ${err.message}`);
+    } finally { setLoading(false); inputRef.current?.focus(); }
+    return;
+}
+// ...
 
         // conectar dispositivos
         if (textoNormalizado.startsWith('conectar')) {
