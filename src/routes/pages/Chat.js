@@ -58,7 +58,6 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
 
     const quickSuggestions = ['Conectar TV','Conectar Ar-Condicionado','Conectar Lâmpada','Conectar Geladeira','Conectar Carregador'];
 
-    // Inicialização do reconhecimento de voz
     useEffect(() => {
         if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
 
@@ -77,7 +76,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
             setNewMessage(transcript);
-            handleSendMessage(); // envia automaticamente
+            handleSendMessage();
         };
 
         recognitionRef.current = recognition;
@@ -118,15 +117,33 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     const sendAssistantMessage = content => {
         setMessages(m => [...m, { role: 'assistant', content }]);
         if (speakMode || screenReaderMode) {
-            const cleanText = content
-                .replace(/\*\*/g, '')
-                .replace(/\n-/g, ', ')
-                .replace(/(\d+)\s*kWh/g, '$1 quilowatt-hora')
-                .replace(/km\/h/g, 'quilômetros por hora');
             window.speechSynthesis.cancel();
-            speakText(cleanText);
+            setTimeout(() => {
+                const cleanText = content
+                    .replace(/\*\*/g, '')
+                    .replace(/\n-/g, ', ')
+                    .replace(/(\d+)\s*kWh/g, '$1 quilowatt-hora')
+                    .replace(/km\/h/g, 'quilômetros por hora');
+                speakText(cleanText);
+            }, 100);
         }
     };
+
+    useEffect(() => {
+        if (screenReaderMode && messages.length > 0) {
+            const last = messages[messages.length - 1];
+            if (last.role === 'assistant') {
+                window.speechSynthesis.cancel();
+                speakText(
+                    last.content
+                        .replace(/\*\*/g, '')
+                        .replace(/\n-/g, ', ')
+                        .replace(/(\d+)\s*kWh/g, '$1 quilowatt-hora')
+                        .replace(/km\/h/g, 'quilômetros por hora')
+                );
+            }
+        }
+    }, [messages, screenReaderMode]);
 
     const connectionCommands = [
         { type: 'TV', keywords: ['tv','televisao','televisão'] },
