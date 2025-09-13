@@ -7,7 +7,9 @@ import '../../CSS/Chat/animacaoComandoTrocaPageViaChat.css';
 import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/quickSuggestions.css';
+import '../../CSS/Chat/iconeMic.css';
 import '../../CSS/Chat/mediaScreen.css';
+
 import sendBtn from '../../imgs/imgChat/sendBtn.png';
 import comandosData from '../../data/commands.json';
 
@@ -16,8 +18,7 @@ import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
 import geladeira from '../../imgs/imgConexao/geladeira.png';
 import lampIcon from '../../imgs/imgConexao/lampada.png';
 import carregador from '../../imgs/imgConexao/carregador.png';
-
-import logoGoodwe from '../../imgs/imgHeader/logo.png'
+import logoGoodwe from '../../imgs/imgHeader/logo.png';
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const OPENWEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
@@ -48,12 +49,46 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     const [awaitingACConfirmation, setAwaitingACConfirmation] = useState(false);
     const [speakMode, setSpeakMode] = useState(() => sessionStorage.getItem('chat_speakMode') === 'true');
     const [screenReaderMode, setScreenReaderMode] = useState(false);
+    const [isListening, setIsListening] = useState(false);
 
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
+    const recognitionRef = useRef(null);
     const navigate = useNavigate();
 
     const quickSuggestions = ['Conectar TV','Conectar Ar-Condicionado','Conectar Lâmpada','Conectar Geladeira','Conectar Carregador'];
+
+    // Inicialização do reconhecimento de voz
+    useEffect(() => {
+        if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'pt-BR';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = () => setIsListening(true);
+        recognition.onend = () => setIsListening(false);
+        recognition.onerror = (event) => {
+            console.error('Erro no reconhecimento de voz:', event.error);
+            setIsListening(false);
+        };
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            setNewMessage(transcript);
+            handleSendMessage(); // envia automaticamente
+        };
+
+        recognitionRef.current = recognition;
+    }, []);
+
+    const handleMicClick = () => {
+        if (recognitionRef.current) {
+            if (isListening) recognitionRef.current.stop();
+            else recognitionRef.current.start();
+        }
+    };
 
     useEffect(() => inputRef.current?.focus(), []);
     useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
@@ -146,7 +181,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         const textoNormalizado = normalizeText(texto);
         let handledByLocalCommand = false;
 
-        // Modo de fala persistente
+        // Modo de fala
         if (textoNormalizado === 'modo de fala') {
             setSpeakMode(true);
             sendAssistantMessage('Modo de fala ativado. 🗣️');
@@ -158,7 +193,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             handledByLocalCommand = true;
         }
 
-        // Modo leitor de tela
+        // Leitor de tela
         if (
           ['modo leitor de tela','ativar leitor de tela','ativar leitura de tela','modo leitor tela','ativar leitor tela','ativar leitura tela'].includes(textoNormalizado)
         ) {
@@ -174,7 +209,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
           handledByLocalCommand = true;
         }
 
-        // clima em [cidade]
+        // clima
         const climaMatch = texto.match(/clima em (.+)/i);
         if (climaMatch) {
             const cidade = climaMatch[1].trim();
@@ -350,17 +385,27 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
                 ))}
             </div>
             <form onSubmit={handleSendMessage} className="message-input-form">
-                <input
-                    ref={inputRef}
-                    type="text"
-                    value={newMessage}
-                    onChange={e=>setNewMessage(e.target.value)}
-                    placeholder="Sua mensagem..."
-                    className="message-input"
-                    disabled={loading}
-                    autoComplete="off"
-                    title="Digite sua mensagem"
-                />
+                <div className="input-with-mic">
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        value={newMessage}
+                        onChange={e=>setNewMessage(e.target.value)}
+                        placeholder="Sua mensagem..."
+                        className="message-input"
+                        disabled={loading}
+                        autoComplete="off"
+                        title="Digite sua mensagem"
+                    />
+                    <button
+                        type="button"
+                        className={`mic-button ${isListening?'listening':''}`}
+                        onClick={handleMicClick}
+                        title={isListening?'Parar escuta':'Clique para falar'}
+                    >
+                        🎤
+                    </button>
+                </div>
                 <button type="submit" className="send-button" disabled={loading}>
                     <img src={sendBtn} alt="Enviar" className="send-icon"/>
                 </button>
