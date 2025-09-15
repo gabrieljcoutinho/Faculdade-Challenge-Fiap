@@ -3,7 +3,7 @@
   "name": "Meu App React PWA",
   "icons": [
     {
-      "src": "favicon-192.png",
+      "src": "goodWeApp.png",
       "type": "image/png",
       "sizes": "192x192"
     },
