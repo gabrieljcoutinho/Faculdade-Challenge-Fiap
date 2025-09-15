@@ -32,6 +32,8 @@ import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 import NotFound from './routes/pages/NotFound';
 import Bateria from './routes/pages/Bateria';
 
+import InstallButtonMobile from '../src/components/InstallButtonMobile';
+
 // Configurações iniciais
 const aparelhosDisponiveis = [
   { id: 1, imagem: tvIcon, nome: 'TV', corFundo: '#e0f7fa' },
@@ -163,6 +165,8 @@ const useWeatherAlerts = () => {
 
 // App principal
 function App() {
+
+
   const [showSplash, setShowSplash] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
 
@@ -283,6 +287,7 @@ function App() {
 
   return (
     <div className="App">
+      <InstallButtonMobile />
       {showSplash ? (
         <div className={`splash ${fadeOut ? 'splash-fade-exit-active' : 'splash-fade-enter-active'}`}>
           <SplashScreen />
