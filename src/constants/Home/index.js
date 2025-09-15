@@ -2,7 +2,7 @@ export const tituloPrincipal ="Produção Atual"
 
 export const graficos = 'Tipo de Gráfico:';
 
-export const relatorioDiário = 'Relatório Diário';
+export const relatorioDiário = 'Relatório do gráfico';
 
 export const dados = 'Fonte: Placas GoodWe';
 
