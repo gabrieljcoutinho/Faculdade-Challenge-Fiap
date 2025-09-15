@@ -44,6 +44,7 @@ const aparelhosDisponiveis = [
 const TAXA_CARREGAMENTO = 1;
 const CONSUMO_POR_APARELHO = 0.5;
 
+// Função para carregar aparelhos do localStorage
 const getInitialAparelhos = () => {
   try {
     const stored = localStorage.getItem('aparelhos');
@@ -60,7 +61,7 @@ const getInitialAparelhos = () => {
   }));
 };
 
-// Hook para leitura em voz alta
+// Hook de leitura em voz alta
 const useReadAloud = (isReading) => {
   useEffect(() => {
     if (!isReading) {
@@ -122,18 +123,48 @@ const SplashScreen = () => (
   </div>
 );
 
+// Hook para monitorar alertas do clima
+const WEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
+const LOCATION = 'São Paulo,BR';
+
+const useWeatherAlerts = () => {
+  const [alerts, setAlerts] = useState([]);
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${LOCATION}&appid=${WEATHER_API_KEY}&lang=pt&units=metric`);
+        const data = await res.json();
+        const newAlerts = [];
+
+        if (data.weather?.some(w => w.main.toLowerCase().includes('rain'))) {
+          newAlerts.push('🚨 Chuva detectada na região! Risco de enchentes.');
+        }
+        if (data.wind?.speed > 15) {
+          newAlerts.push('⚠️ Ventos fortes! Verifique aparelhos externos.');
+        }
+        if (data.main?.temp < 0) {
+          newAlerts.push('❄️ Temperaturas muito baixas! Possível congelamento de tubulações.');
+        }
+
+        setAlerts(newAlerts);
+      } catch (err) {
+        console.error('Erro ao buscar dados do clima:', err);
+      }
+    };
+
+    fetchWeatherData();
+    const interval = setInterval(fetchWeatherData, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return alerts;
+};
+
 // App principal
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setFadeOut(true); // inicia fade out
-      setTimeout(() => setShowSplash(false), 500); // espera animação de 0.5s
-    }, 2500); // Splash dura  em segundos
-    return () => clearTimeout(timer);
-  }, []);
 
   const [aparelhos, setAparelhos] = useState(getInitialAparelhos);
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark-theme');
@@ -150,6 +181,16 @@ function App() {
   const isCharging = (connectionType === 'bateria' && connectedDevicesCount === 0) || connectionType === 'cabo';
   const isDischarging = connectionType === 'bateria' && connectedDevicesCount > 0;
 
+  // Splash screen timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFadeOut(true);
+      setTimeout(() => setShowSplash(false), 500);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Controle da bateria
   useEffect(() => {
     const interval = setInterval(() => {
       setNivelBateria(prev => {
@@ -196,6 +237,7 @@ function App() {
     </button>
   );
 
+  // Conectar e remover aparelhos
   const handleConnectDevice = useCallback((nome, icon, cor = '#e0e0e0', delay = 0) => {
     setTimeout(() => {
       if (aparelhos.find(c => c.nome.toLowerCase() === nome.toLowerCase())) return;
@@ -225,6 +267,20 @@ function App() {
   }, []);
   const handleConnectionTypeChange = useCallback((type) => setConnectionType(type), []);
 
+  // Hook de alertas climáticos
+  const weatherAlerts = useWeatherAlerts();
+
+  // Fala dos alertas
+  useEffect(() => {
+    if (weatherAlerts.length > 0 && isReading) {
+      weatherAlerts.forEach(alert => {
+        const utterance = new SpeechSynthesisUtterance(alert);
+        utterance.lang = 'pt-BR';
+        window.speechSynthesis.speak(utterance);
+      });
+    }
+  }, [weatherAlerts, isReading]);
+
   return (
     <div className="App">
       {showSplash ? (
@@ -233,6 +289,24 @@ function App() {
         </div>
       ) : (
         <BrowserRouter>
+          {/* Alertas de risco */}
+          {weatherAlerts.length > 0 && (
+            <div style={{
+              position: 'fixed',
+              top: 10,
+              right: 10,
+              zIndex: 9999,
+              backgroundColor: '#ffcccc',
+              padding: '10px 20px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
+            }}>
+              {weatherAlerts.map((alert, i) => (
+                <div key={i} style={{ marginBottom: '5px' }}>{alert}</div>
+              ))}
+            </div>
+          )}
+
           <Header><ReadAloudToggle /></Header>
           <ThemeToggle setTheme={setTheme} />
           <Routes>
