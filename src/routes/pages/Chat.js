@@ -154,7 +154,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     ];
 
     function parseTimeDelay(text) {
-        const regex = /daqui\s+(\d+)\s*(hora|horas|minuto|minutos|segundo|segundos)/i;
+    const regex = /daqui\s+(\d+)\s*(h|min|s|hora|horas|minuto|minutos|segundo|segundos)/i;
         const match = text.match(regex);
         if (!match) return null;
         const value = parseInt(match[1], 10);
