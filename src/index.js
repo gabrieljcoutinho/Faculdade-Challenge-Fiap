@@ -1,21 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-
-<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
-
-
-
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'; // PWA
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-
-
-  <App />
-
-
+    <App />
   </React.StrictMode>
-
-
 );
+
+// Verifica se o service worker está disponível antes de registrar
+if ('serviceWorker' in navigator) {
+  serviceWorkerRegistration.register();
+} else {
+  console.log('Service Worker não suportado neste navegador.');
+}
