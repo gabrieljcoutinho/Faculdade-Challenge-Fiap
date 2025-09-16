@@ -12,6 +12,10 @@ Tela de carregamento
 Antes de entrar há uma tela de carreagmento que dura usn 2 ou 3 segudnso e entra na página nesse págian incial é um fundo
 degrade de vernelho e branco com  ologo da empres
 
+Header
+No header há icones como forma de trocar de página ,cada icone representa oque será mostrado na seção, como a masi coloquei que quando o icoen for clciado ele vai mudar de
+icone para mostrar o modo ativado. No header tem os botoes da Home, Conexão do aprelhos, Chat, Contato e Configurações
+
 Home
 Nesta seção, o usuário pode alternar entre três tipos de gráficos (linha, barras e pizza), que podem ser visualizados também por meio de um botão, sem ser pelo chat.
 Os gráficos são gerados com base em dados de uma API simulada. Abaixo dos gráficos, são exibidas informações do clima atual e a previsão do tempo com integraçã ode ap ireal de clima .
