@@ -42,7 +42,7 @@ const deviceIconMap = {
 
 // Linha CORRIGIDA para configurar o worker do pdf.js.
 // Isso resolve o erro de "Module not found" sem que você precise mexer em pastas.
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
 
 const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme, onConnectionTypeChange }) => {
     const [messages, setMessages] = useState(() => JSON.parse(sessionStorage.getItem(CHAT_STORAGE_KEY)) || []);
