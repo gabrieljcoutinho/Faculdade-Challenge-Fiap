@@ -10,8 +10,12 @@ import '../../CSS/Chat/quickSuggestions.css';
 import '../../CSS/Chat/iconeMic.css';
 import '../../CSS/Chat/mediaScreen.css';
 
+// Importações do pdf.js
+import * as pdfjsLib from 'pdfjs-dist/build/pdf';
+
 import sendBtn from '../../imgs/imgChat/sendBtn.png';
 import comandosData from '../../data/commands.json';
+import library from '../../data/library.json'
 
 import tvIcon from '../../imgs/imgConexao/TV.png';
 import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
@@ -36,6 +40,10 @@ const deviceIconMap = {
     Carregador: carregador,
 };
 
+// Linha CORRIGIDA para configurar o worker do pdf.js.
+// Isso resolve o erro de "Module not found" sem que você precise mexer em pastas.
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
 const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme, onConnectionTypeChange }) => {
     const [messages, setMessages] = useState(() => JSON.parse(sessionStorage.getItem(CHAT_STORAGE_KEY)) || []);
     const [firstInteraction, setFirstInteraction] = useState(() => {
@@ -50,6 +58,8 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     const [speakMode, setSpeakMode] = useState(() => sessionStorage.getItem('chat_speakMode') === 'true');
     const [screenReaderMode, setScreenReaderMode] = useState(false);
     const [isListening, setIsListening] = useState(false);
+
+    const [pdfContent, setPdfContent] = useState({});
 
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
@@ -80,6 +90,33 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         };
 
         recognitionRef.current = recognition;
+    }, []);
+
+    // Agora, o chat irá ler o library.json e processar o texto dos seus PDFs.
+    useEffect(() => {
+        const loadPdfs = async () => {
+            const loadedContent = {};
+            for (const doc of library.documents) {
+                try {
+                    const loadingTask = pdfjsLib.getDocument(doc.path);
+                    const pdf = await loadingTask.promise;
+                    let fullText = '';
+
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        fullText += textContent.items.map(item => item.str).join(' ') + ' ';
+                    }
+                    loadedContent[doc.name] = fullText;
+                    console.log(`Documento "${doc.name}" carregado com sucesso.`);
+                } catch (error) {
+                    console.error(`Erro ao carregar o PDF de ${doc.name}:`, error);
+                }
+            }
+            setPdfContent(loadedContent);
+        };
+
+        loadPdfs();
     }, []);
 
     const handleMicClick = () => {
@@ -154,7 +191,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     ];
 
     function parseTimeDelay(text) {
-    const regex = /daqui\s+(\d+)\s*(h|min|s|hora|horas|minuto|minutos|segundo|segundos)/i;
+        const regex = /daqui\s+(\d+)\s*(h|min|s|hora|horas|minuto|minutos|segundo|segundos)/i;
         const match = text.match(regex);
         if (!match) return null;
         const value = parseInt(match[1], 10);
@@ -198,7 +235,6 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         const textoNormalizado = normalizeText(texto);
         let handledByLocalCommand = false;
 
-        // Modo de fala
         if (textoNormalizado === 'modo de fala') {
             setSpeakMode(true);
             sendAssistantMessage('Modo de fala ativado. 🗣️');
@@ -210,42 +246,37 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             handledByLocalCommand = true;
         }
 
-        // Leitor de tela
         if (
-          ['modo leitor de tela','ativar leitor de tela','ativar leitura de tela','modo leitor tela','ativar leitor tela','ativar leitura tela'].includes(textoNormalizado)
+            ['modo leitor de tela','ativar leitor de tela','ativar leitura de tela','modo leitor tela','ativar leitor tela','ativar leitura tela'].includes(textoNormalizado)
         ) {
-          setScreenReaderMode(true);
-          sendAssistantMessage('Leitor de tela ativado. 👁️‍🗨️');
-          handledByLocalCommand = true;
+            setScreenReaderMode(true);
+            sendAssistantMessage('Leitor de tela ativado. 👁️‍🗨️');
+            handledByLocalCommand = true;
         } else if (
-          ['desativar leitor tela','desligar leitor tela','desativar leitura tela','desativar leitor de tela','desligar leitor de tela','desativar leitura de tela'].includes(textoNormalizado)
+            ['desativar leitor tela','desligar leitor tela','desativar leitura tela','desativar leitor de tela','desligar leitor de tela','desativar leitura de tela'].includes(textoNormalizado)
         ) {
-          setScreenReaderMode(false);
-          window.speechSynthesis.cancel();
-          sendAssistantMessage('Leitor de tela desativado.');
-          handledByLocalCommand = true;
+            setScreenReaderMode(false);
+            window.speechSynthesis.cancel();
+            sendAssistantMessage('Leitor de tela desativado.');
+            handledByLocalCommand = true;
         }
 
-     // ... dentro da função handleSendMessage
-const climaMatch = texto.match(/clima em (.+)/i);
-if (climaMatch) {
-    const cidade = climaMatch[1].trim(); // Pega a cidade que o usuário digitou
-    try {
-        // CORRIGIDO: Passa a variável 'cidade' para a função
-        const data = await fetchClimaOpenWeather(cidade);
-        const desc = data.weather[0].description;
-        const temp = Math.round(data.main.temp);
-        const umidity = data.main.humidity;
-        const windSpeedKmH = (data.wind.speed * 3.6).toFixed(1);
-        sendAssistantMessage(`Clima em **${data.name}**:\n- Condição: ${desc}\n- Temperatura: ${temp}°C\n- Umidade: ${umidity}%\n- Vento: ${windSpeedKmH} km/h`);
-    } catch (err) {
-        sendAssistantMessage(`Erro ao buscar clima: ${err.message}`);
-    } finally { setLoading(false); inputRef.current?.focus(); }
-    return;
-}
-// ...
+        const climaMatch = texto.match(/clima em (.+)/i);
+        if (climaMatch) {
+            const cidade = climaMatch[1].trim();
+            try {
+                const data = await fetchClimaOpenWeather(cidade);
+                const desc = data.weather[0].description;
+                const temp = Math.round(data.main.temp);
+                const umidity = data.main.humidity;
+                const windSpeedKmH = (data.wind.speed * 3.6).toFixed(1);
+                sendAssistantMessage(`Clima em **${data.name}**:\n- Condição: ${desc}\n- Temperatura: ${temp}°C\n- Umidade: ${umidity}%\n- Vento: ${windSpeedKmH} km/h`);
+            } catch (err) {
+                sendAssistantMessage(`Erro ao buscar clima: ${err.message}`);
+            } finally { setLoading(false); inputRef.current?.focus(); }
+            return;
+        }
 
-        // conectar dispositivos
         if (textoNormalizado.startsWith('conectar')) {
             let afterConectar = texto.slice(9).trim();
             const delayMs = parseTimeDelay(afterConectar);
@@ -263,7 +294,6 @@ if (climaMatch) {
                 const iconSrc = deviceIconMap[tipoEncontrado];
                 const nomeCompleto = nomeExtra ? `${tipoEncontrado} ${nomeExtra}` : tipoEncontrado;
 
-                // Lógica de verificação de temperatura para o Ar-Condicionado
                 if (tipoEncontrado==='Ar-Condicionado') {
                     try {
                         const clima = await fetchClimaOpenWeather('São Paulo');
@@ -291,7 +321,6 @@ if (climaMatch) {
             } else { sendAssistantMessage('Dispositivo não reconhecido.'); handledByLocalCommand=true; }
         }
 
-        // Comandos JSON / navegação
         if (!handledByLocalCommand) {
             const foundCmd = comandosData.comandos.find(c =>
                 c.triggers?.some(t => textoNormalizado.includes(normalizeText(t)))
@@ -308,7 +337,6 @@ if (climaMatch) {
                     case 'PRODUCAO_GRAFICO':
                         if(productionData?.datasets?.length>0){
                             const total = productionData.datasets[0].data.reduce((a,v)=>a+v,0).toFixed(2);
-                            // Linha corrigida para usar template literals (crases)
                             const hourly = productionData.labels.map((label, index) => `- **${label}**: **${productionData.datasets[0].data[index]} kWh**`).join('\n');
                             sendAssistantMessage(`**Produção diária**\nTotal: **${total} kWh**\n${hourly}`);
                         } else sendAssistantMessage('Não foi possível obter produção.');
@@ -335,7 +363,24 @@ if (climaMatch) {
             }
         }
 
-        // Gemini AI fallback
+        if (!handledByLocalCommand) {
+            let pdfAnswer = null;
+            const normalizedQuery = textoNormalizado;
+
+            for (const docName in pdfContent) {
+                const content = pdfContent[docName];
+                if (normalizeText(content).includes(normalizedQuery)) {
+                    pdfAnswer = `Encontrei a informação sobre "${texto}" no documento "${docName}".`;
+                    break;
+                }
+            }
+
+            if (pdfAnswer) {
+                sendAssistantMessage(pdfAnswer);
+                handledByLocalCommand = true;
+            }
+        }
+
         if (!handledByLocalCommand) {
             if(!GEMINI_API_KEY){ sendAssistantMessage('Erro: Chave Gemini não configurada'); setLoading(false); return; }
             try{
@@ -359,7 +404,7 @@ if (climaMatch) {
 
         setLoading(false);
         inputRef.current?.focus();
-    }, [messages,newMessage,firstInteraction,onConnectDevice,onDisconnectAll,onRemoveAll,productionData,setTheme,onConnectionTypeChange,navigate,awaitingACConfirmation,speakMode,screenReaderMode]);
+    }, [messages,newMessage,firstInteraction,onConnectDevice,onDisconnectAll,onRemoveAll,productionData,setTheme,onConnectionTypeChange,navigate,awaitingACConfirmation,speakMode,screenReaderMode, pdfContent]);
 
     useEffect(()=>{
         if(messages.length===0) return;
@@ -377,7 +422,6 @@ if (climaMatch) {
                                 💡 Digite <strong>Comandos</strong> para receber comandos específicos do site.
                             </span>
                         </div>
-
                         <img
                             src={logoGoodwe}
                             alt="Imagem opaca"
