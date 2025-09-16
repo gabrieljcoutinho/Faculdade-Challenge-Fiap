@@ -8,6 +8,11 @@ import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/quickSuggestions.css';
 import '../../CSS/Chat/iconeMic.css';
+
+import '../../CSS/Chat/iconeLixeiraChat.css';
+import '../../CSS/Chat/imgCentroChat.css';
+
+
 import '../../CSS/Chat/mediaScreen.css';
 
 // Importações do pdf.js
@@ -24,6 +29,8 @@ import lampIcon from '../../imgs/imgConexao/lampada.png';
 import carregador from '../../imgs/imgConexao/carregador.png';
 import logoGoodwe from '../../imgs/imgHeader/logo.png';
 
+import excluir  from '../../imgs/imgChat/excluir.png'
+
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const OPENWEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
 const CHAT_STORAGE_KEY = 'chat_messages';
@@ -39,10 +46,6 @@ const deviceIconMap = {
     Geladeira: geladeira,
     Carregador: carregador,
 };
-
-// Linha CORRIGIDA para configurar o worker do pdf.js.
-// Isso resolve o erro de "Module not found" sem que você precise mexer em pastas.
-
 
 const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme, onConnectionTypeChange }) => {
     const [messages, setMessages] = useState(() => JSON.parse(sessionStorage.getItem(CHAT_STORAGE_KEY)) || []);
@@ -473,6 +476,15 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
                 </div>
                 <button type="submit" className="send-button" disabled={loading}>
                     <img src={sendBtn} alt="Enviar" className="send-icon"/>
+                </button>
+                {/* BOTÃO PARA LIMPAR A CONVERSA */}
+                <button
+                    type="button"
+                    className="clear-button"
+                    onClick={() => setMessages([])}
+                    title="Limpar a conversa"
+                >
+                    <img src={excluir} alt=""  className='iconeImgTrash'/>
                 </button>
             </form>
         </div>
