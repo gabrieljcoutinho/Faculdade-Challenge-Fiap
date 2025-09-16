@@ -20,7 +20,6 @@ A aplicação simula um aplicativo para celular voltado para o gerenciamento e a
 ## 🧠 Tecnologias Utilizadas
 
 - **React** (Framework principal)
-- **TypeScript**
 - **React Router DOM**
 - **CSS Modules** e animações
 - **Chart.js** (Gráficos)
