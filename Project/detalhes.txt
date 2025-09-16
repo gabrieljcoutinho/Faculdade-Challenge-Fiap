@@ -68,7 +68,7 @@ O projeto conta ainda com animações suaves, especialmente visíveis nas transi
  “apagando e acendendo” ao navegar entre seções, contribuindo para uma experiência mais fluida e agradável.O código-fonte está disponível publicamente para consulta.
 
 
-O app comte um sistema de aprendizado com aquivos da propria empresa
+O app contem um sistema de aprendizado com aquivos da propria empresa para ter uma resposta mais verdadeira
 
 APIS usadas:
 Chat gpt
