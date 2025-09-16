@@ -12,18 +12,17 @@ import wifiAtivado from '../imgs/imgHeader/wifiAtivado.png';
 import contato from '../imgs/imgHeader/contato.png';
 import contatoAtivado from '../imgs/imgHeader/contatoAtivado.png';
 import chatIcon from '../imgs/imgHeader/chat.png';
-import chatAtivado from '../imgs/imgHeader/chatAtivado.png'; // <- nova imagem
+import chatAtivado from '../imgs/imgHeader/chatAtivado.png';
 import settingsIcon from '../imgs/imgHeader/engrenagem.png';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
-
   const [ativo, setAtivo] = useState({
-    home: false,
+    home: true,  // <- Home começa ativada
     wifi: false,
     contato: false,
-    chat: false, // <- adicionado chat
+    chat: false,
   });
 
   const location = useLocation();
@@ -61,23 +60,20 @@ const Header = () => {
   useEffect(() => {
     const novaMsg = sessionStorage.getItem('hasNewChatMessage');
     setHasNewMessage(novaMsg === 'true');
-
-    const estadoSalvo = JSON.parse(sessionStorage.getItem('headerAtivo')) || {};
-    setAtivo({
-      home: estadoSalvo.home || false,
-      wifi: estadoSalvo.wifi || false,
-      contato: estadoSalvo.contato || false,
-      chat: estadoSalvo.chat || false,
-    });
   }, []);
 
-  // Função para ativar ícone clicado
-  const handleClick = (item) => {
-    const novoAtivo = { home: false, wifi: false, contato: false, chat: false };
-    if (item) novoAtivo[item] = true;
+  // Atualiza o ícone ativo automaticamente conforme a rota
+  useEffect(() => {
+    setAtivo({
+      home: location.pathname === '/',
+      wifi: location.pathname === '/conectarAparelhos',
+      contato: location.pathname === '/contato',
+      chat: location.pathname === '/chat',
+    });
+  }, [location.pathname]);
 
-    setAtivo(novoAtivo);
-    sessionStorage.setItem('headerAtivo', JSON.stringify(novoAtivo));
+  // Função para fechar menu ao clicar no link
+  const handleClick = () => {
     closeMenu();
   };
 
@@ -92,7 +88,7 @@ const Header = () => {
       <div id="menu" className={menuOpen ? 'open' : ''} ref={menuRef}>
         <button className="close-btn" onClick={closeMenu} title='Fechar Menu'>x</button>
 
-        <Link to="/" onClick={() => handleClick('home')} className={`linkHeader ${location.pathname === '/' ? 'active' : ''}`}>
+        <Link to="/" onClick={handleClick} className="linkHeader">
           <p className='paragrafoListaHeader'>
             <img src={ativo.home ? homeAtivado : home} alt="Home" className='iconesHeader' title='Home' />
           </p>
@@ -100,7 +96,7 @@ const Header = () => {
 
         <br />
 
-        <Link to="/conectarAparelhos" onClick={() => handleClick('wifi')} className={`linkHeader ${location.pathname === '/conectarAparelhos' ? 'active' : ''}`}>
+        <Link to="/conectarAparelhos" onClick={handleClick} className="linkHeader">
           <p className='paragrafoListaHeader'>
             <img src={ativo.wifi ? wifiAtivado : wifi} alt="Wi-Fi" className='iconesHeader' title='Conexão' />
           </p>
@@ -108,7 +104,7 @@ const Header = () => {
 
         <br />
 
-        <Link to="/chat" onClick={() => handleClick('chat')} className={`linkHeader ${location.pathname === '/chat' ? 'active' : ''}`} style={{ position: 'relative' }}>
+        <Link to="/chat" onClick={handleClick} className="linkHeader" style={{ position: 'relative' }}>
           <p className='paragrafoListaHeader'>
             <img src={ativo.chat ? chatAtivado : chatIcon} alt="Chat" className='iconesHeader' title='Chat' />
             {hasNewMessage && (
@@ -133,7 +129,7 @@ const Header = () => {
         <br />
 
         <div className='contato-configuracoes'>
-          <Link to="/contato" onClick={() => handleClick('contato')} className={`linkHeader ${location.pathname === '/contato' ? 'active' : ''}`}>
+          <Link to="/contato" onClick={handleClick} className="linkHeader">
             <p className='paragrafoListaHeader'>
               <img src={ativo.contato ? contatoAtivado : contato} alt="Contato" className='iconesHeader' title='Contato' />
             </p>
@@ -141,7 +137,7 @@ const Header = () => {
 
           <br />
 
-          <Link to="/configuracoes" onClick={closeMenu} className={`linkHeader ${location.pathname === '/configuracoes' ? 'active' : ''}`}>
+          <Link to="/configuracoes" onClick={handleClick} className="linkHeader">
             <p className='paragrafoListaHeader'>
               <img src={settingsIcon} alt="Configurações" className='iconesHeader' title='Configurações' />
             </p>
