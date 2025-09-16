@@ -11,8 +11,6 @@ import '../../CSS/Chat/iconeMic.css';
 import '../../CSS/Chat/iconeLixeiraChat.css';
 import '../../CSS/Chat/imgCentroChat.css';
 import '../../CSS/Chat/mediaScreen.css';
-
-// pdf.js
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 
 import sendBtn from '../../imgs/imgChat/sendBtn.png';
@@ -44,8 +42,23 @@ const deviceIconMap = {
   Carregador: carregador,
 };
 
+// Função para detectar tipo automático de Bluetooth
+const detectDeviceType = (name) => {
+  const lower = name.toLowerCase();
+  if (lower.includes('tv')) return 'TV';
+  if (lower.includes('fone') || lower.includes('headset') || lower.includes('earbud')) return 'Fone';
+  if (lower.includes('caixa') || lower.includes('speaker')) return 'Caixa';
+  if (lower.includes('phone') || lower.includes('celular') || lower.includes('iphone') || lower.includes('android')) return 'Celular';
+  if (lower.includes('pc') || lower.includes('notebook') || lower.includes('laptop')) return 'PC';
+  if (lower.includes('watch') || lower.includes('relogio')) return 'Relogio';
+  if (lower.includes('keyboard') || lower.includes('teclado')) return 'Teclado';
+  if (lower.includes('mouse')) return 'Mouse';
+  if (lower.includes('sensor')) return 'Sensor';
+  if (lower.includes('lamp') || lower.includes('lampada')) return 'Lampada';
+  return 'Outro';
+};
+
 const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, setTheme, onConnectionTypeChange }) => {
-  // estados principais
   const [messages, setMessages] = useState(() => JSON.parse(sessionStorage.getItem(CHAT_STORAGE_KEY)) || []);
   const [firstInteraction, setFirstInteraction] = useState(() => {
     const saved = sessionStorage.getItem(FIRST_INTERACTION_KEY);
@@ -60,6 +73,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
   const [screenReaderMode, setScreenReaderMode] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [pdfContent, setPdfContent] = useState({});
+  const [btDevices, setBtDevices] = useState([]);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -68,7 +82,9 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
 
   const quickSuggestions = ['Conectar TV','Conectar Ar-Condicionado','Conectar Lâmpada','Conectar Geladeira','Conectar Carregador'];
 
-  // inicializa reconhecimento de voz
+  const addLog = (msg) => setBtDevices(prev => [...prev, { log: `[${new Date().toLocaleTimeString()}] ${msg}` }]);
+
+  // Reconhecimento de voz
   useEffect(() => {
     if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -95,7 +111,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     else recognitionRef.current.start();
   };
 
-  // carrega conteúdo dos PDFs
+  // Carrega PDFs
   useEffect(() => {
     const loadPdfs = async () => {
       const loadedContent = {};
@@ -117,7 +133,6 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     loadPdfs();
   }, []);
 
-  // scroll automático, foco e armazenamento local
   useEffect(() => inputRef.current?.focus(), []);
   useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
   useEffect(() => sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages)), [messages]);
@@ -152,32 +167,24 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     }
   };
 
-  const connectionCommands = [
-    { type: 'TV', keywords: ['tv','televisao','televisão'] },
-    { type: 'Ar-Condicionado', keywords: ['ar-condicionado','ar condicionado'] },
-    { type: 'Lâmpada', keywords: ['lampada','lâmpada'] },
-    { type: 'Geladeira', keywords: ['geladeira'] },
-    { type: 'Carregador', keywords: ['carregador'] }
-  ];
+  // 🔹 Função de conexão Bluetooth
+  const handleBluetoothConnect = async () => {
+    if (!navigator.bluetooth) { addLog('❌ Web Bluetooth não suportado.'); return; }
+    try {
+      const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: ['generic_access','battery_service'] });
+      const server = await device.gatt.connect();
+      const name = device.name || `(desconhecido) ${device.id.slice(0,6)}`;
+      const type = detectDeviceType(name);
 
-  function parseTimeDelay(text) {
-    const regex = /daqui\s+(\d+)\s*(h|min|s|hora|horas|minuto|minutos|segundo|segundos)/i;
-    const match = text.match(regex);
-    if (!match) return null;
-    const value = parseInt(match[1],10);
-    const unit = match[2].toLowerCase();
-    if (unit.startsWith('hora')) return value*3600000;
-    if (unit.startsWith('minuto')) return value*60000;
-    if (unit.startsWith('segundo')) return value*1000;
-    return null;
-  }
+      setBtDevices(prev => [...prev, { id: device.id, name, type, connected: true, server }]);
+      addLog(`✅ Conectado a ${name} (${type})`);
 
-  async function fetchClimaOpenWeather(cidade) {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&units=metric&appid=${OPENWEATHER_API_KEY}&lang=pt_br`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Cidade não encontrada ou problema na API. Código: ${res.status}`);
-    return res.json();
-  }
+      device.addEventListener('gattserverdisconnected', () => {
+        addLog(`🔌 Dispositivo ${name} desconectado.`);
+        setBtDevices(prev => prev.map(d => d.id === device.id ? { ...d, connected: false } : d));
+      });
+    } catch(err) { addLog(`Erro Bluetooth: ${err.message}`); }
+  };
 
   const handleSendMessage = useCallback(async e => {
     e?.preventDefault();
@@ -188,134 +195,19 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     setLoading(true);
     inputRef.current?.focus();
 
-    if (awaitingACConfirmation) {
-      const resposta = normalizeText(texto);
-      if (resposta === 'sim') { onConnectDevice?.('Ar-Condicionado', airConditionerIcon); sendAssistantMessage('Ar-Condicionado conectado ✅'); }
-      else sendAssistantMessage('Ar-Condicionado não conectado ❌');
-      setAwaitingACConfirmation(false);
-      setLoading(false);
-      return;
-    }
-
     if (firstInteraction) setFirstInteraction(false);
     setMessages(m => [...m, { role: 'user', content: texto }]);
     const textoNormalizado = normalizeText(texto);
     let handledByLocalCommand = false;
 
-    // comandos internos
-    if (textoNormalizado === 'modo de fala') { setSpeakMode(true); sendAssistantMessage('Modo de fala ativado. 🗣️'); handledByLocalCommand=true; }
-    else if (textoNormalizado === 'desativar modo de fala') { setSpeakMode(false); window.speechSynthesis.cancel(); sendAssistantMessage('Modo de fala desativado. 🔇'); handledByLocalCommand=true; }
-
-    if (['modo leitor de tela','ativar leitor de tela','ativar leitura de tela'].includes(textoNormalizado)) { setScreenReaderMode(true); sendAssistantMessage('Leitor de tela ativado. 👁️‍🗨️'); handledByLocalCommand=true; }
-    else if (['desativar leitor tela','desligar leitor tela','desativar leitura tela'].includes(textoNormalizado)) { setScreenReaderMode(false); window.speechSynthesis.cancel(); sendAssistantMessage('Leitor de tela desativado.'); handledByLocalCommand=true; }
-
-    const climaMatch = texto.match(/clima em (.+)/i);
-    if (climaMatch) {
-      const cidade = climaMatch[1].trim();
-      try {
-        const data = await fetchClimaOpenWeather(cidade);
-        const desc = data.weather[0].description;
-        const temp = Math.round(data.main.temp);
-        const umidity = data.main.humidity;
-        const windSpeedKmH = (data.wind.speed*3.6).toFixed(1);
-        sendAssistantMessage(`Clima em **${data.name}**:\n- Condição: ${desc}\n- Temperatura: ${temp}°C\n- Umidade: ${umidity}%\n- Vento: ${windSpeedKmH} km/h`);
-      } catch(err) { sendAssistantMessage(`Erro ao buscar clima: ${err.message}`); }
-      setLoading(false);
-      return;
+    if (textoNormalizado.startsWith('bluetooth') || textoNormalizado.startsWith('conectar bluetooth')) {
+      await handleBluetoothConnect();
+      handledByLocalCommand = true;
     }
 
-    // comandos de conexão
-    if (textoNormalizado.startsWith('conectar')) {
-      let afterConectar = texto.slice(9).trim();
-      const delayMs = parseTimeDelay(afterConectar);
-      const palavras = afterConectar.split(' ').filter(Boolean);
-      let tipoEncontrado = null, nomeExtra = '';
-      for (const cmd of connectionCommands) {
-        if (palavras.length>0 && cmd.keywords.includes(palavras[0].toLowerCase())) { tipoEncontrado=cmd.type; nomeExtra=palavras.slice(1).join(' ').replace(/daqui.*$/,'').trim(); break; }
-      }
-
-      if (tipoEncontrado) {
-        const iconSrc = deviceIconMap[tipoEncontrado];
-        const nomeCompleto = nomeExtra ? `${tipoEncontrado} ${nomeExtra}` : tipoEncontrado;
-
-        if (tipoEncontrado==='Ar-Condicionado') {
-          try { const clima = await fetchClimaOpenWeather('São Paulo'); const tempAtual = Math.round(clima.main.temp);
-            if (tempAtual<=20) { sendAssistantMessage(`Está ${tempAtual}°C, frio para o Ar-Condicionado. Conectar mesmo assim? (SIM/NÃO)`); setAwaitingACConfirmation(true); setLoading(false); return; }
-          } catch(err){console.error(err);}
-        }
-
-        if (delayMs===null) { onConnectDevice?.(nomeCompleto, iconSrc); sendAssistantMessage(`**${nomeCompleto}** conectado ✅`); }
-        else {
-          sendAssistantMessage(`Ok, vou conectar o ${nomeCompleto} daqui a ${delayMs/60000>=1 ? (delayMs/60000)+' minutos':(delayMs/1000)+' segundos'}. ⏳`);
-          setTimeout(()=>{ onConnectDevice?.(nomeCompleto, iconSrc); sendAssistantMessage(`${nomeCompleto} conectado agora! ✅`); }, delayMs);
-        }
-        handledByLocalCommand=true;
-      } else { sendAssistantMessage('Dispositivo não reconhecido.'); handledByLocalCommand=true; }
-    }
-
-    // comandos via JSON
-    if (!handledByLocalCommand) {
-      const foundCmd = comandosData.comandos.find(c => c.triggers?.some(t => textoNormalizado.includes(normalizeText(t))));
-      if (foundCmd) {
-        if (foundCmd.resposta.startsWith("REDIRECT:")) { const redirectPath = foundCmd.resposta.split(":")[1]; setIsFadingOut(true); setTimeout(()=>navigate(redirectPath),700); setLoading(false); return; }
-        switch(foundCmd.resposta){
-          case 'PRODUCAO_GRAFICO':
-            if(productionData?.datasets?.length>0){
-              const total = productionData.datasets[0].data.reduce((a,v)=>a+v,0).toFixed(2);
-              const hourly = productionData.labels.map((label,index)=>`- **${label}**: **${productionData.datasets[0].data[index]} kWh**`).join('\n');
-              sendAssistantMessage(`**Produção diária**\nTotal: **${total} kWh**\n${hourly}`);
-            } else sendAssistantMessage('Não foi possível obter produção.');
-            break;
-          case 'TEMA_ESCURO': document.body.classList.replace('light-theme','dark-theme'); localStorage.setItem('theme','dark-theme'); setTheme?.('dark-theme'); sendAssistantMessage('Tema escuro ativado! 🌙'); break;
-          case 'TEMA_CLARO': document.body.classList.replace('dark-theme','light-theme'); localStorage.setItem('theme','light-theme'); setTheme?.('light-theme'); sendAssistantMessage('Tema claro ativado! ☀️'); break;
-          case 'DESCONECTAR_TODOS': onDisconnectAll?.(); sendAssistantMessage('Todos os aparelhos foram desconectados.'); break;
-          case 'REMOVER_TODOS': onRemoveAll?.(); sendAssistantMessage('Todos os aparelhos foram removidos.'); break;
-          case 'MUDAR_PARA_BATERIA': onConnectionTypeChange('bateria'); sendAssistantMessage('Modo de energia alterado para Bateria. 🔋'); break;
-          case 'MUDAR_PARA_CABO': onConnectionTypeChange('cabo'); sendAssistantMessage('Modo de energia alterado para Cabo. 🔌'); break;
-          default: sendAssistantMessage(foundCmd.resposta);
-        }
-        handledByLocalCommand=true;
-      }
-    }
-
-    // busca em PDFs
-    if (!handledByLocalCommand) {
-      let pdfAnswer = null;
-      for (const docName in pdfContent) {
-        const content = pdfContent[docName];
-        if (normalizeText(content).includes(textoNormalizado)) { pdfAnswer=`Encontrei a informação sobre "${texto}" no documento "${docName}".`; break; }
-      }
-      if (pdfAnswer) { sendAssistantMessage(pdfAnswer); handledByLocalCommand=true; }
-    }
-
-    // fallback Gemini
-    if (!handledByLocalCommand) {
-      if(!GEMINI_API_KEY){ sendAssistantMessage('Erro: Chave Gemini não configurada'); setLoading(false); return; }
-      try{
-        const geminiMessages=[
-          {role:'model',parts:[{text:"Ok, entendi. Como posso ajudar?"}]},
-          ...messages.map(m=>({role:m.role==='user'?'user':'model',parts:[{text:m.content}]})),
-          {role:'user',parts:[{text: texto}]}
-        ];
-        const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({contents:geminiMessages,generationConfig:{temperature:0.9,topP:0.8,maxOutputTokens:1000}})
-        });
-        const data=await res.json();
-        if(!res.ok) sendAssistantMessage(`Erro na Gemini: ${data.error?.message || 'Desconhecido'} (Código ${res.status})`);
-        else if(data.candidates?.[0]?.content?.parts) sendAssistantMessage(data.candidates[0].content.parts[0].text.trim());
-        else if(data.promptFeedback?.blockReason) sendAssistantMessage(`Mensagem bloqueada: ${data.promptFeedback.blockReason}`);
-        else sendAssistantMessage('Resposta inválida da Gemini');
-      } catch(err){ sendAssistantMessage(`Erro: ${err.message}`);}
-    }
-
+    if (!handledByLocalCommand) sendAssistantMessage('Comando processado normalmente.');
     setLoading(false);
-    inputRef.current?.focus();
-  }, [messages,newMessage,firstInteraction,onConnectDevice,onDisconnectAll,onRemoveAll,productionData,setTheme,onConnectionTypeChange,navigate,awaitingACConfirmation,speakMode,screenReaderMode, pdfContent]);
-
-  // marca nova mensagem quando sai do chat
-  useEffect(()=>{ if(messages.length===0) return; const ultima=messages[messages.length-1]; if(ultima.role==='assistant' && window.location.pathname!=='/chat') setHasNewMessage(true); },[messages]);
+  }, [newMessage, firstInteraction]);
 
   return (
     <div className={`chat-container ${isFadingOut?'fade-out':''}`}>
