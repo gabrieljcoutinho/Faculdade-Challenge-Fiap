@@ -27,9 +27,6 @@ import carregador from '../../imgs/imgConexao/carregador.png';
 import logoGoodwe from '../../imgs/imgHeader/logo.png';
 import excluir from '../../imgs/imgChat/excluir.png';
 
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-const OPENWEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
-
 const CHAT_STORAGE_KEY = 'chat_messages';
 const FIRST_INTERACTION_KEY = 'chat_firstInteraction';
 const NEW_MESSAGE_FLAG = 'hasNewChatMessage';
@@ -67,8 +64,6 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
   });
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isFadingOut, setIsFadingOut] = useState(false);
-  const [hasNewMessage, setHasNewMessage] = useState(false);
   const [awaitingACConfirmation, setAwaitingACConfirmation] = useState(false);
   const [speakMode, setSpeakMode] = useState(() => sessionStorage.getItem('chat_speakMode') === 'true');
   const [screenReaderMode, setScreenReaderMode] = useState(false);
@@ -81,7 +76,15 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
   const recognitionRef = useRef(null);
   const navigate = useNavigate();
 
-  const quickSuggestions = ['Conectar TV','Conectar Ar-Condicionado','Conectar Lâmpada','Conectar Geladeira','Conectar Carregador'];
+  const quickSuggestions = ['Conectar TV','Conectar Ar-Condicionado','Conectar Lâmpada','Conectar Geladeira','Conectar Carregador','Conectar Bluetooth'];
+
+  const connectionCommands = [
+    { type: 'TV', keywords: ['tv','televisao','televisão'] },
+    { type: 'Ar-Condicionado', keywords: ['ar-condicionado','ar condicionado'] },
+    { type: 'Lâmpada', keywords: ['lampada','lâmpada'] },
+    { type: 'Geladeira', keywords: ['geladeira'] },
+    { type: 'Carregador', keywords: ['carregador'] }
+  ];
 
   // Reconhecimento de voz
   useEffect(() => {
@@ -136,19 +139,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
   useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
   useEffect(() => sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages)), [messages]);
   useEffect(() => sessionStorage.setItem(FIRST_INTERACTION_KEY, JSON.stringify(firstInteraction)), [firstInteraction]);
-  useEffect(() => sessionStorage.setItem(NEW_MESSAGE_FLAG, hasNewMessage ? 'true' : 'false'), [hasNewMessage]);
   useEffect(() => sessionStorage.setItem('chat_speakMode', speakMode ? 'true' : 'false'), [speakMode]);
-
-  useEffect(() => {
-    const handleUnload = () => {
-      sessionStorage.removeItem(CHAT_STORAGE_KEY);
-      sessionStorage.removeItem(FIRST_INTERACTION_KEY);
-      sessionStorage.removeItem(NEW_MESSAGE_FLAG);
-      sessionStorage.removeItem('chat_speakMode');
-    };
-    window.addEventListener('beforeunload', handleUnload);
-    return () => window.removeEventListener('beforeunload', handleUnload);
-  }, []);
 
   const speakText = text => {
     if ('speechSynthesis' in window) {
@@ -166,14 +157,6 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     }
   };
 
-  const connectionCommands = [
-    { type: 'TV', keywords: ['tv','televisao','televisão'] },
-    { type: 'Ar-Condicionado', keywords: ['ar-condicionado','ar condicionado'] },
-    { type: 'Lâmpada', keywords: ['lampada','lâmpada'] },
-    { type: 'Geladeira', keywords: ['geladeira'] },
-    { type: 'Carregador', keywords: ['carregador'] }
-  ];
-
   function parseTimeDelay(text) {
     const regex = /daqui\s+(\d+)\s*(h|min|s|hora|horas|minuto|minutos|segundo|segundos)/i;
     const match = text.match(regex);
@@ -187,7 +170,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
   }
 
   async function fetchClimaOpenWeather(cidade) {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&units=metric&appid=${OPENWEATHER_API_KEY}&lang=pt_br`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cidade)}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}&lang=pt_br`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Cidade não encontrada ou problema na API. Código: ${res.status}`);
     return res.json();
@@ -239,7 +222,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     }
 
     // ---------------- Conexões via comando de chat ----------------
-    if (textoNormalizado.startsWith('conectar')) {
+    if (textoNormalizado.startsWith('conectar') && !textoNormalizado.includes('bluetooth')) {
       const afterConectar = texto.slice(9).trim();
       const delayMs = parseTimeDelay(afterConectar);
       const palavras = afterConectar.split(' ').filter(Boolean);
@@ -258,7 +241,6 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         const iconSrc = deviceIconMap[tipoEncontrado];
         const nomeCompleto = nomeExtra ? `${tipoEncontrado} ${nomeExtra}` : tipoEncontrado;
 
-        // Confirmação Ar-Condicionado
         if (tipoEncontrado==='Ar-Condicionado') {
           try { const clima = await fetchClimaOpenWeather('São Paulo'); const tempAtual = Math.round(clima.main.temp);
             if (tempAtual<=20) { sendAssistantMessage(`Está ${tempAtual}°C, frio para o Ar-Condicionado. Conectar mesmo assim? (SIM/NÃO)`); setAwaitingACConfirmation(true); setLoading(false); return; }
@@ -276,9 +258,10 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
     }
 
     // ---------------- Conexões via Bluetooth ----------------
-    if (textoNormalizado.startsWith('bluetooth') || textoNormalizado.startsWith('conectar bluetooth')) {
+    if (textoNormalizado.includes('conectar bluetooth') || textoNormalizado === 'bluetooth') {
       try {
-        const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+        sendAssistantMessage('🔵 Abrindo seleção de dispositivos Bluetooth...');
+        const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices:['battery_service'] });
         const server = await device.gatt.connect();
         const name = device.name || `(desconhecido) ${device.id.slice(0,6)}`;
         const type = detectDeviceType(name);
@@ -286,31 +269,26 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
 
         setBtDevices(prev => [...prev, { id: device.id, name, type, connected: true, server }]);
         sendAssistantMessage(`✅ Bluetooth conectado: ${name} (${type})`);
-
-        // registra no sistema de conexões
         onConnectDevice?.(name, iconSrc);
 
         device.addEventListener('gattserverdisconnected', () => {
           sendAssistantMessage(`🔌 Bluetooth desconectado: ${name}`);
           setBtDevices(prev => prev.map(d => d.id === device.id ? { ...d, connected: false } : d));
         });
-      } catch(err) { sendAssistantMessage(`Erro Bluetooth: ${err.message}`); }
-
+      } catch(err) {
+        sendAssistantMessage(`Erro Bluetooth: ${err.message}`);
+      }
       handledByLocalCommand = true;
     }
 
-    // ---------------- comandos JSON, PDFs e Gemini ----------------
-    // ...mantemos a mesma lógica que você já tinha
-    // (omiti para não ficar muito longo, mas a integração permanece igual)
-
     setLoading(false);
     inputRef.current?.focus();
-  }, [messages,newMessage,firstInteraction,onConnectDevice,onDisconnectAll,onRemoveAll,productionData,setTheme,onConnectionTypeChange,navigate,awaitingACConfirmation,speakMode,screenReaderMode, pdfContent]);
+  }, [newMessage, firstInteraction, onConnectDevice, awaitingACConfirmation, speakMode, screenReaderMode]);
 
-  useEffect(()=>{ if(messages.length===0) return; const ultima=messages[messages.length-1]; if(ultima.role==='assistant' && window.location.pathname!=='/chat') setHasNewMessage(true); },[messages]);
+  useEffect(()=>{ if(messages.length===0) return; const ultima=messages[messages.length-1]; if(ultima.role==='assistant' && window.location.pathname!=='/chat') sessionStorage.setItem(NEW_MESSAGE_FLAG,'true'); },[messages]);
 
   return (
-    <div className={`chat-container ${isFadingOut?'fade-out':''}`}>
+    <div className={`chat-container`}>
       <div className="message-display-area">
         {firstInteraction && (
           <div className="movimentoDaDiv">
@@ -341,7 +319,7 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
           <button type="button" className={`mic-button ${isListening?'listening':''}`} onClick={handleMicClick} title={isListening?'Parar escuta':'Clique para falar'}>🎤</button>
         </div>
         <button type="submit" className="send-button" disabled={loading}><img src={sendBtn} alt="Enviar" className="send-icon"/></button>
-        <button type="button" className="clear-button" onClick={() => setMessages([])} title="Limpar a conversa"><img src={excluir} alt=""  className='iconeImgTrash'/></button>
+        <button type="button" className="clear-button" onClick={() => setMessages([])} title="Limpar a conversa"><img src={excluir} alt="" className='iconeImgTrash'/></button>
       </form>
     </div>
   );
