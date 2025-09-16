@@ -45,7 +45,7 @@ function InstallButtonMobile() {
         bottom: '20px',
         right: '20px',
         padding: '10px 20px',
-        backgroundColor: '#0000ff',
+        backgroundColor: '#252525',
         color: '#fff',
         border: 'none',
         borderRadius: '5px',
