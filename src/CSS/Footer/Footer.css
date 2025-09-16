@@ -13,7 +13,7 @@
     background-color: var(--footer-bg-color);
     color: var(--footer-text-color);
     text-align: center;
-    padding: 10px 0;
+    padding: 0.1px 0;
     /* Para animação suave */
     opacity: 1;
     transition: opacity 0.4s ease;
@@ -22,7 +22,7 @@
     font-family: Orbitron;
 }
 
-.footer.hide {
+/* .footer.hide {
     opacity: 0;
     pointer-events: none;
-}
+} */
