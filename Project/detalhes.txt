@@ -36,7 +36,8 @@ Ele reconhece comandos como “conectar aparelho” ou “mudar de página”, a
  conectado na seção de Conexões, inclusive com agendamento de horários ou temporizadores, por exemplo: “Conectar TV daqui a 30 minutos” ou “Conectar TV sala daqui a 10 segundos”. Antes de inserir o comando, há botões
  já programados que adicionam comandos prontos ao input do chat, facilitando o uso pelo usuário, que pode enviar o comando diretamente ou adicionar mais detalhes. O usuário pdeo tambem pedir pelo chat trocar o uso da energia, pdoe ser
  o uso da bateria ou o uso da energia elétrica. Dicionei a api de clia me tempo para que o usuario posa acessar o cliam de qualquer cidade perguntnado pelo chat. Como adicione a api de cliam e tempo alem dem ostar a temperatura na Home,
- caso esteja frio abixo de 20 graus se o usuario pedir para conectar o arcondiconado, o chat vai perguntar se relamente o usuari qeru relaemnte coenctar co msim coencta co mnao nao conecta
+ caso esteja frio abixo de 20 graus se o usuario pedir para conectar o arcondiconado, o chat vai perguntar se relamente o usuari qeru relaemnte coenctar co msim coencta co mnao nao conecta.
+ Há u msitema de pedir para coenctar por bluetooth e o chat coencta tambem o aparelho, ams para isso é nescessário u mcomando específico
 
 Contato
 Inclui um formulário para envio de mensagens, com campos para nome, e-mail e conteúdo. Também há a opção de enviar arquivos e um botão
