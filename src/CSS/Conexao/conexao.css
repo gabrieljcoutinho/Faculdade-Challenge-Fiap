@@ -43,7 +43,7 @@
 .retanguloAdicionado {
     position: relative;
     width: 255px;
-    height: 100px;
+    height: 150px;
     background: var(--color-bg-retangulo);
     border-radius: 10px;
     display: flex;
@@ -60,6 +60,7 @@
     flex-shrink: 0;
     min-width: 200px;
     touch-action: none;
+    padding-top: 1rem;
 }
 
 .retanguloAdicionado:hover {
