@@ -21,6 +21,7 @@ import '../../CSS/Conexao/btnConectadoEnaoConectado.css';
 import '../../CSS/Conexao/marcadorDeConsumo.css';
 import '../../CSS/Conexao/luzPelaImgNaoConectado.css';
 import '../../CSS/Conexao/iconeBateriaEcabo.css';
+import '../../CSS/Conexao/medidorCorrenteETensao.css'
 
 import tvIcon from '../../imgs/imgConexao/TV.png';
 import airConditionerIcon from '../../imgs/imgConexao/ar-condicionado.png';
