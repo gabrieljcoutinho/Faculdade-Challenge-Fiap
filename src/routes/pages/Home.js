@@ -40,7 +40,7 @@ const WEATHER_ICONS = {
 };
 const CO2_PER_KWH = 0.85;
 const CO2_PER_TREE = 22;
-const OPENWEATHER_API_KEY = "50b5d79d3b8c0475ba7dba090402b21c";
+const OPENWEATHER_API_KEY = "";
 
 const Home = () => {
   const [currentChartType, setCurrentChartType] = useState(() => localStorage.getItem('preferredChartType') || 'line');
