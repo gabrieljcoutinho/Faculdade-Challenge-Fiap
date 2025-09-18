@@ -56,6 +56,10 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice, on
   const [isDragging, setIsDragging] = useState(false);
   const dragItem = useRef(null), dragOverItem = useRef(null), touchStartTimer = useRef(null), currentDragElement = useRef(null);
 
+  // Novos estados para a corrente e tensão
+  const [voltage, setVoltage] = useState('127V');
+  const [current, setCurrent] = useState('3A');
+
   const updateUiState = newState => setUiState(prev => ({ ...prev, ...newState }));
   const getIconKeyBySrc = src => availableIcons.find(icon => icon.src === src)?.name || '';
   const formatDate = d => d ? new Date(d).toLocaleString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A';
@@ -65,6 +69,18 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice, on
     setIsDragging(false);
     if (currentDragElement.current) { currentDragElement.current.classList.remove('dragging'); currentDragElement.current = null; }
     document.querySelectorAll('.retanguloAdicionado.drag-over').forEach(el => el.classList.remove('drag-over'));
+  }, []);
+
+  // Novo useEffect para atualizar a corrente e tensão
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Valores aleatórios para simular mudanças
+      const newVoltage = (Math.random() * (130 - 120) + 120).toFixed(1) + 'V';
+      const newCurrent = (Math.random() * (3.5 - 2.5) + 2.5).toFixed(1) + 'A';
+      setVoltage(newVoltage);
+      setCurrent(newCurrent);
+    }, 1000); // Atualiza a cada segundo
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -206,7 +222,20 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice, on
           devicesToDisplay.map((c, index) => (<div key={c.id} className={`retanguloAdicionado ${isDragging && dragItem.current === index ? 'dragging' : ''}`} style={{ backgroundColor: c.conectado ? (c.corFundo || '#e0e0e0') : '#696969' }} onClick={e => handleConexionClick(c, e)} draggable="true" onDragStart={e => handleDragStart(e, index)} onDragEnter={e => handleDragEnter(e, index)} onDragLeave={handleDragLeave} onDragEnd={handleDragEnd} onDrop={handleDrop} onDragOver={handleDragOver} onTouchStart={e => handleTouchStart(e, index)} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
             {c.conectado && (<div className="qrcode-top-left"><button className="qrcode-button" onClick={e => { e.stopPropagation(); updateUiState({ visibleQRCode: c }); }} type="button"><img src={imgQrcode} alt="QR Code" className="qrCodeAparelhoConectado" /></button></div>)}
             {!c.conectado && <div className="disconnected-overlay">{mensagemAparelhoDesativado}</div>}
-            <div className="icon-text-overlay"><img src={c.imagem} alt={c.nome} className="conexion-icon-overlay" style={{ opacity: c.conectado ? 1 : 0.5 }} /><span className="conexion-text-overlay" style={{ color: c.conectado ? 'inherit' : '#a9a9a9' }}>{c.nome}</span></div>
+
+            <div className="content-container">
+              <div className="icon-text-overlay">
+                <img src={c.imagem} alt={c.nome} className="conexion-icon-overlay" style={{ opacity: c.conectado ? 1 : 0.5 }} />
+                <span className="conexion-text-overlay" style={{ color: c.conectado ? 'inherit' : '#a9a9a9' }}>{c.nome}</span>
+              </div>
+              {c.conectado && (
+                <div className="current-voltage-meter">
+                  <p className="voltage-display">V: {voltage}</p>
+                  <p className="current-display">A: {current}</p>
+                </div>
+              )}
+            </div>
+
             <div className="actions-overlay"><button className="remove-button" onClick={e => { e.stopPropagation(); removeConexion(c.id); }} type="button">×</button><button className="edit-button" onClick={e => { e.stopPropagation(); handleEditClick(c); }} type="button" disabled={!c.conectado}><img src={editIcon} alt="Editar" style={{ width: 16, height: 16 }} /></button>
               <label className="switch"><input type="checkbox" checked={c.conectado} onChange={e => { e.stopPropagation(); toggleConnection(c.id, e.target.checked); }} /><span className="slider round"></span></label>
             </div>
