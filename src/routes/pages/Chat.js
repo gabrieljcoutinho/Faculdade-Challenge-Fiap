@@ -33,6 +33,10 @@ import excluir  from '../../imgs/imgChat/excluir.png'
 
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const OPENWEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
+console.log("Minha chave carregada:", OPENWEATHER_API_KEY);
+
+
+
 const CHAT_STORAGE_KEY = 'chat_messages';
 const FIRST_INTERACTION_KEY = 'chat_firstInteraction';
 const NEW_MESSAGE_FLAG = 'hasNewChatMessage';

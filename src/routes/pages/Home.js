@@ -23,6 +23,7 @@ import '../../CSS/Home/weatherAnimations.css';
 import '../../CSS/Home/relatorioConsumoDiario.css';
 import '../../CSS/Home/imgAtrazDoGrafico.css';
 
+
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale, PieController, ArcElement, BarController, BarElement, Legend, Tooltip);
 
 const COLORS = ['#ADD8E6', '#87CEFA', '#00BFFF', '#1E90FF', 'rgba(31,81,255,0.7)', '#0000FF', '#000080'];
@@ -40,7 +41,9 @@ const WEATHER_ICONS = {
 };
 const CO2_PER_KWH = 0.85;
 const CO2_PER_TREE = 22;
-const OPENWEATHER_API_KEY = "";
+const OPENWEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
+
+
 
 const Home = () => {
   const [currentChartType, setCurrentChartType] = useState(() => localStorage.getItem('preferredChartType') || 'line');
