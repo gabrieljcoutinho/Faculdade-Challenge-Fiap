@@ -31,9 +31,9 @@ import logoGoodwe from '../../imgs/imgHeader/logo.png';
 
 import excluir  from '../../imgs/imgChat/excluir.png'
 
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+const REACT_APP_GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const OPENWEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
-console.log("Minha chave carregada:", OPENWEATHER_API_KEY);
+
 
 
 
@@ -389,14 +389,14 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
         }
 
         if (!handledByLocalCommand) {
-            if(!GEMINI_API_KEY){ sendAssistantMessage('Erro: Chave Gemini não configurada'); setLoading(false); return; }
+            if(!REACT_APP_GEMINI_API_KEY){ sendAssistantMessage('Erro: Chave Gemini não configurada'); setLoading(false); return; }
             try{
                 const geminiMessages=[
                     {role:'model',parts:[{text:"Ok, entendi. Como posso ajudar?"}]},
                     ...messages.map(m=>({role:m.role==='user'?'user':'model',parts:[{text:m.content}]})),
                     {role:'user',parts:[{text: texto}]}
                 ];
-                const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,{
+                const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${REACT_APP_GEMINI_API_KEY}`,{
                     method:'POST',
                     headers:{'Content-Type':'application/json'},
                     body: JSON.stringify({contents:geminiMessages,generationConfig:{temperature:0.9,topP:0.8,maxOutputTokens:1000}})
