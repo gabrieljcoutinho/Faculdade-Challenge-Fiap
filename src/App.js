@@ -166,7 +166,6 @@ const useWeatherAlerts = () => {
 // App principal
 function App() {
 
-
   const [showSplash, setShowSplash] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
 
@@ -211,7 +210,6 @@ function App() {
 
   useEffect(() => { localStorage.setItem('activeConnectionIcon', connectionType); }, [connectionType]);
   useEffect(() => { if (nivelBateria <= 0 && connectionType === 'bateria') setConnectionType('cabo'); }, [nivelBateria, connectionType]);
-
   useEffect(() => { if (initialProductionData.datasetsOptions?.length) setChosenDatasetIndex(Math.floor(Math.random() * initialProductionData.datasetsOptions.length)); }, []);
 
   const formattedProductionData = useMemo(() => {
@@ -274,16 +272,22 @@ function App() {
   // Hook de alertas climáticos
   const weatherAlerts = useWeatherAlerts();
 
+  // Estado para alertas que podem ser fechados manualmente
+  const [dismissedAlerts, setDismissedAlerts] = useState([]);
+  useEffect(() => {
+    setDismissedAlerts(weatherAlerts);
+  }, [weatherAlerts]);
+
   // Fala dos alertas
   useEffect(() => {
-    if (weatherAlerts.length > 0 && isReading) {
-      weatherAlerts.forEach(alert => {
+    if (dismissedAlerts.length > 0 && isReading) {
+      dismissedAlerts.forEach(alert => {
         const utterance = new SpeechSynthesisUtterance(alert);
         utterance.lang = 'pt-BR';
         window.speechSynthesis.speak(utterance);
       });
     }
-  }, [weatherAlerts, isReading]);
+  }, [dismissedAlerts, isReading]);
 
   return (
     <div className="App">
@@ -294,20 +298,45 @@ function App() {
         </div>
       ) : (
         <BrowserRouter>
-          {/* Alertas de risco */}
-          {weatherAlerts.length > 0 && (
+          {/* Alertas de risco com botão de fechar */}
+          {dismissedAlerts.length > 0 && (
             <div style={{
               position: 'fixed',
               top: 10,
               right: 10,
               zIndex: 9999,
-              backgroundColor: '#ffcccc',
-              padding: '10px 20px',
-              borderRadius: '8px',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
             }}>
-              {weatherAlerts.map((alert, i) => (
-                <div key={i} style={{ marginBottom: '5px' }}>{alert}</div>
+              {dismissedAlerts.map((alert, i) => (
+                <div key={i} style={{
+                  backgroundColor: '#ffcccc',
+                  padding: '10px 15px',
+                  borderRadius: '8px',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  minWidth: '250px'
+                }}>
+                  <span>{alert}</span>
+                  <button
+                    onClick={() => setDismissedAlerts(prev => prev.filter((_, idx) => idx !== i))}
+                    style={{
+                      marginLeft: '10px',
+                      background: 'transparent',
+                      border: 'none',
+                      fontSize: '16px',
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      color: '#900'
+                    }}
+                    aria-label="Fechar alerta"
+                  >
+                    ✖
+                  </button>
+                </div>
               ))}
             </div>
           )}
