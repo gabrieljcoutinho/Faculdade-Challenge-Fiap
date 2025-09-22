@@ -86,13 +86,13 @@ const Contato = () => {
           </div>
 
           <div className="social-icons" title="IconesRedes Sociais">
-            <a href="https://www.instagram.com/goodwe_br/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Icone Instagram">
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Icone Instagram">
               <FaInstagram size={35} />
             </a>
-            <a href="https://www.linkedin.com/search/results/all/?heroEntityKey=urn%3Ali%3Aorganization%3A2551475&keywords=GoodWe&origin=ENTITY_SEARCH_HOME_HISTORY&sid=1vJ" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <FaLinkedin size={35} />
             </a>
-            <a href="https://www.youtube.com/@goodwesolarengine" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
               <FaYoutube size={35} />
             </a>
           </div>

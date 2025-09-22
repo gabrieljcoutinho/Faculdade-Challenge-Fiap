@@ -5,7 +5,7 @@ const Footer = () => {
       <div className='footerDiv'>
             <footer className="footer">
 
-      <p>&copy; {new Date().getFullYear()} GoodWe App</p>
+      <p>&copy; {new Date().getFullYear()} PROJETO ACADÊMICO</p>
     </footer>
       </div>
   );

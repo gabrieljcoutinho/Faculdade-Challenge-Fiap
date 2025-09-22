@@ -103,19 +103,19 @@ const SplashScreen = () => (
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    background: 'linear-gradient(135deg, #FF9999, #fff)',
+    background: 'linear-gradient(135deg, #252525, #fff)',
     flexDirection: 'column',
     zIndex: 9999
   }}>
     <div className="splash" style={{ textAlign: 'center', animation: 'fadeIn 1.5s ease' }}>
       <img src={logoSplash} alt="Logo Projeto GoodWe" style={{ animation: 'popIn 1.5s ease', maxWidth: '100%', height: 'auto' }} />
       <h1 style={{ fontSize: 'clamp(1rem, 2vw, 2rem)', marginTop: '20px', color: '#333', animation: 'slideUp 2s ease' }}>
-        Inovador em Energia Inteligente
+        POJETO ACADÊMICO FACULDADE
       </h1>
       <div style={{
         margin: '30px auto 0',
         border: '8px solid #f3f3f3',
-        borderTop: '8px solid #FF6666',
+        borderTop: '8px solid #252525',
         borderRadius: '50%',
         width: 'clamp(60px, 10vw, 120px)',
         height: 'clamp(60px, 10vw, 120px)',
