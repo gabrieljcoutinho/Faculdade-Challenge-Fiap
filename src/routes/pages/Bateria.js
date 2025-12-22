@@ -61,13 +61,18 @@ const Bateria = ({ isDischarging, isCharging, nivelBateria }) => {
     return 'Carregado';
   }, [isCharging, isDischarging]);
 
-  // Lógica de cores
+
+
+  // Lógica mudando as cores da bateria
   const corBarra = useMemo(() => {
     if (nivelAnimado >= 50) return '#00fff0';  // azul/ciano
     if (nivelAnimado >= 30) return '#ffff00';  // amarelo
     if (nivelAnimado >= 20) return '#FFA500';  // laranja
     return '#FF0000';                           // vermelho
   }, [nivelAnimado]);
+
+
+
 
   return (
     <div className={`bateria-container-neon ${piscarCritico ? 'piscar-suave' : ''}`}>

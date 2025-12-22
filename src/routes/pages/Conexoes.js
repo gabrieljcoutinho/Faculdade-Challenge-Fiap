@@ -143,7 +143,8 @@ const Conexoes = ({ aparelhos, setAparelhos, onConnectDevice, onRemoveDevice, on
   const toggleConnection = useCallback((id, newDesiredState) => setAparelhos(prev => prev.map(c => {
     if (c.id !== id) return c;
     const [now, connectedStartTime] = [new Date().getTime(), new Date(c.connectedDate).getTime()];
-    return newDesiredState ? { ...c, conectado: true, connectedDate: new Date().toISOString() } : { ...c, conectado: false, accumulatedSeconds: (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000, connectedDate: null };
+    return newDesiredState ? { ...c, conectado: true, connectedDate: new Date().toISOString() } :
+    { ...c, conectado: false, accumulatedSeconds: (c.accumulatedSeconds || 0) + (now - connectedStartTime) / 1000, connectedDate: null };
   })), [setAparelhos]);
 
   const getConnectionDuration = (connectedDate, accumulatedSeconds = 0) => {
