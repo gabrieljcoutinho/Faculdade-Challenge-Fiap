@@ -6,7 +6,7 @@ Realizei um projeto acadêmico baseado em uma proposta apresentada por uma empre
 
 O objetivo era identificar os principais desafios enfrentados pela empresa e, a partir disso, desenvolver soluções tecnológicas criativas e funcionais. A aplicação simula um **app mobile** para o **gerenciamento inteligente de energia solar residencial**, com funcionalidades modernas e acessíveis. Todo o sistema foi construído utilizando **React**, com simulações via APIs fake e integração com inteligência artificial.
 
-> 🔗 O projeto está publicado na web e pode ser acessado publicamente por meio de um link: https://challenge-fiap-nine.vercel.app/
+> 🔗 O projeto está publicado na web e pode ser acessado publicamente por meio de um link: [https://challenge-fiap-nine.vercel.app/](https://challenge-fiap-sooty.vercel.app/)
 
 
 ---
