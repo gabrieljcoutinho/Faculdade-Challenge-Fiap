@@ -173,6 +173,10 @@ Conjunto de ferramentas essenciais para o usuário:
 
 ---
 
+
+## Há mais
+- O chat terá um prompt ja explicando oque el vai fazer
+
 ## 👨‍🎓 Conclusão
 
 Este projeto foi desenvolvido com o intuito de aplicar na prática conceitos de **desenvolvimento web, acessibilidade, automação, usabilidade, e integração com IA**, tudo isso dentro de um cenário realista e desafiador proposto por uma empresa do mercado.
