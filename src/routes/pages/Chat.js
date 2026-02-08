@@ -169,7 +169,8 @@ const Chat = ({ onConnectDevice, onDisconnectAll, onRemoveAll, productionData, s
             Documentos disponíveis: ${Object.keys(pdfContent).join(', ')}.
             Se o usuário perguntar algo contido nos documentos, use estas informações: ${JSON.stringify(pdfContent).substring(0, 2000)}.
             Seja breve e técnico.
-            Ajude sempre  ousuári ocaso nao enteda algo`;
+            Ajude sempre  ousuári ocaso nao enteda algo.
+            traga exemplos`;
 
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${REACT_APP_GEMINI_API_KEY}`, {
                 method: 'POST',
