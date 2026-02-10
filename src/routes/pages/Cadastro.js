@@ -4,7 +4,7 @@ import '../../CSS/Cadastro/cadastro.module.css';
 import '../../CSS/Cadastro/input.css';
 import '../../CSS/Cadastro/password.css';
 import '../../CSS/Cadastro/links.css';
-import '../../CSS/Cadastro/error.css';
+import '../../CSS/Cadastro/error.module.css';
 import { mensagemLogar, subTitulo, recursos, comunidade, suporte, titulo} from '../../constants/Cadastro/index.js';
 
 const Cadastro = () => {
