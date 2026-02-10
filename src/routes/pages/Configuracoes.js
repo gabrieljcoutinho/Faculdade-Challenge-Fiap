@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../CSS/Settings/overlay.module.css';
 import '../../CSS/Settings/buttons.module.css';
 import '../../CSS/Settings/layout.module.css';
-import '../../CSS/Settings/images.css';
+import '../../CSS/Settings/images.modules.css';
 import '../../CSS/Settings/confirmarDeslogar.css';
 
 import '../../CSS/mudarTema.module.css';
