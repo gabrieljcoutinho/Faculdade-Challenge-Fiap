@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../CSS/Login/container.module.css';
-import '../../CSS/Login/login-box.css';
+import '../../CSS/Login/login-box.module.css';
 import '../../CSS/Login/social-buttons.css';
 import '../../CSS/Login/separator.css';
 import '../../CSS/Login/links.css';
