@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../CSS/EsqueciSenha/resetJs.css';
+import '../../CSS/EsqueciSenha/resetJs.module.css';
 import '../../CSS/EsqueciSenha/layout.css';
 import '../../CSS/EsqueciSenha/form.css';
 import '../../CSS/EsqueciSenha/button.css';
