@@ -7,7 +7,7 @@ import '../../CSS/Settings/layout.css';
 import '../../CSS/Settings/images.css';
 import '../../CSS/Settings/confirmarDeslogar.css';
 
-import '../../CSS/mudarTema.css';
+import '../../CSS/mudarTema.module.css';
 
 import { logar, deslogar } from '../../constants/Configuracao/index.js';
 
