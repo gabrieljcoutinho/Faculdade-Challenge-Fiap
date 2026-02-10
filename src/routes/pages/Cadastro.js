@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../CSS/Cadastro/cadastro.module.css';
-import '../../CSS/Cadastro/input.css';
+import '../../CSS/Cadastro/input.module.css';
 import '../../CSS/Cadastro/password.css';
 import '../../CSS/Cadastro/links.css';
 import '../../CSS/Cadastro/error.module.css';
