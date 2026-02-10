@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import '../../CSS/Settings/overlay.css';
+import '../../CSS/Settings/overlay.module.css';
 import '../../CSS/Settings/buttons.css';
 import '../../CSS/Settings/layout.css';
 import '../../CSS/Settings/images.css';
