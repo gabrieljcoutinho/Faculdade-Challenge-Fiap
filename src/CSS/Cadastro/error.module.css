@@ -1,0 +1,9 @@
+:root {
+    --error-color: #dc3545;
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.8em;
+    margin-top: 5px;
+}
