@@ -5,7 +5,7 @@ import '../../CSS/EsqueciSenha/form.css';
 import '../../CSS/EsqueciSenha/button.css';
 import '../../CSS/EsqueciSenha/animations.module.css';
 import '../../CSS/EsqueciSenha/messagens.css';
-import '../../CSS/EsqueciSenha/links.css';
+import '../../CSS/EsqueciSenha/links.module.css';
 import '../../CSS/EsqueciSenha/mediaScreen.css';
 
 import { tituloPrincipal, paragrafoEsqueciSenha, Email, btnRecuperarSenha, voltarPaginaLogin } from '../../constants/EsqueciSenha/index.js'
