@@ -1,0 +1,240 @@
+:root {
+    /* Cores básicas */
+    --branco: #fff;
+    --preto: #000;
+
+    /* Cores para dark theme */
+    --dark-bg: #121212;
+    --dark-bg-box: #1e1e1e;
+    --dark-bg-input: #2a2a2a;
+    --dark-bg-info: #2a2a2a;
+
+    --dark-text-primary: hsl(0, 0%, 93%);
+    --dark-text-secondary: #f0f0f0;
+    --dark-text-placeholder: #b0b0b0;
+    --dark-text-muted: #252525;
+    --dark-border-input: #444;
+    --dark-border-success: var(--branco);
+
+    /* Cores para estados e destaques */
+    --color-password-fraca: #ff6b6b;
+    --color-password-media: #ffd700;
+    --color-password-forte: #fff;
+    --color-link-dark: #80c0ff;
+    --color-toggle-active: rgba(15, 240, 252);
+
+    /* Cores para light theme */
+    --light-text-primary: var(--preto);
+    --light-text-secondary: black;
+
+    /* Scrollbar */
+    --scrollbar-thumb: rgba(31, 81, 255, 0.7);
+}
+
+/* -------- Temas -------- */
+
+body.light-theme,
+.tipoGrafico {
+    background-color: var(--branco);
+    color: var(--light-text-primary);
+}
+
+body.dark-theme {
+    background-color: var(--dark-bg);
+    color: var(--dark-text-primary);
+}
+
+/* Textos específicos com dark */
+body.dark,
+.paragrafoFonteGrafico,
+.tipoDoFundoConexao {
+    color: var(--dark-bg);
+}
+
+body.dark,
+.placeholder-text,
+.tituloHelpCenter {
+    color: var(--branco);
+}
+
+body.dark,
+.paragrafoContatoTitulo,
+.paragrafoAdiconarAparelhos,
+.connecting-message {
+    color: var(--preto);
+}
+
+/* Títulos conexão */
+body.light-theme .tituloConexao {
+    color: var(--light-text-secondary);
+}
+
+body.dark-theme .tituloConexao,
+.placeholder-texte {
+    color: var(--branco);
+}
+
+/* Containers com dark */
+body.dark-theme .chat-container,
+body.dark-theme .contato-container {
+    background-color: var(--preto);
+    border-color: var(--preto);
+}
+
+/* Mensagem inicial no dark */
+body.dark-theme .messagemInicial {
+    color: var(--preto);
+}
+
+/* Títulos e perguntas */
+body.dark-theme .tituloHelpCenter,
+body.dark-theme .perguntasFrequentes {
+    color: var(--branco);
+}
+
+body.light-theme .tituloHelpCenter,
+body.light-theme .perguntasFrequentes {
+    color: var(--light-text-primary);
+}
+
+/* Esqueci senha */
+body.light-theme .tituloEsqueciSenha,
+body.dark-theme .tituloEsqueciSenha {
+    color: black;
+}
+
+/* Botão toggle no dark */
+body.dark-theme .toggle-button.connected-btn.active {
+    color: var(--color-toggle-active);
+    opacity: 1;
+}
+
+/* Scrollbar dark */
+body.dark-theme * {
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: var(--scrollbar-thumb) var(--preto);
+}
+
+/* ----------------- Cadastro ------------------ */
+
+body.dark .cadastro-container {
+    background-color: var(--dark-bg);
+}
+
+body.dark .cadastro-box {
+    background-color: var(--dark-bg-box);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .cadastro-box h1,
+body.dark .input-group label {
+    color: var(--dark-text-secondary);
+}
+
+body.dark .input-group input {
+    background-color: var(--dark-bg-input);
+    color: var(--dark-text-secondary);
+    border: 1px solid var(--dark-border-input);
+}
+
+body.dark .input-group input::placeholder {
+    color: var(--dark-text-placeholder);
+}
+
+body.dark .password-toggle-icon {
+    color: var(--dark-text-secondary);
+}
+
+body.dark .password-strength.fraca {
+    color: var(--color-password-fraca);
+}
+
+body.dark .password-strength.media {
+    color: var(--color-password-media);
+}
+
+body.dark .password-strength.forte {
+    color: var(--color-password-forte);
+}
+
+body.dark .cadastro-button {
+    background-color: var(--branco);
+    color: var(--branco);
+}
+
+body.dark .cadastro-button:hover:not(:disabled) {
+    background-color: var(--branco);
+}
+
+body.dark .cadastro-button:disabled {
+    background-color: var(--dark-border-input);
+    color: #aaaaaa;
+}
+
+body.dark .success-message {
+    background-color: var(--branco);
+    color: var(--dark-text-muted);
+    border: 1px solid var(--dark-border-success);
+}
+
+body.dark .links p {
+    color: var(--dark-text-muted);
+}
+
+body.dark .links a {
+    color: var(--color-link-dark);
+}
+
+body.dark .cadastro-info {
+    background-color: var(--dark-bg-info);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .cadastro-info h2 {
+    color: var(--color-link-dark);
+}
+
+body.dark .cadastro-info li {
+    color: #e0e0e0;
+}
+
+body.dark .pDescricaoHelpCenter {
+    background-color: red;
+}
+
+
+
+/*---------------------------------------------------------------------------------------------------------------*/
+
+/* Botões de sugestão - estilo padrão */
+.suggestion-button {
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Tema escuro: fundo branco e texto preto */
+body.dark-theme .suggestion-button {
+    background-color: var(--branco);
+    color: var(--preto);
+}
+
+/* Tema claro: fundo preto e texto branco */
+body.light-theme .suggestion-button {
+    background-color: var(--preto);
+    color: var(--branco);
+}
+
+/* Hover para ambos os temas (opcionalmente ajustável) */
+.suggestion-button:hover {
+    opacity: 0.85;
+}
+
+
+body.dark-theme .titulo-bateria {
+    color: #fff;
+}
