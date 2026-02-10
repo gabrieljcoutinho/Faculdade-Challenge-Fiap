@@ -1,0 +1,33 @@
+:root {
+    --color-label: #555;
+    --color-border: #ddd;
+    --color-error-border: #dc3545;
+    --color-error-bg: #fdecea;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-label);
+    font-size: 0.9em;
+    text-align: left;
+}
+
+.input-group input[type='text'],
+.input-group input[type='email'] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.input-group input[type='password'].error {
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+}
