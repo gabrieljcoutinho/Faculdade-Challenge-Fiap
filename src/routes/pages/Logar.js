@@ -5,7 +5,7 @@ import '../../CSS/Login/login-box.module.css';
 import '../../CSS/Login/social-buttons.module.css';
 import '../../CSS/Login/separator.module.css';
 import '../../CSS/Login/links.module.css';
-import '../../CSS/Login/login-info.css';
+import '../../CSS/Login/login-info.module.css';
 import { tituloPrincipal, Email, Senha, BotaoEntrar, BotaoEntrarcontaGoogle, BotaoEntrarContaFacebook, BotaoEntrarContaLinkedin, esqueceuSenha, naoTemConta } from '../../constants/Logar/index.js';
 
 const Logar = () => {
