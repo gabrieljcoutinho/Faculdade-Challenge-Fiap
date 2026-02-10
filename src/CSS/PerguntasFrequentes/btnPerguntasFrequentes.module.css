@@ -1,0 +1,44 @@
+.faq-button-container {
+    margin: 30px 0 40px;
+    text-align: center;
+}
+
+.faq-button {
+    background: linear-gradient(135deg, #6a82fb, #fc5c7d);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(41, 128, 185, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    user-select: none;
+}
+
+.faq-button:hover {
+    background: linear-gradient(135deg, #6dd5fa, #2980b9);
+    box-shadow: 0 8px 18px rgba(41, 128, 185, 0.6);
+    transform: translateY(-3px);
+}
+
+.faq-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(41, 128, 185, 0.5);
+}
+
+.faq-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.7);
+}
+
+/* Opcional: emoji ou ícone melhor alinhado no botão */
+.faq-button span {
+    font-size: 1.4rem;
+    line-height: 1;
+    user-select: none;
+}
