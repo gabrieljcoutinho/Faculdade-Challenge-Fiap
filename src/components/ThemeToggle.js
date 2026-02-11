@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../CSS/mudarTema.module.css'; // importe o css do tema
+import '../CSS/mudarTema.css'; // importe o css do tema
 
 const ThemeToggle = () => {
   // Pega o tema salvo no localStorage ou usa claro por padrão
