@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import '../../CSS/Settings/overlay.module.css';
-import '../../CSS/Settings/buttons.module.css';
-import '../../CSS/Settings/layout.module.css';
-import '../../CSS/Settings/images.modules.css';
-import '../../CSS/Settings/confirmarDeslogar.module.css';
+import '../../CSS/Settings/overlay.css';
+import '../../CSS/Settings/buttons.css';
+import '../../CSS/Settings/layout.css';
+import '../../CSS/Settings/images.css';
+import '../../CSS/Settings/confirmarDeslogar.css';
 
-import '../../CSS/mudarTema.module.css';
+import '../../CSS/mudarTema.css';
 
 import { logar, deslogar } from '../../constants/Configuracao/index.js';
 
