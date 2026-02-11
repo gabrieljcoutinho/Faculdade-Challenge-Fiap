@@ -1,0 +1,106 @@
+:root {
+    --branco: #fff;
+    --branco2: #ddd;
+    --azulMeioEscuro: #0056b3;
+    --azulEscuro: #007bff;
+    --cinza: #555;
+    --cinza2: #333;
+}
+
+.login-box {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.login-box h1 {
+    color: var(--cinza2);
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 350px;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--cinza);
+    font-weight: bold;
+}
+
+/* Input email ocupa toda largura disponível */
+.input-group input[type="email"] {
+    width: 100%;
+    padding: 0.8rem 10px;
+    border: 1px solid var(--branco2);
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* Container da senha com largura fixa */
+.inputSenha {
+    position: relative;
+    width: 310px;
+}
+
+/* Input senha ocupa 100% do container com padding-right para o botão e largura fixa */
+.inputSenha input {
+    width: 100%;
+    min-width: 310px;
+    max-width: 310px;
+    padding: 0.8rem 40px 0.8rem 10px;
+    /* espaço à direita para o botão */
+    border: 1px solid var(--branco2);
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* Botão mostrar/ocultar senha posicionado absoluto */
+.password-toggle-button {
+    position: absolute;
+    right: 23px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-button {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: var(--azulEscuro);
+    color: var(--branco);
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+.login-button:hover {
+    background-color: var(--azulMeioEscuro);
+}
