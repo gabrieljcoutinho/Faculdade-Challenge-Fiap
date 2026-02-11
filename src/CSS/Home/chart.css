@@ -1,0 +1,48 @@
+:root {
+    --cor-fundo-botao: white;
+    --cor-borda-botao: #ccc;
+    --cor-fundo-botao-ativo: #252525;
+    --cor-borda-botao-ativo: #252525;
+    --cor-texto-botao-ativo: rgba(255, 255, 255, 0.9);
+}
+
+.chart-type-selector {
+    align-items: center;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.chart-type-selector label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.chart-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.chart-buttons button {
+    background-color: var(--cor-fundo-botao);
+    border: 1px solid var(--cor-borda-botao);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 12px;
+    transition: background-color 0.3s ease;
+}
+
+.chart-container {
+    height: 360px;
+
+}
+
+.chart-buttons button.active {
+    background-color: var(--cor-fundo-botao-ativo);
+    border-color: var(--cor-borda-botao-ativo);
+    color: var(--cor-texto-botao-ativo);
+}
+
+.chart-buttons button:hover {
+    background-color: var(--cor-fundo-botao-ativo);
+    color: var(--cor-texto-botao-ativo);
+}
