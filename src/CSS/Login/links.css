@@ -1,0 +1,20 @@
+:root {
+    --azulEscuro: #007bff
+}
+
+
+.links {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.links a {
+    color: var(--azulEscuro);
+    text-decoration: none;
+    margin: 0.5rem 0;
+    display: block;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
