@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import '../../CSS/EsqueciSenha/resetJs.module.css';
-import '../../CSS/EsqueciSenha/layout.module.css';
-import '../../CSS/EsqueciSenha/form.module.css';
-import '../../CSS/EsqueciSenha/button.module.css';
-import '../../CSS/EsqueciSenha/animations.module.css';
-import '../../CSS/EsqueciSenha/messagens.module.css';
-import '../../CSS/EsqueciSenha/links.module.css';
-import '../../CSS/EsqueciSenha/mediaScreen.module.css';
+import '../../CSS/EsqueciSenha/resetJs.css';
+import '../../CSS/EsqueciSenha/layout.css';
+import '../../CSS/EsqueciSenha/form.css';
+import '../../CSS/EsqueciSenha/button.css';
+import '../../CSS/EsqueciSenha/animations.css';
+import '../../CSS/EsqueciSenha/messagens.css';
+import '../../CSS/EsqueciSenha/links.css';
+import '../../CSS/EsqueciSenha/mediaScreen.css';
 
 import { tituloPrincipal, paragrafoEsqueciSenha, Email, btnRecuperarSenha, voltarPaginaLogin } from '../../constants/EsqueciSenha/index.js'
 
