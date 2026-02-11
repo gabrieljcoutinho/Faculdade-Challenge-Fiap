@@ -1,0 +1,30 @@
+:root {
+    --cor-fundo-normal: #252525;
+    --cor-fundo-hover: #000000;
+    --cor-texto-normal: #ffffff;
+    --cor-texto-hover: rgba(255, 255, 255, 0.9);
+    --cor-fundo-disabled: #aaaaaa;
+    --cor-texto-disabled: red;
+}
+
+.analyze-button {
+    background-color: var(--cor-fundo-normal);
+    border: none;
+    border-radius: 6px;
+    color: var(--cor-texto-normal);
+    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 10px 16px;
+    transition: background-color 0.3s ease;
+}
+
+.analyze-button:hover {
+    background-color: var(--cor-fundo-hover);
+    color: var(--cor-texto-hover);
+}
+
+.analyze-button:disabled {
+    background-color: var(--cor-fundo-disabled);
+    cursor: not-allowed;
+    color: var(--cor-texto-disabled);
+}
