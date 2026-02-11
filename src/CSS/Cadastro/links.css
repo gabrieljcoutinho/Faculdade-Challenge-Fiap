@@ -1,0 +1,20 @@
+:root {
+    --color-links-text: #777;
+    --color-links-anchor: #007bff;
+}
+
+.links {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: var(--color-links-text);
+}
+
+.links a {
+    color: var(--color-links-anchor);
+    text-decoration: none;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
