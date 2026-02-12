@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 // CSS & Images
 import '../src/CSS/Reset.css';
@@ -9,7 +9,7 @@ import airConditionerIcon from '../src/imgs/imgConexao/ar-condicionado.png';
 import geladeira from './imgs/imgConexao/geladeira.png';
 import lampIcon from './imgs/imgConexao/lampada.png';
 import carregador from './imgs/imgConexao/carregador.png';
-import logoSplash from './imgs/imgHeader/logo.png'; // Sua logo
+import logoSplash from './imgs/imgHeader/logo.png';
 
 // Data
 import initialProductionData from './data/graficoHomeApi.json';
@@ -31,8 +31,22 @@ import HelpCenter from './routes/pages/HelpCenter';
 import PerguntasFrequentes from './routes/pages/PerguntasFrequentes';
 import NotFound from './routes/pages/NotFound';
 import Bateria from './routes/pages/Bateria';
-
 import InstallButtonMobile from '../src/components/InstallButtonMobile';
+
+// --- NOVO: Componente para monitorar mudanças de página no Google Analytics ---
+const AnalyticsTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag('config', 'G-6H5TKLLJWN', {
+        page_path: location.pathname,
+      });
+    }
+  }, [location]);
+
+  return null;
+};
 
 // Configurações iniciais
 const aparelhosDisponiveis = [
@@ -46,7 +60,6 @@ const aparelhosDisponiveis = [
 const TAXA_CARREGAMENTO = 1;
 const CONSUMO_POR_APARELHO = 0.5;
 
-// Função para carregar aparelhos do localStorage
 const getInitialAparelhos = () => {
   try {
     const stored = localStorage.getItem('aparelhos');
@@ -63,7 +76,6 @@ const getInitialAparelhos = () => {
   }));
 };
 
-// Hook de leitura em voz alta
 const useReadAloud = (isReading) => {
   useEffect(() => {
     if (!isReading) {
@@ -92,99 +104,67 @@ const useReadAloud = (isReading) => {
   }, [isReading]);
 };
 
-// Splash Screen
 const SplashScreen = () => (
   <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+    display: 'flex', justifyContent: 'center', alignItems: 'center',
     background: 'linear-gradient(135deg, #252525, #fff)',
-    flexDirection: 'column',
-    zIndex: 9999
+    flexDirection: 'column', zIndex: 9999
   }}>
     <div className="splash" style={{ textAlign: 'center', animation: 'fadeIn 1.5s ease' }}>
       <img src={logoSplash} alt="Logo Projeto GoodWe" style={{ animation: 'popIn 1.5s ease', maxWidth: '100%', height: 'auto' }} />
       <h1 style={{ fontSize: 'clamp(1rem, 2vw, 2rem)', marginTop: '20px', color: '#333', animation: 'slideUp 2s ease' }}>
-        POJETO ACADÊMICO FACULDADE
+        PROJETO ACADÊMICO FACULDADE
       </h1>
       <div style={{
-        margin: '30px auto 0',
-        border: '8px solid #f3f3f3',
-        borderTop: '8px solid #252525',
-        borderRadius: '50%',
-        width: 'clamp(60px, 10vw, 120px)',
-        height: 'clamp(60px, 10vw, 120px)',
+        margin: '30px auto 0', border: '8px solid #f3f3f3', borderTop: '8px solid #252525',
+        borderRadius: '50%', width: 'clamp(60px, 10vw, 120px)', height: 'clamp(60px, 10vw, 120px)',
         animation: 'spin 1.5s linear infinite'
       }}></div>
     </div>
   </div>
 );
 
-// Hook para monitorar alertas do clima
 const WEATHER_API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
 const LOCATION = 'São Paulo,BR';
 
 const useWeatherAlerts = () => {
   const [alerts, setAlerts] = useState([]);
-
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${LOCATION}&appid=${WEATHER_API_KEY}&lang=pt&units=metric`);
         const data = await res.json();
         const newAlerts = [];
-
-        if (data.weather?.some(w => w.main.toLowerCase().includes('rain'))) {
-          newAlerts.push('🚨 Chuva detectada na região! Risco de enchentes.');
-        }
-        if (data.wind?.speed > 15) {
-          newAlerts.push('⚠️ Ventos fortes! Verifique aparelhos externos.');
-        }
-        if (data.main?.temp < 0) {
-          newAlerts.push('❄️ Temperaturas muito baixas! Possível congelamento de tubulações.');
-        }
-
+        if (data.weather?.some(w => w.main.toLowerCase().includes('rain'))) newAlerts.push('🚨 Chuva detectada na região! Risco de enchentes.');
+        if (data.wind?.speed > 15) newAlerts.push('⚠️ Ventos fortes! Verifique aparelhos externos.');
+        if (data.main?.temp < 0) newAlerts.push('❄️ Temperaturas muito baixas! Possível congelamento de tubulações.');
         setAlerts(newAlerts);
       } catch (err) {
         console.error('Erro ao buscar dados do clima:', err);
       }
     };
-
     fetchWeatherData();
     const interval = setInterval(fetchWeatherData, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
-
   return alerts;
 };
 
-// App principal
 function App() {
-
   const [showSplash, setShowSplash] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
-
   const [aparelhos, setAparelhos] = useState(getInitialAparelhos);
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark-theme');
   const [isReading, setIsReading] = useState(() => localStorage.getItem('isReading') === 'true');
   const [chosenDatasetIndex, setChosenDatasetIndex] = useState(0);
   const [connectionType, setConnectionType] = useState(() => localStorage.getItem('activeConnectionIcon') || 'cabo');
+  const [nivelBateria, setNivelBateria] = useState(() => Number(localStorage.getItem('nivelBateria')) || 100);
 
   const connectedDevicesCount = useMemo(() => aparelhos.filter(c => c.conectado).length, [aparelhos]);
-  const [nivelBateria, setNivelBateria] = useState(() => {
-    const saved = localStorage.getItem('nivelBateria');
-    return saved !== null ? Number(saved) : 100;
-  });
-
   const isCharging = (connectionType === 'bateria' && connectedDevicesCount === 0) || connectionType === 'cabo';
   const isDischarging = connectionType === 'bateria' && connectedDevicesCount > 0;
 
-  // Splash screen timer
   useEffect(() => {
     const timer = setTimeout(() => {
       setFadeOut(true);
@@ -193,7 +173,6 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Controle da bateria
   useEffect(() => {
     const interval = setInterval(() => {
       setNivelBateria(prev => {
@@ -217,12 +196,8 @@ function App() {
     return {
       labels: initialProductionData.labels,
       datasets: [{
-        label: chosen.label,
-        data: chosen.data,
-        borderColor: "#0FF0FC",
-        backgroundColor: "rgba(15,240,252,0.3)",
-        fill: true,
-        tension: 0.3
+        label: chosen.label, data: chosen.data, borderColor: "#0FF0FC",
+        backgroundColor: "rgba(15,240,252,0.3)", fill: true, tension: 0.3
       }]
     };
   }, [chosenDatasetIndex]);
@@ -233,26 +208,17 @@ function App() {
 
   useReadAloud(isReading);
   const toggleReading = useCallback(() => setIsReading(prev => !prev), []);
+
   const ReadAloudToggle = () => (
-    <button onClick={toggleReading} style={{ fontSize: '16px', padding: '8px', marginLeft: '10px' }} title="Ativar/Desativar leitura em voz alta" aria-pressed={isReading}>
+    <button onClick={toggleReading} style={{ fontSize: '16px', padding: '8px', marginLeft: '10px' }}>
       {isReading ? '🔈 Leitura Ativa' : '🔇 Leitura Desativada'}
     </button>
   );
 
-  // Conectar e remover aparelhos
   const handleConnectDevice = useCallback((nome, icon, cor = '#e0e0e0', delay = 0) => {
     setTimeout(() => {
       if (aparelhos.find(c => c.nome.toLowerCase() === nome.toLowerCase())) return;
-      const novo = {
-        id: window.crypto.randomUUID(),
-        nome,
-        imagem: icon,
-        corFundo: cor,
-        conectado: true,
-        agendamentos: [],
-        connectedDate: new Date().toISOString(),
-        accumulatedSeconds: 0
-      };
+      const novo = { id: window.crypto.randomUUID(), nome, imagem: icon, corFundo: cor, conectado: true, agendamentos: [], connectedDate: new Date().toISOString(), accumulatedSeconds: 0 };
       setAparelhos(prev => [...prev, novo]);
     }, delay);
   }, [aparelhos]);
@@ -261,24 +227,16 @@ function App() {
   const handleRemoveAll = useCallback(() => setAparelhos([]), []);
   const handleDisconnectAllDevices = useCallback(() => {
     setAparelhos(prev => prev.map(c => ({
-      ...c,
-      conectado: false,
-      connectedDate: null,
+      ...c, conectado: false, connectedDate: null,
       accumulatedSeconds: c.connectedDate ? (c.accumulatedSeconds || 0) + ((new Date().getTime() - new Date(c.connectedDate).getTime()) / 1000) : c.accumulatedSeconds
     })));
   }, []);
   const handleConnectionTypeChange = useCallback((type) => setConnectionType(type), []);
 
-  // Hook de alertas climáticos
   const weatherAlerts = useWeatherAlerts();
-
-  // Estado para alertas que podem ser fechados manualmente
   const [dismissedAlerts, setDismissedAlerts] = useState([]);
-  useEffect(() => {
-    setDismissedAlerts(weatherAlerts);
-  }, [weatherAlerts]);
+  useEffect(() => { setDismissedAlerts(weatherAlerts); }, [weatherAlerts]);
 
-  // Fala dos alertas
   useEffect(() => {
     if (dismissedAlerts.length > 0 && isReading) {
       dismissedAlerts.forEach(alert => {
@@ -298,44 +256,14 @@ function App() {
         </div>
       ) : (
         <BrowserRouter>
-          {/* Alertas de risco com botão de fechar */}
+          <AnalyticsTracker /> {/* <--- RASTREADOR DE PÁGINAS AQUI */}
+
           {dismissedAlerts.length > 0 && (
-            <div style={{
-              position: 'fixed',
-              top: 10,
-              right: 10,
-              zIndex: 9999,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
-            }}>
+            <div style={{ position: 'fixed', top: 10, right: 10, zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {dismissedAlerts.map((alert, i) => (
-                <div key={i} style={{
-                  backgroundColor: '#ffcccc',
-                  padding: '10px 15px',
-                  borderRadius: '8px',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  minWidth: '250px'
-                }}>
+                <div key={i} style={{ backgroundColor: '#ffcccc', padding: '10px 15px', borderRadius: '8px', display: 'flex', alignItems: 'center', minWidth: '250px' }}>
                   <span>{alert}</span>
-                  <button
-                    onClick={() => setDismissedAlerts(prev => prev.filter((_, idx) => idx !== i))}
-                    style={{
-                      marginLeft: '10px',
-                      background: 'transparent',
-                      border: 'none',
-                      fontSize: '16px',
-                      fontWeight: 'bold',
-                      cursor: 'pointer',
-                      color: '#900'
-                    }}
-                    aria-label="Fechar alerta"
-                  >
-                    ✖
-                  </button>
+                  <button onClick={() => setDismissedAlerts(prev => prev.filter((_, idx) => idx !== i))} style={{ marginLeft: '10px', background: 'transparent', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>✖</button>
                 </div>
               ))}
             </div>
@@ -355,8 +283,8 @@ function App() {
             <Route path="/esqueciSenha" element={<EsqueciSenha />} />
             <Route path="/helpCenter" element={<HelpCenter />} />
             <Route path="/perguntas-frequentes" element={<PerguntasFrequentes isReading={isReading} />} />
-            <Route path="*" element={<NotFound />} />
             <Route path="/bateria" element={<Bateria isDischarging={isDischarging} isCharging={isCharging} nivelBateria={nivelBateria} />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
         </BrowserRouter>
