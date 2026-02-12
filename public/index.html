@@ -12,7 +12,14 @@
  <link rel="shortcut icon" href="%PUBLIC_URL%/logoPages.png" type="image/x-icon" />
 
     <!-- Ícone do app -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEU-ID-AQUI"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
+      gtag('config', 'G-SEU-ID-AQUI'); // <--- COLOQUE SEU ID AQUI
+    </script>
 
     <title>Solaris</title>
   </head>
