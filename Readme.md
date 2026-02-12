@@ -4,7 +4,7 @@
 > git clone https://github.com/gabrieljcoutinho/Faculdade-Challenge-Fiap.git
 
 ## Instalação
-> npm instal
+> npm install
 
 ## Rodagem
 > npm start
