@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../../CSS/Login/container.module.css';
 import '../../CSS/Login/login-box.module.css';
 import '../../CSS/Login/social-buttons.module.css';
-import '../../CSS/Login/separator.css';
+import '../../CSS/Login/separator.module.css';
 import '../../CSS/Login/links.css';
 import '../../CSS/Login/login-info.css';
 import { tituloPrincipal, Email, Senha, BotaoEntrar, BotaoEntrarcontaGoogle, BotaoEntrarContaFacebook, BotaoEntrarContaLinkedin, esqueceuSenha, naoTemConta } from '../../constants/Logar/index.js';
