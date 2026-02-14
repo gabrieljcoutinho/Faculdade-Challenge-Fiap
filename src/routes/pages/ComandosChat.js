@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../CSS/Comandos/estruturaGeral.css';
+import '../../CSS/Comandos/estruturaGeral.module.css';
 import '../../CSS/Comandos/header.css';
 import '../../CSS/Comandos/container.css';
 import '../../CSS/Comandos/description.css';
