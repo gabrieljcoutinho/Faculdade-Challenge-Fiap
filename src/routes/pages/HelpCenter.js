@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../CSS/HelpCenter/container.css';
 import '../../CSS/HelpCenter/categories.module.css';
-import '../../CSS/HelpCenter/categoryCard.css';
+import '../../CSS/HelpCenter/categoryCard.module.css';
 import '../../CSS/HelpCenter/titulo.css'; // Assuming this is still needed for .tituloHelpCenter
 
 import { tituloPrincipal, conta, descricaoConta, problemas, descricaoProblemas,
