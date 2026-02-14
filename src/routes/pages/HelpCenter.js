@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../CSS/HelpCenter/container.css';
-import '../../CSS/HelpCenter/categories.css';
+import '../../CSS/HelpCenter/categories.module.css';
 import '../../CSS/HelpCenter/categoryCard.css';
 import '../../CSS/HelpCenter/titulo.css'; // Assuming this is still needed for .tituloHelpCenter
 
