@@ -1,0 +1,27 @@
+:root {
+    --branco: #ffffff
+}
+
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--branco);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 90%;
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+
+
+
+
+@media (min-width: 768px) {
+    .login-container {
+        flex-direction: row;
+        height: 600px;
+    }
+}
