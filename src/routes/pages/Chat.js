@@ -5,7 +5,7 @@ import DOMPurify from 'dompurify';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 
 // Estilos
-import '../../CSS/Chat/chat.css';
+import '../../CSS/Chat/chat.module.css';
 import '../../CSS/Chat/animacaoComandoTrocaPageViaChat.css';
 import '../../CSS/Chat/mensagem.css';
 import '../../CSS/Chat/send.css';
