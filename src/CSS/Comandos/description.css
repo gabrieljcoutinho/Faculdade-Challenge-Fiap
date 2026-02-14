@@ -1,0 +1,12 @@
+:root {
+    --cinza: #555
+}
+
+
+.comandos-description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--cinza);
+    font-weight: 500;
+}
