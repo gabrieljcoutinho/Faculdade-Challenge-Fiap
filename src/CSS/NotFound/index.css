@@ -1,0 +1,47 @@
+.divNotFound {
+    background-color: #000;
+    height: 90vh;
+    /* Garante que a página toda seja preenchida */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerNotFound {
+    text-align: center;
+}
+
+.tituloNotFound {
+    font-size: 3em;
+    /* Use em para melhor responsividade */
+    margin-bottom: 20px;
+    color: rgba(255, 0, 51, 0.7);
+}
+
+.textoNotFound {
+    font-size: 2rem;
+    color: #f0f0f0;
+    /* Um cinza claro para melhor leitura */
+    margin-bottom: 30px;
+}
+
+.botoesNotFound a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 10px;
+    text-decoration: none;
+    color: #252525;
+    background-color: rgba(15, 240, 252);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    /* Adiciona uma transição suave */
+}
+
+.botoesNotFound a:hover {
+    background-color: rgba(255, 0, 51, 0.7);
+    /* Escurece um pouco no hover */
+}
+
+.styleBoneco404 {
+    color: rgba(255, 0, 51, 0.7);
+}
