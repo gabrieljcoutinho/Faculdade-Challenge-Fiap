@@ -10,7 +10,7 @@ import logoLinkedin from '../../imgs/imgHome/Logolinkedin.png';
 
 import '../../CSS/Home/home.module.css';
 import '../../CSS/Home/expanded.module.css';
-import '../../CSS/Home/analyze.css';
+import '../../CSS/Home/analyze.module.css';
 import '../../CSS/Home/share.css';
 import '../../CSS/Home/chart.css';
 import '../../CSS/Home/closeBtn.css';
