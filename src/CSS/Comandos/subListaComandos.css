@@ -1,0 +1,25 @@
+:root {
+    --cor-fundo-sublista: #f8f9fa;
+    --cor-borda-sublista: #dee2e6;
+    --cor-texto-sublista: #495057;
+}
+
+.sub-lista-comandos {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-top: 1rem;
+    background-color: var(--cor-fundo-sublista);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--cor-borda-sublista);
+}
+
+.sub-lista-comandos li {
+    margin-bottom: 0.5rem;
+    color: var(--cor-texto-sublista);
+    font-size: 0.9rem;
+}
+
+.sub-lista-comandos li:last-child {
+    margin-bottom: 0;
+}
