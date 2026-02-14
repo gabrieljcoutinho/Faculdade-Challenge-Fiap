@@ -16,7 +16,7 @@ import '../../CSS/Home/chart.module.css';
 import '../../CSS/Home/closeBtn.module.css';
 import '../../CSS/Home/forecast.module.css';
 import '../../CSS/Home/weather.module.css';
-import '../../CSS/Home/current.css';
+import '../../CSS/Home/current.module.css';
 import '../../CSS/Home/production.css';
 import '../../CSS/Home/impactoAmbiental.css';
 import '../../CSS/Home/mediaScreen.css';
