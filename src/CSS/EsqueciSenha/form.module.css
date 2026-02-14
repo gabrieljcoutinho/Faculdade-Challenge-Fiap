@@ -1,0 +1,39 @@
+:root {
+    --color-label: #7F8C8D;
+    --color-border-default: #DDE5ED;
+    --color-text-input: #2C3E50;
+    --color-border-focus: #4A90E2;
+    --color-shadow-focus: rgba(74, 144, 226, 0.25);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.labelEmail {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--color-label);
+    font-size: 0.9em;
+}
+
+/* Corrigindo o seletor: era .iputEmailt, parece erro de digitação */
+.inputEmail[type="email"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 10px;
+    font-size: 1em;
+    color: var(--color-text-input);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    box-sizing: border-box;
+}
+
+.inputEmail[type="email"]:focus {
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 3px var(--color-shadow-focus);
+    transform: translateY(-1px);
+    outline: none;
+}
