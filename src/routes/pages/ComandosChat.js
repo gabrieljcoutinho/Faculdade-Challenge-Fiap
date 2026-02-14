@@ -2,7 +2,7 @@ import React from 'react';
 import '../../CSS/Comandos/estruturaGeral.module.css';
 import '../../CSS/Comandos/header.css';
 import '../../CSS/Comandos/container.module.css';
-import '../../CSS/Comandos/description.css';
+import '../../CSS/Comandos/description.module.css';
 import '../../CSS/Comandos/comandoItem.module.css';
 import '../../CSS/Comandos/comandoExample.module.css';
 import '../../CSS/Comandos/comandoExplicacao.css';
