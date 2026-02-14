@@ -7,7 +7,7 @@ import '../../CSS/Comandos/comandoItem.module.css';
 import '../../CSS/Comandos/comandoExample.module.css';
 import '../../CSS/Comandos/comandoExplicacao.css';
 import '../../CSS/Comandos/subListaComandos.module.css';
-import '../../CSS/Comandos/ulReset.css';
+import '../../CSS/Comandos/ulReset.module.css';
 
 import { tituloPrincipal, subTitulo, exemploMensagemChat, comandoAnlisarGrafico } from '../../constants/ComandosChat/index.js';
 
