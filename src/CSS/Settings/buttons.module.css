@@ -1,0 +1,50 @@
+:root {
+    --vermelho: #ff0000;
+    --branco: #fff;
+    --azul: #007bff;
+}
+
+
+
+.fechar-btn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: var(--branco);
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+/* Botões principais */
+.btn-container button,
+.comando-btn {
+    padding: 10px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-container button:hover,
+.comando-btn:hover {
+    opacity: 0.8;
+}
+
+/* Log In */
+.top-buttons button:nth-child(1) {
+    background-color: var(--azul);
+    color: var(--branco);
+}
+
+/* Log Out */
+.top-buttons button:nth-child(2) {
+    background-color: var(--vermelho);
+    color: var(--branco);
+}
+
+/* Comandos */
+.comando-btn {
+    background-color: rgba(255, 255, 255, 0.9);
+    align-self: flex-end;
+}
