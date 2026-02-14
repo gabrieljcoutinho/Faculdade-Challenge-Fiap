@@ -1,0 +1,20 @@
+.input-with-mic {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.message-input {
+    flex: 1;
+    padding-right: 40px;
+    /* espaço para o microfone */
+}
+
+.mic-button {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
