@@ -18,7 +18,7 @@ import '../../CSS/Home/forecast.module.css';
 import '../../CSS/Home/weather.module.css';
 import '../../CSS/Home/current.module.css';
 import '../../CSS/Home/production.module.css';
-import '../../CSS/Home/impactoAmbiental.css';
+import '../../CSS/Home/impactoAmbiental.module.css';
 import '../../CSS/Home/mediaScreen.css';
 import '../../CSS/Home/weatherAnimations.css';
 import '../../CSS/Home/relatorioConsumoDiario.css';
