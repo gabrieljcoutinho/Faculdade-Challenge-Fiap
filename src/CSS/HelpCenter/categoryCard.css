@@ -1,0 +1,44 @@
+:root {
+    --bg-category: #f9f9f9;
+    --border-category: #ddd;
+    --primary-color: #007bff;
+    --shadow-hover: rgba(0, 123, 255, 0.1);
+    --text-color-title: #000;
+    /* caso queira definir texto padrão */
+}
+
+
+
+
+.category {
+    background-color: var(--bg-category);
+    border: 1px solid var(--border-category);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--shadow-hover);
+}
+
+.category svg {
+    width: 40px;
+    height: 40px;
+    fill: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.category h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    /* pode usar a variável para texto, se quiser */
+    /* color: var(--text-color-title); */
+}
+
+.category p {
+    font-size: 0.95rem;
+}
