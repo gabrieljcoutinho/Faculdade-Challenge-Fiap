@@ -2,7 +2,7 @@ import React from 'react';
 import '../../CSS/HelpCenter/container.css';
 import '../../CSS/HelpCenter/categories.module.css';
 import '../../CSS/HelpCenter/categoryCard.module.css';
-import '../../CSS/HelpCenter/titulo.css'; // Assuming this is still needed for .tituloHelpCenter
+import '../../CSS/HelpCenter/titulo.module.css'; // Assuming this is still needed for .tituloHelpCenter
 
 import { tituloPrincipal, conta, descricaoConta, problemas, descricaoProblemas,
   pagamentos, descricaoPagamentos, seguranca, descricaoSeguranca, notificacoes,
