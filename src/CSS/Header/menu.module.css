@@ -1,0 +1,160 @@
+:root {
+    --color-bg-menu: #333;
+    --color-text-menu: #ddd;
+    --color-text-menu-hover: #f1f1f1;
+    --color-bg-header: #252525;
+    --color-text-header: #fff;
+    --color-close-btn: #ddd;
+    --color-close-btn-hover: #f1f1f1;
+    --color-box-shadow-header: rgba(0, 0, 0, 0.1);
+}
+
+/* ---------------- MENU ---------------- */
+#menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    background-color: var(--color-bg-menu);
+    color: var(--color-text-menu);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#menu.open {
+    width: 150px;
+}
+
+#menu a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 20px;
+    color: var(--color-text-menu);
+    display: block;
+    transition: 0.3s;
+    margin-left: 45px;
+}
+
+#menu a:hover {
+    color: var(--color-text-menu-hover);
+    text-decoration: underline;
+}
+
+/* ---------------- HEADER ---------------- */
+header {
+    position: fixed;
+    width: 100%;
+    background-color: var(--color-bg-header);
+    box-shadow: 0 2px 4px var(--color-box-shadow-header);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    color: var(--color-text-header);
+    padding: 0;
+    /* sem padding para não empurrar a logo */
+}
+
+/* ---------------- MAIN ---------------- */
+#main {
+    padding: 10px;
+    font-size: 20px;
+    color: var(--color-text-header);
+}
+
+/* ---------------- BOTÃO FECHAR ---------------- */
+.close-btn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--color-close-btn);
+    padding: 0;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: var(--color-close-btn-hover);
+}
+
+/* ---------------- ICONES ---------------- */
+.iconesHeader {
+    width: 35px;
+    cursor: pointer;
+}
+
+.settings {
+    cursor: pointer;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.imgHeader {
+    padding-top: 3.5rem;
+}
+
+/* ---------------- LOGO GOODWE ---------------- */
+.logoGoodwe {
+    width: 30px;
+    /* tamanho da logo */
+    display: block;
+    position: absolute;
+    /* fixa no header */
+    top: 5px;
+    /* distância do topo do header */
+    right: 10px;
+    /* distância da borda direita */
+    padding: 0;
+    /* remove padding extra */
+    margin: 0;
+    /* remove margem */
+}
+
+/* ---------------- MEDIA QUERIES (apenas ajustes de padding/top) ---------------- */
+@media (max-width: 400px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+}
+
+@media screen and (width: 360px) and (height: 720px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+}
+
+@media screen and (width: 360px) and (height: 740px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+}
+
+@media screen and (width: 414px) and (height: 896px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+}
+
+@media screen and (width: 430px) and (height: 932px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+}
+
+@media screen and (width: 412px) and (height: 915px) {
+    .imgHeader {
+        padding-top: 15rem;
+    }
+}
