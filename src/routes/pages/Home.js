@@ -12,7 +12,7 @@ import '../../CSS/Home/home.module.css';
 import '../../CSS/Home/expanded.module.css';
 import '../../CSS/Home/analyze.module.css';
 import '../../CSS/Home/share.module.css';
-import '../../CSS/Home/chart.css';
+import '../../CSS/Home/chart.module.css';
 import '../../CSS/Home/closeBtn.css';
 import '../../CSS/Home/forecast.css';
 import '../../CSS/Home/weather.css';
