@@ -7,7 +7,7 @@ import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 // Estilos
 import '../../CSS/Chat/chat.module.css';
 import '../../CSS/Chat/animacaoComandoTrocaPageViaChat.module.css';
-import '../../CSS/Chat/mensagem.css';
+import '../../CSS/Chat/mensagem.module.css';
 import '../../CSS/Chat/send.css';
 import '../../CSS/Chat/quickSuggestions.css';
 import '../../CSS/Chat/iconeMic.css';
