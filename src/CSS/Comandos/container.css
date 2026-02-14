@@ -1,0 +1,23 @@
+:root {
+    --max-width: 800px;
+    --padding: 2.5rem;
+    --bg-gradient-start: #f9fbfd;
+    --bg-gradient-end: #e0f2f7;
+    --border-radius: 25px;
+    --box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    --font-family: 'Roboto', sans-serif;
+    --font-color: #3f4a54;
+    --line-height: 1.6;
+}
+
+.comandos-container {
+    max-width: var(--max-width);
+    width: 100%;
+    padding: var(--padding);
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    font-family: var(--font-family);
+    color: var(--font-color);
+    line-height: var(--line-height);
+}
