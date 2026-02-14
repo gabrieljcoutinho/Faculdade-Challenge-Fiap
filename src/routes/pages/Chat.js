@@ -12,7 +12,7 @@ import '../../CSS/Chat/send.module.css';
 import '../../CSS/Chat/quickSuggestions.module.css';
 import '../../CSS/Chat/iconeMic.module.css';
 import '../../CSS/Chat/iconeLixeiraChat.module.css';
-import '../../CSS/Chat/imgCentroChat.css';
+import '../../CSS/Chat/imgCentroChat.module.css';
 import '../../CSS/Chat/mediaScreen.css';
 
 // Dados e Imagens
