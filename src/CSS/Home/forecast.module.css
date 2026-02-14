@@ -1,0 +1,26 @@
+:root {
+    --branco: #f0f0f0
+}
+
+.forecast-list {
+    list-style: none;
+    padding: 0;
+}
+
+.forecast-list li {
+    padding: 8px 0;
+}
+
+.forecast-list li:last-child {
+    border-bottom: none;
+}
+
+.forecast-list li {
+    padding: 8px 0;
+}
+
+.forecast-card .temp-range {
+    font-size: 1.2em;
+    /* margin-top: 10px; */
+    color: var(--branco);
+}
