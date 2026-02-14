@@ -1,0 +1,148 @@
+@keyframes fadeInOverlay {
+    from {
+        background-color: rgba(15, 15, 15, 0);
+    }
+
+    to {
+        background-color: rgba(15, 15, 15, 0.75);
+    }
+}
+
+@keyframes popInModal {
+    0% {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes btnPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    50% {
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.25);
+    }
+}
+
+/* Overlay do Modal */
+.modal-logout-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 15, 15, 0.75);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeInOverlay 0.5s ease forwards;
+}
+
+/* Conteúdo do Modal */
+.modal-logout-content {
+    background: linear-gradient(135deg, #ffffff, #f0f4f8);
+    padding: 36px 48px;
+    border-radius: 20px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.12),
+        0 0 40px rgba(22, 163, 74, 0.15);
+    text-align: center;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    color: #222;
+    animation: popInModal 0.4s ease forwards;
+    transform-origin: center center;
+    user-select: none;
+}
+
+/* Texto do Modal */
+.modal-logout-content p {
+    margin-bottom: 32px;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    color: #333;
+}
+
+/* Botões do Modal */
+.modal-logout-content button {
+    margin: 0 14px;
+    padding: 14px 34px;
+    font-size: 17px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition:
+        background-color 0.4s ease,
+        box-shadow 0.4s ease,
+        transform 0.2s ease;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+    will-change: transform, box-shadow;
+    user-select: none;
+    min-width: 120px;
+}
+
+/* Foco acessível */
+.modal-logout-content button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.4);
+}
+
+/* Hover suave */
+.modal-logout-content button:hover {
+    transform: translateY(-3px) scale(1.07);
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.25);
+}
+
+/* Click ativo */
+.modal-logout-content button:active {
+    transform: translateY(0) scale(0.95);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* Botão "Sim" verde com gradiente */
+.btn-sim {
+    background: linear-gradient(45deg, #22c55e, #16a34a);
+    color: #fff;
+    animation: btnPulse 3s infinite ease-in-out;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.6);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.04em;
+}
+
+/* Hover do botão "Sim" */
+.btn-sim:hover {
+    background: linear-gradient(45deg, #16a34a, #15803d);
+    box-shadow: 0 18px 36px rgba(21, 128, 61, 0.7);
+}
+
+/* Botão "Não" vermelho com gradiente */
+.btn-nao {
+    background: linear-gradient(45deg, #f87171, #ef4444);
+    color: #fff;
+    animation: btnPulse 3s infinite ease-in-out;
+    box-shadow: 0 8px 24px rgba(248, 113, 113, 0.6);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.04em;
+}
+
+/* Hover do botão "Não" */
+.btn-nao:hover {
+    background: linear-gradient(45deg, #b91c1c, #991b1b);
+    box-shadow: 0 18px 36px rgba(185, 28, 28, 0.8);
+}
