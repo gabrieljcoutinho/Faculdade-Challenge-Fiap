@@ -1,5 +1,14 @@
 # 🌞 Projeto GoodWe - Aplicação React para Gerenciamento de Energia Solar
 
+## Clonagem
+> git clone https://github.com/gabrieljcoutinho/Faculdade-Challenge-Fiap.git
+
+## Instalação
+> npm install
+
+## Rodagem
+> npm start
+
 ## 📌 Visão Geral
 
 Realizei um projeto acadêmico baseado em uma proposta apresentada por uma empresa durante uma visita à faculdade. O objetivo da atividade era compreender as dificuldades que a empresa vem enfrentando e, a partir disso, os alunos deveriam desenvolver soluções tecnológicas que pudessem colaborar com a melhoria de seus processos.
