@@ -1,0 +1,70 @@
+:root {
+    --fundo-principal: #333;
+    --texto-principal: #f0f0f5;
+    --destaque: #00c8ff;
+    --card-normal: #252525;
+    --card-hover: #000;
+    --sombra: rgba(0, 0, 0, 0.4);
+}
+
+.wf-section {
+    background-color: var(--fundo-principal);
+    color: var(--texto-principal);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 30px;
+    box-shadow: 0 6px 12px var(--sombra);
+}
+
+.wf-section h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--destaque);
+    font-size: 2rem;
+}
+
+.wf-card-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.wf-card {
+    background-color: var(--card-normal);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    flex: 1;
+    min-width: 240px;
+    max-width: 30%;
+    box-shadow: 0 4px 10px var(--sombra);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.wf-card:hover {
+    transform: translateY(-6px);
+    background-color: var(--card-hover);
+}
+
+.wf-card h3 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: var(--texto-principal);
+    margin-bottom: 12px;
+}
+
+.wf-temp {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.wf-condition,
+.wf-condition-text,
+.wf-range,
+.wf-icon {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: var(--texto-principal);
+}
