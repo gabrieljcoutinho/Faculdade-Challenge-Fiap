@@ -1,0 +1,68 @@
+:root {
+    --color-background: white;
+    --color-overlay: rgba(0, 0, 0, 0.5);
+    --color-shadow: rgba(0, 0, 0, 0.2);
+    --color-primary: #007bff;
+    --color-button-text: white;
+    --color-link-text: white;
+}
+
+.expanded-chart-container {
+    background-color: var(--color-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px var(--color-shadow);
+    display: flex;
+    flex-direction: column;
+    height: 75%;
+    padding: 20px;
+    position: relative;
+    width: 80%;
+}
+
+.expanded-chart-container .chart-container {
+    flex-grow: 1;
+    height: calc(100% - 10px);
+    width: 100%;
+}
+
+.expanded-chart-actions {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 15px;
+}
+
+.expanded-chart-actions button {
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 5px;
+    color: var(--color-button-text);
+    cursor: pointer;
+    font-size: 1em;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.expanded-chart-overlay {
+    align-items: center;
+    background-color: var(--color-overlay);
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.expanded-chart-actions a {
+    border: none;
+    color: var(--color-link-text);
+    cursor: pointer;
+    font-size: 1em;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
