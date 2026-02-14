@@ -9,7 +9,7 @@ import '../../CSS/Chat/chat.module.css';
 import '../../CSS/Chat/animacaoComandoTrocaPageViaChat.module.css';
 import '../../CSS/Chat/mensagem.module.css';
 import '../../CSS/Chat/send.module.css';
-import '../../CSS/Chat/quickSuggestions.css';
+import '../../CSS/Chat/quickSuggestions.module.css';
 import '../../CSS/Chat/iconeMic.css';
 import '../../CSS/Chat/iconeLixeiraChat.css';
 import '../../CSS/Chat/imgCentroChat.css';
