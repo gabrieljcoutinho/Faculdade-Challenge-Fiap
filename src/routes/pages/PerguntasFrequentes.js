@@ -1,6 +1,6 @@
 // src/routes/pages/PerguntasFrequentes.js
 import React, { useState } from 'react';
-import '../../CSS/PerguntasFrequentes/perguntasFrequentes.css';
+import '../../CSS/PerguntasFrequentes/perguntasFrequentes.module.css';
 import '../../CSS/PerguntasFrequentes/btnPerguntasFrequentes.css';
 
 const PerguntasFrequentes = ({ isReading }) => {
