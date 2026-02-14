@@ -5,15 +5,15 @@ import DOMPurify from 'dompurify';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 
 // Estilos
-import '../../CSS/Chat/chat.module.css';
-import '../../CSS/Chat/animacaoComandoTrocaPageViaChat.module.css';
-import '../../CSS/Chat/mensagem.module.css';
-import '../../CSS/Chat/send.module.css';
-import '../../CSS/Chat/quickSuggestions.module.css';
-import '../../CSS/Chat/iconeMic.module.css';
-import '../../CSS/Chat/iconeLixeiraChat.module.css';
-import '../../CSS/Chat/imgCentroChat.module.css';
-import '../../CSS/Chat/mediaScreen.module.css';
+import '../../CSS/Chat/chat.css';
+import '../../CSS/Chat/animacaoComandoTrocaPageViaChat.css';
+import '../../CSS/Chat/mensagem.css';
+import '../../CSS/Chat/send.css';
+import '../../CSS/Chat/quickSuggestions.css';
+import '../../CSS/Chat/iconeMic.css';
+import '../../CSS/Chat/iconeLixeiraChat.css';
+import '../../CSS/Chat/imgCentroChat.css';
+import '../../CSS/Chat/mediaScreen.css';
 
 // Dados e Imagens
 import comandosData from '../../data/commands.json';
