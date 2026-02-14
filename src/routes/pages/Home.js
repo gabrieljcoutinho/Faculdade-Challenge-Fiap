@@ -7,6 +7,7 @@ import logoGmail from '../../imgs/imgHome/Logogmail.png';
 import logoWhatsapp from '../../imgs/imgHome/Logowhatsapp.png';
 import logoInstagram from '../../imgs/imgHome/Logoinstagram.png';
 import logoLinkedin from '../../imgs/imgHome/Logolinkedin.png';
+
 import '../../CSS/Home/home.css';
 import '../../CSS/Home/expanded.css';
 import '../../CSS/Home/analyze.css';
