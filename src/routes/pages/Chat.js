@@ -13,7 +13,7 @@ import '../../CSS/Chat/quickSuggestions.module.css';
 import '../../CSS/Chat/iconeMic.module.css';
 import '../../CSS/Chat/iconeLixeiraChat.module.css';
 import '../../CSS/Chat/imgCentroChat.module.css';
-import '../../CSS/Chat/mediaScreen.css';
+import '../../CSS/Chat/mediaScreen.module.css';
 
 // Dados e Imagens
 import comandosData from '../../data/commands.json';
